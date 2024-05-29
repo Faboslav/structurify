@@ -1,0 +1,55 @@
+{
+	"schemaVersion": 1,
+	"id": "${modId}",
+	"version": "${modVersion}",
+	"name": "${modName}",
+	"description": "${modDescription}",
+	"authors": [
+		"${modAuthor}"
+	],
+	"contact": {
+		"homepage": "https://github.com/Faboslav/structurized",
+		"sources": "https://github.com/Faboslav/structurized",
+		"issues": "https://github.com/Faboslav/structurized/issues",
+		"wiki": "https://github.com/Faboslav/structurized/wiki",
+		"discord": "https://discord.com/invite/QGwFvvMQCn"
+	},
+	"license": "CC BY-NC-ND 4.0",
+	"icon": "icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.faboslav.structurized.fabric.StructurizedFabric"
+		],
+		"modmenu": [
+			"com.faboslav.structurized.fabric.modcompat.ModMenuCompat"
+		]
+	},
+	"mixins": [
+		"structurized.mixins.json"
+	],
+	"depends": {
+		"java": ">=17",
+		"minecraft": ">=${minecraftVersion}",
+		"fabricloader": ">=${fabricLoaderVersion}",
+		"fabric": ">=${fabricApiVersion}"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"Discord": "https://discord.com/invite/QGwFvvMQCn",
+				"Wiki": "https://github.com/Faboslav/structurized/wiki",
+				"CurseForge": "https://www.curseforge.com/minecraft/mc-mods/structurized",
+				"Modrinth": "https://modrinth.com/mod/structurized"
+			}
+		},
+		"catalogue": {
+			"configFactory": "com.faboslav.structurized.fabric.CatalogueCompat",
+			"icon": {
+				"image": "catalogue_icon.png"
+			},
+			"banner": "catalogue_logo.png",
+			"background": "catalogue_background.png"
+		}
+	}
+}

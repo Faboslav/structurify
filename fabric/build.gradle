@@ -1,0 +1,87 @@
+plugins {
+	id "com.github.johnrengelman.shadow" version "8.1.1"
+}
+
+allprojects {
+	archivesBaseName = "${rootProject.mod_id}-fabric-mc${rootProject.minecraft_version}"
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+dependencies {
+	// Core dependencies
+	modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+	modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+
+	// Mod menu (https://modrinth.com/mod/modmenu)
+	modImplementation("com.terraformersmc:modmenu:${project.mod_menu_version}") { transitive = false }
+
+	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
+	modImplementation "dev.isxander:yet-another-config-lib:${rootProject.yet_another_config_lib_version}+${rootProject.minecraft_version}-fabric"
+
+	common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+	shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+}
+
+processResources {
+	inputs.property 'modId', rootProject.mod_id
+	inputs.property 'modName', rootProject.mod_name
+	inputs.property 'modDescription', rootProject.mod_description
+	inputs.property 'modVersion', rootProject.mod_version
+	inputs.property 'modAuthor', rootProject.mod_author
+	inputs.property "minecraftVersion", rootProject.minecraft_version
+	inputs.property "fabricLoaderVersion", rootProject.fabric_loader_version
+	inputs.property "fabricApiVersion", rootProject.fabric_api_version
+
+	filesMatching("fabric.mod.json") {
+		expand([
+			'modId'              : rootProject.mod_id,
+			'modName'            : rootProject.mod_name,
+			'modDescription'     : rootProject.mod_description,
+			'modVersion'         : rootProject.mod_version,
+			'modAuthor'          : rootProject.mod_author,
+			"minecraftVersion"   : rootProject.minecraft_version,
+			"fabricLoaderVersion": rootProject.fabric_loader_version,
+			"fabricApiVersion"   : rootProject.fabric_api_version
+		])
+	}
+}
+
+shadowJar {
+	configurations = [project.configurations.shadowBundle]
+	archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+	input.set shadowJar.archiveFile
+}
+
+repositories {
+	maven {
+		name 'Xander Maven'
+		url 'https://maven.isxander.dev/releases'
+	}
+
+	maven {
+		name = "TerraformersMC"
+		url "https://maven.terraformersmc.com/releases/"
+	}
+}

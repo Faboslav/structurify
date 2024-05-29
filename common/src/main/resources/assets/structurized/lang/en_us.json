@@ -1,0 +1,26 @@
+{
+	"structurized": "Structurized",
+	"structurized.structures.disable_all_structures.title": "Disable all structures",
+	"structurized.structures.disable_all_structures.description": "All structures will be disabled, each of the options below will not work",
+	"structurized.structures": "Structures",
+	"structurized.structures.biomes_description": "Structure can be found in the following biomes:",
+	"structurized.structures.warning": "Bear in mind that every structure can still possibly be enabled or disabled by individual mods and datapacks.",
+	"structurized.structure_spacing.enable_global_spacing_and_separation.title": "Enable global spacing and separation",
+	"structurized.structure_spacing.enable_global_spacing_and_separation.description": "TBD",
+	"structurized.structure_spacing.global_spacing_modifier.title": "Global spacing modifier (Spacing is averagee distance in chunks between the structures from same structure set (group).",
+	"structurized.structure_spacing.global_separation_modifier.title": "Global spacing modifier (Separation is minimum distance in chunks between the structures)",
+	"structurized.exception.all_structures_are_disabled": "Can't locate any structure, all structures are disabled based on the Structurized mod config.",
+	"structurized.exception.structure_is_disabled": "Can't locate %s structure, structure is currently disabled based on the Structurized mod config.",
+	"gui.structurized.structures": "structures",
+
+	"gui.structurized.structures.general.title": "General",
+	"gui.structurized.structures.general.description": "General structure settings",
+
+	"gui.structurized.structure_sets.spacing.title": "Spacing",
+	"gui.structurized.structure_sets.spacing.description": "Spacing",
+	"gui.structurized.structure_sets.separation.title": "Separation",
+	"gui.structurized.structure_sets.separation.description": "Separation",
+
+	"gui.structurized.structure_spread.title": "Structure spread",
+	"gui.structurized.structure_spread.description": "Configure custom structure spread either via global spacing and separation modifiers or per structure specific spacing and separation values\n\nSpacing is average distance in chunks between the structures from the same structure set(group).\n\nSeparation is minimum distance in chunks between the structures from the same structure set(group).\nSeparation value should not be bigger than spacing value."
+}
