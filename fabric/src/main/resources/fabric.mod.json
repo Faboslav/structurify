@@ -19,14 +19,17 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.faboslav.structurized.fabric.StructurizedFabric"
+          "com.faboslav.structurify.fabric.StructurifyFabric"
+		],
+		"client": [
+			"com.faboslav.structurify.fabric.StructurifyFabricClient"
 		],
 		"modmenu": [
-			"com.faboslav.structurized.fabric.modcompat.ModMenuCompat"
+          "com.faboslav.structurify.common.modcompat.fabric.ModMenuCompat"
 		]
 	},
 	"mixins": [
-		"structurized.mixins.json"
+		"structurify-common.mixins.json"
 	],
 	"depends": {
 		"java": ">=17",

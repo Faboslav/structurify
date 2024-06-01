@@ -1,10 +1,3 @@
-plugins {
-	id 'dev.architectury.loom' version '1.6-SNAPSHOT' apply false
-	id 'architectury-plugin' version '3.4-SNAPSHOT'
-	id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
-	id "io.github.pacifistmc.forgix" version "1.2.6"
-}
-
 architectury {
 	minecraft = project.minecraft_version
 }
@@ -15,37 +8,8 @@ allprojects {
 	version = rootProject.mod_version
 }
 
-subprojects {
-	apply plugin: 'dev.architectury.loom'
-	apply plugin: 'architectury-plugin'
-	apply plugin: 'maven-publish'
-
-	base {
-		archivesName = "$rootProject.mod_id-$project.name"
-	}
-
-	repositories {
-	}
-
-	dependencies {
-		minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
-		mappings "net.fabricmc:yarn:$rootProject.yarn_mappings:v2"
-	}
-
-	java {
-		withSourcesJar()
-
-		sourceCompatibility = JavaVersion.VERSION_17
-		targetCompatibility = JavaVersion.VERSION_17
-	}
-
-	tasks.withType(JavaCompile).configureEach {
-		it.options.release = 17
-	}
-}
-
 forgix {
-	group = "com.faboslav.structurized"
+	group = "com.faboslav.structurify"
 	mergedJarName = "${rootProject.mod_id}-mc${rootProject.minecraft_version}-${rootProject.mod_version}.jar"
 	outputDir = "build/libs/merged"
 
@@ -66,4 +30,70 @@ forgix {
 			projectName = "neoforge"
 			jarLocation = "build/libs/${rootProject.mod_id}-neoforge-mc${rootProject.minecraft_version}-${rootProject.mod_version}.jar"
 		}
+}
+
+subprojects {
+	apply plugin: "dev.architectury.loom"
+
+	loom {
+		silentMojangMappingsLicense()
+	}
+
+	dependencies {
+		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+		mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
+	}
+}
+
+allprojects {
+	apply plugin: "java"
+	apply plugin: "architectury-plugin"
+
+	group = rootProject.maven_group
+	version = rootProject.mod_version
+	archivesBaseName = "${rootProject.mod_id}-mc${rootProject.minecraft_version}"
+
+
+	repositories {
+		// NeoForge
+		maven { url 'https://maven.neoforged.net/releases/' }
+
+		// Mod Menu.
+		maven { url 'https://maven.terraformersmc.com' }
+
+		// Jitpack for Mixin Extras.
+		maven {
+			url 'https://jitpack.io'
+			content {
+				includeGroup 'com.github.llamalad7'
+			}
+		}
+
+		// YACL
+		maven { url "https://maven.isxander.dev/releases" }
+
+		// YACL dep
+		maven {
+			name = 'kotlinforforge'
+			url = 'https://thedarkcolour.github.io/KotlinForForge/'
+		}
+
+		// Mod Menu
+		maven { url "https://maven.terraformersmc.com/releases" }
+		maven  { url "https://maven.terraformersmc.com" }
+		maven  { url "https://maven.isxander.dev/releases" }
+		maven  { url "https://maven.isxander.dev/snapshots" }
+		maven  { url "https://maven.quiltmc.org/repository/release" }
+		maven  { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+		maven  { url "https://maven.neoforged.net/releases/" }
+	}
+
+	tasks.withType(JavaCompile) {
+		options.encoding = "UTF-8"
+		options.release = 17
+	}
+
+	java {
+		withSourcesJar()
+	}
 }

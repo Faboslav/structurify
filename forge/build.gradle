@@ -1,38 +1,58 @@
 plugins {
-    id 'com.github.johnrengelman.shadow'
+	id 'com.github.johnrengelman.shadow'
 }
-
 loom {
-    forge {
-        mixinConfig "structurized.mixins.json"
-    }
+	accessWidenerPath = project(":common").loom.accessWidenerPath
+
+	forge {
+		convertAccessWideners = true
+		extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+		mixinConfig "structurify-common.mixins.json"
+		mixinConfig "structurify-forge.mixins.json"
+	}
 }
 
 architectury {
-    platformSetupLoomIde()
-    forge()
+	platformSetupLoomIde()
+	forge()
 }
 
 configurations {
-    common {
-        canBeResolved = true
-        canBeConsumed = false
-    }
-    compileClasspath.extendsFrom common
-    runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+	common {
+		canBeResolved = true
+		canBeConsumed = false
+	}
+	compileClasspath.extendsFrom common
+	runtimeClasspath.extendsFrom common
+	developmentForge.extendsFrom common
 
-    shadowBundle {
-        canBeResolved = true
-        canBeConsumed = false
-    }
+	shadowBundle {
+		canBeResolved = true
+		canBeConsumed = false
+	}
 }
 
 dependencies {
 	forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
 
-    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
-    shadowBundle project(path: ':common', configuration: 'transformProductionForge')
+	modImplementation ("dev.isxander.yacl:yet-another-config-lib-forge:${yacl_version}") { transitive = false }
+
+	// Required
+	//modImplementation modRuntimeOnly ("curse.maven:yacl-667299:5376023")
+	// modApi ("dev.isxander:yet-another-config-lib:${rootProject.yet_another_config_lib_version}+${rootProject.minecraft_version}-forge")
+	// modCompileOnly ("dev.isxander:yet-another-config-lib:${rootProject.yet_another_config_lib_version}+${rootProject.minecraft_version}-forge")
+
+	// Compat
+	modCompileOnly modRuntimeOnly ("curse.maven:drp-global-datapack-317134:4573646")
+	//modApi ("maven.modrinth:globalpacks:${rootProject.globalpacks_version}_forge")
+	// modRuntimeOnly ("maven.modrinth:globalpacks:${rootProject.globalpacks_version}_forge")
+	// modCompileOnly ("maven.modrinth:globalpacks:${rootProject.globalpacks_version}_forge")
+
+	// include("maven.modrinth:globalpacks:${rootProject.globalpacks_version}_forge")
+	// include ("dev.isxander:yet-another-config-lib:${rootProject.yet_another_config_lib_version}+${rootProject.minecraft_version}-forge")
+
+	common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+	shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 }
 
 processResources {
@@ -56,10 +76,27 @@ processResources {
 }
 
 shadowJar {
-    configurations = [project.configurations.shadowBundle]
-    archiveClassifier = 'dev-shadow'
+	configurations = [project.configurations.shadowBundle]
+	archiveClassifier = 'dev-shadow'
 }
 
 remapJar {
-    input.set shadowJar.archiveFile
+	input.set shadowJar.archiveFile
+}
+
+repositories {
+	maven {
+		name 'Modrinth'
+		url 'https://api.modrinth.com/maven'
+	}
+
+	maven {
+		name 'Xander Maven'
+		url 'https://maven.isxander.dev/releases'
+	}
+
+	maven {
+		name 'CurseForge'
+		url "https://www.cursemaven.com"
+	}
 }

@@ -1,22 +1,14 @@
 architectury {
-    common rootProject.enabled_platforms.split(',')
+	common rootProject.enabled_platforms.split(',')
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/structurized.accesswidener")
+	accessWidenerPath = file("src/main/resources/structurify.accesswidener")
 }
 
 dependencies {
 	// Common
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+	modImplementation("net.fabricmc:fabric-loader:$rootProject.fabric_loader_version")
 
-	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
-	modImplementation "dev.isxander:yet-another-config-lib:${rootProject.yet_another_config_lib_version}+${rootProject.minecraft_version}-fabric"
-}
-
-repositories {
-	maven {
-		name 'Xander Maven'
-		url 'https://maven.isxander.dev/releases'
-	}
+	modImplementation("dev.isxander.yacl:yet-another-config-lib-common:${yacl_version}")
 }

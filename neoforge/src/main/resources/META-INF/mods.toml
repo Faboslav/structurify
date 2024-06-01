@@ -35,4 +35,4 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[mixins]]
-config = "structurized.mixins.json"
+config = "structurify.mixins.json"

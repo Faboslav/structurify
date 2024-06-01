@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "com.faboslav.structurify.forge.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"minVersion": "0.8",
+	"client": [
+	],
+	"mixins": [
+		"ClientModLoaderAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

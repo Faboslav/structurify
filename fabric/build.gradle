@@ -28,14 +28,20 @@ configurations {
 
 dependencies {
 	// Core dependencies
-	modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-	modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+	modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+	modApi "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
 
 	// Mod menu (https://modrinth.com/mod/modmenu)
-	modImplementation("com.terraformersmc:modmenu:${project.mod_menu_version}") { transitive = false }
+	modImplementation("com.terraformersmc:modmenu:${mod_menu_version}") { transitive = false }
 
 	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
-	modImplementation "dev.isxander:yet-another-config-lib:${rootProject.yet_another_config_lib_version}+${rootProject.minecraft_version}-fabric"
+	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${yacl_version}"
+
+	// Compat
+	modCompileOnly ("curse.maven:global-datapacks-594773:4706699")
+	modCompileOnly ("curse.maven:drp-global-datapack-317134:4570601")
+	modCompileOnly ("curse.maven:paxi-418881:4749995")
+	modApi ("com.yungnickyoung.minecraft.yungsapi:YungsApi:${yungsapi_mc_version}-Fabric-${yungsapi_version}")
 
 	common(project(path: ':common', configuration: 'namedElements')) { transitive false }
 	shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
@@ -75,6 +81,16 @@ remapJar {
 }
 
 repositories {
+	maven {
+		name 'CurseForge'
+		url "https://www.cursemaven.com"
+	}
+
+	maven {
+		name 'Modrinth'
+		url 'https://api.modrinth.com/maven'
+	}
+
 	maven {
 		name 'Xander Maven'
 		url 'https://maven.isxander.dev/releases'
