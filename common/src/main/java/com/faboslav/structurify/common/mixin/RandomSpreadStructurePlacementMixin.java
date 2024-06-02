@@ -32,7 +32,7 @@ public abstract class RandomSpreadStructurePlacementMixin extends StructurePlace
 		super(locateOffset, frequencyReductionMethod, frequency, salt, exclusionZone);
 	}
 
-	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
+	public void structurify$setStructureSetIdentifier(Identifier structureSetIdentifier) {
 		this.structureSetIdentifier = structureSetIdentifier;
 	}
 

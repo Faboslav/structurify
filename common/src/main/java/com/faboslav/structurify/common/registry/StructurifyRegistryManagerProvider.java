@@ -1,7 +1,6 @@
 package com.faboslav.structurify.common.registry;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.mixin.CreateWorldScreenAccessor;
 import com.mojang.serialization.Lifecycle;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
@@ -12,6 +11,7 @@ import net.minecraft.resource.ResourcePackManager;
 import net.minecraft.resource.ResourcePackProvider;
 import net.minecraft.server.SaveLoader;
 import net.minecraft.server.SaveLoading;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.util.Util;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionOptionsRegistryHolder;
@@ -43,8 +43,9 @@ public final class StructurifyRegistryManagerProvider
 				Structurify.getLogger().info("Registering resource pack provider: " + resourcePackProvider.getClass().getSimpleName());
 			}
 
-			ResourcePackManager packRepository = new ResourcePackManager(StructurifyResourcePackProvider.getResourcePackProviders().toArray(new ResourcePackProvider[0]));
-			SaveLoading.ServerConfig serverConfig = CreateWorldScreenAccessor.callCreateServerConfig(packRepository, DataConfiguration.SAFE_MODE);
+			ResourcePackManager resourcePackManager = new ResourcePackManager(StructurifyResourcePackProvider.getResourcePackProviders().toArray(new ResourcePackProvider[0]));
+			SaveLoading.DataPacks dataPacks = new SaveLoading.DataPacks(resourcePackManager, DataConfiguration.SAFE_MODE, false, false);
+			SaveLoading.ServerConfig serverConfig = new SaveLoading.ServerConfig(dataPacks, CommandManager.RegistrationEnvironment.INTEGRATED, 2);
 
 			SaveLoader saveLoader = Util.waitAndApply(executor ->
 				SaveLoading.load(serverConfig, loadContextSupplierContext -> {

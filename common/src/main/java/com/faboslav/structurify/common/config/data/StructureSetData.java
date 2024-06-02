@@ -2,8 +2,8 @@ package com.faboslav.structurify.common.config.data;
 
 public final class StructureSetData
 {
-	public static final int MAX_SPACING = 1024;
-	public static final int MAX_SEPARATION = 1024;
+	public static final int MAX_SPACING = 256;
+	public static final int MAX_SEPARATION = 256;
 
 	private final int defaultSpacing;
 	private final int defaultSeparation;
@@ -38,11 +38,7 @@ public final class StructureSetData
 	}
 
 	public void setSeparation(int separation) {
-		if (this.separation >= this.spacing) {
-			this.separation = this.spacing;
-		} else {
-			this.separation = separation;
-		}
+		this.separation = separation;
 	}
 
 	public boolean isUsingDefaultSpacing() {
@@ -54,6 +50,6 @@ public final class StructureSetData
 	}
 
 	public boolean isUsingDefaultSpacingAndSeparation() {
-		return isUsingDefaultSpacing() || isUsingDefaultSeparation();
+		return isUsingDefaultSpacing() && isUsingDefaultSeparation();
 	}
 }

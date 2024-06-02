@@ -7,48 +7,51 @@ import dev.isxander.yacl3.gui.controllers.BooleanController;
 import dev.isxander.yacl3.impl.controller.BooleanControllerBuilderImpl;
 import org.apache.commons.lang3.Validate;
 
-public class BooleanWithButtonControllerBuilder extends BooleanControllerBuilderImpl
+public class StructureButtonControllerBuilder extends BooleanControllerBuilderImpl
 {
+	private final String structureId;
 	private boolean coloured = false;
 	private ValueFormatter<Boolean> formatter = BooleanController.ON_OFF_FORMATTER::apply;
 
-	public BooleanWithButtonControllerBuilder(Option<Boolean> option) {
+	public StructureButtonControllerBuilder(Option<Boolean> option, String structureId) {
 		super(option);
+
+		this.structureId = structureId;
 	}
 
-	public BooleanWithButtonControllerBuilder coloured(boolean coloured) {
+	public StructureButtonControllerBuilder coloured(boolean coloured) {
 		this.coloured = coloured;
 		return this;
 	}
 
-	public BooleanWithButtonControllerBuilder formatValue(ValueFormatter<Boolean> formatter) {
+	public StructureButtonControllerBuilder formatValue(ValueFormatter<Boolean> formatter) {
 		Validate.notNull(formatter, "formatter cannot be null");
 
 		this.formatter = formatter;
 		return this;
 	}
 
-	public BooleanWithButtonControllerBuilder onOffFormatter() {
+	public StructureButtonControllerBuilder onOffFormatter() {
 		this.formatter = BooleanController.ON_OFF_FORMATTER::apply;
 		return this;
 	}
 
-	public BooleanWithButtonControllerBuilder yesNoFormatter() {
+	public StructureButtonControllerBuilder yesNoFormatter() {
 		this.formatter = BooleanController.YES_NO_FORMATTER::apply;
 		return this;
 	}
 
-	public BooleanWithButtonControllerBuilder trueFalseFormatter() {
+	public StructureButtonControllerBuilder trueFalseFormatter() {
 		this.formatter = BooleanController.TRUE_FALSE_FORMATTER::apply;
 		return this;
 	}
 
 	@Override
 	public Controller<Boolean> build() {
-		return new BooleanWithButtonController(option, this.formatter::format, this.coloured);
+		return new StructureButtonController(option, this.structureId, this.formatter::format, this.coloured);
 	}
 
-	public static BooleanWithButtonControllerBuilder create(Option<Boolean> option) {
-		return new BooleanWithButtonControllerBuilder(option);
+	public static StructureButtonControllerBuilder create(Option<Boolean> option, String structureId) {
+		return new StructureButtonControllerBuilder(option, structureId);
 	}
 }

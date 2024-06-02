@@ -1,8 +1,7 @@
-package com.faboslav.structurify.common.events.lifecycle;
+package com.faboslav.structurify.common.events.common;
 
 import com.faboslav.structurify.common.events.base.EventHandler;
-
-import java.util.function.Consumer;
+import net.minecraft.registry.DynamicRegistryManager;
 
 /**
  * Event related is code based on The Bumblezone/Resourceful Lib mods with permissions from the authors
@@ -12,14 +11,7 @@ import java.util.function.Consumer;
  * @author ThatGravyBoat
  * <a href="https://github.com/Team-Resourceful/ResourcefulLib">https://github.com/Team-Resourceful/ResourcefulLib</a>
  */
-public record SetupEvent(Consumer<Runnable> enqueue)
+public record PrepareRegistriesEvent(DynamicRegistryManager.Immutable registryManager)
 {
-	public static final EventHandler<SetupEvent> EVENT = new EventHandler<>();
-
-	/**
-	 * Forge runs in parallel with other mods so we need to enqueue some things.
-	 */
-	public void enqueueWork(Runnable runnable) {
-		enqueue.accept(runnable);
-	}
+	public static final EventHandler<PrepareRegistriesEvent> EVENT = new EventHandler<>();
 }

@@ -1,17 +1,18 @@
 package com.faboslav.structurify.common.config.data;
 
+import java.util.List;
 import java.util.Set;
 
 public class StructureData
 {
 	private boolean isDisabled;
 	private final Set<String> biomes;
-	private Set<String> disabledBiomes;
+	private List<String> blacklistedBiomes;
 
-	public StructureData(boolean isDisabled, Set<String> biomes, Set<String> disabledBiomes) {
+	public StructureData(boolean isDisabled, Set<String> biomes, List<String> blacklistedBiomes) {
 		this.isDisabled = isDisabled;
 		this.biomes = biomes;
-		this.disabledBiomes = disabledBiomes;
+		this.blacklistedBiomes = blacklistedBiomes;
 	}
 
 	public boolean isDisabled() {
@@ -26,11 +27,11 @@ public class StructureData
 		return this.biomes;
 	}
 
-	public Set<String> getDisabledBiomes() {
-		return this.disabledBiomes;
+	public List<String> getBlacklistedBiomes() {
+		return this.blacklistedBiomes;
 	}
 
-	public void setDisabledBiomes(Set<String> disabledBiomes) {
-		this.disabledBiomes = disabledBiomes;
+	public void setBlacklistedBiomes(List<String> blacklistedBiomes) {
+		this.blacklistedBiomes = blacklistedBiomes;
 	}
 }

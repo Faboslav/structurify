@@ -7,6 +7,5 @@ import net.minecraft.server.MinecraftServer;
 
 public record DatapackReloadEvent(MinecraftServer server, LifecycledResourceManager serverResourceManager)
 {
-
 	public static final EventHandler<DatapackReloadEvent> EVENT = new EventHandler<>();
 }

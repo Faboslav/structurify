@@ -48,25 +48,25 @@ dependencies {
 }
 
 processResources {
-	inputs.property 'modId', rootProject.mod_id
-	inputs.property 'modName', rootProject.mod_name
-	inputs.property 'modDescription', rootProject.mod_description
-	inputs.property 'modVersion', rootProject.mod_version
-	inputs.property 'modAuthor', rootProject.mod_author
-	inputs.property "minecraftVersion", rootProject.minecraft_version
-	inputs.property "fabricLoaderVersion", rootProject.fabric_loader_version
-	inputs.property "fabricApiVersion", rootProject.fabric_api_version
+	inputs.property 'modId', mod_id
+	inputs.property 'modName', mod_name
+	inputs.property 'modDescription', mod_description
+	inputs.property 'modVersion', mod_version
+	inputs.property 'modAuthor', mod_author
+	inputs.property "minecraftVersion", min_minecraft_version
+	inputs.property "fabricLoaderVersion", fabric_loader_version
+	inputs.property "fabricApiVersion", fabric_api_version
 
 	filesMatching("fabric.mod.json") {
 		expand([
-			'modId'              : rootProject.mod_id,
-			'modName'            : rootProject.mod_name,
-			'modDescription'     : rootProject.mod_description,
-			'modVersion'         : rootProject.mod_version,
-			'modAuthor'          : rootProject.mod_author,
-			"minecraftVersion"   : rootProject.minecraft_version,
-			"fabricLoaderVersion": rootProject.fabric_loader_version,
-			"fabricApiVersion"   : rootProject.fabric_api_version
+			'modId'              : mod_id,
+			'modName'            : mod_name,
+			'modDescription'     : mod_description,
+			'modVersion'         : mod_version,
+			'modAuthor'          : mod_author,
+			"minecraftVersion"   : min_minecraft_version,
+			"fabricLoaderVersion": fabric_loader_version,
+			"fabricApiVersion"   : fabric_api_version
 		])
 	}
 }

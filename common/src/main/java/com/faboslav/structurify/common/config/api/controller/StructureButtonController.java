@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.config.api.controller;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.gui.StructureConfigScreen;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.utils.Dimension;
@@ -10,22 +9,29 @@ import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.BooleanController;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.function.Function;
 
-public class BooleanWithButtonController extends BooleanController
+public class StructureButtonController extends BooleanController
 {
-	public BooleanWithButtonController(
+	private final String structureId;
+
+
+	public StructureButtonController(
 		Option<Boolean> option,
+		String structureId,
 		Function<Boolean, Text> valueFormatter,
 		boolean coloured
 	) {
 		super(option, valueFormatter, coloured);
+
+		this.structureId = structureId;
 	}
 
 	@Override
 	public AbstractWidget provideWidget(YACLScreen screen, Dimension<Integer> widgetDimension) {
-		return new BooleanWithButtonControllerElement(this, screen, widgetDimension);
+		return new BooleanWithButtonControllerElement(this, screen, widgetDimension, structureId);
 	}
 
 	public static class BooleanWithButtonControllerElement extends BooleanControllerElement
@@ -35,13 +41,14 @@ public class BooleanWithButtonController extends BooleanController
 		public BooleanWithButtonControllerElement(
 			BooleanController control,
 			YACLScreen screen,
-			Dimension<Integer> dim
+			Dimension<Integer> dim,
+			String structureId
 		) {
 			super(control, screen, dim);
 
 			this.setDimension(this.getDimension().expanded(-20, 0));
-			this.configurationButton = new TextScaledButtonWidget(screen, this.getDimension().xLimit(), -50, 20, 20, 2.0f, Text.literal("\u2699"), button -> {
-				var structureScreen = StructureConfigScreen.create(screen);
+			this.configurationButton = new TextScaledButtonWidget(screen, this.getDimension().xLimit(), -50, 20, 20, 1.0f, Text.literal("\u2699").styled(style -> style.withBold(true)), button -> {
+				var structureScreen = StructureConfigScreen. create(screen, structureId);
 				this.client.setScreen(structureScreen);
 			});
 			this.configurationButton.active = true;

@@ -4,5 +4,5 @@ import net.minecraft.util.Identifier;
 
 public interface RandomSpreadStructurePlacement
 {
-	void structurify$setStructureIdentifier(Identifier structureSetIdentifier);
+	void structurify$setStructureSetIdentifier(Identifier structureSetIdentifier);
 }

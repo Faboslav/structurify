@@ -1,6 +1,14 @@
 package com.faboslav.structurify.common.mixin;
 
+import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.api.RandomSpreadStructurePlacement;
+import com.faboslav.structurify.common.api.StructurifyStructure;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
@@ -9,6 +17,8 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.noise.NoiseConfig;
 import net.minecraft.world.gen.structure.JigsawStructure;
 import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.world.gen.structure.StructureType;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,19 +26,34 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Mixin(JigsawStructure.class)
-public abstract class JigsawStructureMixin extends Structure
+public abstract class JigsawStructureMixin extends Structure implements StructurifyStructure
 {
-	@Shadow
-	@Final
-	private int maxDistanceFromCenter;
+	@Nullable
+	public Identifier structureIdentifier = null;
 
 	protected JigsawStructureMixin(Config config) {
 		super(config);
 	}
+
+	public void structurify$setStructureIdentifier(Identifier structureIdentifier) {
+		this.structureIdentifier = structureIdentifier;
+	}
+
+	@Nullable
+	public Identifier structurify$getStructureIdentifier() {
+		return this.structureIdentifier;
+	}
+
+	@Shadow
+	@Final
+	private int maxDistanceFromCenter;
 
 	@Inject(
 		method = "getStructurePosition",
@@ -36,29 +61,42 @@ public abstract class JigsawStructureMixin extends Structure
 		cancellable = true
 	)
 	private void structurify$getStructurePosition(
-		Context context,
-		CallbackInfoReturnable<Optional<StructurePosition>> cir
+		Structure.Context context,
+		CallbackInfoReturnable<Optional<Structure.StructurePosition>> cir
 	) {
-		int checkRadius = this.maxDistanceFromCenter;
-		int stepSize = 16;
-		BlockPos blockPos = new BlockPos(context.chunkPos().getStartX(), 63, context.chunkPos().getStartZ());
-		Predicate<RegistryEntry<Biome>> blackListedBiomes = biomeEntry -> {
-			return biomeEntry.matchesKey(BiomeKeys.RIVER) || biomeEntry.matchesKey(BiomeKeys.FROZEN_RIVER);
-		};
+		Identifier structureId = structurify$getStructureIdentifier();
 
-		for (int xOffset = -checkRadius; xOffset <= checkRadius; xOffset += stepSize) {
-			for (int zOffset = -checkRadius; zOffset <= checkRadius; zOffset += stepSize) {
-				int x = xOffset + blockPos.getX();
-				int y = blockPos.getY();
-				int z = zOffset + blockPos.getZ();
+		if (structureId != null) {
+			if(Structurify.getConfig().getStructureData().containsKey(structureId.toString())) {
+				List<String> blacklistedBiomeIds = Structurify.getConfig().getStructureData().get(structureId.toString()).getBlacklistedBiomes();
 
-				if (xOffset % checkRadius == 0 && zOffset % checkRadius == 0) {
-					var structurePosition = new StructurePosition(new BlockPos(x, y, z), collector -> {
-					});
-					var isBlacklistedBiome = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.noiseConfig(), blackListedBiomes);
-					if (isBlacklistedBiome) {
-						cir.setReturnValue(Optional.empty());
-						return;
+				if(!blacklistedBiomeIds.isEmpty()) {
+					Set<RegistryKey<Biome>> blacklistedBiomeKeys = blacklistedBiomeIds.stream()
+						.map(id -> RegistryKey.of(RegistryKeys.BIOME, new Identifier(id)))
+						.collect(Collectors.toSet());
+
+					Predicate<RegistryEntry<Biome>> blackListedBiomesPredicate = biomeEntry -> {
+						return blacklistedBiomeKeys.contains(biomeEntry.getKey().orElse(null));
+					};
+
+					int checkRadius = this.maxDistanceFromCenter;
+					int stepSize = 8;
+					BlockPos blockPos = new BlockPos(context.chunkPos().getStartX(), 63, context.chunkPos().getStartZ());
+
+					for (int xOffset = -checkRadius; xOffset <= checkRadius; xOffset += stepSize) {
+						for (int zOffset = -checkRadius; zOffset <= checkRadius; zOffset += stepSize) {
+							int x = xOffset + blockPos.getX();
+							int y = blockPos.getY();
+							int z = zOffset + blockPos.getZ();
+
+							var structurePosition = new Structure.StructurePosition(new BlockPos(x, y, z), collector -> {});
+							var isBlacklistedBiome = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.noiseConfig(), blackListedBiomesPredicate);
+
+							if (isBlacklistedBiome) {
+								cir.setReturnValue(Optional.empty());
+								return;
+							}
+						}
 					}
 				}
 			}
@@ -66,7 +104,7 @@ public abstract class JigsawStructureMixin extends Structure
 	}
 
 	private boolean structurify$isBiomeValid(
-		StructurePosition result,
+		Structure.StructurePosition result,
 		ChunkGenerator chunkGenerator,
 		NoiseConfig noiseConfig,
 		Predicate<RegistryEntry<Biome>> validBiomes

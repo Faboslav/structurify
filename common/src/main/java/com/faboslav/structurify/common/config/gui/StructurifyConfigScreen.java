@@ -1,18 +1,20 @@
 package com.faboslav.structurify.common.config.gui;
 
 import com.faboslav.structurify.common.config.StructurifyConfig;
-import com.faboslav.structurify.common.config.api.controller.BooleanWithButtonControllerBuilder;
+import com.faboslav.structurify.common.config.api.controller.StructureButtonControllerBuilder;
 import com.faboslav.structurify.common.config.api.controller.DualControllerBuilder;
 import com.faboslav.structurify.common.config.api.controller.HolderOption;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
-import com.faboslav.structurify.common.config.util.StructureSetUtil;
-import com.faboslav.structurify.common.events.client.ClientLoadedEvent;
+import com.faboslav.structurify.common.events.common.LoadConfigEvent;
+import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -23,13 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Environment(EnvType.CLIENT)
 public final class StructurifyConfigScreen
 {
 	public static Screen createConfigGui(StructurifyConfig config, Screen parent) {
-		ClientLoadedEvent.EVENT.invoke(new ClientLoadedEvent());
+		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 
 		var yacl = YetAnotherConfigLib.createBuilder()
-			.title(Text.translatable("structurized.name"))
+			.title(Text.translatable("gui.structurify.title"))
 			.save(config::save);
 
 		createStructuresTab(yacl, config);
@@ -40,12 +43,12 @@ public final class StructurifyConfigScreen
 
 	public static void createStructuresTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
 		var structureCategoryBuilder = ConfigCategory.createBuilder()
-			.name(Text.literal("Structures"))
-			.tooltip(Text.literal("Choose which structures will be disabled"));
+			.name(Text.translatable("gui.structurify.structures_category.title"))
+			.tooltip(Text.translatable("gui.structurify.structures_category.description"));
 
 		var generalStructuresGroupBuilder = OptionGroup.createBuilder()
-			.name(Text.translatable("gui.structurized.structures.general.title"))
-			.description(OptionDescription.of(Text.literal("gui.structurized.structures.general.description")));
+			.name(Text.translatable("gui.structurify.structures.general.title"))
+			.description(OptionDescription.of(Text.literal("gui.structurify.structures.general.description")));
 
 		var disableAllStructuresOptionBuilder = Option.<Boolean>createBuilder()
 			.name(Text.translatable("structurized.structures.disable_all_structures.title"))
@@ -78,40 +81,38 @@ public final class StructurifyConfigScreen
 					optionGroups.add(currentGroupBuilder.build());
 				}
 
-				String possibleModNameTranslationKey = namespace + "." + namespace;
-
-				if (!Language.getInstance().hasTranslation(possibleModNameTranslationKey)) {
-					possibleModNameTranslationKey = namespace;
-				}
-
 				// Create new group
 				currentGroupBuilder = OptionGroup.createBuilder()
-					.name(Text.translatable(possibleModNameTranslationKey).append(" ").append(Text.translatable("gui.structurized.structures")))
-					.description(OptionDescription.of(Text.literal("Options for namespace: " + namespace)));
+					.name(Text.literal(LanguageUtil.translateId(null, namespace).getString()).append(" ").append(Text.translatable("gui.structurify.structures.structures_group.title")))
+					.description(OptionDescription.of(Text.translatable("gui.structurify.structures.structures_group.description" + namespace)));
+
 				currentNamespace = namespace;
 			}
 
 			var optionBuilder = Option.<Boolean>createBuilder()
-				.name(Text.literal(structureStringId))
+				.name(LanguageUtil.translateId("structure", structureStringId))
 				.binding(
 					true,
 					() -> !config.getStructureData().get(structureStringId).isDisabled(),
 					isEnabled -> config.getStructureData().get(structureStringId).setDisabled(!isEnabled)
 				)
-				.controller(opt -> BooleanWithButtonControllerBuilder.create(opt)
+				.controller(opt -> StructureButtonControllerBuilder.create(opt, structureStringId)
 					.valueFormatter(val -> val ? Text.literal("Enabled"):Text.literal("Disabled"))
 					.coloured(true));
 
 			var descriptionBuilder = OptionDescription.createBuilder();
 			descriptionBuilder.text(Text.literal("\n"));
-			descriptionBuilder.text(Text.translatable("structurized.structures.biomes_description").styled(style -> style.withColor(Formatting.WHITE)));
+
+			// maybe some day i can render images
+			//descriptionBuilder.webpImage(Structurify.makeID("textures/gui/config/images/structures/minecraft_ancient_city.webp"));
+
+			descriptionBuilder.text(Text.translatable("structurized.structures.biomes_description").append(Text.literal("\n")));
 
 			for (String biome : structureData.getBiomes()) {
-				descriptionBuilder.text(Text.literal(" • " + biome).styled(style -> style.withColor(Formatting.WHITE)));
+				descriptionBuilder.text(Text.literal(" • ").append(LanguageUtil.translateId("biome", biome)));
 			}
 
-			descriptionBuilder.text(Text.literal("\n"));
-			descriptionBuilder.text(Text.translatable("structurized.structures.warning").styled(style -> style.withColor(Formatting.YELLOW)));
+			descriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("structurized.structures.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
 
 			optionBuilder.description(descriptionBuilder.build());
 			currentGroupBuilder.option(optionBuilder.build());
@@ -130,16 +131,16 @@ public final class StructurifyConfigScreen
 
 	public static void createStructureSetsTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
 		var structureSetCategoryBuilder = ConfigCategory.createBuilder()
-			.name(Text.translatable("gui.structurized.structure_sets.title"))
-			.tooltip(Text.translatable("gui.structurized.structure_sets.description"));
+			.name(Text.translatable("gui.structurify.structure_sets.title"))
+			.tooltip(Text.translatable("gui.structurify.structure_sets.description"));
 
 		var generalStructuresSetsGroupBuilder = OptionGroup.createBuilder()
-			.name(Text.translatable("gui.structurized.structure_sets.global_spacing_and_separation.title"))
-			.description(OptionDescription.of(Text.translatable("gui.structurized.structure_sets.global_spacing_and_separation.description")));
+			.name(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation.title"))
+			.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation.description")));
 
 		var enableGlobalSpacingAndSeparationBuilder = Option.<Boolean>createBuilder()
-			.name(Text.translatable("gui.structurized.structure_sets.enable_global_spacing_and_separation_modifier.title"))
-			.description(OptionDescription.of(Text.translatable("gui.structurized.structure_sets.enable_global_spacing_and_separation_modifier.description")))
+			.name(Text.translatable("gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.title"))
+			.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.description")))
 			.binding(
 				false,
 				() -> config.enableGlobalSpacingAndSeparationModifier,
@@ -152,8 +153,8 @@ public final class StructurifyConfigScreen
 		generalStructuresSetsGroupBuilder.option(enableGlobalSpacingAndSeparationBuilder.build());
 
 		var globalSpacingModifierBuilder = Option.<Double>createBuilder()
-			.name(Text.translatable("gui.structurized.structure_sets.global_spacing_and_separation_modifier.title"))
-			.description(OptionDescription.of(Text.translatable("gui.structurized.structure_sets.global_spacing_and_separation_modifier.description")))
+			.name(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.title"))
+			.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.description")))
 			.binding(
 				1.0D,
 				() -> config.globalSpacingAndSeparationModifier,
@@ -191,24 +192,24 @@ public final class StructurifyConfigScreen
 
 				// Create new group
 				currentGroupBuilder = OptionGroup.createBuilder()
-					.name(Text.translatable(possibleModNameTranslationKey).append(" ").append(Text.translatable("gui.structurized.structures")))
+					.name(Text.translatable(possibleModNameTranslationKey).append(" ").append(Text.translatable("gui.structurify.structures")))
 					.description(OptionDescription.of(Text.literal("Options for namespace: " + namespace)));
 				currentNamespace = namespace;
 			}
 
 			var spacingOption = Option.<Integer>createBuilder()
-				.name(Text.translatable("gui.structurized.structure_sets.spacing.title"))
-				.description(OptionDescription.of(Text.translatable("gui.structurized.structure_sets.spacing.description")))
+				.name(Text.translatable("gui.structurify.structure_sets.spacing.title"))
+				.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.spacing.description")))
 				.binding(
 					config.getStructureSetData().get(structureSetStringId).getDefaultSpacing(),
 					() -> config.getStructureSetData().get(structureSetStringId).getSpacing(),
-					spacing -> config.getStructureSetData().get(structureSetStringId).setSpacing(StructureSetUtil.correctSpacing(spacing, config.getStructureSetData().get(structureSetStringId).getSeparation()))
+					spacing -> config.getStructureSetData().get(structureSetStringId).setSpacing(spacing)
 				)
 				.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SPACING).step(1)).build();
 
 			var separationOption = Option.<Integer>createBuilder()
-				.name(Text.translatable("gui.structurized.structure_sets.separation.title"))
-				.description(OptionDescription.of(Text.translatable("gui.structurized.structure_sets.separation.description")))
+				.name(Text.translatable("gui.structurify.structure_sets.separation.title"))
+				.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.separation.description")))
 				.binding(
 					config.getStructureSetData().get(structureSetStringId).getDefaultSeparation(),
 					() -> config.getStructureSetData().get(structureSetStringId).getSeparation(),
@@ -217,6 +218,17 @@ public final class StructurifyConfigScreen
 				.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SEPARATION).step(1)).build();
 
 
+			spacingOption.addListener((opt, spacing) -> {
+				if(spacing <= separationOption.pendingValue()) {
+					spacingOption.requestSet(separationOption.pendingValue() + 1);
+				}
+			});
+
+			separationOption.addListener((opt, separation) -> {
+				if(separation >= spacingOption.pendingValue()) {
+					separationOption.requestSet(spacingOption.pendingValue() - 1);
+				}
+			});
 			var spacingAndSeparationOptionBuilder = HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
 				.controller(opt -> DualControllerBuilder.create(LabelOption.createBuilder().line(Text.literal(structureSetStringId)).build(), spacingOption, separationOption));
 

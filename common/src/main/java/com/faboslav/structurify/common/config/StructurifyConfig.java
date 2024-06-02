@@ -8,9 +8,7 @@ import com.google.gson.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public final class StructurifyConfig
 {
@@ -22,7 +20,6 @@ public final class StructurifyConfig
 	public double globalSpacingAndSeparationModifier = 1.0D;
 
 	public boolean disableAllStructures = false;
-	private final Map<String, Boolean> jsonStructures = new HashMap<>();
 	private Map<String, StructureData> structureData = new TreeMap<>();
 	private Map<String, StructureSetData> structureSetData = new TreeMap<>();
 
@@ -35,7 +32,7 @@ public final class StructurifyConfig
 	}
 
 	public void load() {
-		Structurify.getLogger().info("Loading Structurify");
+		Structurify.getLogger().info("Loading Structurify config...");
 
 		try {
 			WorldgenDataProvider.reload();
@@ -72,6 +69,36 @@ public final class StructurifyConfig
 				}
 			}
 
+			if (json.has("structures")) {
+				var structures = json.getAsJsonArray("structures");
+
+				for (JsonElement structure : structures) {
+					var structureJson = structure.getAsJsonObject();
+
+					if (!structureJson.has("name") || !structureJson.has("is_disabled") || !structureJson.has("blacklisted_biomes")) {
+						// TODO warning
+						continue;
+					}
+
+					if (!this.structureData.containsKey(structureJson.get("name").getAsString())) {
+						// TODO warning
+						continue;
+					}
+
+					var structureData = this.structureData.get(structureJson.get("name").getAsString());
+					structureData.setDisabled(structureJson.get("is_disabled").getAsBoolean());
+
+					var blacklistedBiomesJson = structureJson.getAsJsonArray("blacklisted_biomes");
+					List<String> blacklistedBiomes = new ArrayList<>();
+
+					for (JsonElement blacklistedBiome : blacklistedBiomesJson) {
+						blacklistedBiomes.add(blacklistedBiome.getAsString());
+					}
+
+					structureData.setBlacklistedBiomes(blacklistedBiomes);
+				}
+			}
+
 			if (json.has("structure_sets")) {
 				var structureSets = json.getAsJsonArray("structure_sets");
 
@@ -93,16 +120,16 @@ public final class StructurifyConfig
 				}
 			}
 
-			Structurify.getLogger().info("sETTTING IS LOADED");
+			Structurify.getLogger().info("Structurify config loaded");
 			this.isLoaded = true;
 		} catch (Exception e) {
-			Structurify.getLogger().error("Failed to load structurify config");
+			Structurify.getLogger().error("Failed to load Structurify config");
 			e.printStackTrace();
 		}
 	}
 
 	public void save() {
-		Structurify.getLogger().info("Saving Structurify Config");
+		Structurify.getLogger().info("Saving Structurify config...");
 
 		try {
 			Files.deleteIfExists(configPath);
@@ -112,23 +139,39 @@ public final class StructurifyConfig
 			json.addProperty("enable_global_spacing_and_separation_modifier", this.enableGlobalSpacingAndSeparationModifier);
 			json.addProperty("global_spacing_and_separation_modifier", this.globalSpacingAndSeparationModifier);
 
-			JsonArray disabledStructures = new JsonArray();
+			JsonArray structures = new JsonArray();
+
 			this.structureData.entrySet().stream()
-				.filter(entry -> entry.getValue().isDisabled())
-				.forEach(entry -> disabledStructures.add(entry.getKey()));
-			json.add("disabled_structures", disabledStructures);
+				.filter(entry -> entry.getValue().isDisabled() || !entry.getValue().getBlacklistedBiomes().isEmpty())
+				.forEach(entry -> {
+					JsonObject structure = new JsonObject();
+					structure.addProperty("name", entry.getKey());
+					structure.addProperty("is_disabled", entry.getValue().isDisabled());
+
+					JsonArray blacklistedBiomes = new JsonArray();
+					entry.getValue().getBlacklistedBiomes().forEach(blacklistedBiomes::add);
+					structure.add("blacklisted_biomes", blacklistedBiomes);
+					structures.add(structure);
+				});
+
+			json.add("structures", structures);
 
 			JsonArray structureSets = new JsonArray();
 			this.structureSetData.entrySet().stream()
 				.filter(entry -> !entry.getValue().isUsingDefaultSpacing() || !entry.getValue().isUsingDefaultSeparation())
 				.forEach(entry -> {
-					Structurify.getLogger().info("Adding structure set " + entry.getKey());
-					Structurify.getLogger().info("Spacing: " + String.valueOf(entry.getValue().getSpacing()));
-					Structurify.getLogger().info("Separation: " + String.valueOf(entry.getValue().getSeparation()));
+					var spacing = entry.getValue().getSpacing();
+					var separation = entry.getValue().getSeparation();
+
+					if(separation >= spacing) {
+						Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}. ", entry.getKey(), separation, spacing, spacing - 1);
+						separation = spacing - 1;
+					}
+
 					JsonObject specificStructureSpread = new JsonObject();
 					specificStructureSpread.addProperty("name", entry.getKey());
-					specificStructureSpread.addProperty("spacing", entry.getValue().getSpacing());
-					specificStructureSpread.addProperty("separation", entry.getValue().getSeparation());
+					specificStructureSpread.addProperty("spacing", spacing);
+					specificStructureSpread.addProperty("separation", separation);
 					structureSets.add(specificStructureSpread);
 				});
 
@@ -136,7 +179,9 @@ public final class StructurifyConfig
 
 			Files.createFile(configPath);
 			Files.writeString(configPath, gson.toJson(json));
+			Structurify.getLogger().info("Structurify config saved");
 		} catch (Exception e) {
+			Structurify.getLogger().error("Failed to save Structurify config");
 			e.printStackTrace();
 		}
 	}

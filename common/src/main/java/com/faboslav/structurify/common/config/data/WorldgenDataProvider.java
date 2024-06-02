@@ -12,24 +12,26 @@ import java.util.*;
 
 public final class WorldgenDataProvider
 {
+	private static List<String> biomes = new ArrayList<>();
 	private static Map<String, StructureData> structureData = new TreeMap<>();
-	private static Comparator<String> alphabeticallComparator = new Comparator<String>() {
-		@Override
-		public int compare(String key1, String key2) {
-			boolean isKey1Minecraft = key1.startsWith("minecraft:");
-			boolean isKey2Minecraft = key2.startsWith("minecraft:");
+	private static Map<String, StructureSetData> structureSetData = new TreeMap<>();
 
-			if (isKey1Minecraft && !isKey2Minecraft) {
-				return -1;
-			} else if (!isKey1Minecraft && isKey2Minecraft) {
-				return 1;
-			} else {
-				return key1.compareTo(key2);
-			}
+	private static final Comparator<String> alphabeticallComparator = (key1, key2) -> {
+		boolean isKey1Minecraft = key1.startsWith("minecraft:");
+		boolean isKey2Minecraft = key2.startsWith("minecraft:");
+
+		if (isKey1Minecraft && !isKey2Minecraft) {
+			return -1;
+		} else if (!isKey1Minecraft && isKey2Minecraft) {
+			return 1;
+		} else {
+			return key1.compareTo(key2);
 		}
 	};
 
-	private static Map<String, StructureSetData> structureSetData = new TreeMap<>();
+	public static List<String> getBiomes() {
+		return biomes;
+	}
 
 	public static Map<String, StructureData> getStructures() {
 		return structureData;
@@ -41,8 +43,26 @@ public final class WorldgenDataProvider
 
 	public static void reload() {
 		StructurifyRegistryManagerProvider.reloadRegistryManager();
+		biomes = loadBiomes();
 		structureData = loadStructures();
 		structureSetData = loadStructureSets();
+	}
+
+	public static List<String> loadBiomes() {
+		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+
+		if (registryManager == null) {
+			return Collections.emptyList();
+		}
+
+		var biomeRegistry = registryManager.get(RegistryKeys.BIOME);
+		List<String> biomes = new ArrayList<>();
+
+		for (var biome : biomeRegistry.streamEntries().toList()) {
+			biomes.add(biome.getKey().get().getValue().toString());
+		}
+
+		return biomes;
 	}
 
 	public static Map<String, StructureData> loadStructures() {
@@ -83,7 +103,7 @@ public final class WorldgenDataProvider
 				new StructureData(
 					false,
 					defaultBiomes,
-					new HashSet<>()
+					new ArrayList<>()
 				)
 			);
 		}
@@ -113,8 +133,6 @@ public final class WorldgenDataProvider
 
 			if (structureSet.placement() instanceof RandomSpreadStructurePlacement randomSpreadStructurePlacement) {
 				structureSets.put(structureSetStringId, new StructureSetData(randomSpreadStructurePlacement.getSpacing(), randomSpreadStructurePlacement.getSeparation()));
-			} else {
-				structureSets.put(structureSetStringId, new StructureSetData(-1, -1));
 			}
 		}
 

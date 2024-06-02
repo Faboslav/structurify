@@ -5,16 +5,12 @@
 	"minVersion": "0.8",
 	"mixins": [
 		"ChunkGeneratorMixin",
-		"CreateWorldScreenAccessor",
-		"FileResourcePackProviderMixin",
 		"JigsawStructureMixin",
 		"LocateCommandMixin",
-		"RandomSpreadStructurePlacementMixin"
+		"RandomSpreadStructurePlacementMixin",
+		"StructureMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
-	},
-	"client": [
-		"MinecraftClientMixin"
-	]
+	}
 }
