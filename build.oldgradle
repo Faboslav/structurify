@@ -15,6 +15,7 @@ allprojects {
 	version = rootProject.mod_version
 }
 
+/*
 forgix {
 	group = "com.faboslav.structurify"
 	mergedJarName = "${rootProject.mod_id}-mc${rootProject.minecraft_version}-${rootProject.mod_version}.jar"
@@ -37,7 +38,7 @@ forgix {
 			projectName = "neoforge"
 			jarLocation = "build/libs/${rootProject.mod_id}-neoforge-mc${rootProject.minecraft_version}-${rootProject.mod_version}.jar"
 		}
-}
+}*/
 
 subprojects {
 	apply plugin: "dev.architectury.loom"

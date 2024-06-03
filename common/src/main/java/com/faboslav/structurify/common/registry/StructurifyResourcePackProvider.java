@@ -3,6 +3,7 @@ package com.faboslav.structurify.common.registry;
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import com.faboslav.structurify.common.modcompat.ModCompat;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourcePackProvider;
 import net.minecraft.resource.VanillaDataPackProvider;
 
@@ -23,7 +24,11 @@ public final class StructurifyResourcePackProvider
 	public static ArrayList<ResourcePackProvider> getVanillaResourcePackProviders() {
 		ArrayList<ResourcePackProvider> vanillaResourcePackProviders = new ArrayList<>();
 
+		/*? 1.20.1 {*/
 		vanillaResourcePackProviders.add(new VanillaDataPackProvider());
+		/*? } else {*//*
+        vanillaResourcePackProviders.add(new VanillaDataPackProvider(MinecraftClient.getInstance().getSymlinkFinder()));
+        *//*? }*/
 
 		return vanillaResourcePackProviders;
 	}

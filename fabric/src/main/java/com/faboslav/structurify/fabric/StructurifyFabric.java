@@ -13,6 +13,16 @@ public final class StructurifyFabric implements ModInitializer {
     public void onInitialize() {
 		Structurify.init();
 
+		Structurify.getLogger().info("test");
+
+		/*? if ~1.20.2 {*/
+			Structurify.getLogger().info("FABRIC 1.20.2");
+		/*?} else {*//*
+				Structurify.getLogger().info("FABRIC 1.20.1");
+		*//*?} */
+
+		Structurify.getLogger().info("test");
+
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(this::onDatapackReload);
     }

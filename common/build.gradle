@@ -1,14 +1,70 @@
+plugins {
+	id 'java'
+	id 'idea'
+	id 'dev.architectury.loom'
+	id 'architectury-plugin'
+	id 'com.github.johnrengelman.shadow'
+}
+
+def mcVersion = stonecutter.current.version
+def prop(String name) {
+	return rootProject.project(stonecutter.current.project).property(name).toString()
+}
+
+//project.logger.error(stonecutter.current)
+
 architectury {
-	common rootProject.enabled_platforms.split(',')
+	common enabled_platforms.split(',')
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/structurify.accesswidener")
+	accessWidenerPath = file("../../src/main/resources/structurify.accesswidener")
 }
 
 dependencies {
-	// Common
-	modImplementation("net.fabricmc:fabric-loader:$rootProject.fabric_loader_version")
+	minecraft "com.mojang:minecraft:${mcVersion}"
+	mappings "net.fabricmc:yarn:${property('yarn_mappings')}:v2"
 
-	modImplementation("dev.isxander.yacl:yet-another-config-lib-common:${yacl_version}")
+	// Common
+	modImplementation("net.fabricmc:fabric-loader:${property('fabric_loader_version')}")
+
+	modImplementation("dev.isxander.yacl:yet-another-config-lib-common:${property('yacl_version')}")
+}
+
+java {
+	withSourcesJar()
+}
+
+repositories {
+	// NeoForge
+	maven { url 'https://maven.neoforged.net/releases/' }
+
+	// Mod Menu.
+	maven { url 'https://maven.terraformersmc.com' }
+
+	// Jitpack for Mixin Extras.
+	maven {
+		url 'https://jitpack.io'
+		content {
+			includeGroup 'com.github.llamalad7'
+		}
+	}
+
+	// YACL
+	maven { url "https://maven.isxander.dev/releases" }
+
+	// YACL dep
+	maven {
+		name = 'kotlinforforge'
+		url = 'https://thedarkcolour.github.io/KotlinForForge/'
+	}
+
+	// Mod Menu
+	maven { url "https://maven.terraformersmc.com/releases" }
+	maven  { url "https://maven.terraformersmc.com" }
+	maven  { url "https://maven.isxander.dev/releases" }
+	maven  { url "https://maven.isxander.dev/snapshots" }
+	maven  { url "https://maven.quiltmc.org/repository/release" }
+	maven  { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	maven  { url "https://maven.neoforged.net/releases/" }
 }

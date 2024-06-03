@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.client.api;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.client.gui.StructureConfigScreen;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.utils.Dimension;
@@ -81,9 +82,16 @@ public class StructureButtonController extends BooleanController
 			return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || this.configurationButton.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
 		}
 
+		/*? 1.20.1 {*/
 		@Override
 		public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
 			return super.mouseScrolled(mouseX, mouseY, delta) || this.configurationButton.mouseScrolled(mouseX, mouseY, delta);
 		}
+		/*? } else {*//*
+		@Override
+		public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+			return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || this.configurationButton.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+		}
+		*//*? }*/
 	}
 }

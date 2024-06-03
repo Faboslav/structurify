@@ -1,9 +1,16 @@
 plugins {
-	id "com.github.johnrengelman.shadow" version "8.1.1"
+	id 'java'
+	id 'idea'
+	id 'dev.architectury.loom'
+	id 'architectury-plugin'
+	id 'com.github.johnrengelman.shadow'
 }
 
-allprojects {
-	archivesBaseName = "${rootProject.mod_id}-fabric-mc${rootProject.minecraft_version}"
+def subproject = stonecutter.current.project
+def minecraftVersion = stonecutter.current.version
+
+def prop(String name) {
+	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
 
 architectury {
@@ -16,6 +23,7 @@ configurations {
         canBeResolved = true
         canBeConsumed = false
     }
+
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentFabric.extendsFrom common
@@ -27,22 +35,29 @@ configurations {
 }
 
 dependencies {
+	minecraft "com.mojang:minecraft:${minecraftVersion}"
+	mappings "net.fabricmc:yarn:${property('yarn_mappings')}:v2"
+
 	// Core dependencies
-	modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-	modApi "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+	modImplementation "net.fabricmc:fabric-loader:${property('fabric_loader_version')}"
+	modApi "net.fabricmc.fabric-api:fabric-api:${property('fabric_api_version')}"
 
 	// Mod menu (https://modrinth.com/mod/modmenu)
-	modImplementation("com.terraformersmc:modmenu:${mod_menu_version}") { transitive = false }
+	// modImplementation("com.terraformersmc:modmenu:${property('mod_menu_version')}") { transitive = false }
 
 	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
-	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${yacl_version}"
+	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${property('yacl_version')}"
 
 	// Compat
-	modCompileOnly ("curse.maven:global-datapacks-594773:4706699")
-	modCompileOnly ("curse.maven:drp-global-datapack-317134:4570601")
+	// modCompileOnly ("curse.maven:global-datapacks-594773:4706699")
+	// modCompileOnly ("curse.maven:drp-global-datapack-317134:4570601")
 
-	common(project(path: ':common', configuration: 'namedElements')) { transitive false }
-	shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+	common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
+	shadowBundle project(path: ":common:$subproject", configuration: 'transformProductionFabric')
+}
+
+java {
+	withSourcesJar()
 }
 
 processResources {
@@ -98,4 +113,36 @@ repositories {
 		name = "TerraformersMC"
 		url "https://maven.terraformersmc.com/releases/"
 	}
+
+	// NeoForge
+	maven { url 'https://maven.neoforged.net/releases/' }
+
+	// Mod Menu.
+	maven { url 'https://maven.terraformersmc.com' }
+
+	// Jitpack for Mixin Extras.
+	maven {
+		url 'https://jitpack.io'
+		content {
+			includeGroup 'com.github.llamalad7'
+		}
+	}
+
+	// YACL
+	maven { url "https://maven.isxander.dev/releases" }
+
+	// YACL dep
+	maven {
+		name = 'kotlinforforge'
+		url = 'https://thedarkcolour.github.io/KotlinForForge/'
+	}
+
+	// Mod Menu
+	maven { url "https://maven.terraformersmc.com/releases" }
+	maven  { url "https://maven.terraformersmc.com" }
+	maven  { url "https://maven.isxander.dev/releases" }
+	maven  { url "https://maven.isxander.dev/snapshots" }
+	maven  { url "https://maven.quiltmc.org/repository/release" }
+	maven  { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	maven  { url "https://maven.neoforged.net/releases/" }
 }
