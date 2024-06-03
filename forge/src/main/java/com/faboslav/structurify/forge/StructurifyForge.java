@@ -32,6 +32,7 @@ public final class StructurifyForge
     }
 
 	private static void onServerStarting(ServerStartingEvent event) {
+		Structurify.getLogger().info("onServerStarting");
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(event.getServer().getRegistryManager().toImmutable()));
 	}

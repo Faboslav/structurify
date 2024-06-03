@@ -2,7 +2,7 @@ package com.faboslav.structurify.forge;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
-import com.faboslav.structurify.common.config.gui.StructurifyConfigScreen;
+import com.faboslav.structurify.common.config.client.gui.StructurifyConfigScreen;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;

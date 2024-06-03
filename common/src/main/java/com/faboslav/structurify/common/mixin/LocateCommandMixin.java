@@ -30,7 +30,7 @@ public class LocateCommandMixin
 		CallbackInfoReturnable<Integer> cir
 	) throws CommandSyntaxException {
 		if (Structurify.getConfig().disableAllStructures) {
-			throw new SimpleCommandExceptionType(Text.translatable("structurized.exception.all_structures_are_disabled")).create();
+			throw new SimpleCommandExceptionType(Text.translatable("command.structurify.locate.exception.all_structures_are_disabled")).create();
 		}
 
 		Optional<RegistryKey<Structure>> structureRegistryKey = predicate.getKey().left();
@@ -40,19 +40,25 @@ public class LocateCommandMixin
 			String structureId = structureRegistryKey.get().getValue().toString();
 
 			if (structurify$isStructureDisabled(structureId)) {
-				throw new SimpleCommandExceptionType(Text.translatable("structurized.exception.structure_is_disabled", structureId)).create();
+				throw new SimpleCommandExceptionType(Text.translatable("command.structurify.locate.structure_is_disabled", structureId)).create();
 			}
 		} else if (structureTagKey.isPresent()) {
 			var structureRegistry = source.getWorld().getRegistryManager().get(RegistryKeys.STRUCTURE);
 
 			try {
 				structureRegistry.getEntryList(structureTagKey.get()).ifPresent(tagStructures -> {
+					boolean areAllStructuresInTagDisabled = true;
+
 					for (var tagStructure : tagStructures) {
 						String tagStructureId = tagStructure.getKey().get().getValue().toString();
 
-						if (structurify$isStructureDisabled(tagStructureId)) {
-							throw new RuntimeException(new SimpleCommandExceptionType(Text.translatable("structurized.exception.structure_is_disabled", "#" + structureTagKey.get().id().toString())).create());
+						if (!structurify$isStructureDisabled(tagStructureId)) {
+							areAllStructuresInTagDisabled = false;
 						}
+					}
+
+					if(areAllStructuresInTagDisabled) {
+						throw new RuntimeException(new SimpleCommandExceptionType(Text.translatable("command.structurify.locate.structure_is_disabled", "#" + structureTagKey.get().id().toString())).create());
 					}
 				});
 			} catch (RuntimeException e) {

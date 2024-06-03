@@ -12,9 +12,6 @@ public final class ModCheckerImpl
 		try {
 			modId = "global-datapack";
 			loadModCompat(modId, () -> new GlobalDatapacksCompat());
-
-			modId = "paxi";
-			loadModCompat(modId, () -> new PaxiCompat());
 		} catch (Throwable e) {
 			Structurify.getLogger().error("Failed to setup compat with " + modId);
 			e.printStackTrace();

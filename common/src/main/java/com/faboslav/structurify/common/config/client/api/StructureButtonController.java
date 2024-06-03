@@ -1,6 +1,6 @@
-package com.faboslav.structurify.common.config.api.controller;
+package com.faboslav.structurify.common.config.client.api;
 
-import com.faboslav.structurify.common.config.gui.StructureConfigScreen;
+import com.faboslav.structurify.common.config.client.gui.StructureConfigScreen;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
@@ -9,7 +9,6 @@ import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.BooleanController;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.function.Function;
 

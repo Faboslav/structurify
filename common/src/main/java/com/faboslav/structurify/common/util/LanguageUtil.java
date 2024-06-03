@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.util;
 
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Language;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +12,7 @@ public final class LanguageUtil
 	private static final String FIRST_LETTER_REGEX = "\\b(.)(.*?)\\b";
 	private static final Pattern FIRST_LETTER_PATTERN = Pattern.compile(FIRST_LETTER_REGEX);
 
-	public static Text translateId(@Nullable String prefix, String id) {
+	public static MutableText translateId(@Nullable String prefix, String id) {
 		String langKey = transformToLangKey(prefix, id);
 		Language language = Language.getInstance();
 

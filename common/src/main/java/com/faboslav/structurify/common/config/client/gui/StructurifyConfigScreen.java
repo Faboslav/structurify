@@ -1,9 +1,9 @@
-package com.faboslav.structurify.common.config.gui;
+package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.config.StructurifyConfig;
-import com.faboslav.structurify.common.config.api.controller.StructureButtonControllerBuilder;
-import com.faboslav.structurify.common.config.api.controller.DualControllerBuilder;
-import com.faboslav.structurify.common.config.api.controller.HolderOption;
+import com.faboslav.structurify.common.config.client.api.StructureButtonControllerBuilder;
+import com.faboslav.structurify.common.config.client.api.DualControllerBuilder;
+import com.faboslav.structurify.common.config.client.api.HolderOption;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
@@ -132,7 +132,7 @@ public final class StructurifyConfigScreen
 	public static void createStructureSetsTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
 		var structureSetCategoryBuilder = ConfigCategory.createBuilder()
 			.name(Text.translatable("gui.structurify.structure_sets.title"))
-			.tooltip(Text.translatable("gui.structurify.structure_sets.description"));
+			.tooltip(Text.translatable("gui.structurify.structure_sets.description").append("\n\n").append(Text.translatable("gui.structurify.structure_sets.spacing.description")).append("\n\n").append(Text.translatable("gui.structurify.structure_sets.separation.description")));
 
 		var generalStructuresSetsGroupBuilder = OptionGroup.createBuilder()
 			.name(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation.title"))
@@ -184,16 +184,10 @@ public final class StructurifyConfigScreen
 					optionGroups.add(currentGroupBuilder.build());
 				}
 
-				String possibleModNameTranslationKey = namespace + "." + namespace;
-
-				if (!Language.getInstance().hasTranslation(possibleModNameTranslationKey)) {
-					possibleModNameTranslationKey = namespace;
-				}
-
 				// Create new group
 				currentGroupBuilder = OptionGroup.createBuilder()
-					.name(Text.translatable(possibleModNameTranslationKey).append(" ").append(Text.translatable("gui.structurify.structures")))
-					.description(OptionDescription.of(Text.literal("Options for namespace: " + namespace)));
+					.name(LanguageUtil.translateId(null, namespace).append(" ").append(Text.translatable("gui.structurify.structure_sets.structure_group.title")))
+					.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.structure_group.description" + LanguageUtil.translateId(null, namespace))));
 				currentNamespace = namespace;
 			}
 
@@ -230,7 +224,7 @@ public final class StructurifyConfigScreen
 				}
 			});
 			var spacingAndSeparationOptionBuilder = HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
-				.controller(opt -> DualControllerBuilder.create(LabelOption.createBuilder().line(Text.literal(structureSetStringId)).build(), spacingOption, separationOption));
+				.controller(opt -> DualControllerBuilder.create(LabelOption.createBuilder().line(LanguageUtil.translateId("structure", structureSetStringId)).build(), spacingOption, separationOption));
 
 			currentGroupBuilder.option(spacingAndSeparationOptionBuilder.build());
 		}
@@ -245,5 +239,4 @@ public final class StructurifyConfigScreen
 
 		yacl.category(structureSetCategoryBuilder.build());
 	}
-
 }

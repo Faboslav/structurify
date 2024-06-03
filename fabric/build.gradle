@@ -40,8 +40,6 @@ dependencies {
 	// Compat
 	modCompileOnly ("curse.maven:global-datapacks-594773:4706699")
 	modCompileOnly ("curse.maven:drp-global-datapack-317134:4570601")
-	modCompileOnly ("curse.maven:paxi-418881:4749995")
-	modApi ("com.yungnickyoung.minecraft.yungsapi:YungsApi:${yungsapi_mc_version}-Fabric-${yungsapi_version}")
 
 	common(project(path: ':common', configuration: 'namedElements')) { transitive false }
 	shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

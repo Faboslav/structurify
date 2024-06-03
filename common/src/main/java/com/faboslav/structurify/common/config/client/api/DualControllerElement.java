@@ -1,4 +1,4 @@
-package com.faboslav.structurify.common.config.api.controller;
+package com.faboslav.structurify.common.config.client.api;
 
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;

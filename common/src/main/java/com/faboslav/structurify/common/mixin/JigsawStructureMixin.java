@@ -3,6 +3,7 @@ package com.faboslav.structurify.common.mixin;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.RandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructure;
+import com.faboslav.structurify.common.config.data.StructureData;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -79,22 +80,33 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 						return blacklistedBiomeKeys.contains(biomeEntry.getKey().orElse(null));
 					};
 
-					int checkRadius = this.maxDistanceFromCenter;
-					int stepSize = 8;
 					BlockPos blockPos = new BlockPos(context.chunkPos().getStartX(), 63, context.chunkPos().getStartZ());
+					var biomeBlacklistType = Structurify.getConfig().getStructureData().get(structureId.toString()).getBiomeBlacklistType();
 
-					for (int xOffset = -checkRadius; xOffset <= checkRadius; xOffset += stepSize) {
-						for (int zOffset = -checkRadius; zOffset <= checkRadius; zOffset += stepSize) {
-							int x = xOffset + blockPos.getX();
-							int y = blockPos.getY();
-							int z = zOffset + blockPos.getZ();
+					if(biomeBlacklistType == StructureData.BiomeBlacklistType.CENTER_PART) {
+						var structurePosition = new Structure.StructurePosition(blockPos, collector -> {});
+						var isBiomeBlacklisted = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.noiseConfig(), blackListedBiomesPredicate);
 
-							var structurePosition = new Structure.StructurePosition(new BlockPos(x, y, z), collector -> {});
-							var isBlacklistedBiome = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.noiseConfig(), blackListedBiomesPredicate);
+						if (isBiomeBlacklisted) {
+							cir.setReturnValue(Optional.empty());
+						}
+					} else if(biomeBlacklistType == StructureData.BiomeBlacklistType.ALL_PARTS) {
+						int checkRadius = this.maxDistanceFromCenter;
+						int stepSize = 8;
 
-							if (isBlacklistedBiome) {
-								cir.setReturnValue(Optional.empty());
-								return;
+						for (int xOffset = -checkRadius; xOffset <= checkRadius; xOffset += stepSize) {
+							for (int zOffset = -checkRadius; zOffset <= checkRadius; zOffset += stepSize) {
+								int x = xOffset + blockPos.getX();
+								int y = blockPos.getY();
+								int z = zOffset + blockPos.getZ();
+
+								var structurePosition = new Structure.StructurePosition(new BlockPos(x, y, z), collector -> {});
+								var isBiomeBlacklisted = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.noiseConfig(), blackListedBiomesPredicate);
+
+								if (isBiomeBlacklisted) {
+									cir.setReturnValue(Optional.empty());
+									return;
+								}
 							}
 						}
 					}

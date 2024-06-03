@@ -1,4 +1,4 @@
-package com.faboslav.structurify.common.config.api.controller;
+package com.faboslav.structurify.common.config.client.api;
 
 import com.google.common.collect.ImmutableSet;
 import dev.isxander.yacl3.api.*;
