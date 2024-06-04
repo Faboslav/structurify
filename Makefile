@@ -29,10 +29,10 @@ run-quilt-client: ## Runs quilt client
 	./gradlew quilt:runClient
 
 run-forge-client: ## Runs forge client
-	./gradlew forge:runClient
+	./gradlew :forge:1.20.1:runClient
 
 run-neoforge-client: ## Runs neoforge client
-	./gradlew neoforge:runClient
+	./gradlew neoforge:1.20.2:runClient
 
 run-fabric-server: ## Runs fabric server
 	./gradlew fabric:runServer

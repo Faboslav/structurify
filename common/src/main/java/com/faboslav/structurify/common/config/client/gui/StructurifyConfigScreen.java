@@ -109,7 +109,7 @@ public final class StructurifyConfigScreen
 			descriptionBuilder.text(Text.translatable("structurized.structures.biomes_description").append(Text.literal("\n")));
 
 			for (String biome : structureData.getBiomes()) {
-				descriptionBuilder.text(Text.literal(" • ").append(LanguageUtil.translateId("biome", biome)));
+				descriptionBuilder.text(Text.literal(" - ").append(LanguageUtil.translateId("biome", biome)));
 			}
 
 			descriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("structurized.structures.warning")).styled(style -> style.withColor(Formatting.YELLOW)));

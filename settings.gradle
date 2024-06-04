@@ -15,16 +15,29 @@ plugins {
 
 rootProject.name = 'structurify'
 
-def dists = ["common", "fabric"]
-include(*dists)
+Map<String, String> dists = new HashMap<String, List<String>>() {{
+	put("common", Arrays.asList("1.20.1", "1.20.2"));
+	put("fabric", Arrays.asList("1.20.1", "1.20.2"));
+	put("forge", Arrays.asList("1.20.1", "1.20.2"));
+	put("neoforge", Arrays.asList("1.20.2"));
+}};
 
 stonecutter {
-	shared {
-		versions '1.20.1', '1.20.2'
+	for(def dist : dists) {
+		def platform = dist.getKey();
+		def platformVersions = dist.getValue()
+
+		include(platform)
+
+		shared {
+			versions(platformVersions)
+		}
+
+		create(project(":$platform"))
 	}
 
-	dists.forEach {
-		create(project(":$it"))
+	shared {
+		versions '1.20.1', '1.20.2'
 	}
 
 	create(rootProject)

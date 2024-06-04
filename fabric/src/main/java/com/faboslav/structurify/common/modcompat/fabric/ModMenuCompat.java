@@ -2,11 +2,10 @@ package com.faboslav.structurify.common.modcompat.fabric;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.client.gui.StructurifyConfigScreen;
-//import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-//import com.terraformersmc.modmenu.api.ModMenuApi;
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.fabricmc.loader.api.FabricLoader;
 
-/*
 public final class ModMenuCompat implements ModMenuApi
 {
 	@Override
@@ -19,4 +18,4 @@ public final class ModMenuCompat implements ModMenuApi
 			return StructurifyConfigScreen.createConfigGui(Structurify.getConfig(), parent);
 		};
 	}
-}*/
+}

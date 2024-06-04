@@ -3,7 +3,6 @@ plugins {
 	id 'idea'
 	id 'dev.architectury.loom'
 	id 'architectury-plugin'
-	id 'com.github.johnrengelman.shadow'
 }
 
 def mcVersion = stonecutter.current.version
@@ -11,10 +10,8 @@ def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
 
-//project.logger.error(stonecutter.current)
-
 architectury {
-	common enabled_platforms.split(',')
+	common prop('enabled_platforms').split(',')
 }
 
 loom {
@@ -23,12 +20,12 @@ loom {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${mcVersion}"
-	mappings "net.fabricmc:yarn:${property('yarn_mappings')}:v2"
+	mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
 
 	// Common
-	modImplementation("net.fabricmc:fabric-loader:${property('fabric_loader_version')}")
-
-	modImplementation("dev.isxander.yacl:yet-another-config-lib-common:${property('yacl_version')}")
+	modImplementation ("net.fabricmc:fabric-loader:${prop('fabric_loader_version')}")
+	modImplementation ("dev.isxander.yacl:yet-another-config-lib-common:${prop('yacl_version')}")
+	modImplementation ("curse.maven:drp-global-datapack-317134:${prop('datapacks_version')}")
 }
 
 java {
@@ -36,6 +33,11 @@ java {
 }
 
 repositories {
+	maven {
+		name 'CurseForge'
+		url "https://www.cursemaven.com"
+	}
+
 	// NeoForge
 	maven { url 'https://maven.neoforged.net/releases/' }
 

@@ -8,9 +8,12 @@ plugins {
 
 def subproject = stonecutter.current.project
 def minecraftVersion = stonecutter.current.version
-
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
+}
+
+allprojects {
+	archivesBaseName = "${mod_id}-fabric-mc${minecraftVersion}"
 }
 
 architectury {
@@ -36,21 +39,26 @@ configurations {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraftVersion}"
-	mappings "net.fabricmc:yarn:${property('yarn_mappings')}:v2"
+	mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
 
 	// Core dependencies
-	modImplementation "net.fabricmc:fabric-loader:${property('fabric_loader_version')}"
-	modApi "net.fabricmc.fabric-api:fabric-api:${property('fabric_api_version')}"
+	modImplementation "net.fabricmc:fabric-loader:${prop('fabric_loader_version')}"
+	modApi "net.fabricmc.fabric-api:fabric-api:${prop('fabric_api_version')}"
 
-	// Mod menu (https://modrinth.com/mod/modmenu)
-	// modImplementation("com.terraformersmc:modmenu:${property('mod_menu_version')}") { transitive = false }
-
+	// Required client
 	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
-	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${property('yacl_version')}"
+	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${prop('yacl_version')}"
+
+	// Optional client
+	// Mod menu (https://modrinth.com/mod/modmenu)
+	modImplementation("com.terraformersmc:modmenu:${prop('mod_menu_version')}") { transitive = false }
 
 	// Compat
-	// modCompileOnly ("curse.maven:global-datapacks-594773:4706699")
-	// modCompileOnly ("curse.maven:drp-global-datapack-317134:4570601")
+	modCompileOnly(modRuntimeOnly("curse.maven:global-datapacks-594773:${prop('globalpacks_version')}"))
+
+	modCompileOnly(modRuntimeOnly("curse.maven:drp-global-datapack-317134:${prop('datapacks_version')}"))
+	modCompileOnly(modRuntimeOnly(group: 'com.electronwill.night-config', name: 'core', version: prop('night_config_version')))
+	modCompileOnly(modRuntimeOnly(group: 'com.electronwill.night-config', name: 'toml', version: prop('night_config_version')))
 
 	common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
 	shadowBundle project(path: ":common:$subproject", configuration: 'transformProductionFabric')
@@ -66,9 +74,9 @@ processResources {
 	inputs.property 'modDescription', mod_description
 	inputs.property 'modVersion', mod_version
 	inputs.property 'modAuthor', mod_author
-	inputs.property "minecraftVersion", min_minecraft_version
-	inputs.property "fabricLoaderVersion", fabric_loader_version
-	inputs.property "fabricApiVersion", fabric_api_version
+	inputs.property "minecraftVersion", prop('min_minecraft_version')
+	inputs.property "fabricLoaderVersion", prop('fabric_loader_version')
+	inputs.property "fabricApiVersion", prop('fabric_api_version')
 
 	filesMatching("fabric.mod.json") {
 		expand([
@@ -77,9 +85,9 @@ processResources {
 			'modDescription'     : mod_description,
 			'modVersion'         : mod_version,
 			'modAuthor'          : mod_author,
-			"minecraftVersion"   : min_minecraft_version,
-			"fabricLoaderVersion": fabric_loader_version,
-			"fabricApiVersion"   : fabric_api_version
+			"minecraftVersion"   : prop('min_minecraft_version'),
+			"fabricLoaderVersion": prop('fabric_loader_version'),
+			"fabricApiVersion"   : prop('fabric_api_version')
 		])
 	}
 }
