@@ -9,7 +9,8 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import java.util.Map;
 
 @Mixin(net.minecraftforge.client.loading.ClientModLoader.class)
-public interface ClientModLoaderAccessor {
+public interface ClientModLoaderAccessor
+{
 	@Invoker
 	static ResourcePackProvider callBuildPackFinder(Map<IModFile, ? extends PathPackResources> modResourcePacks) {
 		throw new UnsupportedOperationException();

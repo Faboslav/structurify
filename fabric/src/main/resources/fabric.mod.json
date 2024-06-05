@@ -19,13 +19,13 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "com.faboslav.structurify.fabric.StructurifyFabric"
+			"com.faboslav.structurify.fabric.StructurifyFabric"
 		],
 		"client": [
 			"com.faboslav.structurify.fabric.StructurifyFabricClient"
 		],
 		"modmenu": [
-          "com.faboslav.structurify.common.modcompat.fabric.ModMenuCompat"
+			"com.faboslav.structurify.common.modcompat.fabric.ModMenuCompat"
 		]
 	},
 	"mixins": [

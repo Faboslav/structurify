@@ -19,11 +19,11 @@ public final class StructurifyForgeClient
 	private static void onClientSetup(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
 			//if (ModList.get().isLoaded("yet_another_config_lib_v3")) {
-				ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
-					new ConfigScreenHandler.ConfigScreenFactory(
-						(mc, screen) -> StructurifyConfigScreen.createConfigGui(Structurify.getConfig(), screen)
-					)
-				);
+			ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
+				new ConfigScreenHandler.ConfigScreenFactory(
+					(mc, screen) -> StructurifyConfigScreen.createConfigGui(Structurify.getConfig(), screen)
+				)
+			);
 			//}
 		});
 	}

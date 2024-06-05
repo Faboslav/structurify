@@ -1,7 +1,10 @@
 package com.faboslav.structurify.common.modcompat.fabric;
 
 import com.faboslav.structurify.common.modcompat.ModCompat;
-import net.minecraft.resource.*;
+import net.minecraft.resource.FileResourcePackProvider;
+import net.minecraft.resource.ResourcePackProvider;
+import net.minecraft.resource.ResourcePackSource;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.path.SymlinkFinder;
 
 import java.lang.reflect.Field;

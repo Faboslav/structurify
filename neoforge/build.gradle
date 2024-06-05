@@ -12,24 +12,25 @@ architectury {
 }
 
 configurations {
-    common {
-        canBeResolved = true
-        canBeConsumed = false
-    }
+	common {
+		canBeResolved = true
+		canBeConsumed = false
+	}
 
-    compileClasspath.extendsFrom common
-    runtimeClasspath.extendsFrom common
-    developmentNeoForge.extendsFrom common
+	compileClasspath.extendsFrom common
+	runtimeClasspath.extendsFrom common
+	developmentNeoForge.extendsFrom common
 
-    shadowBundle {
-        canBeResolved = true
-        canBeConsumed = false
-    }
+	shadowBundle {
+		canBeResolved = true
+		canBeConsumed = false
+	}
 }
 
 
 def subproject = stonecutter.current.project
 def minecraftVersion = stonecutter.current.version
+
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
@@ -43,7 +44,7 @@ dependencies {
 
 	neoForge "net.neoforged:neoforge:${prop('neoforge_version')}"
 
-	if(minecraftVersion == "1.20.2") {
+	if (minecraftVersion == "1.20.2") {
 		modImplementation("dev.isxander.yacl:yet-another-config-lib-forge:${prop('yacl_version')}") { transitive = false }
 	} else {
 		modImplementation("dev.isxander.yacl:yet-another-config-lib-neoforge:${prop('yacl_version')}") { transitive = false }
@@ -84,7 +85,7 @@ shadowJar {
 java {
 	withSourcesJar()
 
-	if(minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
 	} else {
@@ -94,7 +95,7 @@ java {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	if(minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
 		it.options.release = 17
 	} else {
 		it.options.release = 21
@@ -103,8 +104,8 @@ tasks.withType(JavaCompile).configureEach {
 
 repositories {
 	// YACL
-	maven  { url "https://maven.isxander.dev/releases" }
-	maven  { url "https://maven.isxander.dev/snapshots" }
+	maven { url "https://maven.isxander.dev/releases" }
+	maven { url "https://maven.isxander.dev/snapshots" }
 	maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
 
 	// NeoForge

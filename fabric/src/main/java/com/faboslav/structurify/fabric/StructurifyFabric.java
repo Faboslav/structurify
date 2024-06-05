@@ -8,9 +8,10 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.resource.LifecycledResourceManager;
 import net.minecraft.server.MinecraftServer;
 
-public final class StructurifyFabric implements ModInitializer {
-    @Override
-    public void onInitialize() {
+public final class StructurifyFabric implements ModInitializer
+{
+	@Override
+	public void onInitialize() {
 		Structurify.init();
 
 		Structurify.getLogger().info("test");
@@ -19,7 +20,7 @@ public final class StructurifyFabric implements ModInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(this::onDatapackReload);
-    }
+	}
 
 	private void onServerStarting(MinecraftServer minecraftServer) {
 		Structurify.getLogger().info("onServerStarting");
@@ -27,8 +28,12 @@ public final class StructurifyFabric implements ModInitializer {
 		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(minecraftServer.getRegistryManager().toImmutable()));
 	}
 
-	private void onDatapackReload(MinecraftServer minecraftServer, LifecycledResourceManager serverResourceManager, boolean success) {
-		if(!success) {
+	private void onDatapackReload(
+		MinecraftServer minecraftServer,
+		LifecycledResourceManager serverResourceManager,
+		boolean success
+	) {
+		if (!success) {
 			return;
 		}
 

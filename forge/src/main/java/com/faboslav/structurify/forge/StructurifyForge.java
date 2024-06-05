@@ -15,7 +15,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 @Mod(Structurify.MOD_ID)
 public final class StructurifyForge
 {
-    public StructurifyForge() {
+	public StructurifyForge() {
 		Structurify.getLogger().info("StructurifyForge");
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		IEventBus eventBus = MinecraftForge.EVENT_BUS;
@@ -29,7 +29,7 @@ public final class StructurifyForge
 		}
 		eventBus.addListener(StructurifyForge::onServerStarting);
 		eventBus.addListener(StructurifyForge::onTagsUpdate);
-    }
+	}
 
 	private static void onServerStarting(ServerStartingEvent event) {
 		Structurify.getLogger().info("onServerStarting");

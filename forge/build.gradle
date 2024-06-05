@@ -8,6 +8,7 @@ plugins {
 
 def subproject = stonecutter.current.project
 def minecraftVersion = stonecutter.current.version
+
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
@@ -47,7 +48,7 @@ configurations {
 java {
 	withSourcesJar()
 
-	if(minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
 	} else {
@@ -57,7 +58,7 @@ java {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	if(minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
 		it.options.release = 17
 	} else {
 		it.options.release = 21
@@ -70,7 +71,7 @@ dependencies {
 
 	forge "net.minecraftforge:forge:${prop('minecraft_version')}-${prop('forge_version')}"
 
-	modImplementation ("dev.isxander.yacl:yet-another-config-lib-forge:${prop('yacl_version')}") { transitive = false }
+	modImplementation("dev.isxander.yacl:yet-another-config-lib-forge:${prop('yacl_version')}") { transitive = false }
 	// forgeRuntimeLibrary
 	// Required
 	//modImplementation modRuntimeOnly ("curse.maven:yacl-667299:5376023")
@@ -164,10 +165,10 @@ repositories {
 
 	// Mod Menu
 	maven { url "https://maven.terraformersmc.com/releases" }
-	maven  { url "https://maven.terraformersmc.com" }
-	maven  { url "https://maven.isxander.dev/releases" }
-	maven  { url "https://maven.isxander.dev/snapshots" }
-	maven  { url "https://maven.quiltmc.org/repository/release" }
-	maven  { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-	maven  { url "https://maven.neoforged.net/releases/" }
+	maven { url "https://maven.terraformersmc.com" }
+	maven { url "https://maven.isxander.dev/releases" }
+	maven { url "https://maven.isxander.dev/snapshots" }
+	maven { url "https://maven.quiltmc.org/repository/release" }
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	maven { url "https://maven.neoforged.net/releases/" }
 }
