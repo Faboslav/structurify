@@ -4,8 +4,8 @@ import com.faboslav.structurify.common.api.RandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
-import com.faboslav.structurify.common.events.lifecycle.DatapackReloadEvent;
 import com.faboslav.structurify.common.events.common.PrepareRegistriesEvent;
+import com.faboslav.structurify.common.events.lifecycle.DatapackReloadEvent;
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
@@ -65,7 +65,7 @@ public final class Structurify
 			.map(Map.Entry::getKey)
 			.toList();
 
-		if(!disabledStructures.isEmpty()) {
+		if (!disabledStructures.isEmpty()) {
 			Structurify.getLogger().info("Disabled {} structures: {}", disabledStructures.size(), disabledStructures);
 		}
 
@@ -75,7 +75,7 @@ public final class Structurify
 			.map(Map.Entry::getKey)
 			.toList();
 
-		if(!changedStructureSets.isEmpty()) {
+		if (!changedStructureSets.isEmpty()) {
 			Structurify.getLogger().info("Changed spacing and/or separation of {} structures sets: {}", changedStructureSets.size(), changedStructureSets);
 		}
 	}
@@ -94,7 +94,7 @@ public final class Structurify
 
 		var registryManager = event.registryManager();
 
-		if(registryManager == null) {
+		if (registryManager == null) {
 			return;
 		}
 
@@ -107,7 +107,7 @@ public final class Structurify
 	private static void prepareStructures(DynamicRegistryManager registryManager) {
 		var structureRegistry = registryManager.getOptional(RegistryKeys.STRUCTURE).orElse(null);
 
-		if(structureRegistry == null) {
+		if (structureRegistry == null) {
 			return;
 		}
 
@@ -126,7 +126,7 @@ public final class Structurify
 	private static void prepareStructureSets(DynamicRegistryManager registryManager) {
 		var structureSetRegistry = registryManager.getOptional(RegistryKeys.STRUCTURE_SET).orElse(null);
 
-		if(structureSetRegistry == null) {
+		if (structureSetRegistry == null) {
 			return;
 		}
 

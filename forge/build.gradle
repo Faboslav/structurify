@@ -46,6 +46,22 @@ configurations {
 
 java {
 	withSourcesJar()
+
+	if(minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
+	} else {
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	if(minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+		it.options.release = 17
+	} else {
+		it.options.release = 21
+	}
 }
 
 dependencies {
@@ -101,23 +117,6 @@ shadowJar {
 	configurations = [project.configurations.shadowBundle]
 	archiveClassifier = 'dev-shadow'
 }
-
-remapJar {
-	inputFile.set shadowJar.archiveFile
-	dependsOn shadowJar
-	archiveClassifier.set(null)
-}
-
-jar {
-	archiveClassifier.set("dev")
-}
-
-sourcesJar {
-	def commonSources = project(":common:$subproject").sourcesJar
-	dependsOn commonSources
-	from commonSources.archiveFile.map { zipTree(it) }
-}
-
 
 repositories {
 	maven {

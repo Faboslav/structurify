@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.config.client.api;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.client.gui.StructureConfigScreen;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.utils.Dimension;
@@ -48,7 +47,7 @@ public class StructureButtonController extends BooleanController
 
 			this.setDimension(this.getDimension().expanded(-20, 0));
 			this.configurationButton = new TextScaledButtonWidget(screen, this.getDimension().xLimit(), -50, 20, 20, 1.0f, Text.literal("\u2699").styled(style -> style.withBold(true)), button -> {
-				var structureScreen = StructureConfigScreen. create(screen, structureId);
+				var structureScreen = StructureConfigScreen.create(screen, structureId);
 				this.client.setScreen(structureScreen);
 			});
 			this.configurationButton.active = true;

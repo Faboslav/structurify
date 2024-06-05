@@ -13,7 +13,7 @@ public class StructureData
 	private List<String> blacklistedBiomes;
 	private BiomeBlacklistType biomeBlacklistType = BiomeBlacklistType.CENTER_PART;
 
-		public StructureData(boolean isDisabled, Set<String> biomes, List<String> blacklistedBiomes) {
+	public StructureData(boolean isDisabled, Set<String> biomes, List<String> blacklistedBiomes) {
 		this.isDisabled = isDisabled;
 		this.biomes = biomes;
 		this.blacklistedBiomes = blacklistedBiomes;
@@ -36,7 +36,7 @@ public class StructureData
 	}
 
 	public void setBiomeBlacklistType(BiomeBlacklistType biomeBlacklistType) {
-			this.biomeBlacklistType = biomeBlacklistType;
+		this.biomeBlacklistType = biomeBlacklistType;
 	}
 
 	public List<String> getBlacklistedBiomes() {

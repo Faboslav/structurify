@@ -17,7 +17,7 @@ public final class LanguageUtil
 		Language language = Language.getInstance();
 
 		if (!language.hasTranslation(langKey)) {
-			if(prefix == null ) {
+			if (prefix == null) {
 				langKey = id;
 			} else {
 				langKey = id.split(":")[1];
@@ -34,7 +34,7 @@ public final class LanguageUtil
 	}
 
 	private static String transformToLangKey(@Nullable String prefix, String identifier) {
-		if(prefix == null) {
+		if (prefix == null) {
 			return identifier.replace(":", ".");
 		}
 

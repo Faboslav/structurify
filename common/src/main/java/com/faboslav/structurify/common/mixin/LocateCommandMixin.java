@@ -57,7 +57,7 @@ public class LocateCommandMixin
 						}
 					}
 
-					if(areAllStructuresInTagDisabled) {
+					if (areAllStructuresInTagDisabled) {
 						throw new RuntimeException(new SimpleCommandExceptionType(Text.translatable("command.structurify.locate.structure_is_disabled", "#" + structureTagKey.get().id().toString())).create());
 					}
 				});

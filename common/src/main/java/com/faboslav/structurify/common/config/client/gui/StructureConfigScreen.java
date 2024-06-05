@@ -3,12 +3,10 @@ package com.faboslav.structurify.common.config.client.gui;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
-import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.DropdownStringControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
-import dev.isxander.yacl3.gui.controllers.cycling.EnumController;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
@@ -39,12 +37,12 @@ public final class StructureConfigScreen
 			.toList();
 
 		var biomeBlacklistTypeOption = Option.<StructureData.BiomeBlacklistType>createBuilder()
-									 .name(Text.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"))
-									 .binding(
-										 StructureData.BiomeBlacklistType.CENTER_PART,
-										 () -> Structurify.getConfig().getStructureData().get(structureId).getBiomeBlacklistType(),
-										 biomeBlacklistType -> Structurify.getConfig().getStructureData().get(structureId).setBiomeBlacklistType(biomeBlacklistType)
-									 ).controller(opt -> EnumControllerBuilder.create(opt)
+			.name(Text.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"))
+			.binding(
+				StructureData.BiomeBlacklistType.CENTER_PART,
+				() -> Structurify.getConfig().getStructureData().get(structureId).getBiomeBlacklistType(),
+				biomeBlacklistType -> Structurify.getConfig().getStructureData().get(structureId).setBiomeBlacklistType(biomeBlacklistType)
+			).controller(opt -> EnumControllerBuilder.create(opt)
 				.enumClass(StructureData.BiomeBlacklistType.class)
 				.valueFormatter(v -> Text.translatable("gui.structurify.structures.structure.biome_blacklist_type." + v.name().toLowerCase())));
 

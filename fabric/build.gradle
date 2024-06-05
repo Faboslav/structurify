@@ -37,6 +37,26 @@ configurations {
     }
 }
 
+java {
+	withSourcesJar()
+
+	if(minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
+	} else {
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	if(minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+		it.options.release = 17
+	} else {
+		it.options.release = 21
+	}
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraftVersion}"
 	mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
@@ -54,18 +74,21 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${prop('mod_menu_version')}") { transitive = false }
 
 	// Compat
-	modCompileOnly(modRuntimeOnly("curse.maven:global-datapacks-594773:${prop('globalpacks_version')}"))
+	if (minecraftVersion == '1.20.1') {
+		modCompileOnly ("curse.maven:drp-global-datapack-317134:4570601")
+		modCompileOnly(modRuntimeOnly("curse.maven:global-datapacks-594773:4706699"))
+	} else if (minecraftVersion == '1.20.2') {
+		modCompileOnly("curse.maven:drp-global-datapack-317134:5374072")
+		modCompileOnly(modRuntimeOnly("curse.maven:global-datapacks-594773:4923994"))
+	} else if (minecraftVersion == '1.20.4') {
+		modCompileOnly ("curse.maven:drp-global-datapack-317134:5374072")
+	}
 
-	modCompileOnly(modRuntimeOnly("curse.maven:drp-global-datapack-317134:${prop('datapacks_version')}"))
-	modCompileOnly(modRuntimeOnly(group: 'com.electronwill.night-config', name: 'core', version: prop('night_config_version')))
-	modCompileOnly(modRuntimeOnly(group: 'com.electronwill.night-config', name: 'toml', version: prop('night_config_version')))
+	modCompileOnly(modRuntimeOnly(group: 'com.electronwill.night-config', name: 'core', version: '3.6.5'))
+	modCompileOnly(modRuntimeOnly(group: 'com.electronwill.night-config', name: 'toml', version: '3.6.5'))
 
 	common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
 	shadowBundle project(path: ":common:$subproject", configuration: 'transformProductionFabric')
-}
-
-java {
-	withSourcesJar()
 }
 
 processResources {
@@ -95,10 +118,6 @@ processResources {
 shadowJar {
 	configurations = [project.configurations.shadowBundle]
 	archiveClassifier = 'dev-shadow'
-}
-
-remapJar {
-	input.set shadowJar.archiveFile
 }
 
 repositories {

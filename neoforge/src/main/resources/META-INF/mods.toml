@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "*"
 license = "CC-BY-NC-ND-4.0"
-issueTrackerURL = "https://github.com/Faboslav/variants-and-ventures/issues"
+issueTrackerURL = "https://github.com/Faboslav/structurify/issues"
 
 [[mods]]
 modId = "${modId}"
@@ -11,7 +11,7 @@ authors = "${modAuthor}"
 description = "${modDescription}"
 logoFile = "icon.png"
 logoBlur = false
-displayURL = "https://www.curseforge.com/minecraft/mc-mods/variants-and-ventures"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/structurify"
 
 [[mixins]]
 config = "structurify-common.mixins.json"

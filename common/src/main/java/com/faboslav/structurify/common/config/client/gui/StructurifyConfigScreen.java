@@ -1,9 +1,9 @@
 package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.config.StructurifyConfig;
-import com.faboslav.structurify.common.config.client.api.StructureButtonControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.DualControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.HolderOption;
+import com.faboslav.structurify.common.config.client.api.StructureButtonControllerBuilder;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
@@ -19,7 +19,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Language;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -213,13 +212,13 @@ public final class StructurifyConfigScreen
 
 
 			spacingOption.addListener((opt, spacing) -> {
-				if(spacing <= separationOption.pendingValue()) {
+				if (spacing <= separationOption.pendingValue()) {
 					spacingOption.requestSet(separationOption.pendingValue() + 1);
 				}
 			});
 
 			separationOption.addListener((opt, separation) -> {
-				if(separation >= spacingOption.pendingValue()) {
+				if (separation >= spacingOption.pendingValue()) {
 					separationOption.requestSet(spacingOption.pendingValue() - 1);
 				}
 			});

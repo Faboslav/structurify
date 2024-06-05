@@ -8,7 +8,10 @@ import com.google.gson.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public final class StructurifyConfig
 {
@@ -163,7 +166,7 @@ public final class StructurifyConfig
 					var spacing = entry.getValue().getSpacing();
 					var separation = entry.getValue().getSeparation();
 
-					if(separation >= spacing) {
+					if (separation >= spacing) {
 						Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}. ", entry.getKey(), separation, spacing, spacing - 1);
 						separation = spacing - 1;
 					}

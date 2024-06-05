@@ -4,7 +4,6 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import com.faboslav.structurify.common.modcompat.ModCompat;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourcePackProvider;
 import net.minecraft.resource.VanillaDataPackProvider;
 import net.minecraft.util.path.SymlinkFinder;
@@ -28,8 +27,8 @@ public final class StructurifyResourcePackProvider
 
 		/*? if =1.20.1 {*/
 		/*vanillaResourcePackProviders.add(new VanillaDataPackProvider());
-		*//*?} else {*/
-        vanillaResourcePackProviders.add(new VanillaDataPackProvider(new SymlinkFinder(path -> true)));
+		 *//*?} else {*/
+		vanillaResourcePackProviders.add(new VanillaDataPackProvider(new SymlinkFinder(path -> true)));
 		/*?}*/
 
 		return vanillaResourcePackProviders;

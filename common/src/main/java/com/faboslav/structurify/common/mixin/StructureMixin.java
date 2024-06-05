@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.mixin;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.structure.Structure;
