@@ -15,18 +15,18 @@ plugins {
 
 rootProject.name = 'structurify'
 
-Map<String, String> dists = new HashMap<String, List<String>>() {
-	{
-		put("common", Arrays.asList("1.20.1", "1.20.2", "1.20.4"));
-		put("fabric", Arrays.asList("1.20.1", "1.20.2", "1.20.4"));
-		put("forge", Arrays.asList("1.20.1", "1.20.2"));
-		put("neoforge", Arrays.asList("1.20.2", "1.20.4"));
-	}
-};
+def dists = [
+	common: ['1.20.1', '1.20.2', '1.20.4', '1.20.6'],
+	fabric: ['1.20.1', '1.20.2', '1.20.4', '1.20.6'],
+	forge: ['1.20.1', '1.20.2'],
+	neoforge: ['1.20.2', '1.20.4', '1.20.6']
+]
+
+def uniqueVersions = dists.values().flatten().unique().collect { "'${it}'" }.join(", ")
 
 stonecutter {
-	for (def dist : dists) {
-		def platform = dist.getKey();
+	for (def dist : dists.entrySet()) {
+		def platform = dist.getKey()
 		def platformVersions = dist.getValue()
 
 		include(platform)
@@ -39,7 +39,7 @@ stonecutter {
 	}
 
 	shared {
-		versions '1.20.1', '1.20.2', '1.20.4'
+		versions uniqueVersions.split(", ").collect { it.replaceAll("'", "") }
 	}
 
 	create(rootProject)

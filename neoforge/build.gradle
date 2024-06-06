@@ -24,6 +24,17 @@ architectury {
 	neoForge()
 }
 
+
+loom {
+	silentMojangMappingsLicense()
+
+	accessWidenerPath.set(project(":common:$subproject").loom.accessWidenerPath)
+
+	runConfigs.all {
+		ideConfigGenerated true
+	}
+}
+
 configurations {
 	common {
 		canBeResolved = true
@@ -44,25 +55,28 @@ dependencies {
 	minecraft "com.mojang:minecraft:${minecraftVersion}"
 	mappings loom.layered {
 		it.mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
-		it.mappings "dev.architectury:yarn-mappings-patch-forge:${prop('yarn_mappings_patch')}"
+		if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+			it.mappings "dev.architectury:yarn-mappings-patch-forge:${prop('yarn_mappings_patch')}"
+		} else {
+			it.mappings "dev.architectury:yarn-mappings-patch-neoforge:${prop('yarn_mappings_patch')}"
+		}
 	}
 
 	neoForge "net.neoforged:neoforge:${prop('neoforge_version')}"
 
 	if (minecraftVersion == "1.20.2") {
-		modImplementation(modrinth("yacl", "${prop('yacl_version')}-forge"))
-		//modImplementation("dev.isxander.yacl:yet-another-config-lib-forge:${prop('yacl_version')}") { transitive = false }
+		//modImplementation(modrinth("yacl", "${prop('yacl_version')}-forge"))
 	} else {
-		modImplementation(modrinth("yacl", "${prop('yacl_version')}-neoforge"))
-		modImplementation("dev.isxander.yacl:yet-another-config-lib-neoforge:${prop('yacl_version')}") { transitive = false }
+		//modImplementation(modrinth("yacl", "${prop('yacl_version')}-neoforge"))
 	}
 
-	common(project(path: ":common:1.20.1", configuration: 'namedElements')) { transitive false }
-	shadowBundle project(path: ":common:1.20.1", configuration: 'transformProductionNeoForge')
+	//common(project(path: ":common:1.20.1", configuration: 'namedElements')) { transitive false }
+	//shadowBundle project(path: ":common:1.20.1", configuration: 'transformProductionNeoForge')
 
 	common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
-	shadowBundle project(path: ":common:$subproject", configuration: 'transformProductionNeoForge')
+	shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionNeoForge'))
 
+	//project.logger.error(getResolveStrategy())
 	//project.logger.error("mcminecraftVersion:" + minecraftVersion)
 	//project.logger.error(minecraftVersion)
 	//project.logger.error(stonecutter.active)
@@ -112,15 +126,17 @@ shadowJar {
 	archiveClassifier = 'dev-shadow'
 }
 
-jar {
-	archiveClassifier.set("dev")
-}
-
-// Doesnt work on neo
 /*
 remapJar {
-	input.set shadowJar.archiveFile
+	inputFile.set shadowJar.archiveFile
+	dependsOn shadowJar
+	archiveClassifier.set(null)
+	atAccessWideners.add("${rootProject.mod_id}.accesswidener") // this is a path inside the mod jar
 }*/
+
+remapJar {
+	input.set shadowJar.archiveFile
+}
 
 java {
 	withSourcesJar()

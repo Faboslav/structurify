@@ -18,7 +18,13 @@ architectury {
 }
 
 loom {
+	silentMojangMappingsLicense()
+
 	accessWidenerPath = file("../../src/main/resources/structurify.accesswidener")
+
+	runConfigs.all {
+		ideConfigGenerated true
+	}
 }
 
 dependencies {

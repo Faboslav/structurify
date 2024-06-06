@@ -4,6 +4,9 @@ help: ## Prints help for targets with comments
 build-project: ## Builds project
 	./gradlew build
 
+build-project2: ## Builds project
+	./gradlew build
+
 build-chiseled: ## Builds project
 	./gradlew chiseledBuild
 
@@ -38,7 +41,7 @@ run-forge-client: ## Runs forge client
 	./gradlew :forge:1.20.2:runClient
 
 run-neoforge-client: ## Runs neoforge client
-	./gradlew neoforge:1.20.2:runClient
+	./gradlew neoforge:1.20.6:runClient
 
 run-fabric-server: ## Runs fabric server
 	./gradlew fabric:runServer
