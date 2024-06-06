@@ -4,6 +4,15 @@ help: ## Prints help for targets with comments
 build-project: ## Builds project
 	./gradlew build
 
+build-chiseled: ## Builds project
+	./gradlew chiseledBuild
+
+build-active: ## Builds the active version
+	./gradlew buildActiveCommon
+	./gradlew buildActiveFabric
+	./gradlew buildActiveForge
+	./gradlew buildActiveNeoForge
+
 merge-jars: ## Builds project
 	./gradlew mergeJars
 
@@ -23,22 +32,16 @@ gen-sources: ## Generate sources
 	./gradlew genSources
 
 run-fabric-client: ## Runs fabric client
-	./gradlew fabric:runClient
-
-run-quilt-client: ## Runs quilt client
-	./gradlew quilt:runClient
+	./gradlew fabric:1.20.2:runClient
 
 run-forge-client: ## Runs forge client
-	./gradlew :forge:1.20.1:runClient
+	./gradlew :forge:1.20.2:runClient
 
 run-neoforge-client: ## Runs neoforge client
-	./gradlew neoforge:1.20.4:runClient
+	./gradlew neoforge:1.20.2:runClient
 
 run-fabric-server: ## Runs fabric server
 	./gradlew fabric:runServer
-
-run-quilt-server: ## Runs quilt server
-	./gradlew quilt:runServer
 
 run-forge-server: ## Runs forge server
 	./gradlew forge:runServer

@@ -15,22 +15,6 @@ plugins {
 
 rootProject.name = 'structurify'
 
-/*
-def dists = ["common", "fabric", "forge", "neoforge"]
-include(*dists)
-
-stonecutter {
-	shared {
-		versions '1.20.1', '1.20.2'
-	}
-
-	dists.forEach {
-		create(project(":$it"))
-	}
-
-	create(rootProject)
-}*/
-
 Map<String, String> dists = new HashMap<String, List<String>>() {
 	{
 		put("common", Arrays.asList("1.20.1", "1.20.2", "1.20.4"));

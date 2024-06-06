@@ -8,13 +8,15 @@ plugins {
 
 def subproject = stonecutter.current.project
 def minecraftVersion = stonecutter.current.version
-
+def modrinth(String name, String version) {
+	return "maven.modrinth:$name:$version"
+}
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
 
-allprojects {
-	archivesBaseName = "${mod_id}-fabric-mc${minecraftVersion}"
+base {
+	archivesName.set("${mod_id}-fabric-mc${minecraftVersion}")
 }
 
 architectury {
@@ -38,26 +40,6 @@ configurations {
 	}
 }
 
-java {
-	withSourcesJar()
-
-	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
-		sourceCompatibility = JavaVersion.VERSION_17
-		targetCompatibility = JavaVersion.VERSION_17
-	} else {
-		sourceCompatibility = JavaVersion.VERSION_21
-		targetCompatibility = JavaVersion.VERSION_21
-	}
-}
-
-tasks.withType(JavaCompile).configureEach {
-	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
-		it.options.release = 17
-	} else {
-		it.options.release = 21
-	}
-}
-
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraftVersion}"
 	mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
@@ -68,7 +50,8 @@ dependencies {
 
 	// Required client
 	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
-	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${prop('yacl_version')}"
+
+	modImplementation(modrinth("yacl", "${prop('yacl_version')}-fabric"))
 
 	// Optional client
 	// Mod menu (https://modrinth.com/mod/modmenu)
@@ -121,34 +104,47 @@ shadowJar {
 	archiveClassifier = 'dev-shadow'
 }
 
+jar {
+	archiveClassifier.set("dev")
+}
+
+remapJar {
+	input.set shadowJar.archiveFile
+}
+
+java {
+	withSourcesJar()
+
+	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
+	} else {
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+		it.options.release = 17
+	} else {
+		it.options.release = 21
+	}
+}
+
 repositories {
-	maven {
-		name 'CurseForge'
-		url "https://www.cursemaven.com"
-	}
+	// CurseForge
+	maven { url "https://www.cursemaven.com" }
 
-	maven {
-		name 'Modrinth'
-		url 'https://api.modrinth.com/maven'
-	}
-
-	maven {
-		name 'Xander Maven'
-		url 'https://maven.isxander.dev/releases'
-	}
-
-	maven {
-		name = "TerraformersMC"
-		url "https://maven.terraformersmc.com/releases/"
-	}
-
-	// NeoForge
-	maven { url 'https://maven.neoforged.net/releases/' }
+	// YACL
+	maven { url "https://maven.isxander.dev/releases" }
+	maven { url "https://maven.isxander.dev/snapshots" }
+	maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
 
 	// Mod Menu.
-	maven { url 'https://maven.terraformersmc.com' }
+	maven { url 'https://maven.terraformersmc.com/releases/' }
 
-	// Jitpack for Mixin Extras.
+	// Mixin Extras.
 	maven {
 		url 'https://jitpack.io'
 		content {
@@ -156,21 +152,21 @@ repositories {
 		}
 	}
 
-	// YACL
-	maven { url "https://maven.isxander.dev/releases" }
-
-	// YACL dep
+	// Modrinth
 	maven {
-		name = 'kotlinforforge'
-		url = 'https://thedarkcolour.github.io/KotlinForForge/'
+		url "https://api.modrinth.com/maven"
+		content {
+			includeGroup("maven.modrinth")
+		}
 	}
 
-	// Mod Menu
-	maven { url "https://maven.terraformersmc.com/releases" }
-	maven { url "https://maven.terraformersmc.com" }
-	maven { url "https://maven.isxander.dev/releases" }
-	maven { url "https://maven.isxander.dev/snapshots" }
-	maven { url "https://maven.quiltmc.org/repository/release" }
+	// Random
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-	maven { url "https://maven.neoforged.net/releases/" }
+}
+
+if(stonecutter.current.isActive) {
+	rootProject.tasks.register("buildActiveFabric") {
+		group = "project"
+		dependsOn(tasks.named("build"))
+	}
 }

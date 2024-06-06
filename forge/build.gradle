@@ -8,9 +8,15 @@ plugins {
 
 def subproject = stonecutter.current.project
 def minecraftVersion = stonecutter.current.version
-
+def modrinth(String name, String version) {
+	return "maven.modrinth:$name:$version"
+}
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
+}
+
+base {
+	archivesName.set("${mod_id}-forge-mc${minecraftVersion}")
 }
 
 architectury {
@@ -71,7 +77,8 @@ dependencies {
 
 	forge "net.minecraftforge:forge:${prop('minecraft_version')}-${prop('forge_version')}"
 
-	modImplementation("dev.isxander.yacl:yet-another-config-lib-forge:${prop('yacl_version')}") { transitive = false }
+	modImplementation(modrinth("yacl", "${prop('yacl_version')}-forge"))
+	//modImplementation("dev.isxander.yacl:yet-another-config-lib-forge:${prop('yacl_version')}") { transitive = false }
 	// forgeRuntimeLibrary
 	// Required
 	//modImplementation modRuntimeOnly ("curse.maven:yacl-667299:5376023")
@@ -119,26 +126,19 @@ shadowJar {
 	archiveClassifier = 'dev-shadow'
 }
 
+jar {
+	archiveClassifier.set("dev")
+}
+
+remapJar {
+	input.set shadowJar.archiveFile
+}
+
 repositories {
-	maven {
-		name 'CurseForge'
-		url "https://www.cursemaven.com"
-	}
-
-	maven {
-		name 'Modrinth'
-		url 'https://api.modrinth.com/maven'
-	}
-
-	maven {
-		name 'Xander Maven'
-		url 'https://maven.isxander.dev/releases'
-	}
-
-	maven {
-		name = "TerraformersMC"
-		url "https://maven.terraformersmc.com/releases/"
-	}
+	// YACL
+	maven { url "https://maven.isxander.dev/releases" }
+	maven { url "https://maven.isxander.dev/snapshots" }
+	maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
 
 	// NeoForge
 	maven { url 'https://maven.neoforged.net/releases/' }
@@ -146,7 +146,7 @@ repositories {
 	// Mod Menu.
 	maven { url 'https://maven.terraformersmc.com' }
 
-	// Jitpack for Mixin Extras.
+	// Mixin Extras.
 	maven {
 		url 'https://jitpack.io'
 		content {
@@ -154,21 +154,18 @@ repositories {
 		}
 	}
 
-	// YACL
-	maven { url "https://maven.isxander.dev/releases" }
-
-	// YACL dep
+	// Modrinth
 	maven {
-		name = 'kotlinforforge'
-		url = 'https://thedarkcolour.github.io/KotlinForForge/'
+		url "https://api.modrinth.com/maven"
+		content {
+			includeGroup("maven.modrinth")
+		}
 	}
+}
 
-	// Mod Menu
-	maven { url "https://maven.terraformersmc.com/releases" }
-	maven { url "https://maven.terraformersmc.com" }
-	maven { url "https://maven.isxander.dev/releases" }
-	maven { url "https://maven.isxander.dev/snapshots" }
-	maven { url "https://maven.quiltmc.org/repository/release" }
-	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-	maven { url "https://maven.neoforged.net/releases/" }
+if(stonecutter.current.isActive) {
+	rootProject.tasks.register("buildActiveForge") {
+		group = "project"
+		dependsOn(tasks.named("build"))
+	}
 }

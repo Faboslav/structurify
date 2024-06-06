@@ -6,7 +6,9 @@ plugins {
 }
 
 def minecraftVersion = stonecutter.current.version
-
+def modrinth(String name, String version) {
+	return "maven.modrinth:$name:$version"
+}
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
@@ -25,7 +27,14 @@ dependencies {
 
 	// Common
 	modImplementation("net.fabricmc:fabric-loader:${prop('fabric_loader_version')}")
-	modImplementation("dev.isxander.yacl:yet-another-config-lib-common:${prop('yacl_version')}")
+
+	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+		modImplementation(modrinth("yacl", "${prop('yacl_version')}-fabric"))
+		//modImplementation("dev.isxander.yacl:yet-another-config-lib-common:${prop('yacl_version')}")
+	} else {
+		modImplementation(modrinth("yacl", "${prop('yacl_version')}-fabric"))
+		//modImplementation("dev.isxander.yacl:yet-another-config-lib:${prop('yacl_version')}");
+	}
 
 	if (minecraftVersion == '1.20.1') {
 		modCompileOnly("curse.maven:drp-global-datapack-317134:4570601")
@@ -76,6 +85,14 @@ repositories {
 		}
 	}
 
+	// Modrinth
+	maven {
+		url "https://api.modrinth.com/maven"
+		content {
+			includeGroup("maven.modrinth")
+		}
+	}
+
 	// YACL
 	maven { url "https://maven.isxander.dev/releases" }
 
@@ -93,4 +110,11 @@ repositories {
 	maven { url "https://maven.quiltmc.org/repository/release" }
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 	maven { url "https://maven.neoforged.net/releases/" }
+}
+
+if(stonecutter.current.isActive) {
+	rootProject.tasks.register("buildActiveCommon") {
+		group = "project"
+		dependsOn(tasks.named("build"))
+	}
 }
