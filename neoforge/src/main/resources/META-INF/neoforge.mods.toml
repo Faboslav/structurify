@@ -4,11 +4,27 @@ license = "CC-BY-NC-ND-4.0"
 issueTrackerURL = "https://github.com/Faboslav/structurify/issues"
 
 [[mods]]
-modId = "structurify"
-version = "1.0.0"
-displayName = "structurify"
-authors = "fabo"
-description = "tbd"
+modId = "${modId}"
+version = "${modVersion}"
+displayName = "${modName}"
+authors = "${modAuthor}"
+description = "${modDescription}"
 logoFile = "icon.png"
 logoBlur = false
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/structurify"
+
+[[mixins]]
+config = "structurify-common.mixins.json"
+
+#[[mixins]]
+#config = "structurify-neoforge.mixins.json"
+
+#[[dependencies.${ modId }]]
+#modId = "minecraft"
+#required = true
+#versionRange = "[${minecraftVersion},)"
+
+#[modproperties.${ modId }]
+#catalogueImageIcon = "catalogue_icon.png"
+#catalogueBackground = "catalogue_background.png"
+#configuredBackground = "catalogue_background.png"

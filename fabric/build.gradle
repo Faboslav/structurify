@@ -123,7 +123,7 @@ remapJar {
 java {
 	withSourcesJar()
 
-	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+	if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
 	} else {
@@ -133,7 +133,7 @@ java {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+	if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
 		it.options.release = 17
 	} else {
 		it.options.release = 21
@@ -170,6 +170,8 @@ repositories {
 
 	// Random
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+
+	maven{ url = "https://maven.quiltmc.org/repository/release" }
 }
 
 if(stonecutter.current.isActive) {

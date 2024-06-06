@@ -26,10 +26,10 @@ public final class StructurifyResourcePackProvider
 		ArrayList<ResourcePackProvider> vanillaResourcePackProviders = new ArrayList<>();
 
 		/*? if =1.20.1 {*/
-		/*vanillaResourcePackProviders.add(new VanillaDataPackProvider());
-		 *//*?} else {*/
-		vanillaResourcePackProviders.add(new VanillaDataPackProvider(new SymlinkFinder(path -> true)));
-		/*?}*/
+		vanillaResourcePackProviders.add(new VanillaDataPackProvider());
+		 /*?} else {*/
+		/*vanillaResourcePackProviders.add(new VanillaDataPackProvider(new SymlinkFinder(path -> true)));
+		*//*?}*/
 
 		return vanillaResourcePackProviders;
 	}

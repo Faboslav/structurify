@@ -6,6 +6,7 @@ plugins {
 	id 'com.github.johnrengelman.shadow'
 }
 
+def currentRootVersion = getRootProject().stonecutter.current.version;
 def subproject = stonecutter.current.project
 def minecraftVersion = stonecutter.current.version
 def modrinth(String name, String version) {
@@ -55,7 +56,7 @@ dependencies {
 	minecraft "com.mojang:minecraft:${minecraftVersion}"
 	mappings loom.layered {
 		it.mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
-		if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+		if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
 			it.mappings "dev.architectury:yarn-mappings-patch-forge:${prop('yarn_mappings_patch')}"
 		} else {
 			it.mappings "dev.architectury:yarn-mappings-patch-neoforge:${prop('yarn_mappings_patch')}"
@@ -64,37 +65,16 @@ dependencies {
 
 	neoForge "net.neoforged:neoforge:${prop('neoforge_version')}"
 
-	if (minecraftVersion == "1.20.2") {
-		//modImplementation(modrinth("yacl", "${prop('yacl_version')}-forge"))
+	compileOnly(modrinth("yacl", "${prop('yacl_version')}-neoforge"))
+
+	def availableVersions = enabled_neoforge_versions.split(',').collect { it.trim() }
+
+	if(!availableVersions.contains(currentRootVersion) && minecraftVersion != currentRootVersion) {
+		common(project(path: ":common:$currentRootVersion", configuration: 'namedElements')) { transitive false }
+		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionNeoForge'))
 	} else {
-		//modImplementation(modrinth("yacl", "${prop('yacl_version')}-neoforge"))
-	}
-
-	//common(project(path: ":common:1.20.1", configuration: 'namedElements')) { transitive false }
-	//shadowBundle project(path: ":common:1.20.1", configuration: 'transformProductionNeoForge')
-
-	common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
-	shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionNeoForge'))
-
-	//project.logger.error(getResolveStrategy())
-	//project.logger.error("mcminecraftVersion:" + minecraftVersion)
-	//project.logger.error(minecraftVersion)
-	//project.logger.error(stonecutter.active)
-
-	/*
-	def activeVersions = getRootProject().stonecutter.versions.findAll { it.isActive }
-	activeVersions.each { version ->
-		println "Active version: ${version.version}"
-	}*/
-
-	if(stonecutter.current.isActive) {
-		//project.logger.error("YAS")
-		//common(project(path: ":common:1.20.1", configuration: 'namedElements')) { transitive false }
-		//shadowBundle project(path: ":common:1.20.1", configuration: 'transformProductionNeoForge')
-	} else {
-		//project.logger.error("NO")
-		//common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
-		//shadowBundle project(path: ":common:$subproject", configuration: 'transformProductionNeoForge')
+		common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
+		shadowBundle project(path: ":common:$subproject", configuration: 'transformProductionNeoForge')
 	}
 }
 
@@ -107,7 +87,15 @@ processResources {
 	inputs.property "minecraftVersion", prop('minecraft_version')
 	inputs.property "neoForgeVersion", prop('neoforge_version')
 
-	filesMatching("META-INF/mods.toml") {
+	String tomlFileName;
+
+	if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
+		tomlFileName = "META-INF/mods.toml"
+	} else {
+		tomlFileName = "META-INF/neoforge.mods.toml"
+	}
+
+	filesMatching(tomlFileName) {
 		expand "modId": prop('mod_id'),
 			"modVersion": prop('mod_version'),
 			"modName": prop('mod_name'),
@@ -141,7 +129,7 @@ remapJar {
 java {
 	withSourcesJar()
 
-	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+	if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
 	} else {
@@ -151,7 +139,7 @@ java {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	if (minecraftVersion == "1.20.1" || minecraftVersion == "1.20.2" || minecraftVersion == "1.20.4") {
+	if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
 		it.options.release = 17
 	} else {
 		it.options.release = 21
@@ -159,16 +147,22 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 repositories {
-	// YACL
-	maven { url "https://maven.isxander.dev/releases" }
-	maven { url "https://maven.isxander.dev/snapshots" }
-	maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
+	// CurseForge
+	maven { url "https://www.cursemaven.com" }
+
+	// Modrinth
+	maven {
+		url "https://api.modrinth.com/maven"
+		content {
+			includeGroup("maven.modrinth")
+		}
+	}
 
 	// NeoForge
 	maven { url 'https://maven.neoforged.net/releases/' }
 
-	// Mod Menu.
-	maven { url 'https://maven.terraformersmc.com' }
+	// Quilt
+	maven { url "https://maven.quiltmc.org/repository/release" }
 
 	// Mixin Extras.
 	maven {
@@ -178,11 +172,15 @@ repositories {
 		}
 	}
 
-	// Modrinth
-	maven {
-		url "https://api.modrinth.com/maven"
-		content {
-			includeGroup("maven.modrinth")
-		}
-	}
+	// YACL
+	maven { url "https://maven.isxander.dev/releases" }
+	maven { url "https://maven.isxander.dev/snapshots" }
+	maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
+
+	// Mod Menu.
+	maven { url "https://maven.terraformersmc.com/releases" }
+	maven { url "https://maven.terraformersmc.com" }
+
+	// Random
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }

@@ -20,8 +20,6 @@ public final class StructurifyForge
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		IEventBus eventBus = MinecraftForge.EVENT_BUS;
 
-		// ResourcePackProvider
-		//RegistryManagerProvider.addResourcePackProvider(((ClientModLoaderAccessor)ClientModLoader))::callBuildPackFinder);
 		Structurify.init();
 
 		if (FMLEnvironment.dist == Dist.CLIENT) {

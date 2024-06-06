@@ -82,15 +82,15 @@ public class StructureButtonController extends BooleanController
 		}
 
 		/*? =1.20.1 {*/
-		/*@Override
+		@Override
 		public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
 			return super.mouseScrolled(mouseX, mouseY, delta) || this.configurationButton.mouseScrolled(mouseX, mouseY, delta);
 		}
-		*//*?} else {*/
-		@Override
+		/*?} else {*/
+		/*@Override
 		public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
 			return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || this.configurationButton.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
 		}
-		/*?}*/
+		*//*?}*/
 	}
 }

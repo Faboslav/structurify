@@ -64,16 +64,16 @@ public final class DualControllerElement extends AbstractWidget
 	}
 
 	/*? if =1.20.1 {*/
-		/*@Override
-		public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-			return firstElement.mouseScrolled(mouseX, mouseY, delta) || secondElement.mouseScrolled(mouseX, mouseY, delta);
-		}
-		*//*?} else {*/
 	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+		return firstElement.mouseScrolled(mouseX, mouseY, delta) || secondElement.mouseScrolled(mouseX, mouseY, delta);
+	}
+	/*?} else {*/
+	/*@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
 		return firstElement.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || secondElement.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
 	}
-	/*?}*/
+	*//*?}*/
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {

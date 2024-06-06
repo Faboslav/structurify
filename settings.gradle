@@ -10,16 +10,16 @@ pluginManagement {
 }
 
 plugins {
-	id "dev.kikugie.stonecutter" version "0.4-beta.1"
+	id "dev.kikugie.stonecutter" version "0.4-beta.3"
 }
 
 rootProject.name = 'structurify'
 
 def dists = [
-	common: ['1.20.1', '1.20.2', '1.20.4', '1.20.6'],
-	fabric: ['1.20.1', '1.20.2', '1.20.4', '1.20.6'],
-	forge: ['1.20.1', '1.20.2'],
-	neoforge: ['1.20.2', '1.20.4', '1.20.6']
+	common: enabled_common_versions.split(',').collect { it.trim() },
+	fabric: enabled_fabric_versions.split(',').collect { it.trim() },
+	forge: enabled_forge_versions.split(',').collect { it.trim() },
+	neoforge: enabled_neoforge_versions.split(',').collect { it.trim() }
 ]
 
 def uniqueVersions = dists.values().flatten().unique().collect { "'${it}'" }.join(", ")
