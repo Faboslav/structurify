@@ -31,7 +31,7 @@ jobs:
             -   name: "Check if the mod loader is supported"
                 id: check-mod-loader
                 run: |
-                    if [ -d ${{ matrix.mod_loader }}/versions/${{ matrix.version }} ]; then
+                    if ./gradlew projects | grep -q "Project ':${{ matrix.mod_loader }}:${{ matrix.version }}'"; then
                         echo "Mod loader is supported"
                         echo "is_mod_loader_supported=true" >> $GITHUB_OUTPUT
                     else
