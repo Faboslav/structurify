@@ -1,5 +1,6 @@
-package com.faboslav.structurify.common.config.client.api;
+package com.faboslav.structurify.common.config.client.api.option;
 
+import com.faboslav.structurify.common.config.client.api.controller.DualController;
 import com.google.common.collect.ImmutableSet;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.ControllerBuilder;
@@ -51,7 +52,6 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 		this.firstOption = this.controller.optionPair.getFirstOption();
 		this.secondOption = this.controller.optionPair.getSecondOption();
 
-		// Adding listeners from OptionPair's first and second options
 		optionPair.getFirstOption().addListener((opt, pending) -> triggerListeners(false));
 		optionPair.getSecondOption().addListener((opt, pending) -> triggerListeners(false));
 
@@ -61,12 +61,12 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 
 	@Override
 	public @NotNull Text name() {
-		return OptionDescription.of(optionPair.getFirstOption().name(), Text.literal("&"), optionPair.getSecondOption().name()).text();
+		return optionPair.getFirstOption().name().copy().append(" & ").append(optionPair.getSecondOption().name().copy());
 	}
 
 	@Override
 	public @NotNull OptionDescription description() {
-		return OptionDescription.of(optionPair.getFirstOption().description().text(), Text.literal("\n"), optionPair.getSecondOption().description().text());
+		return OptionDescription.of(optionPair.getFirstOption().description().text().copy().append("\n\n").append(optionPair.getSecondOption().description().text()));
 	}
 
 	@Override
@@ -126,8 +126,9 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 		K firstOption = optionPair.getFirstOption();
 		V secondOption = optionPair.getSecondOption();
 
-		// Explicitly casting the pending values to the appropriate types
-		// firstOption.requestSet(firstOption.pendingValue());
+		// This just doesnt work, why?
+		//firstOption.requestSet(firstOption.pendingValue());
+		//secondOption.requestSet(secondOption.pendingValue());
 
 		this.triggerListeners(true);
 	}

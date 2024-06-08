@@ -1,11 +1,11 @@
 package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.DropdownStringControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -32,9 +32,6 @@ public final class StructureConfigScreen
 			.name(Text.translatable("gui.structurify.structures.general.title"))
 			.description(OptionDescription.of(Text.literal("gui.structurify.structures.general.description")));
 		*/
-		List<String> translatedBiomes = WorldgenDataProvider.getBiomes().stream()
-			.map(biome -> LanguageUtil.translateId("biome", biome).getString())
-			.toList();
 
 		var biomeBlacklistTypeOption = Option.<StructureData.BiomeBlacklistType>createBuilder()
 			.name(Text.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"))
@@ -44,11 +41,28 @@ public final class StructureConfigScreen
 				biomeBlacklistType -> Structurify.getConfig().getStructureData().get(structureId).setBiomeBlacklistType(biomeBlacklistType)
 			).controller(opt -> EnumControllerBuilder.create(opt)
 				.enumClass(StructureData.BiomeBlacklistType.class)
-				.valueFormatter(v -> Text.translatable("gui.structurify.structures.structure.biome_blacklist_type." + v.name().toLowerCase())));
+				.valueFormatter(v -> Text.translatable("gui.structurify.structures.structure.biome_blacklist_type." + v.name().toLowerCase())))
+			.available(!Structurify.getConfig().getStructureData().get(structureId).isBiomeBlacklistTypeLocked());
 
 		var biomeBlacklistTypeDescription = OptionDescription.of(Text.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"));
 
 		biomeBlacklistTypeOption.description(biomeBlacklistTypeDescription);
+
+		List<String> biomes = WorldgenDataProvider.getBiomes().stream().toList();
+
+		/*
+		Map<String, String> biomeTranslatedBiomePair = WorldgenDataProvider.getBiomes().stream()
+			.collect(Collectors.toMap(
+				biome -> biome,
+				biome -> LanguageUtil.translateId("biome", biome).getString()
+			));
+
+		Map<String, String> translatedBiomeBiomePair = translatedBiomesMap.entrySet().stream()
+			.collect(Collectors.toMap(
+				Map.Entry::getValue,
+				Map.Entry::getKey
+			));
+			*/
 
 		var blackListedBiomesOption = ListOption.<String>createBuilder()
 			.name(Text.translatable("gui.structurify.structures.structure.blacklisted_biomes.title"))
@@ -59,11 +73,13 @@ public final class StructureConfigScreen
 				() -> Structurify.getConfig().getStructureData().get(structureId).getBlacklistedBiomes(),
 				blacklistedBiomes -> Structurify.getConfig().getStructureData().get(structureId).setBlacklistedBiomes(blacklistedBiomes)
 			)
-			.controller(opt -> DropdownStringControllerBuilder.create(opt).values(translatedBiomes)) // usual controllers, passed to every entry
-			.initial(""); // when adding a new entry to the list, this is the initial value it has
+			.controller(BiomeStringControllerBuilder::create)
+			.initial("").build();
 
+
+		//DropdownStringControllerBuilder
 		structureCategoryBuilder.option(biomeBlacklistTypeOption.build());
-		structureCategoryBuilder.group(blackListedBiomesOption.build());
+		structureCategoryBuilder.group(blackListedBiomesOption);
 
 		yacl.category(structureCategoryBuilder.build());
 

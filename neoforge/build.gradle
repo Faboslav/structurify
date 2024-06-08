@@ -17,7 +17,7 @@ def prop(String name) {
 }
 
 base {
-	archivesName.set("${mod_id}-neoforge-mc${minecraftVersion}")
+	archivesName.set("${mod_id}-neoforge-mc${minecraftVersion}-${mod_version}")
 }
 
 architectury {
@@ -129,21 +129,14 @@ remapJar {
 java {
 	withSourcesJar()
 
-	if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
-		sourceCompatibility = JavaVersion.VERSION_17
-		targetCompatibility = JavaVersion.VERSION_17
-	} else {
-		sourceCompatibility = JavaVersion.VERSION_21
-		targetCompatibility = JavaVersion.VERSION_21
-	}
+	def javaVersion = (stonecutter.compare(stonecutter.current.version, "1.20.6") >= 0) ? JavaVersion.VERSION_21 : JavaVersion.VERSION_17
+	sourceCompatibility = javaVersion
+	targetCompatibility = javaVersion
 }
 
 tasks.withType(JavaCompile).configureEach {
-	if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
-		it.options.release = 17
-	} else {
-		it.options.release = 21
-	}
+	def releaseVersion = (stonecutter.compare(stonecutter.current.version, "1.20.6") >= 0) ? 21 : 17;
+	it.options.release = releaseVersion
 }
 
 repositories {

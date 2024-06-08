@@ -14,10 +14,6 @@ public final class StructurifyFabric implements ModInitializer
 	public void onInitialize() {
 		Structurify.init();
 
-		Structurify.getLogger().info("test");
-
-		Structurify.getLogger().info("test");
-
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStarting);
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(this::onDatapackReload);
 	}

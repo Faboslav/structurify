@@ -96,20 +96,20 @@ public abstract class RandomSpreadStructurePlacementMixin extends StructurePlace
 	}
 
 	private int structurify$getModifiedSeparation(int originalSeparation) {
+		Identifier structureSetIdentifier = structurify$getStructureIdentifier();
 
-		// TODO unite
-
-		Identifier structureSetId = structurify$getStructureIdentifier();
-		double globalModifier = Structurify.getConfig().globalSpacingAndSeparationModifier;
-
-		if (structureSetId == null || !Structurify.getConfig().getStructureSetData().containsKey(structureSetId.toString())) {
-			return (int) (originalSeparation * globalModifier);
+		if (structureSetIdentifier == null) {
+			return (int) ((double) originalSeparation * Structurify.getConfig().globalSpacingAndSeparationModifier);
 		}
 
-		StructureSetData structureSetData = Structurify.getConfig().getStructureSetData().get(structureSetId.toString());
+		if (!Structurify.getConfig().getStructureSetData().containsKey(structureSetIdentifier.toString())) {
+			return (int) ((double) originalSeparation * Structurify.getConfig().globalSpacingAndSeparationModifier);
+		}
 
-		if (structureSetData.isUsingDefaultSpacing()) {
-			return (int) (originalSeparation * globalModifier);
+		StructureSetData structureSetData = Structurify.getConfig().getStructureSetData().get(structureSetIdentifier.toString());
+
+		if (structureSetData.isUsingDefaultSeparation()) {
+			return (int) ((double) originalSeparation * Structurify.getConfig().globalSpacingAndSeparationModifier);
 		}
 
 		return structureSetData.getSeparation();

@@ -1,5 +1,6 @@
 plugins {
 	id "dev.kikugie.stonecutter"
+	id "io.github.pacifistmc.forgix" version "1.2.6"
 	id 'dev.architectury.loom' version '1.6-SNAPSHOT' apply false
 	id 'architectury-plugin' version '3.4-SNAPSHOT' apply false
 	id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
@@ -8,65 +9,48 @@ plugins {
 stonecutter {
 	registerChiseled(tasks.register("chiseledBuild", chiseled) {
 		group = "project"
-		ofTask("build")
+		ofTask("chiseledBuild")
 	})
 }
 
 stonecutter.active "1.20.1" /* [SC] DO NOT EDIT */
 
 /*
-subprojects {
-	repositories {
-		// CurseForge
-		maven { url "https://www.cursemaven.com" }
-
-		// Modrinth
-		maven {
-			url "https://api.modrinth.com/maven"
-			content {
-				includeGroup("maven.modrinth")
+forgix {
+	stonecutter.versions.each {
+		def type = it.project.substring(it.project.indexOf('-') + 1) // Assuming its 1.20.1-fabric, 1.20.4-neoforge, etc
+		if (type == "fabric") {
+			fabric {
+				projectName = "fabric"
+				jarLocation = "fabric/versions/${it.project}/build/libs/${modid}-${modVersion}+${it.version}.jar"
+			}
+		} else if (type == "forge") {
+			forge {
+				projectName = "forge"
+				jarLocation = "forge/versions/${it.project}/build/libs/${modid}-${modVersion}+${it.version}.jar"
+			}
+		} else if (type == "neoforge") {
+			neoforge {
+				projectName = "neoforge"
+				jarLocation = "neoforge/versions/${it.project}/build/libs/${modid}-${modVersion}+${it.version}.jar"
 			}
 		}
-
-		// Architectury
-		maven { url "https://maven.architectury.dev/" }
-
-		// Fabric
-		maven {
-			url = 'https://maven.fabricmc.net/'
-			content {
-				includeGroup 'net.fabricmc'
-			}
-		}
-
-		// Quilt
-		maven { url "https://maven.quiltmc.org/repository/release" }
-
-		// NeoForge
-		maven { url 'https://maven.neoforged.net/releases/' }
-
-		// Forge
-		maven { url "https://maven.minecraftforge.net/" }
-
-		// Mixin Extras.
-		maven {
-			url 'https://jitpack.io'
-			content {
-				includeGroup 'com.github.llamalad7'
-			}
-		}
-
-		// YACL
-		maven { url "https://maven.isxander.dev/releases" }
-		maven { url "https://maven.isxander.dev/snapshots" }
-		maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
-
-		// Mod Menu.
-		maven { url "https://maven.terraformersmc.com/releases" }
-		maven { url "https://maven.terraformersmc.com" }
-
-		// Random
-		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 	}
+}*/
+
+forgix {
+	group = "com.faboslav.structurify"
+	mergedJarName = "structurify-mc1.20.1-1.0.0.jar"
+	outputDir = "build/libs/merged"
+
+	/*
+	custom {
+		projectName = "fabric"
+		jarLocation = "versions/1.20.1/build/libs/structurify-fabric-mc1.20.1-1.0.0.jar"
+	}
+
+	custom {
+		projectName = "forge"
+		jarLocation = "versions/1.20.1/build/libs/structurify-forge-mc1.20.1-1.0.0.jar"
+	}*/
 }
-*/

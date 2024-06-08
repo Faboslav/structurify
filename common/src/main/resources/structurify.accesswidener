@@ -1,7 +1,1 @@
 accessWidener v2 named
-
-accessible    method    net/minecraft/client/gui/screen/world/CreateWorldScreen    createServerConfig    (Lnet/minecraft/resource/ResourcePackManager;Lnet/minecraft/resource/DataConfiguration;)Lnet/minecraft/server/SaveLoading$ServerConfig;
-accessible    method    net/minecraft/server/SaveLoading    withRegistriesLoaded    (Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/registry/CombinedDynamicRegistries;Lnet/minecraft/registry/ServerDynamicRegistryType;Ljava/util/List;)Lnet/minecraft/registry/CombinedDynamicRegistries;
-accessible    field    net/minecraft/server/SaveLoading$ServerConfig    dataPacks    Lnet/minecraft/server/SaveLoading$DataPacks;
-accessible    field    net/minecraft/world/gen/chunk/placement/RandomSpreadStructurePlacement    spacing    I
-accessible    field    net/minecraft/world/gen/chunk/placement/RandomSpreadStructurePlacement    separation    I

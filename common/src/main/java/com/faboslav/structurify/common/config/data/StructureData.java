@@ -3,20 +3,21 @@ package com.faboslav.structurify.common.config.data;
 import dev.isxander.yacl3.api.NameableEnum;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class StructureData
 {
-	private boolean isDisabled;
+	private boolean isDisabled = false;
 	private final Set<String> biomes;
-	private List<String> blacklistedBiomes;
+	private List<String> blacklistedBiomes = new ArrayList<>();
 	private BiomeBlacklistType biomeBlacklistType = BiomeBlacklistType.CENTER_PART;
+	private boolean isBiomeBlacklistTypeLocked = false;
 
-	public StructureData(boolean isDisabled, Set<String> biomes, List<String> blacklistedBiomes) {
-		this.isDisabled = isDisabled;
+	public StructureData(Set<String> biomes, boolean isBiomeBlacklistTypeLocked) {
 		this.biomes = biomes;
-		this.blacklistedBiomes = blacklistedBiomes;
+		this.isBiomeBlacklistTypeLocked = isBiomeBlacklistTypeLocked;
 	}
 
 	public boolean isDisabled() {
@@ -31,6 +32,14 @@ public class StructureData
 		return this.biomes;
 	}
 
+	public List<String> getBlacklistedBiomes() {
+		return this.blacklistedBiomes;
+	}
+
+	public void setBlacklistedBiomes(List<String> blacklistedBiomes) {
+		this.blacklistedBiomes = blacklistedBiomes;
+	}
+
 	public BiomeBlacklistType getBiomeBlacklistType() {
 		return this.biomeBlacklistType;
 	}
@@ -39,12 +48,12 @@ public class StructureData
 		this.biomeBlacklistType = biomeBlacklistType;
 	}
 
-	public List<String> getBlacklistedBiomes() {
-		return this.blacklistedBiomes;
+	public void lockBlacklistType() {
+		this.isBiomeBlacklistTypeLocked = true;
 	}
 
-	public void setBlacklistedBiomes(List<String> blacklistedBiomes) {
-		this.blacklistedBiomes = blacklistedBiomes;
+	public boolean isBiomeBlacklistTypeLocked() {
+		return this.isBiomeBlacklistTypeLocked;
 	}
 
 	public enum BiomeBlacklistType implements NameableEnum

@@ -1,9 +1,9 @@
 package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.config.StructurifyConfig;
-import com.faboslav.structurify.common.config.client.api.DualControllerBuilder;
-import com.faboslav.structurify.common.config.client.api.HolderOption;
-import com.faboslav.structurify.common.config.client.api.StructureButtonControllerBuilder;
+import com.faboslav.structurify.common.config.client.api.controller.builder.DualControllerBuilder;
+import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
+import com.faboslav.structurify.common.config.client.api.option.HolderOption;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
@@ -100,10 +100,6 @@ public final class StructurifyConfigScreen
 					.coloured(true));
 
 			var descriptionBuilder = OptionDescription.createBuilder();
-			descriptionBuilder.text(Text.literal("\n"));
-
-			// maybe some day i can render images
-			//descriptionBuilder.webpImage(Structurify.makeID("textures/gui/config/images/structures/minecraft_ancient_city.webp"));
 
 			descriptionBuilder.text(Text.translatable("structurized.structures.biomes_description").append(Text.literal("\n")));
 

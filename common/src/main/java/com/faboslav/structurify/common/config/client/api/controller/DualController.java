@@ -1,5 +1,7 @@
-package com.faboslav.structurify.common.config.client.api;
+package com.faboslav.structurify.common.config.client.api.controller;
 
+import com.faboslav.structurify.common.config.client.api.controller.element.DualControllerElement;
+import com.faboslav.structurify.common.config.client.api.option.OptionPair;
 import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.LabelOption;
 import dev.isxander.yacl3.api.Option;

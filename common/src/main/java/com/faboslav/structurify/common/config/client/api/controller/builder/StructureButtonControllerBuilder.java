@@ -1,5 +1,6 @@
-package com.faboslav.structurify.common.config.client.api;
+package com.faboslav.structurify.common.config.client.api.controller.builder;
 
+import com.faboslav.structurify.common.config.client.api.controller.StructureButtonController;
 import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.controller.ValueFormatter;

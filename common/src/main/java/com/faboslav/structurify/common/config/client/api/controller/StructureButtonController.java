@@ -1,4 +1,4 @@
-package com.faboslav.structurify.common.config.client.api;
+package com.faboslav.structurify.common.config.client.api.controller;
 
 import com.faboslav.structurify.common.config.client.gui.StructureConfigScreen;
 import dev.isxander.yacl3.api.Option;

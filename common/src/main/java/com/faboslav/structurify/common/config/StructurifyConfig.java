@@ -78,7 +78,12 @@ public final class StructurifyConfig
 				for (JsonElement structure : structures) {
 					var structureJson = structure.getAsJsonObject();
 
-					if (!structureJson.has("name") || !structureJson.has("is_disabled") || !structureJson.has("blacklisted_biomes")) {
+					if (
+						!structureJson.has("name")
+						|| !structureJson.has("is_disabled")
+						|| !structureJson.has("biome_blacklist_type")
+						|| !structureJson.has("blacklisted_biomes")
+					) {
 						// TODO warning
 						continue;
 					}
@@ -91,10 +96,23 @@ public final class StructurifyConfig
 					var structureData = this.structureData.get(structureJson.get("name").getAsString());
 					structureData.setDisabled(structureJson.get("is_disabled").getAsBoolean());
 
+					String possibleBiomeBlacklistType = structureJson.get("biome_blacklist_type").getAsString();
+					StructureData.BiomeBlacklistType biomeBlacklistType;
+					try {
+						biomeBlacklistType = StructureData.BiomeBlacklistType.valueOf(possibleBiomeBlacklistType);
+					} catch (IllegalArgumentException ignored) {
+						biomeBlacklistType = StructureData.BiomeBlacklistType.CENTER_PART;
+					}
+					structureData.setBiomeBlacklistType(biomeBlacklistType);
+
 					var blacklistedBiomesJson = structureJson.getAsJsonArray("blacklisted_biomes");
 					List<String> blacklistedBiomes = new ArrayList<>();
 
 					for (JsonElement blacklistedBiome : blacklistedBiomesJson) {
+						if (blacklistedBiomes.contains(blacklistedBiome.getAsString())) {
+							continue;
+						}
+
 						blacklistedBiomes.add(blacklistedBiome.getAsString());
 					}
 
@@ -150,9 +168,10 @@ public final class StructurifyConfig
 					JsonObject structure = new JsonObject();
 					structure.addProperty("name", entry.getKey());
 					structure.addProperty("is_disabled", entry.getValue().isDisabled());
+					structure.addProperty("biome_blacklist_type", entry.getValue().getBiomeBlacklistType().toString());
 
 					JsonArray blacklistedBiomes = new JsonArray();
-					entry.getValue().getBlacklistedBiomes().forEach(blacklistedBiomes::add);
+					entry.getValue().getBlacklistedBiomes().stream().distinct().forEach(blacklistedBiomes::add);
 					structure.add("blacklisted_biomes", blacklistedBiomes);
 					structures.add(structure);
 				});

@@ -2,8 +2,8 @@ package com.faboslav.structurify.common.config.data;
 
 public final class StructureSetData
 {
-	public static final int MAX_SPACING = 256;
-	public static final int MAX_SEPARATION = 256;
+	public static final int MAX_SPACING = 128;
+	public static final int MAX_SEPARATION = 128;
 
 	private final int defaultSpacing;
 	private final int defaultSeparation;

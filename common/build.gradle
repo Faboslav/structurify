@@ -6,9 +6,11 @@ plugins {
 }
 
 def minecraftVersion = stonecutter.current.version
+
 def modrinth(String name, String version) {
 	return "maven.modrinth:$name:$version"
 }
+
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
@@ -55,21 +57,14 @@ dependencies {
 java {
 	withSourcesJar()
 
-	if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
-		sourceCompatibility = JavaVersion.VERSION_17
-		targetCompatibility = JavaVersion.VERSION_17
-	} else {
-		sourceCompatibility = JavaVersion.VERSION_21
-		targetCompatibility = JavaVersion.VERSION_21
-	}
+	def javaVersion = (stonecutter.compare(stonecutter.current.version, "1.20.6") >= 0) ? JavaVersion.VERSION_21 : JavaVersion.VERSION_17
+	sourceCompatibility = javaVersion
+	targetCompatibility = javaVersion
 }
 
 tasks.withType(JavaCompile).configureEach {
-	if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
-		it.options.release = 17
-	} else {
-		it.options.release = 21
-	}
+	def releaseVersion = (stonecutter.compare(stonecutter.current.version, "1.20.6") >= 0) ? 21 : 17;
+	it.options.release = releaseVersion
 }
 
 repositories {
@@ -101,7 +96,7 @@ repositories {
 	maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
 }
 
-if(stonecutter.current.isActive) {
+if (stonecutter.current.isActive) {
 	rootProject.tasks.register("buildActiveCommon") {
 		group = "project"
 		dependsOn(tasks.named("build"))

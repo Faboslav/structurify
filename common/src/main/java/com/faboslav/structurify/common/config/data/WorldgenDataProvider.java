@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.gen.structure.Structure;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public final class WorldgenDataProvider
@@ -98,14 +99,18 @@ public final class WorldgenDataProvider
 				return null;
 			});
 
-			structures.put(
-				structureId,
-				new StructureData(
-					false,
-					defaultBiomes,
-					new ArrayList<>()
-				)
-			);
+			Class<?> clazz = structure.getClass();
+			Field[] fields = clazz.getDeclaredFields();
+			boolean hasMaxDistanceFromCenter = false;
+
+			for (Field field : fields) {
+				if (field.getName().equals("maxDistanceFromCenter")) {
+					hasMaxDistanceFromCenter = true;
+					break;
+				}
+			}
+
+			structures.put(structureId, new StructureData(defaultBiomes, !hasMaxDistanceFromCenter));
 		}
 
 		return structures;
