@@ -15,7 +15,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                mod_loader: [ fabric, forge, neoforge, quilt ]
+                mod_loader: [ fabric, forge, neoforge ]
                 version: [ 1.20.1, 1.20.2, 1.20.4, 1.20.6 ]
                 script: [ client, server ]
 
@@ -28,6 +28,19 @@ jobs:
                 with:
                     fetch-depth: 0
 
+            -   name: "Set up JDK"
+                uses: actions/setup-java@v4.0.0
+                with:
+                    java-version: 21
+                    distribution: temurin
+
+            -   name: "Setup Gradle and run build"
+                uses: gradle/gradle-build-action@v2.11.1
+                with:
+                    cache-read-only: false
+                    gradle-version: wrapper
+                    arguments: ${{ matrix.mod_loader }}:${{ matrix.version }}:build
+
             -   name: "Check if the mod loader is supported"
                 id: check-mod-loader
                 run: |
@@ -38,21 +51,6 @@ jobs:
                         echo "Mod loader is not supported"
                         echo "is_mod_loader_supported=false" >> $GITHUB_OUTPUT
                     fi
-
-            -   name: "Set up JDK"
-                if: steps.check-mod-loader.outputs.is_mod_loader_supported == 'true'
-                uses: actions/setup-java@v4.0.0
-                with:
-                    java-version: 21
-                    distribution: temurin
-
-            -   name: "Setup Gradle and run build"
-                if: steps.check-mod-loader.outputs.is_mod_loader_supported == 'true'
-                uses: gradle/gradle-build-action@v2.11.1
-                with:
-                    cache-read-only: false
-                    gradle-version: wrapper
-                    arguments: ${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
             -   name: "Accept eula"
                 if: steps.check-mod-loader.outputs.is_mod_loader_supported == 'true'
