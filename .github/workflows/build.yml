@@ -31,7 +31,7 @@ jobs:
                     distribution: temurin
 
             -   name: "Setup Gradle and run build"
-                uses: gradle/actions/setup-gradle@3
+                uses: gradle/actions/setup-gradle@v3
                 with:
                     cache-write-only: true
                     gradle-version: wrapper
@@ -63,7 +63,7 @@ jobs:
                     distribution: temurin
 
             -   name: "Setup Gradle and run build"
-                uses: gradle/actions/setup-gradle@3
+                uses: gradle/actions/setup-gradle@v3
                 with:
                     cache-read-only: true
                     gradle-version: wrapper
