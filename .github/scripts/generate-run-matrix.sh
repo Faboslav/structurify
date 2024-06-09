@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Initialize an empty array for the matrix in JSON format
-matrix_content="["
+# Initialize the matrix JSON with the 'include' key
+matrix_content="{\"include\":["
 
 # Extract enabled platforms from gradle.properties
 enabled_platforms=$(awk -F= '/enabled_platforms/{print $2}' gradle.properties | tr -d ' ')
@@ -10,18 +10,17 @@ enabled_platforms=$(awk -F= '/enabled_platforms/{print $2}' gradle.properties | 
 for platform in $(echo $enabled_platforms | tr ',' ' '); do
   versions=$(awk -F= '/enabled_'$platform'_versions/{print $2}' gradle.properties | tr -d ' ')
   for version in $(echo $versions | tr ',' ' '); do
-    # Create each entry
-    matrix_entry="{\"mod_loader\":\"$platform\",\"version\":\"$version\",\"script\":[\"client\",\"server\"]}"
-    # Append to matrix content
-    matrix_content+="$matrix_entry,"
+    # Create each entry with a JSON object for each combination
+    matrix_entry="{\"mod_loader\":\"$platform\",\"version\":\"$version\",\"script\":\"client\"},"
+    matrix_content+="$matrix_entry"
+    matrix_entry="{\"mod_loader\":\"$platform\",\"version\":\"$version\",\"script\":\"server\"},"
+    matrix_content+="$matrix_entry"
   done
 done
 
-# Remove the trailing comma and close the JSON array
-matrix_content="${matrix_content%,}]"
-
+# Remove the trailing comma and close the JSON object
+matrix_content="${matrix_content%,}]}"
 # Output the matrix content for debugging
 echo "Generated matrix: $matrix_content"
-
 # Set the output for GitHub Actions
 echo "::set-output name=matrix::$matrix_content"
