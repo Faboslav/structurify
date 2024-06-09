@@ -177,3 +177,10 @@ repositories {
 	// Random
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
+
+if(stonecutter.current.isActive) {
+	rootProject.tasks.register("buildActiveNeoForge") {
+		group = "project"
+		dependsOn(tasks.named("build"))
+	}
+}

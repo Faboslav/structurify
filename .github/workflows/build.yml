@@ -37,15 +37,17 @@ jobs:
                     gradle-version: wrapper
                     arguments: build
 
+            -   name: "Generate matrix for the run job"
+                id: generate-matrix
+                run: ./.github/scripts/generate-run-matrix.sh
+                
+
     run:
         runs-on: ubuntu-latest
         needs: build
         strategy:
             fail-fast: false
-            matrix:
-                mod_loader: [ fabric, forge, neoforge ]
-                version: [ 1.20.1, 1.20.2, 1.20.4, 1.20.6 ]
-                script: [ client, server ]
+            matrix: ${{ fromJson(env.matrix) }}
 
         name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }}
         timeout-minutes: 30
@@ -69,23 +71,10 @@ jobs:
                     gradle-version: wrapper
                     arguments: ${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
-            -   name: "Check if the mod loader is supported"
-                id: check-mod-loader
-                run: |
-                    if ./gradlew projects | grep -q "Project ':${{ matrix.mod_loader }}:${{ matrix.version }}'"; then
-                        echo "Mod loader is supported"
-                        echo "is_mod_loader_supported=true" >> $GITHUB_OUTPUT
-                    else
-                        echo "Mod loader is not supported"
-                        echo "is_mod_loader_supported=false" >> $GITHUB_OUTPUT
-                    fi
-
             -   name: "Accept eula"
-                if: steps.check-mod-loader.outputs.is_mod_loader_supported == 'true'
                 run: mkdir -p versions/${{ matrix.mod_loader }}/${{ matrix.version }}/run && echo "eula=true" > versions/${{ matrix.mod_loader }}/${{ matrix.version }}/run/eula.txt
 
             -   name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }}
-                if: steps.check-mod-loader.outputs.is_mod_loader_supported == 'true'
                 uses: modmuss50/xvfb-action@v1
                 with:
                     run: ./.github/scripts/run-${{ matrix.script }}.sh ${{ matrix.mod_loader }}:${{ matrix.version }}
