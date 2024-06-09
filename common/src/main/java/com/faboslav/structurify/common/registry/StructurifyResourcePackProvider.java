@@ -6,6 +6,9 @@ import com.faboslav.structurify.common.modcompat.ModCompat;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.resource.ResourcePackProvider;
 import net.minecraft.resource.VanillaDataPackProvider;
+/*? if >=1.20.2 {*/
+/*import net.minecraft.util.path.SymlinkFinder;
+*//*?}*/
 
 import java.util.ArrayList;
 
@@ -26,7 +29,7 @@ public final class StructurifyResourcePackProvider
 
 		/*? if =1.20.1 {*/
 		vanillaResourcePackProviders.add(new VanillaDataPackProvider());
-		/*?} else {*/
+		/*?} else if >=1.20.2 {*/
 		/*vanillaResourcePackProviders.add(new VanillaDataPackProvider(new SymlinkFinder(path -> true)));
 		 *//*?}*/
 
