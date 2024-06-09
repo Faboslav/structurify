@@ -14,6 +14,34 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
+
+        name: Run build
+        timeout-minutes: 30
+
+        steps:
+            -   name: "Checkout repository"
+                uses: actions/checkout@v4.1.1
+                with:
+                    fetch-depth: 0
+
+            -   name: "Set up JDK"
+                uses: actions/setup-java@v4.0.0
+                with:
+                    java-version: 21
+                    distribution: temurin
+
+            -   name: "Setup Gradle and run build"
+                uses: gradle/actions/setup-gradle@3.3.2
+                with:
+                    cache-write-only: true
+                    gradle-version: wrapper
+                    arguments: build
+
+    run:
+        runs-on: ubuntu-latest
+        needs: build
+        strategy:
+            fail-fast: false
             matrix:
                 mod_loader: [ fabric, forge, neoforge ]
                 version: [ 1.20.1, 1.20.2, 1.20.4, 1.20.6 ]
@@ -35,9 +63,9 @@ jobs:
                     distribution: temurin
 
             -   name: "Setup Gradle and run build"
-                uses: gradle/gradle-build-action@v2.11.1
+                uses: gradle/actions/setup-gradle@3.3.2
                 with:
-                    cache-read-only: false
+                    cache-read-only: true
                     gradle-version: wrapper
                     arguments: ${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
@@ -54,7 +82,7 @@ jobs:
 
             -   name: "Accept eula"
                 if: steps.check-mod-loader.outputs.is_mod_loader_supported == 'true'
-                run: mkdir -p ${{ matrix.mod_loader }}/run && echo "eula=true" > ${{ matrix.mod_loader }}/run/eula.txt
+                run: mkdir -p versions/${{ matrix.mod_loader }}/${{ matrix.version }}/run && echo "eula=true" > versions/${{ matrix.mod_loader }}/${{ matrix.version }}/run/eula.txt
 
             -   name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }}
                 if: steps.check-mod-loader.outputs.is_mod_loader_supported == 'true'
