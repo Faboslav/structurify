@@ -73,7 +73,7 @@ jobs:
                     arguments: ${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
             -   name: "Accept eula"
-                run: mkdir -p versions/${{ matrix.mod_loader }}/${{ matrix.version }}/run && echo "eula=true" > versions/${{ matrix.mod_loader }}/${{ matrix.version }}/run/eula.txt
+                run: mkdir -p ${{ matrix.mod_loader }}/versions/${{ matrix.version }}/run && echo "eula=true" > versions/${{ matrix.mod_loader }}/${{ matrix.version }}/run/eula.txt
 
             -   name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }}
                 uses: modmuss50/xvfb-action@v1

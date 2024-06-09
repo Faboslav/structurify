@@ -1,7 +1,5 @@
 #!/bin/bash
 
-mkdir -p $1/run && echo "eula=true" > $1/run/eula.txt
-
 ./gradlew $1:runServer --no-daemon --args="nogui" 2>&1 | tee gradle_server_output.txt &
 
 SUCCESS_PATTERN='For help, type "help"'
