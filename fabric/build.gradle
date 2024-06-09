@@ -4,7 +4,6 @@ plugins {
 	id 'dev.architectury.loom'
 	id 'architectury-plugin'
 	id 'com.github.johnrengelman.shadow'
-	id "io.github.pacifistmc.forgix"
 }
 
 def subproject = stonecutter.current.project

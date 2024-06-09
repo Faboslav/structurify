@@ -1,56 +1,8 @@
 plugins {
 	id "dev.kikugie.stonecutter"
-	id "io.github.pacifistmc.forgix" version "1.2.6"
 	id 'dev.architectury.loom' version '1.6-SNAPSHOT' apply false
 	id 'architectury-plugin' version '3.4-SNAPSHOT' apply false
 	id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
 
-stonecutter {
-	registerChiseled(tasks.register("chiseledBuild", chiseled) {
-		group = "project"
-		ofTask("chiseledBuild")
-	})
-}
-
-stonecutter.active "1.20.1" /* [SC] DO NOT EDIT */
-
-/*
-forgix {
-	stonecutter.versions.each {
-		def type = it.project.substring(it.project.indexOf('-') + 1) // Assuming its 1.20.1-fabric, 1.20.4-neoforge, etc
-		if (type == "fabric") {
-			fabric {
-				projectName = "fabric"
-				jarLocation = "fabric/versions/${it.project}/build/libs/${modid}-${modVersion}+${it.version}.jar"
-			}
-		} else if (type == "forge") {
-			forge {
-				projectName = "forge"
-				jarLocation = "forge/versions/${it.project}/build/libs/${modid}-${modVersion}+${it.version}.jar"
-			}
-		} else if (type == "neoforge") {
-			neoforge {
-				projectName = "neoforge"
-				jarLocation = "neoforge/versions/${it.project}/build/libs/${modid}-${modVersion}+${it.version}.jar"
-			}
-		}
-	}
-}*/
-
-forgix {
-	group = "com.faboslav.structurify"
-	mergedJarName = "structurify-mc1.20.1-1.0.0.jar"
-	outputDir = "build/libs/merged"
-
-	/*
-	custom {
-		projectName = "fabric"
-		jarLocation = "versions/1.20.1/build/libs/structurify-fabric-mc1.20.1-1.0.0.jar"
-	}
-
-	custom {
-		projectName = "forge"
-		jarLocation = "versions/1.20.1/build/libs/structurify-forge-mc1.20.1-1.0.0.jar"
-	}*/
-}
+stonecutter.active "1.20.6" /* [SC] DO NOT EDIT */
