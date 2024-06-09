@@ -20,8 +20,8 @@ done
 # Remove the trailing comma and close the JSON array
 matrix_content="${matrix_content%,}]"
 
-# Output the matrix content
+# Output the matrix content for debugging
 echo "Generated matrix: $matrix_content"
 
-# Export the matrix as an environment variable
-echo "matrix=$matrix_content" >> $GITHUB_ENV
+# Set the output for GitHub Actions
+echo "::set-output name=matrix::$matrix_content"

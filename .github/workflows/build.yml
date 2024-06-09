@@ -14,9 +14,10 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
-
         name: Run build
         timeout-minutes: 30
+        outputs:
+            matrix: ${{ steps.set-matrix.outputs.matrix }}
 
         steps:
             -   name: "Checkout repository"
@@ -38,7 +39,7 @@ jobs:
                     arguments: build
 
             -   name: "Generate matrix for the run job"
-                id: generate-matrix
+                id: set-matrix
                 run: ./.github/scripts/generate-run-matrix.sh
                 
 
@@ -47,7 +48,7 @@ jobs:
         needs: build
         strategy:
             fail-fast: false
-            matrix: ${{ fromJson(env.matrix) }}
+            matrix: ${{fromJson(needs.build.outputs.matrix)}}
 
         name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }}
         timeout-minutes: 30

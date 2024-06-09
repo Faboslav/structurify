@@ -29,7 +29,7 @@ gen-sources: ## Generate sources
 	./gradlew genSources
 
 run-fabric-client: ## Runs fabric client
-	./gradlew fabric:1.20.6:runClient
+	./gradlew :fabric:1.20.6:runClient
 
 run-forge-client: ## Runs forge client
 	./gradlew :forge:1.20.2:runClient
