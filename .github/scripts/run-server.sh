@@ -4,6 +4,7 @@
 
 SUCCESS_PATTERN='For help, type "help"'
 ERROR_PATTERNS=(
+	'Error:'
 	'Crash Report'
 	'BUILD FAILED'
     'For more details see the full crash report file'
