@@ -25,7 +25,6 @@ architectury {
 	neoForge()
 }
 
-
 loom {
 	silentMojangMappingsLicense()
 

@@ -6,19 +6,19 @@ plugins {
 }
 
 def minecraftVersion = stonecutter.current.version
-
 def modrinth(String name, String version) {
 	return "maven.modrinth:$name:$version"
 }
-
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
 
+base {
+	archivesName.set("${mod_id}-common-mc${minecraftVersion}-${mod_version}")
+}
+
 architectury {
-	common(prop('enabled_platforms').split(',')) {
-		it.platformPackage "neoforge", "forge"
-	}
+	common prop('enabled_platforms').split(',')
 }
 
 loom {
@@ -32,12 +32,7 @@ loom {
 }
 
 dependencies {
-	// temp hack, 1.20.6 is not visible, due to some random reasons
-	//if(minecraftVersion == "1.20.6") {
-		//minecraft "com.mojang:minecraft:1.20.5"
-	//} else {
-		minecraft "com.mojang:minecraft:${minecraftVersion}"
-	//}
+	minecraft "com.mojang:minecraft:${minecraftVersion}"
 	mappings loom.layered {
 		it.mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
 		if (stonecutter.compare(minecraftVersion, '1.20.4') == 0) {
