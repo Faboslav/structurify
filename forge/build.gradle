@@ -92,7 +92,8 @@ dependencies {
 		if (minecraftVersion == '1.20.2') {
 			modImplementation(modrinth("yacl", "${prop('yacl_version')}-forge"))
 		} else {
-			modImplementation("dev.isxander:yet-another-config-lib:${prop('yacl_version')}-forge")
+			// Temp disable, its not working for forge
+			//modImplementation("dev.isxander:yet-another-config-lib:${prop('yacl_version')}-forge")
 		}
 	}
 
