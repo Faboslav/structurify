@@ -4,6 +4,7 @@
 
 SUCCESS_PATTERN='minecraft:textures/atlas/mob_effects\.png-atlas'
 ERROR_PATTERNS=(
+	'Crash Report'
 	'BUILD FAILED'
     'For more details see the full crash report file'
     ' end of report '
