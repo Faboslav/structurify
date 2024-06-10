@@ -28,7 +28,7 @@ architectury {
 loom {
 	silentMojangMappingsLicense()
 
-	//accessWidenerPath.set(project(":common:$subproject").loom.accessWidenerPath)
+	// accessWidenerPath.set(project(":common:$subproject").loom.accessWidenerPath)
 
 	forge {
 		convertAccessWideners = true
@@ -73,7 +73,14 @@ tasks.withType(JavaCompile).configureEach {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraftVersion}"
-	mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
+	mappings loom.layered {
+		it.mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
+		if (stonecutter.compare(minecraftVersion, '1.20.4') == 0) {
+			it.mappings "dev.architectury:yarn-mappings-patch-forge:${prop('yarn_mappings_patch')}"
+		} else if (stonecutter.compare(minecraftVersion, '1.20.6') >= 0) {
+			it.mappings "dev.architectury:yarn-mappings-patch-neoforge:${prop('yarn_mappings_patch')}"
+		}
+	}
 
 	forge "net.minecraftforge:forge:${prop('minecraft_version')}-${prop('forge_version')}"
 
@@ -98,10 +105,10 @@ dependencies {
 
 	if(!availableVersions.contains(currentRootVersion) && minecraftVersion != currentRootVersion) {
 		common(project(path: ":common:$currentRootVersion", configuration: 'namedElements')) { transitive false }
-		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionForge'))
+		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionForge')) { transitive false }
 	} else {
 		common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
-		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionForge'))
+		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionForge')) { transitive false }
 	}
 }
 

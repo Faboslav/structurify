@@ -53,14 +53,6 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	@Override
-	protected void renderDropdownEntry(DrawContext graphics, String identifier, int delta) {
-		super.renderDropdownEntry(graphics, identifier, delta);
-
-		// maybe future update
-		//this.renderBiomeImage(this.biomeStringController.option().pendingValue(), graphics, imageX, imageY, delta);
-	}
-
-	@Override
 	public String getString(String biome) {
 		return LanguageUtil.translateId("string", biome).getString();
 	}

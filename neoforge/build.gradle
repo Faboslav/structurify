@@ -56,9 +56,9 @@ dependencies {
 	minecraft "com.mojang:minecraft:${minecraftVersion}"
 	mappings loom.layered {
 		it.mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
-		if (stonecutter.compare(minecraftVersion, '1.20.6') < 0) {
+		if (stonecutter.compare(minecraftVersion, '1.20.4') == 0) {
 			it.mappings "dev.architectury:yarn-mappings-patch-forge:${prop('yarn_mappings_patch')}"
-		} else {
+		} else if (stonecutter.compare(minecraftVersion, '1.20.6') >= 0) {
 			it.mappings "dev.architectury:yarn-mappings-patch-neoforge:${prop('yarn_mappings_patch')}"
 		}
 	}
@@ -71,10 +71,10 @@ dependencies {
 
 	if(!availableVersions.contains(currentRootVersion) && minecraftVersion != currentRootVersion) {
 		common(project(path: ":common:$currentRootVersion", configuration: 'namedElements')) { transitive false }
-		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionNeoForge'))
+		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionNeoForge')) { transitive false }
 	} else {
 		common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
-		shadowBundle project(path: ":common:$subproject", configuration: 'transformProductionNeoForge')
+		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionNeoForge')) { transitive false }
 	}
 }
 
