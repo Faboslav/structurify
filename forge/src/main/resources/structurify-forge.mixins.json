@@ -6,7 +6,6 @@
 	"client": [
 	],
 	"mixins": [
-		"ClientModLoaderAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

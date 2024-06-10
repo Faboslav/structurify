@@ -1,8 +1,5 @@
 package com.faboslav.structurify.common.config.data;
 
-import dev.isxander.yacl3.api.NameableEnum;
-import net.minecraft.text.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -56,14 +53,9 @@ public class StructureData
 		return this.isBiomeBlacklistTypeLocked;
 	}
 
-	public enum BiomeBlacklistType implements NameableEnum
+	public enum BiomeBlacklistType
 	{
 		CENTER_PART,
 		ALL_PARTS;
-
-		@Override
-		public Text getDisplayName() {
-			return Text.translatable("gui.structurized.structure." + name().toLowerCase());
-		}
 	}
 }
