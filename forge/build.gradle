@@ -30,11 +30,12 @@ architectury {
 loom {
 	silentMojangMappingsLicense()
 
-	// accessWidenerPath.set(project(":common:$subproject").loom.accessWidenerPath)
+	accessWidenerPath.set(project(":common:$subproject").loom.accessWidenerPath)
 
 	forge {
 		convertAccessWideners = true
-		//extraAccessWideners.add(project(":common:$subproject").loom.accessWidenerPath.get().asFile.name)
+		extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
+
 		mixinConfig "structurify-common.mixins.json"
 		mixinConfig "structurify-forge.mixins.json"
 	}
@@ -95,22 +96,6 @@ dependencies {
 		}
 	}
 
-	//modImplementation("dev.isxander.yacl:yet-another-config-lib-forge:${prop('yacl_version')}") { transitive = false }
-	// forgeRuntimeLibrary
-	// Required
-	//modImplementation modRuntimeOnly ("curse.maven:yacl-667299:5376023")
-	// modApi ("dev.isxander:yet-another-config-lib:${rootProject.yet_another_config_lib_version}+${rootProject.minecraft_version}-forge")
-	// modCompileOnly ("dev.isxander:yet-another-config-lib:${rootProject.yet_another_config_lib_version}+${rootProject.minecraft_version}-forge")
-
-	// Compat
-	//modCompileOnly modRuntimeOnly ("curse.maven:drp-global-datapack-317134:4573646")
-	//modApi ("maven.modrinth:globalpacks:${rootProject.globalpacks_version}_forge")
-	// modRuntimeOnly ("maven.modrinth:globalpacks:${rootProject.globalpacks_version}_forge")
-	// modCompileOnly ("maven.modrinth:globalpacks:${rootProject.globalpacks_version}_forge")
-
-	// include("maven.modrinth:globalpacks:${rootProject.globalpacks_version}_forge")
-	// include ("dev.isxander:yet-another-config-lib:${rootProject.yet_another_config_lib_version}+${rootProject.minecraft_version}-forge")
-
 	def availableVersions = enabled_forge_versions.split(',').collect { it.trim() }
 
 	if(!availableVersions.contains(currentRootVersion) && minecraftVersion != currentRootVersion) {
@@ -155,7 +140,10 @@ jar {
 }
 
 remapJar {
-	input.set shadowJar.archiveFile
+	injectAccessWidener.set(true)
+	input.set(shadowJar.archiveFile)
+	dependsOn(shadowJar)
+	archiveClassifier.set(null)
 }
 
 repositories {
@@ -163,7 +151,7 @@ repositories {
 	maven { url "https://maven.isxander.dev/releases" }
 	maven { url "https://maven.isxander.dev/snapshots" }
 	maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
-	maven{ url = "https://maven.quiltmc.org/repository/release" }
+	maven { url "https://maven.quiltmc.org/repository/release" }
 
 	// NeoForge
 	maven { url 'https://maven.neoforged.net/releases/' }

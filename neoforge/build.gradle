@@ -113,16 +113,11 @@ shadowJar {
 	archiveClassifier = 'dev-shadow'
 }
 
-/*
 remapJar {
-	inputFile.set shadowJar.archiveFile
-	dependsOn shadowJar
+	injectAccessWidener.set(true)
+	input.set(shadowJar.archiveFile)
+	dependsOn(shadowJar)
 	archiveClassifier.set(null)
-	atAccessWideners.add("${rootProject.mod_id}.accesswidener") // this is a path inside the mod jar
-}*/
-
-remapJar {
-	input.set shadowJar.archiveFile
 }
 
 java {

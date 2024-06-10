@@ -126,8 +126,12 @@ jar {
 	archiveClassifier.set("dev")
 }
 
+
 remapJar {
-	input.set shadowJar.archiveFile
+	injectAccessWidener.set(true)
+	input.set(shadowJar.archiveFile)
+	dependsOn(shadowJar)
+	archiveClassifier.set(null)
 }
 
 java {
