@@ -34,7 +34,6 @@ jobs:
             -   name: "Setup Gradle and run build"
                 uses: gradle/actions/setup-gradle@v3
                 with:
-                    cache-write-only: true
                     gradle-version: wrapper
                     arguments: build
 
