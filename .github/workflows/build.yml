@@ -34,7 +34,6 @@ jobs:
             -   name: "Setup Gradle and run build"
                 uses: gradle/actions/setup-gradle@v3
                 with:
-                    cache-write-only: true
                     gradle-version: wrapper
                     arguments: build
 
@@ -71,6 +70,9 @@ jobs:
                     cache-read-only: true
                     gradle-version: wrapper
                     arguments: ${{ matrix.mod_loader }}:${{ matrix.version }}:build
+
+            -   name: "Switch active versions"
+                run: ./gradlew "Set active project to ${{ matrix.version }}"
 
             -   name: "Accept eula"
                 run: mkdir -p ${{ matrix.mod_loader }}/versions/${{ matrix.version }}/run && echo "eula=true" > ${{ matrix.mod_loader }}/versions/${{ matrix.version }}/run/eula.txt
