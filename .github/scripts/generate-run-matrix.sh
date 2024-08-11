@@ -4,11 +4,11 @@
 matrix_content="{\"include\":["
 
 # Extract enabled platforms from gradle.properties
-enabled_platforms=$(awk -F= '/enabled_platforms/{print $2}' gradle.properties | tr -d ' ')
+enabled_platforms=$(awk -F= '/stonecutter_enabled_platforms/{print $2}' gradle.properties | tr -d ' ')
 
 # Iterate over each platform and gather versions
 for platform in $(echo $enabled_platforms | tr ',' ' '); do
-  versions=$(awk -F= '/enabled_'$platform'_versions/{print $2}' gradle.properties | tr -d ' ')
+  versions=$(awk -F= '/stonecutter_enabled_'$platform'_versions/{print $2}' gradle.properties | tr -d ' ')
   for version in $(echo $versions | tr ',' ' '); do
     # Create each entry with a JSON object for each combination
     matrix_entry="{\"mod_loader\":\"$platform\",\"version\":\"$version\",\"script\":\"client\"},"
