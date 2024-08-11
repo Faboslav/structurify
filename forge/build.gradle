@@ -97,7 +97,7 @@ dependencies {
 		}
 	}
 
-	def availableVersions = enabled_forge_versions.split(',').collect { it.trim() }
+	def availableVersions = stonecutter_enabled_forge_versions.split(',').collect { it.trim() }
 
 	if(!availableVersions.contains(currentRootVersion) && minecraftVersion != currentRootVersion) {
 		common(project(path: ":common:$currentRootVersion", configuration: 'namedElements')) { transitive false }
