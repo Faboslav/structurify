@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.client.gui;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.DualControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
@@ -71,7 +72,7 @@ public final class StructurifyConfigScreen
 			String structureStringId = entry.getKey();
 			StructureData structureData = entry.getValue();
 
-			Identifier structureId = new Identifier(structureStringId);
+			Identifier structureId = Structurify.makeVanillaId(structureStringId);
 			String namespace = structureId.getNamespace();
 
 			// Create new group for each namespace
@@ -170,7 +171,7 @@ public final class StructurifyConfigScreen
 		for (Map.Entry<String, StructureSetData> entry : structureSets.entrySet()) {
 			String structureSetStringId = entry.getKey();
 
-			Identifier structureSetId = new Identifier(structureSetStringId);
+			Identifier structureSetId = Structurify.makeVanillaId(structureSetStringId);
 			String namespace = structureSetId.getNamespace();
 
 			// Create new group for each namespace

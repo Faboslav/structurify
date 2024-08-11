@@ -68,7 +68,7 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 
 				if (!blacklistedBiomeIds.isEmpty()) {
 					Set<RegistryKey<Biome>> blacklistedBiomeKeys = blacklistedBiomeIds.stream()
-						.map(id -> RegistryKey.of(RegistryKeys.BIOME, new Identifier(id)))
+						.map(id -> RegistryKey.of(RegistryKeys.BIOME, Structurify.makeVanillaId(id)))
 						.collect(Collectors.toSet());
 
 					Predicate<RegistryEntry<Biome>> blackListedBiomesPredicate = biomeEntry -> {

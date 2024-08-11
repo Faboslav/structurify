@@ -29,10 +29,10 @@ public final class GlobalDatapacksCompat implements ModCompat
 			Path globalPackFolder = (Path) globalPackFolderField.get(null);
 
 			/*? if =1.20.1 {*/
-			resourcePackProviders.add(new FileResourcePackProvider(globalPackFolder, ResourceType.SERVER_DATA, ResourcePackSource.WORLD));
-			 /*?} else {*/
-			/*resourcePackProviders.add(new FileResourcePackProvider(globalPackFolder, ResourceType.SERVER_DATA, ResourcePackSource.WORLD, new SymlinkFinder(path -> true)));
-			*//*?}*/
+			/*resourcePackProviders.add(new FileResourcePackProvider(globalPackFolder, ResourceType.SERVER_DATA, ResourcePackSource.WORLD));
+			 *//*?} else {*/
+			resourcePackProviders.add(new FileResourcePackProvider(globalPackFolder, ResourceType.SERVER_DATA, ResourcePackSource.WORLD, new SymlinkFinder(path -> true)));
+			/*?}*/
 		} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
 			System.out.println("Dependency not found or field access failed: " + e.getMessage());
 		}
