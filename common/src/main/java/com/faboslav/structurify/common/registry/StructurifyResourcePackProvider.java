@@ -25,10 +25,10 @@ public final class StructurifyResourcePackProvider
 		ArrayList<ResourcePackProvider> vanillaResourcePackProviders = new ArrayList<>();
 
 		/*? if =1.20.1 {*/
-		/*vanillaResourcePackProviders.add(new VanillaDataPackProvider());
-		*//*?} else if >=1.20.2 {*/
-		vanillaResourcePackProviders.add(new VanillaDataPackProvider(new net.minecraft.util.path.SymlinkFinder(path -> true)));
-		 /*?}*/
+		vanillaResourcePackProviders.add(new VanillaDataPackProvider());
+		/*?} else if >=1.20.2 {*/
+		/*vanillaResourcePackProviders.add(new VanillaDataPackProvider(new net.minecraft.util.path.SymlinkFinder(path -> true)));
+		 *//*?}*/
 
 		return vanillaResourcePackProviders;
 	}

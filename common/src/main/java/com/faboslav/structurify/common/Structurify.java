@@ -40,28 +40,28 @@ public final class Structurify
 
 	public static Identifier makeId(String path) {
 		/*? >=1.21 {*/
-		return Identifier.of(
+		/*return Identifier.of(
 			MOD_ID,
 			path
 		);
-		 /*?} else {*/
-		/*return new Identifier(
+		 *//*?} else {*/
+		return new Identifier(
 			MOD_ID,
 			path
 		);
-		*//*?}*/
+		/*?}*/
 	}
 
 	public static Identifier makeVanillaId(String id) {
 		/*? >=1.21 {*/
-		return Identifier.of(
+		/*return Identifier.of(
 			id
 		);
-		/*?} else {*/
-		/*return new Identifier(
+		*//*?} else {*/
+		return new Identifier(
 			id
 		);
-		*//*?}*/
+		/*?}*/
 	}
 
 	public static void init() {
