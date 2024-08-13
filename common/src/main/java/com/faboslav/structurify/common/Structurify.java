@@ -65,6 +65,7 @@ public final class Structurify
 	}
 
 	public static void init() {
+		Structurify.getConfig().create();
 		ModChecker.setupModCompat();
 
 		LoadConfigEvent.EVENT.addListener(Structurify::loadConfig);

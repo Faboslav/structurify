@@ -2,6 +2,7 @@ package com.faboslav.structurify.forge;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
+import com.faboslav.structurify.common.config.client.gui.StructuresConfigScreen;
 import com.faboslav.structurify.common.config.client.gui.StructurifyConfigScreen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -25,7 +26,7 @@ public final class StructurifyForgeClient
 			if (ModList.get().isLoaded("yet_another_config_lib_v3")) {
 				ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
 					new ConfigScreenHandler.ConfigScreenFactory(
-						(mc, screen) -> StructurifyConfigScreen.createConfigGui(Structurify.getConfig(), screen)
+						(mc, screen) -> new StructurifyConfigScreen(screen)
 					)
 				);
 			}

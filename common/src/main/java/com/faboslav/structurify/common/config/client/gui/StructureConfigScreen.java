@@ -36,7 +36,7 @@ public final class StructureConfigScreen
 		var biomeBlacklistTypeOption = Option.<StructureData.BiomeBlacklistType>createBuilder()
 			.name(Text.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"))
 			.binding(
-				StructureData.BiomeBlacklistType.CENTER_PART,
+				StructureData.DEFAULT_BIOME_BLACKLIST_TYPE,
 				() -> Structurify.getConfig().getStructureData().get(structureId).getBiomeBlacklistType(),
 				biomeBlacklistType -> Structurify.getConfig().getStructureData().get(structureId).setBiomeBlacklistType(biomeBlacklistType)
 			).controller(opt -> EnumControllerBuilder.create(opt)

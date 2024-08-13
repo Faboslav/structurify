@@ -37,6 +37,7 @@ jobs:
             -   name: "Setup Gradle and run build"
                 uses: gradle/actions/setup-gradle@v3
                 with:
+                    generate-job-summary: false
                     gradle-version: wrapper
                     arguments: build
 
@@ -72,6 +73,7 @@ jobs:
             -   name: "Setup Gradle and run build"
                 uses: gradle/actions/setup-gradle@v3
                 with:
+                    generate-job-summary: false
                     cache-read-only: true
                     gradle-version: wrapper
                     arguments: ${{ matrix.mod_loader }}:${{ matrix.version }}:build

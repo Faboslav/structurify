@@ -1,15 +1,19 @@
 package com.faboslav.structurify.common.config.data;
 
+import com.faboslav.structurify.common.config.StructurifyConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class StructureData
 {
+	public static StructureData.BiomeBlacklistType DEFAULT_BIOME_BLACKLIST_TYPE = StructureData.BiomeBlacklistType.NONE;
+
 	private boolean isDisabled = false;
 	private final Set<String> biomes;
 	private List<String> blacklistedBiomes = new ArrayList<>();
-	private BiomeBlacklistType biomeBlacklistType = BiomeBlacklistType.CENTER_PART;
+	private BiomeBlacklistType biomeBlacklistType = DEFAULT_BIOME_BLACKLIST_TYPE;
 	private boolean isBiomeBlacklistTypeLocked = false;
 
 	public StructureData(Set<String> biomes, boolean isBiomeBlacklistTypeLocked) {
@@ -55,6 +59,7 @@ public class StructureData
 
 	public enum BiomeBlacklistType
 	{
+		NONE,
 		CENTER_PART,
 		ALL_PARTS;
 	}

@@ -31,10 +31,15 @@ public final class ChunkGeneratorMixin
 		ChunkSectionPos sectionPos,
 		CallbackInfoReturnable<Boolean> cir
 	) {
+		if(Structurify.getConfig().disableAllStructures) {
+			cir.setReturnValue(false);
+		}
+
 		String structureName = weightedEntry.structure().getKey().get().getValue().toString();
 		var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName, null);
 
 		if (structureData != null && structureData.isDisabled()) {
+			// TODO handle debug?
 			// Structurized.getLogger().info("Disabled generation of {}", weightedEntry.structure().getKey().get().getValue().toString());
 			cir.setReturnValue(false);
 		}
