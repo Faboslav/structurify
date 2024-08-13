@@ -2,26 +2,32 @@
 
 version=$1
 
-while IFS='=' read -r key value; do
-    # Trim leading/trailing whitespace from key and value
-    key=$(echo "$key" | awk '{$1=$1;print}')
-    value=$(echo "$value" | awk '{$1=$1;print}')
+parse_properties_file() {
+    local file=$1
+    while IFS='=' read -r key value; do
+        # Trim leading/trailing whitespace from key and value
+        key=$(echo "$key" | awk '{$1=$1;print}')
+        value=$(echo "$value" | awk '{$1=$1;print}')
 
-    # Convert key to uppercase and replace non-alphanumeric characters with underscores
-    key=$(echo "$key" | tr '[:lower:]' '[:upper:]' | tr -c '[:alnum:]' '_')
+        # Skip comments, empty keys, and unwanted keys like "org.gradle.jvmargs"
+        if [[ -z "$key" || "$key" =~ ^# || "$key" == "org.gradle.jvmargs" ]]; then
+            continue
+        fi
 
-    # Output the key-value pair to the GitHub output
-    echo "${key}=${value}" >> "$GITHUB_OUTPUT"
-done < gradle.properties
+        # Convert key to uppercase and replace non-alphanumeric characters with underscores
+        key=$(echo "$key" | tr '[:lower:]' '[:upper:]' | tr -c '[:alnum:]' '_')
 
-while IFS='=' read -r key value; do
-    # Trim leading/trailing whitespace from key and value
-    key=$(echo "$key" | awk '{$1=$1;print}')
-    value=$(echo "$value" | awk '{$1=$1;print}')
+        # Remove any trailing underscores
+        key=$(echo "$key" | sed 's/_$//')
 
-    # Convert key to uppercase and replace non-alphanumeric characters with underscores
-    key=$(echo "$key" | tr '[:lower:]' '[:upper:]' | tr -c '[:alnum:]' '_')
+        # Output the key-value pair
+        echo "${key}=${value}"
+        echo "${key}=${value}" >> "$GITHUB_OUTPUT"
+    done < "$file"
+}
 
-    # Output the key-value pair to the GitHub output
-    echo "${key}=${value}" >> "$GITHUB_OUTPUT"
-done < versions/"${version}"/gradle.properties
+# Parse the main gradle.properties file
+parse_properties_file gradle.properties
+
+# Parse the version-specific gradle.properties file
+parse_properties_file versions/"${version}"/gradle.properties
