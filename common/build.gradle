@@ -63,17 +63,28 @@ dependencies {
 	}
 }
 
+processResources {
+	def expandProps = [
+		"modJavaVersion"     : prop('mod_java_version'),
+	]
+
+	filesMatching(['*.mixins.json']) {
+		expand expandProps
+	}
+
+	inputs.properties(expandProps)
+}
+
 java {
 	withSourcesJar()
 
-	def javaVersion = (stonecutter.compare(stonecutter.current.version, "1.20.6") >= 0) ? JavaVersion.VERSION_21 : JavaVersion.VERSION_17
-	sourceCompatibility = javaVersion
-	targetCompatibility = javaVersion
+	sourceCompatibility = JavaVersion.toVersion(prop('mod_java_version'))
+	targetCompatibility = JavaVersion.toVersion(prop('mod_java_version'))
 }
 
 tasks.withType(JavaCompile).configureEach {
-	def releaseVersion = (stonecutter.compare(stonecutter.current.version, "1.20.6") >= 0) ? 21 : 17;
-	it.options.release = releaseVersion
+	it.options.encoding = 'UTF-8'
+	it.options.getRelease().set(prop('mod_java_version') as Integer)
 }
 
 repositories {

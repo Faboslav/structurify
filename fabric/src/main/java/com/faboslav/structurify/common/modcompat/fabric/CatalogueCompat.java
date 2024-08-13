@@ -1,7 +1,5 @@
 package com.faboslav.structurify.common.modcompat.fabric;
 
-import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.config.client.gui.StructuresConfigScreen;
 import com.faboslav.structurify.common.config.client.gui.StructurifyConfigScreen;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;

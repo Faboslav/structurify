@@ -37,7 +37,6 @@ loom {
 		extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 
 		mixinConfig "structurify-common.mixins.json"
-		mixinConfig "structurify-forge.mixins.json"
 	}
 
 	runConfigs.all {
@@ -64,14 +63,13 @@ configurations {
 java {
 	withSourcesJar()
 
-	def javaVersion = (stonecutter.compare(stonecutter.current.version, "1.20.6") >= 0) ? JavaVersion.VERSION_21 : JavaVersion.VERSION_17
-	sourceCompatibility = javaVersion
-	targetCompatibility = javaVersion
+	sourceCompatibility = JavaVersion.toVersion(prop('mod_java_version'))
+	targetCompatibility = JavaVersion.toVersion(prop('mod_java_version'))
 }
 
 tasks.withType(JavaCompile).configureEach {
-	def releaseVersion = (stonecutter.compare(stonecutter.current.version, "1.20.6") >= 0) ? 21 : 17;
-	it.options.release = releaseVersion
+	it.options.encoding = 'UTF-8'
+	it.options.getRelease().set(prop('mod_java_version') as Integer)
 }
 
 dependencies {
@@ -109,23 +107,23 @@ dependencies {
 }
 
 processResources {
-	inputs.property "modId", mod_id
-	inputs.property "modVersion", mod_version
-	inputs.property "modName", mod_name
-	inputs.property "modDescription", mod_description
-	inputs.property "modAuthor", mod_author
-	inputs.property "minecraftVersion", prop('min_minecraft_version')
-	inputs.property "forgeVersion", prop('forge_version')
+	def expandProps = [
+		"modJavaVersion"     : prop('mod_java_version'),
+		'modId'              : mod_id,
+		'modName'            : mod_name,
+		'modDescription'     : mod_description,
+		'modVersion'         : mod_version,
+		'modAuthor'          : mod_author,
+		"minecraftVersion"   : prop('minecraft_version'),
+		"minMinecraftVersion": prop('min_minecraft_version'),
+		"forgeVersion"       : prop('forge_version')
+	]
 
-	filesMatching("META-INF/mods.toml") {
-		expand "modId": mod_id,
-			"modVersion": mod_version,
-			"modName": mod_name,
-			"modDescription": mod_description,
-			"modAuthor": mod_author,
-			"minecraftVersion": prop('min_minecraft_version'),
-			"forgeVersion": prop('forge_version')
+	filesMatching(['pack.mcmeta', 'META-INF/mods.toml', '*.mixins.json']) {
+		expand expandProps
 	}
+
+	inputs.properties(expandProps)
 }
 
 shadowJar {

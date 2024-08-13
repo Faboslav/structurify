@@ -14,9 +14,6 @@ logoBlur = false
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/structurify"
 
 [[mixins]]
-config = "structurify-forge.mixins.json"
-
-[[mixins]]
 config = "structurify-common.mixins.json"
 
 [[dependencies.${ modId }]]
@@ -27,7 +24,7 @@ versionRange = "[${forgeVersion},)"
 [[dependencies.${ modId }]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[${minecraftVersion},)"
+versionRange = "[${minMinecraftVersion},)"
 
 [modproperties.${ modId }]
 catalogueImageIcon = "catalogue_icon.png"

@@ -94,27 +94,24 @@ dependencies {
 }
 
 processResources {
-	inputs.property 'modId', mod_id
-	inputs.property 'modName', mod_name
-	inputs.property 'modDescription', mod_description
-	inputs.property 'modVersion', mod_version
-	inputs.property 'modAuthor', mod_author
-	inputs.property "minecraftVersion", prop('min_minecraft_version')
-	inputs.property "fabricLoaderVersion", prop('fabric_loader_version')
-	inputs.property "fabricApiVersion", prop('fabric_api_version')
+	def expandProps = [
+		"modJavaVersion"     : prop('mod_java_version'),
+		'modId'              : mod_id,
+		'modName'            : mod_name,
+		'modDescription'     : mod_description,
+		'modVersion'         : mod_version,
+		'modAuthor'          : mod_author,
+		"minecraftVersion"   : prop('minecraft_version'),
+		"minMinecraftVersion": prop('min_minecraft_version'),
+		"fabricLoaderVersion": prop('fabric_loader_version'),
+		"fabricApiVersion"   : prop('fabric_api_version')
+	]
 
-	filesMatching("fabric.mod.json") {
-		expand([
-			'modId'              : mod_id,
-			'modName'            : mod_name,
-			'modDescription'     : mod_description,
-			'modVersion'         : mod_version,
-			'modAuthor'          : mod_author,
-			"minecraftVersion"   : prop('min_minecraft_version'),
-			"fabricLoaderVersion": prop('fabric_loader_version'),
-			"fabricApiVersion"   : prop('fabric_api_version')
-		])
+	filesMatching(['fabric.mod.json', '*.mixins.json']) {
+		expand expandProps
 	}
+
+	inputs.properties(expandProps)
 }
 
 shadowJar {
@@ -126,7 +123,6 @@ jar {
 	archiveClassifier.set("dev")
 }
 
-
 remapJar {
 	injectAccessWidener.set(true)
 	input.set(shadowJar.archiveFile)
@@ -137,14 +133,13 @@ remapJar {
 java {
 	withSourcesJar()
 
-	def javaVersion = (stonecutter.compare(stonecutter.current.version, "1.20.6") >= 0) ? JavaVersion.VERSION_21 : JavaVersion.VERSION_17
-	sourceCompatibility = javaVersion
-	targetCompatibility = javaVersion
+	sourceCompatibility = JavaVersion.toVersion(prop('mod_java_version'))
+	targetCompatibility = JavaVersion.toVersion(prop('mod_java_version'))
 }
 
 tasks.withType(JavaCompile).configureEach {
-	def releaseVersion = (stonecutter.compare(stonecutter.current.version, "1.20.6") >= 0) ? 21 : 17;
-	it.options.release = releaseVersion
+	it.options.encoding = 'UTF-8'
+	it.options.getRelease().set(prop('mod_java_version') as Integer)
 }
 
 repositories {
