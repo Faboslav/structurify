@@ -72,7 +72,7 @@ jobs:
             -   name: "Set up JDK"
                 uses: actions/setup-java@v4
                 with:
-                    java-version: ${{ steps.gradle-properties.outputs.MOD_JAVA_VERSION }}
+                    java-version: 21
                     distribution: temurin
 
             -   name: "Setup Gradle"
