@@ -28,15 +28,20 @@ jobs:
             -   name: "Install missing flite"
                 run: sudo apt-get install -y flite
 
+            -   name: "Parse gradle properties"
+                id: gradle-properties
+                run: ./parse-gradle-properties.sh
+
             -   name: "Set up JDK"
                 uses: actions/setup-java@v4
                 with:
-                    java-version: 21
+                    java-version: ${{ steps.gradle-properties.outputs.MOD_JAVA_VERSION }}
                     distribution: temurin
 
             -   name: "Setup Gradle and run build"
                 uses: gradle/actions/setup-gradle@v3
                 with:
+                    cache-read-only: false
                     generate-job-summary: false
                     gradle-version: wrapper
                     arguments: build
