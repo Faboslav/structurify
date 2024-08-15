@@ -82,7 +82,7 @@ public final class StructuresConfigScreen
 
 				// Create new group
 				currentGroupBuilder = OptionGroup.createBuilder()
-					.name(Text.literal(LanguageUtil.translateId(null, namespace).getString()).append(" ").append(Text.translatable("gui.structurify.structures.structures_group.title")))
+					.name(Text.translatable("gui.structurify.structures.structures_group.title", LanguageUtil.translateId(null, namespace).getString()))
 					.description(OptionDescription.of(Text.translatable("gui.structurify.structures.structures_group.description", namespace)));
 
 				currentNamespace = namespace;

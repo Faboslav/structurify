@@ -24,8 +24,8 @@ public final class StructureConfigScreen
 			.save(Structurify.getConfig()::save);
 
 		var structureCategoryBuilder = ConfigCategory.createBuilder()
-			.name(LanguageUtil.translateId("structure", structureId))
-			.tooltip(Text.literal("Specific structure settings"));
+			.name(Text.translatable("gui.structurify.structures.structure.title", LanguageUtil.translateId("structure", structureId)))
+			.tooltip(Text.translatable("gui.structurify.structures.structure.description"));
 
 		/*
 		var structureBlacklistedBiomesGroup = OptionGroup.createBuilder()
