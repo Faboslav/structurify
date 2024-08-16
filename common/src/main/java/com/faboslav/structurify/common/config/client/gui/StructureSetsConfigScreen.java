@@ -3,9 +3,7 @@ package com.faboslav.structurify.common.config.client.gui;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.DualControllerBuilder;
-import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.HolderOption;
-import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
@@ -20,7 +18,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,9 +46,13 @@ public final class StructureSetsConfigScreen
 			.name(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation.title"))
 			.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation.description")));
 
-		var enableGlobalSpacingAndSeparationBuilder = Option.<Boolean>createBuilder()
+		var enableGlobalSpacingAndSeparationDescriptionBuilder = OptionDescription.createBuilder();
+		enableGlobalSpacingAndSeparationDescriptionBuilder.text(Text.translatable("gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.description"));
+		enableGlobalSpacingAndSeparationDescriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("gui.structurify.structure_sets.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
+
+		var enableGlobalSpacingAndSeparationOption = Option.<Boolean>createBuilder()
 			.name(Text.translatable("gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.title"))
-			.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.description")))
+			.description(enableGlobalSpacingAndSeparationDescriptionBuilder.build())
 			.binding(
 				true,
 				() -> config.enableGlobalSpacingAndSeparationModifier,
@@ -59,21 +60,26 @@ public final class StructureSetsConfigScreen
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
 				.valueFormatter(val -> val ? Text.translatable("Yes"):Text.translatable("No"))
-				.coloured(true));
+				.coloured(true)).build();
 
-		generalStructuresSetsGroupBuilder.option(enableGlobalSpacingAndSeparationBuilder.build());
+		generalStructuresSetsGroupBuilder.option(enableGlobalSpacingAndSeparationOption);
 
-		var globalSpacingModifierBuilder = Option.<Double>createBuilder()
+		var globalSpacingAndSeparationModifierDescriptionBuilder = OptionDescription.createBuilder();
+		globalSpacingAndSeparationModifierDescriptionBuilder.text(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.description"));
+		globalSpacingAndSeparationModifierDescriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("gui.structurify.structure_sets.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
+
+		var globalSpacingAndSeparationModifierOption = Option.<Double>createBuilder()
 			.name(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.title"))
-			.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.description")))
+			.description(globalSpacingAndSeparationModifierDescriptionBuilder.build())
 			.binding(
 				1.0D,
 				() -> config.globalSpacingAndSeparationModifier,
 				modifier -> config.globalSpacingAndSeparationModifier = modifier
 			)
-			.controller(opt -> DoubleSliderControllerBuilder.create(opt).range(0.1D, 100.0D).step(0.1D));
+			.controller(opt -> DoubleSliderControllerBuilder.create(opt).range(0.1D, 100.0D).step(0.1D)).build();
 
-		generalStructuresSetsGroupBuilder.option(globalSpacingModifierBuilder.build());
+		generalStructuresSetsGroupBuilder.option(globalSpacingAndSeparationModifierOption);
+
 		structureSetCategoryBuilder.group(generalStructuresSetsGroupBuilder.build());
 
 		var structureSets = WorldgenDataProvider.getStructureSets();

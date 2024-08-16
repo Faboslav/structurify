@@ -1,20 +1,22 @@
 {
-  "required": true,
-  "package": "com.faboslav.structurify.common.mixin",
-  "compatibilityLevel": "JAVA_${modJavaVersion}",
-  "minVersion": "0.8",
-  "mixins": [
-    "AnimatedDynamicTextureImageAccessor",
-    "ChunkGeneratorMixin",
-    "JigsawStructureMixin",
-    "LocateCommandMixin",
-    "RandomSpreadStructurePlacementMixin",
-    "StructureMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "client": [
-    "ClickableWidgetAccessor"
-  ]
+	"required": true,
+	"package": "com.faboslav.structurify.common.mixin",
+	"compatibilityLevel": "JAVA_${modJavaVersion}",
+	"minVersion": "0.8",
+	"plugin": "com.faboslav.structurify.common.mixin.plugin.StructurifyMixinPlugin",
+	"mixins": [
+		"ChunkGeneratorMixin",
+		"JigsawStructureMixin",
+		"LocateCommandMixin",
+		"RandomSpreadStructurePlacementMixin",
+		"StructureMixin",
+		"compat.AdvancedRandomSpreadMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"client": [
+		"AnimatedDynamicTextureImageAccessor",
+		"ClickableWidgetAccessor"
+	]
 }

@@ -1,13 +1,12 @@
 package com.faboslav.structurify.common.config.data;
 
+import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.structure.StructureSet;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.gen.structure.Structure;
-
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -136,8 +135,9 @@ public final class WorldgenDataProvider
 			Identifier structureSetId = structureSetRegistryKey.getValue();
 			String structureSetStringId = structureSetId.toString();
 
-			if (structureSet.placement() instanceof RandomSpreadStructurePlacement randomSpreadStructurePlacement) {
-				structureSets.put(structureSetStringId, new StructureSetData(randomSpreadStructurePlacement.getSpacing(), randomSpreadStructurePlacement.getSeparation()));
+			if (structureSet.placement() instanceof net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement randomSpreadStructurePlacement) {
+				structureSets.put(structureSetStringId, new StructureSetData(
+					((StructurifyRandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$getOriginalSpacing(), ((StructurifyRandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$getOriginalSeparation()));
 			}
 		}
 

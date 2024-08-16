@@ -1,6 +1,6 @@
 package com.faboslav.structurify.common;
 
-import com.faboslav.structurify.common.api.RandomSpreadStructurePlacement;
+import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
@@ -10,7 +10,6 @@ import com.faboslav.structurify.common.modcompat.ModChecker;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.resource.VanillaDataPackProvider;
 import net.minecraft.structure.StructureSet;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.structure.Structure;
@@ -79,6 +78,10 @@ public final class Structurify
 		}
 
 		Structurify.getConfig().load();
+
+		if (Structurify.getConfig().enableGlobalSpacingAndSeparationModifier && Structurify.getConfig().globalSpacingAndSeparationModifier != 1.0D) {
+			Structurify.getLogger().info("Enabled global spacing and separation modifier with value of {}", Structurify.getConfig().globalSpacingAndSeparationModifier);
+		}
 
 		List<String> disabledStructures = Structurify.getConfig().getStructureData().entrySet()
 			.stream()
@@ -161,7 +164,7 @@ public final class Structurify
 			Identifier structureSetId = structureSetRegistryKey.getValue();
 
 			if (structureSet.placement() instanceof net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement randomSpreadStructurePlacement) {
-				((RandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$setStructureSetIdentifier(structureSetId);
+				((StructurifyRandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$setStructureSetIdentifier(structureSetId);
 			}
 		}
 	}

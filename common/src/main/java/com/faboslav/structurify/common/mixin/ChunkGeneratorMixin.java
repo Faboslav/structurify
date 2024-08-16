@@ -31,7 +31,7 @@ public final class ChunkGeneratorMixin
 		ChunkSectionPos sectionPos,
 		CallbackInfoReturnable<Boolean> cir
 	) {
-		if(Structurify.getConfig().disableAllStructures) {
+		if (Structurify.getConfig().disableAllStructures) {
 			cir.setReturnValue(false);
 		}
 

@@ -11,9 +11,11 @@ def isServer = project.gradle.startParameter.taskNames.any { it.contains('runSer
 def currentRootVersion = getRootProject().stonecutter.current.version;
 def subproject = stonecutter.current.project
 def minecraftVersion = stonecutter.current.version
+
 def modrinth(String name, String version) {
 	return "maven.modrinth:$name:$version"
 }
+
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
@@ -85,19 +87,29 @@ dependencies {
 
 	forge "net.minecraftforge:forge:${prop('minecraft_version')}-${prop('forge_version')}"
 
-	if(isClient) {
-		// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
-		if (minecraftVersion == '1.20.2') {
-			modImplementation(modrinth("yacl", "${prop('yacl_version')}-forge"))
-		} else {
-			// Temp disable, its not working for forge
-			//modImplementation("dev.isxander:yet-another-config-lib:${prop('yacl_version')}-forge")
-		}
+	// Mixin extras (https://github.com/LlamaLad7/MixinExtras)
+	compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${prop('mixin_extras_version')}"))
+	implementation(include("io.github.llamalad7:mixinextras-forge:${prop('mixin_extras_version')}"))
+
+	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
+	if (minecraftVersion == '1.20.2') {
+		modImplementation(modrinth("yacl", "${prop('yacl_version')}-forge")) { transitive false }
+	} else {
+		modImplementation("dev.isxander:yet-another-config-lib:${prop('yacl_version')}-forge") { transitive false }
 	}
+
+	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.imageio:imageio-core:3.10.0")))
+	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.imageio:imageio-webp:3.10.0")))
+	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.imageio:imageio-metadata:3.10.0")))
+	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.common:common-lang:3.10.0")))
+	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.common:common-io:3.10.0")))
+	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.common:common-image:3.10.0")))
+	forgeRuntimeLibrary((implementation include("org.quiltmc.parsers:json:0.2.1")))
+	forgeRuntimeLibrary((implementation include("org.quiltmc.parsers:gson:0.2.1")))
 
 	def availableVersions = stonecutter_enabled_forge_versions.split(',').collect { it.trim() }
 
-	if(!availableVersions.contains(currentRootVersion) && minecraftVersion != currentRootVersion) {
+	if (!availableVersions.contains(currentRootVersion) && minecraftVersion != currentRootVersion) {
 		common(project(path: ":common:$currentRootVersion", configuration: 'namedElements')) { transitive false }
 		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionForge')) { transitive false }
 	} else {
@@ -175,7 +187,7 @@ repositories {
 	}
 }
 
-if(stonecutter.current.isActive) {
+if (stonecutter.current.isActive) {
 	rootProject.tasks.register("buildActiveForge") {
 		group = "project"
 		dependsOn(tasks.named("build"))

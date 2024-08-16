@@ -25,18 +25,19 @@
 	"gui.structurify.structures.structure.biome_blacklist_type.all_parts": "All Parts",
 	"gui.structurify.structures.structure.blacklisted_biomes.title": "Blacklisted biomes",
 	"gui.structurify.structures.structure.blacklisted_biomes.description": "Choose in which biomes structure should not generate.",
+	"gui.structurify.structure_sets.warning": "Bear in mind that every structure set can still have very different placement rules and overrides which can cause that changing this value doesn't have any effect at all.",
 	"gui.structurify.structure_sets_category.title": "Structure spread settings",
 	"gui.structurify.structure_sets_category.description": "Configure custom structure spread either via global spacing and separation modifier or per structure specific spacing and separation values.",
 	"gui.structurify.structure_sets.global_spacing_and_separation.title": "Global settings",
 	"gui.structurify.structure_sets.global_spacing_and_separation.description": "Global settings for structure sets.",
 	"gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.title": "Enable global spacing and separation modifier",
-	"gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.description": "Spacing and separation of each structure set will be multiplied by this value",
+	"gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.description": "Spacing and separation of each structure set will be multiplied by this value.",
 	"gui.structurify.structure_sets.global_spacing_and_separation_modifier.title": "Global spacing and separation modifier",
 	"gui.structurify.structure_sets.global_spacing_and_separation_modifier.description": "When different from default value of 1.0, each structure set will be either more concentrated or more spread out.\n\n < 1.0 - more concentrated \n = 1.0 - unaffected \n > 1.0 - more spread out",
 	"gui.structurify.structure_sets.structure_group.title": "structures",
 	"gui.structurify.structure_sets.structure_group.description": "Specific %s structure set settings.",
 	"gui.structurify.structure_sets.spacing.title": "Spacing",
-	"gui.structurify.structure_sets.spacing.description": "Spacing is average distance in chunks between the structures from same structure set (group of structures).",
+	"gui.structurify.structure_sets.spacing.description": "Spacing is the average distance in chunks between structures within the same structure set (group of structures).",
 	"gui.structurify.structure_sets.separation.title": "Separation",
-	"gui.structurify.structure_sets.separation.description": "Separation is minimum distance in chunks between the structures in the same structure set (group of structures). Separation value can not be bigger than spacing the spacing value."
+	"gui.structurify.structure_sets.separation.description": "Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value."
 }

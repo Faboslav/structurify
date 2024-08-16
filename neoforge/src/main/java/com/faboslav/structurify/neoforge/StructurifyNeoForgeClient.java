@@ -1,22 +1,22 @@
-package com.faboslav.structurify.forge;
+package com.faboslav.structurify.neoforge;
 
 import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.client.gui.StructurifyConfigScreen;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ConfigScreenHandler;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.ConfigScreenHandler;
 
 @OnlyIn(Dist.CLIENT)
-public final class StructurifyForgeClient
+public final class StructurifyNeoForgeClient
 {
 	public static void init(IEventBus modEventBus, IEventBus eventBus) {
 		StructurifyClient.init();
 
-		modEventBus.addListener(StructurifyForgeClient::onClientSetup);
+		modEventBus.addListener(StructurifyNeoForgeClient::onClientSetup);
 	}
 
 	private static void onClientSetup(final FMLClientSetupEvent event) {

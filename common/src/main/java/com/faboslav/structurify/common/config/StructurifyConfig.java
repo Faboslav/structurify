@@ -140,17 +140,38 @@ public final class StructurifyConfig
 					var structureSpreadJson = structureSet.getAsJsonObject();
 
 					if (!structureSpreadJson.has("name") || !structureSpreadJson.has("spacing") || !structureSpreadJson.has("separation")) {
-						// TODO warning
+						// TODO warning or just skip?
 						continue;
 					}
 
 					if (!this.structureSetData.containsKey(structureSpreadJson.get("name").getAsString())) {
+						Structurify.getLogger().info("Invalid structure set identifier of \"{}\"", structureSpreadJson.get("name").getAsString());
 						continue;
 					}
 
+					var structureSetName = structureSpreadJson.get("name").getAsString();
 					var structureSetData = this.structureSetData.get(structureSpreadJson.get("name").getAsString());
-					structureSetData.setSpacing(structureSpreadJson.get("spacing").getAsInt());
-					structureSetData.setSeparation(structureSpreadJson.get("separation").getAsInt());
+
+					var spacing = structureSpreadJson.get("spacing").getAsInt();
+					var separation = structureSpreadJson.get("separation").getAsInt();
+
+					if (separation >= spacing) {
+						Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}.", structureSetName, separation, spacing, spacing - 1);
+						separation = spacing - 1;
+					}
+
+					if (separation < 0) {
+						Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, separation);
+						separation = 0;
+					}
+
+					if (spacing < 1) {
+						Structurify.getLogger().info("Spacing value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, spacing);
+						separation = 0;
+					}
+
+					structureSetData.setSpacing(spacing);
+					structureSetData.setSeparation(separation);
 				}
 			}
 
@@ -166,7 +187,7 @@ public final class StructurifyConfig
 		Structurify.getLogger().info("Saving Structurify config...");
 
 		try {
-			if(Files.exists(configPath)) {
+			if (Files.exists(configPath)) {
 				Files.deleteIfExists(backupConfigPath);
 				Files.move(configPath, backupConfigPath);
 			}
@@ -179,6 +200,7 @@ public final class StructurifyConfig
 
 			Files.createFile(configPath);
 			Files.writeString(configPath, gson.toJson(json));
+			Files.deleteIfExists(backupConfigPath);
 
 			Structurify.getLogger().info("Structurify config saved");
 		} catch (Exception e) {
@@ -232,12 +254,23 @@ public final class StructurifyConfig
 		this.structureSetData.entrySet().stream()
 			.filter(entry -> !entry.getValue().isUsingDefaultSpacing() || !entry.getValue().isUsingDefaultSeparation())
 			.forEach(entry -> {
+				var structureSetName = entry.getKey();
 				var spacing = entry.getValue().getSpacing();
 				var separation = entry.getValue().getSeparation();
 
 				if (separation >= spacing) {
-					Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}. ", entry.getKey(), separation, spacing, spacing - 1);
+					Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}. ", structureSetName, separation, spacing, spacing - 1);
 					separation = spacing - 1;
+				}
+
+				if (separation < 0) {
+					Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, separation);
+					separation = 0;
+				}
+
+				if (spacing < 1) {
+					Structurify.getLogger().info("Spacing value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, spacing);
+					separation = 0;
 				}
 
 				JsonObject specificStructureSpread = new JsonObject();

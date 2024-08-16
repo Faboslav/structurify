@@ -1,7 +1,5 @@
 package com.faboslav.structurify.common.modcompat.fabric;
 
-import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.config.client.gui.StructuresConfigScreen;
 import com.faboslav.structurify.common.config.client.gui.StructurifyConfigScreen;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

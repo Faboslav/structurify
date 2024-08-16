@@ -9,9 +9,11 @@ plugins {
 def currentRootVersion = getRootProject().stonecutter.current.version;
 def subproject = stonecutter.current.project
 def minecraftVersion = stonecutter.current.version
+
 def modrinth(String name, String version) {
 	return "maven.modrinth:$name:$version"
 }
+
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
@@ -68,7 +70,7 @@ dependencies {
 
 	def availableVersions = stonecutter_enabled_neoforge_versions.split(',').collect { it.trim() }
 
-	if(!availableVersions.contains(currentRootVersion) && minecraftVersion != currentRootVersion) {
+	if (!availableVersions.contains(currentRootVersion) && minecraftVersion != currentRootVersion) {
 		common(project(path: ":common:$currentRootVersion", configuration: 'namedElements')) { transitive false }
 		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionNeoForge')) { transitive false }
 	} else {
@@ -169,7 +171,7 @@ repositories {
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
-if(stonecutter.current.isActive) {
+if (stonecutter.current.isActive) {
 	rootProject.tasks.register("buildActiveNeoForge") {
 		group = "project"
 		dependsOn(tasks.named("build"))

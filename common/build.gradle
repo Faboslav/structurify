@@ -6,9 +6,11 @@ plugins {
 }
 
 def minecraftVersion = stonecutter.current.version
+
 def modrinth(String name, String version) {
 	return "maven.modrinth:$name:$version"
 }
+
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
@@ -61,11 +63,14 @@ dependencies {
 	} else if (minecraftVersion == '1.20.4') {
 		modCompileOnly("curse.maven:drp-global-datapack-317134:5374072")
 	}
+
+	// Special compat
+	modImplementation(modrinth("repurposed-structures-fabric", "${prop('repurposed_structures_version')}-fabric"))
 }
 
 processResources {
 	def expandProps = [
-		"modJavaVersion"     : prop('mod_java_version'),
+		"modJavaVersion": prop('mod_java_version'),
 	]
 
 	filesMatching(['*.mixins.json']) {
@@ -114,7 +119,7 @@ repositories {
 	maven { url "https://maven.isxander.dev/releases" }
 	maven { url "https://maven.isxander.dev/snapshots" }
 	maven { url 'https://thedarkcolour.github.io/KotlinForForge/' }
-	maven{ url = "https://maven.quiltmc.org/repository/release" }
+	maven { url = "https://maven.quiltmc.org/repository/release" }
 }
 
 if (stonecutter.current.isActive) {

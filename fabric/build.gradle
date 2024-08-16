@@ -8,9 +8,11 @@ plugins {
 
 def subproject = stonecutter.current.project
 def minecraftVersion = stonecutter.current.version
+
 def modrinth(String name, String version) {
 	return "maven.modrinth:$name:$version"
 }
+
 def prop(String name) {
 	return rootProject.project(stonecutter.current.project).property(name).toString()
 }
@@ -175,7 +177,7 @@ repositories {
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
-if(stonecutter.current.isActive) {
+if (stonecutter.current.isActive) {
 	rootProject.tasks.register("buildActiveFabric") {
 		group = "project"
 		dependsOn(tasks.named("build"))
