@@ -9,8 +9,8 @@ public final class CatalogueCompat
 {
 	public static Screen createConfigScreen(Screen screen, ModContainer container) {
 		if (
-			FabricLoader.getInstance().isModLoaded("catalogue") == false
-			|| FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3") == false
+			!FabricLoader.getInstance().isModLoaded("catalogue")
+			|| !FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")
 		) {
 			return null;
 		}

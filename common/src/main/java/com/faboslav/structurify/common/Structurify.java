@@ -79,10 +79,6 @@ public final class Structurify
 
 		Structurify.getConfig().load();
 
-		if (Structurify.getConfig().enableGlobalSpacingAndSeparationModifier && Structurify.getConfig().globalSpacingAndSeparationModifier != 1.0D) {
-			Structurify.getLogger().info("Enabled global spacing and separation modifier with value of {}", Structurify.getConfig().globalSpacingAndSeparationModifier);
-		}
-
 		List<String> disabledStructures = Structurify.getConfig().getStructureData().entrySet()
 			.stream()
 			.filter(entry -> entry.getValue().isDisabled())
@@ -98,6 +94,10 @@ public final class Structurify
 			.filter(entry -> !entry.getValue().isUsingDefaultSpacingAndSeparation())
 			.map(Map.Entry::getKey)
 			.toList();
+
+		if (Structurify.getConfig().enableGlobalSpacingAndSeparationModifier && Structurify.getConfig().globalSpacingAndSeparationModifier != 1.0D) {
+			Structurify.getLogger().info("Enabled global spacing and separation modifier with value of {}", Structurify.getConfig().globalSpacingAndSeparationModifier);
+		}
 
 		if (!changedStructureSets.isEmpty()) {
 			Structurify.getLogger().info("Changed spacing and/or separation of {} structures sets: {}", changedStructureSets.size(), changedStructureSets);
