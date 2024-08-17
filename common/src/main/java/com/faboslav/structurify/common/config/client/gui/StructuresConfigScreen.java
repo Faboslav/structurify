@@ -44,14 +44,14 @@ public final class StructuresConfigScreen
 			.description(OptionDescription.of(Text.translatable("gui.structurify.structures.general.description")));
 
 		var disableAllStructuresOptionBuilder = Option.<Boolean>createBuilder()
-			.name(Text.translatable("structurized.structures.disable_all_structures.title"))
-			.description(OptionDescription.of(Text.translatable("structurized.structures.disable_all_structures.description")))
+			.name(Text.translatable("gui.structurify.structures.disable_all_structures.title"))
+			.description(OptionDescription.of(Text.translatable("gui.structurify.structures.disable_all_structures.description")))
 			.binding(
 				false,
 				() -> config.disableAllStructures,
 				disableAllStructures -> config.disableAllStructures = disableAllStructures
 			)
-			.controller(opt -> BooleanControllerBuilder.create(opt).valueFormatter(val -> val ? Text.translatable("Yes").styled(style -> style.withColor(Formatting.RED)):Text.translatable("No").styled(style -> style.withColor(Formatting.GREEN))));
+			.controller(opt -> BooleanControllerBuilder.create(opt).valueFormatter(val -> val ? Text.translatable("gui.structurify.label.yes").styled(style -> style.withColor(Formatting.RED)):Text.translatable("gui.structurify.label.no").styled(style -> style.withColor(Formatting.GREEN))));
 
 		generalStructuresGroupBuilder.option(disableAllStructuresOptionBuilder.build());
 		structureCategoryBuilder.group(generalStructuresGroupBuilder.build());
@@ -90,18 +90,18 @@ public final class StructuresConfigScreen
 					isEnabled -> config.getStructureData().get(structureStringId).setDisabled(!isEnabled)
 				)
 				.controller(opt -> StructureButtonControllerBuilder.create(opt, structureStringId)
-					.valueFormatter(val -> val ? Text.literal("Enabled"):Text.literal("Disabled"))
+					.valueFormatter(val -> val ? Text.translatable("gui.structurify.label.enabled"):Text.translatable("gui.structurify.label.disabled"))
 					.coloured(true));
 
 			var descriptionBuilder = OptionDescription.createBuilder();
 
-			descriptionBuilder.text(Text.translatable("structurized.structures.biomes_description").append(Text.literal("\n")));
+			descriptionBuilder.text(Text.translatable("gui.structurify.structures.biomes_description").append(Text.literal("\n")));
 
 			for (String biome : structureData.getBiomes()) {
 				descriptionBuilder.text(Text.literal(" - ").append(LanguageUtil.translateId("biome", biome)));
 			}
 
-			descriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("structurized.structures.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
+			descriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("gui.structurify.structures.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
 
 			optionBuilder.description(descriptionBuilder.build());
 			currentGroupBuilder.option(optionBuilder.build());

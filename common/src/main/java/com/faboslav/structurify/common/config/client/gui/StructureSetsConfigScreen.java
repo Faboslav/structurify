@@ -59,7 +59,7 @@ public final class StructureSetsConfigScreen
 				enableGlobalSpacingAndSeparationModifier -> config.enableGlobalSpacingAndSeparationModifier = enableGlobalSpacingAndSeparationModifier
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(val -> val ? Text.translatable("Yes"):Text.translatable("No"))
+				.valueFormatter(val -> val ? Text.translatable("gui.structurify.label.yes"):Text.translatable("gui.structurify.label.no"))
 				.coloured(true)).build();
 
 		generalStructuresSetsGroupBuilder.option(enableGlobalSpacingAndSeparationOption);
@@ -103,8 +103,8 @@ public final class StructureSetsConfigScreen
 
 				// Create new group
 				currentGroupBuilder = OptionGroup.createBuilder()
-					.name(LanguageUtil.translateId(null, namespace).append(" ").append(Text.translatable("gui.structurify.structure_sets.structure_group.title")))
-					.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.structure_group.description" + LanguageUtil.translateId(null, namespace))));
+					.name(Text.translatable("gui.structurify.structure_sets.structure_group.title", LanguageUtil.translateId(null, namespace)))
+					.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.structure_group.description", namespace)));
 				currentNamespace = namespace;
 			}
 

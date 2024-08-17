@@ -51,7 +51,7 @@ public class StructurifyConfigScreen extends Screen
 		super.init();
 
 		int fontHeight = textRenderer.fontHeight;
-		DynamicGridWidget grid = new DynamicGridWidget(10, 10 + fontHeight + 10, width - 20, height - 20 - fontHeight - 10 - 20);
+		DynamicGridWidget grid = new DynamicGridWidget(10, 10 + fontHeight + 10, width - 13, height - 20 - fontHeight - 10 - 20);
 
 		grid.setPadding(3);
 
