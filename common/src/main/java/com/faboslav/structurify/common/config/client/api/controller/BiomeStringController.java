@@ -18,7 +18,7 @@ public final class BiomeStringController extends AbstractDropdownController<Stri
 
 	@Override
 	public String getString() {
-		return option.pendingValue().toString();
+		return option.pendingValue();
 	}
 
 	@Override

@@ -97,12 +97,12 @@ public final class StructurifyConfig
 						|| !structureJson.has("biome_blacklist_type")
 						|| !structureJson.has("blacklisted_biomes")
 					) {
-						// TODO warning
+						Structurify.getLogger().info("Found invalid structure entry, skipping.");
 						continue;
 					}
 
 					if (!this.structureData.containsKey(structureJson.get("name").getAsString())) {
-						// TODO warning
+						Structurify.getLogger().info("Found invalid structure identifier of \"{}\", skipping.", structureJson.get("name").getAsString());
 						continue;
 					}
 
@@ -111,11 +111,13 @@ public final class StructurifyConfig
 
 					String possibleBiomeBlacklistType = structureJson.get("biome_blacklist_type").getAsString();
 					StructureData.BiomeBlacklistType biomeBlacklistType;
+
 					try {
 						biomeBlacklistType = StructureData.BiomeBlacklistType.valueOf(possibleBiomeBlacklistType);
 					} catch (IllegalArgumentException ignored) {
 						biomeBlacklistType = StructureData.DEFAULT_BIOME_BLACKLIST_TYPE;
 					}
+
 					structureData.setBiomeBlacklistType(biomeBlacklistType);
 
 					var blacklistedBiomesJson = structureJson.getAsJsonArray("blacklisted_biomes");
@@ -139,13 +141,17 @@ public final class StructurifyConfig
 				for (JsonElement structureSet : structureSets) {
 					var structureSpreadJson = structureSet.getAsJsonObject();
 
-					if (!structureSpreadJson.has("name") || !structureSpreadJson.has("spacing") || !structureSpreadJson.has("separation")) {
-						// TODO warning or just skip?
+					if (
+						!structureSpreadJson.has("name")
+						|| !structureSpreadJson.has("spacing")
+						|| !structureSpreadJson.has("separation")
+					) {
+						Structurify.getLogger().info("Found invalid structure set entry, skipping.");
 						continue;
 					}
 
 					if (!this.structureSetData.containsKey(structureSpreadJson.get("name").getAsString())) {
-						Structurify.getLogger().info("Invalid structure set identifier of \"{}\"", structureSpreadJson.get("name").getAsString());
+						Structurify.getLogger().info("Found invalid structure set identifier of \"{}\", skipping.", structureSpreadJson.get("name").getAsString());
 						continue;
 					}
 

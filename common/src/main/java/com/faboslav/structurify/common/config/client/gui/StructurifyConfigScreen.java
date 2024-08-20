@@ -22,9 +22,7 @@ public class StructurifyConfigScreen extends Screen
 		super(Text.translatable("structurify"));
 		this.parent = parent;
 		this.structuresScreen = StructuresConfigScreen.createConfigGui(Structurify.getConfig(), this);
-		;
 		this.structureSetsScreen = StructureSetsConfigScreen.createConfigGui(Structurify.getConfig(), this);
-		;
 	}
 
 	@Override
