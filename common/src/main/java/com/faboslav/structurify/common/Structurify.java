@@ -3,10 +3,12 @@ package com.faboslav.structurify.common;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.StructurifyConfig;
+import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.PrepareRegistriesEvent;
 import com.faboslav.structurify.common.events.lifecycle.DatapackReloadEvent;
 import com.faboslav.structurify.common.modcompat.ModChecker;
+import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -69,7 +71,7 @@ public final class Structurify
 
 		LoadConfigEvent.EVENT.addListener(Structurify::loadConfig);
 		PrepareRegistriesEvent.EVENT.addListener(Structurify::prepareRegistries);
-		DatapackReloadEvent.EVENT.addListener(Structurify::reloadStructurifyRegistryManager);
+		// DatapackReloadEvent.EVENT.addListener(Structurify::reloadStructurifyRegistryManager);
 	}
 
 	private static void loadConfig(final LoadConfigEvent event) {
@@ -104,17 +106,15 @@ public final class Structurify
 		}
 	}
 
+	/*
 	private static void reloadStructurifyRegistryManager(final DatapackReloadEvent event) {
-		Structurify.getLogger().info("DatapackReloadEvent");
-		// StructurifyRegistryManagerProvider.reloadRegistryManager();
-	}
+		WorldgenDataProvider.reload();
+	} */
 
 	private static void prepareRegistries(final PrepareRegistriesEvent event) {
 		if (!Structurify.getConfig().isLoaded) {
 			return;
 		}
-
-		Structurify.getLogger().info("TagsUpdatedEvent");
 
 		var registryManager = event.registryManager();
 
@@ -124,8 +124,6 @@ public final class Structurify
 
 		Structurify.prepareStructures(registryManager);
 		Structurify.prepareStructureSets(registryManager);
-
-		Structurify.getLogger().info("tags loaded");
 	}
 
 	private static void prepareStructures(DynamicRegistryManager registryManager) {

@@ -106,7 +106,8 @@ processResources {
 		"minecraftVersion"   : prop('minecraft_version'),
 		"minMinecraftVersion": prop('min_minecraft_version'),
 		"fabricLoaderVersion": prop('fabric_loader_version'),
-		"fabricApiVersion"   : prop('fabric_api_version')
+		"fabricApiVersion"   : prop('fabric_api_version'),
+		"yaclVersion"        : prop('yacl_version'),
 	]
 
 	filesMatching(['fabric.mod.json', '*.mixins.json']) {

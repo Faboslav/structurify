@@ -39,8 +39,6 @@ public final class ChunkGeneratorMixin
 		var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName, null);
 
 		if (structureData != null && structureData.isDisabled()) {
-			// TODO handle debug?
-			// Structurized.getLogger().info("Disabled generation of {}", weightedEntry.structure().getKey().get().getValue().toString());
 			cir.setReturnValue(false);
 		}
 	}

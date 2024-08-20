@@ -19,7 +19,6 @@ public final class StructurifyFabric implements ModInitializer
 	}
 
 	private void onServerStarting(MinecraftServer minecraftServer) {
-		Structurify.getLogger().info("onServerStarting");
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(minecraftServer.getRegistryManager().toImmutable()));
 	}

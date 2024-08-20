@@ -89,7 +89,8 @@ processResources {
 		'modAuthor'          : mod_author,
 		"minecraftVersion"   : prop('minecraft_version'),
 		"minMinecraftVersion": prop('min_minecraft_version'),
-		"neoForgeVersion"    : prop('neoforge_version')
+		"neoForgeVersion"    : prop('neoforge_version'),
+		"yaclVersion"        : prop('yacl_version'),
 	]
 
 	def tomlFileName = "META-INF/mods.toml"

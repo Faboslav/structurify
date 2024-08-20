@@ -16,15 +16,18 @@ displayURL = "https://www.curseforge.com/minecraft/mc-mods/structurify"
 [[mixins]]
 config = "structurify-common.mixins.json"
 
-#[[mixins]]
-#config = "structurify-neoforge.mixins.json"
+[[dependencies.${ modId }]]
+modId = "minecraft"
+required = true
+versionRange = "[${minecraftVersion},)"
 
-#[[dependencies.${ modId }]]
-#modId = "minecraft"
-#required = true
-#versionRange = "[${minecraftVersion},)"
+[[dependencies.${ modId }]]
+modId = "yet_another_config_lib_v3"
+required = true
+versionRange = "[${yaclVersion},)"
+side = "CLIENT"
 
-#[modproperties.${ modId }]
-#catalogueImageIcon = "catalogue_icon.png"
-#catalogueBackground = "catalogue_background.png"
-#configuredBackground = "catalogue_background.png"
+[modproperties.${ modId }]
+catalogueImageIcon = "catalogue_icon.png"
+catalogueBackground = "catalogue_background.png"
+configuredBackground = "catalogue_background.png"

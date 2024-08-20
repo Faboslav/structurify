@@ -128,7 +128,8 @@ processResources {
 		'modAuthor'          : mod_author,
 		"minecraftVersion"   : prop('minecraft_version'),
 		"minMinecraftVersion": prop('min_minecraft_version'),
-		"forgeVersion"       : prop('forge_version')
+		"forgeVersion"       : prop('forge_version'),
+		"yaclVersion"        : prop('yacl_version'),
 	]
 
 	filesMatching(['pack.mcmeta', 'META-INF/mods.toml', '*.mixins.json']) {

@@ -7,6 +7,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.structure.StructureSet;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.structure.Structure;
+
 import java.lang.reflect.Field;
 import java.util.*;
 
