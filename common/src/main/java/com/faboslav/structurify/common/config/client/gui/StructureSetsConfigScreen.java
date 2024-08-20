@@ -110,7 +110,6 @@ public final class StructureSetsConfigScreen
 
 			var spacingDescriptionBuilder = OptionDescription.createBuilder();
 			spacingDescriptionBuilder.text(Text.translatable("gui.structurify.structure_sets.spacing.description"));
-			spacingDescriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("gui.structurify.structure_sets.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
 
 			var spacingOption = Option.<Integer>createBuilder()
 				.name(Text.translatable("gui.structurify.structure_sets.spacing.title"))
@@ -135,7 +134,6 @@ public final class StructureSetsConfigScreen
 					separation -> config.getStructureSetData().get(structureSetStringId).setSeparation(separation)
 				)
 				.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SEPARATION).step(1)).build();
-
 
 			spacingOption.addListener((opt, spacing) -> {
 				if (spacing <= separationOption.pendingValue()) {
