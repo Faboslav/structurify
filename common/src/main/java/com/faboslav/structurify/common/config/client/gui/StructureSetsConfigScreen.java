@@ -108,9 +108,13 @@ public final class StructureSetsConfigScreen
 				currentNamespace = namespace;
 			}
 
+			var spacingDescriptionBuilder = OptionDescription.createBuilder();
+			spacingDescriptionBuilder.text(Text.translatable("gui.structurify.structure_sets.spacing.description"));
+			spacingDescriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("gui.structurify.structure_sets.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
+
 			var spacingOption = Option.<Integer>createBuilder()
 				.name(Text.translatable("gui.structurify.structure_sets.spacing.title"))
-				.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.spacing.description")))
+				.description(spacingDescriptionBuilder.build())
 				.binding(
 					config.getStructureSetData().get(structureSetStringId).getDefaultSpacing(),
 					() -> config.getStructureSetData().get(structureSetStringId).getSpacing(),
@@ -118,9 +122,13 @@ public final class StructureSetsConfigScreen
 				)
 				.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SPACING).step(1)).build();
 
+			var separationDescriptionBuilder = OptionDescription.createBuilder();
+			separationDescriptionBuilder.text(Text.translatable("gui.structurify.structure_sets.separation.description"));
+			separationDescriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("gui.structurify.structure_sets.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
+
 			var separationOption = Option.<Integer>createBuilder()
 				.name(Text.translatable("gui.structurify.structure_sets.separation.title"))
-				.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.separation.description")))
+				.description(separationDescriptionBuilder.build())
 				.binding(
 					config.getStructureSetData().get(structureSetStringId).getDefaultSeparation(),
 					() -> config.getStructureSetData().get(structureSetStringId).getSeparation(),
