@@ -1,6 +1,8 @@
 package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.structure.StructureSet;
 import net.minecraft.structure.StructureTemplateManager;
@@ -11,15 +13,14 @@ import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.noise.NoiseConfig;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChunkGenerator.class)
 public final class ChunkGeneratorMixin
 {
-	@Inject(method = "trySetStructureStart", at = @At("HEAD"), cancellable = true)
-	public void structurify$trySetStructureStart(
+	@WrapMethod(
+		method = "trySetStructureStart"
+	)
+	public boolean structurify$trySetStructureStart(
 		StructureSet.WeightedEntry weightedEntry,
 		StructureAccessor structureAccessor,
 		DynamicRegistryManager dynamicRegistryManager,
@@ -29,17 +30,19 @@ public final class ChunkGeneratorMixin
 		Chunk chunk,
 		ChunkPos pos,
 		ChunkSectionPos sectionPos,
-		CallbackInfoReturnable<Boolean> cir
+		Operation<Boolean> original
 	) {
 		if (Structurify.getConfig().disableAllStructures) {
-			cir.setReturnValue(false);
+			return false;
 		}
 
 		String structureName = weightedEntry.structure().getKey().get().getValue().toString();
 		var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName, null);
 
 		if (structureData != null && structureData.isDisabled()) {
-			cir.setReturnValue(false);
+			return false;
 		}
+
+		return original.call(weightedEntry, structureAccessor, dynamicRegistryManager, noiseConfig, structureManager, seed, chunk, pos, sectionPos);
 	}
 }

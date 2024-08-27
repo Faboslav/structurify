@@ -16,6 +16,9 @@ displayURL = "https://www.curseforge.com/minecraft/mc-mods/structurify"
 [[mixins]]
 config = "structurify-common.mixins.json"
 
+[[mixins]]
+config = "structurify-neoforge.mixins.json"
+
 [[dependencies.${ modId }]]
 modId = "minecraft"
 required = true

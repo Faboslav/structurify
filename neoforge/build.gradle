@@ -64,9 +64,29 @@ dependencies {
 		}
 	}
 
+	// Core
 	neoForge "net.neoforged:neoforge:${prop('neoforge_version')}"
 
-	compileOnly(modrinth("yacl", "${prop('yacl_version')}-neoforge"))
+	// Mixin extras (https://github.com/LlamaLad7/MixinExtras)
+	implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixin_extras_version}"))
+	implementation(include("io.github.llamalad7:mixinextras-neoforge:${mixin_extras_version}"))
+
+	// Dependencies
+	modImplementation(modrinth("yacl", "${prop('yacl_version')}-neoforge"))
+
+	// For YACL to work
+	forgeRuntimeLibrary(implementation(include("com.twelvemonkeys.imageio:imageio-core:3.10.0")))
+	forgeRuntimeLibrary(implementation(include("com.twelvemonkeys.imageio:imageio-webp:3.10.0")))
+	forgeRuntimeLibrary(implementation(include("com.twelvemonkeys.imageio:imageio-metadata:3.10.0")))
+	forgeRuntimeLibrary(implementation(include("com.twelvemonkeys.common:common-lang:3.10.0")))
+	forgeRuntimeLibrary(implementation(include("com.twelvemonkeys.common:common-io:3.10.0")))
+	forgeRuntimeLibrary(implementation(include("com.twelvemonkeys.common:common-image:3.10.0")))
+	forgeRuntimeLibrary(implementation(include("org.quiltmc.parsers:json:0.2.1")))
+	forgeRuntimeLibrary(implementation(include("org.quiltmc.parsers:gson:0.2.1")))
+
+
+	// Compat
+	modImplementation(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-neoforge"))
 
 	def availableVersions = stonecutter_enabled_neoforge_versions.split(',').collect { it.trim() }
 

@@ -3,6 +3,8 @@ package com.faboslav.structurify.common.mixin;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.StructureData;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -18,9 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,15 +50,14 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 	@Final
 	private int maxDistanceFromCenter;
 
-	@Inject(
-		method = "getStructurePosition",
-		at = @At(value = "TAIL"),
-		cancellable = true
+	@WrapMethod(
+		method = "getStructurePosition"
 	)
-	private void structurify$getStructurePosition(
-		Structure.Context context,
-		CallbackInfoReturnable<Optional<Structure.StructurePosition>> cir
+	private Optional<StructurePosition> structurify$getStructurePosition(
+		Context context,
+		Operation<Optional<StructurePosition>> original
 	) {
+		var originalStructurePosition = original.call(context);
 		Identifier structureId = structurify$getStructureIdentifier();
 
 		if (structureId != null) {
@@ -84,7 +82,7 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 						var isBiomeBlacklisted = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.noiseConfig(), blackListedBiomesPredicate);
 
 						if (isBiomeBlacklisted) {
-							cir.setReturnValue(Optional.empty());
+							return Optional.empty();
 						}
 					} else if (biomeBlacklistType == StructureData.BiomeBlacklistType.ALL_PARTS) {
 						int checkRadius = this.maxDistanceFromCenter;
@@ -101,8 +99,7 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 								var isBiomeBlacklisted = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.noiseConfig(), blackListedBiomesPredicate);
 
 								if (isBiomeBlacklisted) {
-									cir.setReturnValue(Optional.empty());
-									return;
+									return Optional.empty();
 								}
 							}
 						}
@@ -110,6 +107,8 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 				}
 			}
 		}
+
+		return originalStructurePosition;
 	}
 
 	private boolean structurify$isBiomeValid(

@@ -1,12 +1,11 @@
 package com.faboslav.structurify.common.registry;
 
-import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.mixin.ResourcePackManagerAccessor;
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import com.faboslav.structurify.common.modcompat.ModCompat;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.resource.ResourcePackProvider;
 import net.minecraft.resource.VanillaDataPackProvider;
-
 import java.util.ArrayList;
 
 public final class StructurifyResourcePackProvider
@@ -24,11 +23,13 @@ public final class StructurifyResourcePackProvider
 	public static ArrayList<ResourcePackProvider> getVanillaResourcePackProviders() {
 		ArrayList<ResourcePackProvider> vanillaResourcePackProviders = new ArrayList<>();
 
-		/*? if =1.20.1 {*/
+		/*? if >=1.20.6 {*/
+		/*vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor)VanillaDataPackProvider.createClientManager()).getProviders());
+		 *//*?} else if =1.20.4 {*/
+		/*vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor)VanillaDataPackProvider.createRealmsManager()).getProviders());
+		 *//*?} else {*/
 		vanillaResourcePackProviders.add(new VanillaDataPackProvider());
-		/*?} else if >=1.20.2 {*/
-		/*vanillaResourcePackProviders.add(new VanillaDataPackProvider(new net.minecraft.util.path.SymlinkFinder(path -> true)));
-		 *//*?}*/
+		/*?}*/
 
 		return vanillaResourcePackProviders;
 	}

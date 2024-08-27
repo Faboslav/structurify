@@ -88,6 +88,13 @@ dependencies {
 		modCompileOnly("curse.maven:drp-global-datapack-317134:5374072")
 	}
 
+	// Repurposed Structures
+	modImplementation(modrinth("repurposed-structures-fabric", "${prop('repurposed_structures_version')}-fabric"))
+
+	if (minecraftVersion == '1.21.1') {
+		modImplementation(modrinth("midnightlib", "1.5.7-fabric"))
+	}
+
 	modCompileOnly(modRuntimeOnly(group: 'com.electronwill.night-config', name: 'core', version: '3.6.5'))
 	modCompileOnly(modRuntimeOnly(group: 'com.electronwill.night-config', name: 'toml', version: '3.6.5'))
 

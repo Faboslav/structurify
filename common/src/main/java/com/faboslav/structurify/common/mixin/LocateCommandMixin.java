@@ -2,6 +2,8 @@ package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.StructureData;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.command.argument.RegistryPredicateArgumentType;
@@ -14,20 +16,18 @@ import net.minecraft.text.Text;
 import net.minecraft.world.gen.structure.Structure;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import java.util.Optional;
 
 @Mixin(LocateCommand.class)
 public class LocateCommandMixin
 {
-	@Inject(method = "executeLocateStructure", at = @At(value = "HEAD"))
-	private static void structurify$executeLocateStructure(
+	@WrapMethod(
+		method = "executeLocateStructure"
+	)
+	private static int structurify$executeLocateStructure(
 		ServerCommandSource source,
 		RegistryPredicateArgumentType.RegistryPredicate<Structure> predicate,
-		CallbackInfoReturnable<Integer> cir
+		Operation<Integer> original
 	) throws CommandSyntaxException {
 		if (Structurify.getConfig().disableAllStructures) {
 			throw new SimpleCommandExceptionType(Text.translatable("command.structurify.locate.exception.all_structures_are_disabled")).create();
@@ -69,6 +69,8 @@ public class LocateCommandMixin
 				}
 			}
 		}
+
+		return original.call(source, predicate);
 	}
 
 	@Unique

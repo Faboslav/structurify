@@ -9,8 +9,8 @@
 		"JigsawStructureMixin",
 		"LocateCommandMixin",
 		"RandomSpreadStructurePlacementMixin",
-		"StructureMixin",
-		"compat.AdvancedRandomSpreadMixin"
+		"ResourcePackManagerAccessor",
+		"StructureMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -1,66 +1,37 @@
-package com.faboslav.structurify.common.mixin;
+package com.faboslav.structurify.neoforge.mixin;
 
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.util.Identifier;
+import com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.gen.chunk.placement.StructurePlacement;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.gen.chunk.placement.SpreadType;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Optional;
 
-@Mixin(net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement.class)
-public abstract class RandomSpreadStructurePlacementMixin extends StructurePlacement implements StructurifyRandomSpreadStructurePlacement
+@Mixin(AdvancedRandomSpread.class)
+public abstract class RepurposedStructuresAdvancedRandomSpreadMixin extends RandomSpreadStructurePlacement implements StructurifyRandomSpreadStructurePlacement
 {
-	@Shadow
-	@Final
-	private int spacing;
-
-	@Shadow
-	@Final
-	private int separation;
-
-	@Shadow
-	public abstract int getSeparation();
-
 	@Shadow
 	public abstract int getSpacing();
 
-	@Nullable
-	public Identifier structureSetIdentifier = null;
-
-	protected RandomSpreadStructurePlacementMixin(
+	public RepurposedStructuresAdvancedRandomSpreadMixin(
 		Vec3i locateOffset,
 		FrequencyReductionMethod frequencyReductionMethod,
 		float frequency,
 		int salt,
-		Optional<ExclusionZone> exclusionZone
+		Optional<ExclusionZone> exclusionZone,
+		int spacing,
+		int separation,
+		SpreadType spreadType
 	) {
-		super(locateOffset, frequencyReductionMethod, frequency, salt, exclusionZone);
-	}
-
-	public void structurify$setStructureSetIdentifier(Identifier structureSetIdentifier) {
-		this.structureSetIdentifier = structureSetIdentifier;
-	}
-
-	@Nullable
-	public Identifier structurify$getStructureSetIdentifier() {
-		return this.structureSetIdentifier;
-	}
-
-	public int structurify$getOriginalSpacing() {
-		return this.spacing;
-	}
-
-	public int structurify$getOriginalSeparation() {
-		return this.separation;
+		super(locateOffset, frequencyReductionMethod, frequency, salt, exclusionZone, spacing, separation, spreadType);
 	}
 
 	@ModifyReturnValue(
@@ -83,7 +54,7 @@ public abstract class RandomSpreadStructurePlacementMixin extends StructurePlace
 		method = "getStartChunk",
 		at = @At(
 			value = "FIELD",
-			target = "Lnet/minecraft/world/gen/chunk/placement/RandomSpreadStructurePlacement;spacing:I",
+			target = "Lcom/telepathicgrunt/repurposedstructures/world/structures/placements/AdvancedRandomSpread;spacing:I",
 			opcode = Opcodes.GETFIELD
 		)
 	)
@@ -95,7 +66,7 @@ public abstract class RandomSpreadStructurePlacementMixin extends StructurePlace
 		method = "getStartChunk",
 		at = @At(
 			value = "FIELD",
-			target = "Lnet/minecraft/world/gen/chunk/placement/RandomSpreadStructurePlacement;separation:I",
+			target = "Lcom/telepathicgrunt/repurposedstructures/world/structures/placements/AdvancedRandomSpread;separation:I",
 			opcode = Opcodes.GETFIELD
 		)
 	)

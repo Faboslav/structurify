@@ -6,6 +6,8 @@ public interface StructurifyRandomSpreadStructurePlacement
 {
 	void structurify$setStructureSetIdentifier(Identifier structureSetIdentifier);
 
+	Identifier structurify$getStructureSetIdentifier();
+
 	int structurify$getOriginalSpacing();
 
 	int structurify$getOriginalSeparation();

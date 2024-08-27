@@ -28,7 +28,8 @@
 		]
 	},
 	"mixins": [
-		"structurify-common.mixins.json"
+		"structurify-common.mixins.json",
+		"structurify-fabric.mixins.json"
 	],
 	"depends": {
 		"java": ">=${modJavaVersion}",

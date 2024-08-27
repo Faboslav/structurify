@@ -63,9 +63,6 @@ dependencies {
 	} else if (minecraftVersion == '1.20.4') {
 		modCompileOnly("curse.maven:drp-global-datapack-317134:5374072")
 	}
-
-	// Special compat
-	modImplementation(modrinth("repurposed-structures-fabric", "${prop('repurposed_structures_version')}-fabric"))
 }
 
 processResources {

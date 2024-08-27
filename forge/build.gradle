@@ -39,6 +39,7 @@ loom {
 		extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 
 		mixinConfig "structurify-common.mixins.json"
+		mixinConfig "structurify-forge.mixins.json"
 	}
 
 	runConfigs.all {
@@ -97,6 +98,9 @@ dependencies {
 	} else {
 		modImplementation("dev.isxander:yet-another-config-lib:${prop('yacl_version')}-forge") { transitive false }
 	}
+
+	// Special compat
+	modImplementation(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-forge"))
 
 	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.imageio:imageio-core:3.10.0")))
 	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.imageio:imageio-webp:3.10.0")))
