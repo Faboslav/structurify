@@ -79,13 +79,13 @@ dependencies {
 
 	// Compat
 	// Global Datapacks
-	modImplementation(modrinth("datapacks", "${prop('global_datapacks_version')}"))
+	modCompileOnly(modrinth("datapacks", "${prop('global_datapacks_version')}")) { transitive = false }
 
 	// Global Packs
 	if (minecraftVersion == '1.20.1') {
-		modImplementation(modrinth("globalpacks", "${prop('global_packs_version')}_fabric"))
+		modCompileOnly(modrinth("globalpacks", "${prop('global_packs_version')}_fabric")) { transitive = false }
 	} else if (minecraftVersion == '1.21.1') {
-		modImplementation(modrinth("globalpacks", "${prop('global_packs_version')}"))
+		modCompileOnly(modrinth("globalpacks", "${prop('global_packs_version')}")) { transitive = false }
 	}
 
 	// Repurposed Structures
