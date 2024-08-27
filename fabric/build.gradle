@@ -78,14 +78,14 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${prop('mod_menu_version')}") { transitive = false }
 
 	// Compat
+	// Global Datapacks
+	modImplementation(modrinth("datapacks", "${prop('global_datapacks_version')}"))
+
+	// Global Packs
 	if (minecraftVersion == '1.20.1') {
-		modCompileOnly("curse.maven:drp-global-datapack-317134:4570601")
-		modCompileOnly(modRuntimeOnly("curse.maven:global-datapacks-594773:4706699"))
-	} else if (minecraftVersion == '1.20.2') {
-		modCompileOnly("curse.maven:drp-global-datapack-317134:5374072")
-		modCompileOnly(modRuntimeOnly("curse.maven:global-datapacks-594773:4923994"))
-	} else if (minecraftVersion == '1.20.4') {
-		modCompileOnly("curse.maven:drp-global-datapack-317134:5374072")
+		modImplementation(modrinth("globalpacks", "${prop('global_packs_version')}_fabric"))
+	} else if (minecraftVersion == '1.21.1') {
+		modImplementation(modrinth("globalpacks", "${prop('global_packs_version')}"))
 	}
 
 	// Repurposed Structures

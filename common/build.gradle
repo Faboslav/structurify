@@ -49,11 +49,7 @@ dependencies {
 	implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${prop('mixin_extras_version')}"))
 
 	// Required client
-	if (minecraftVersion == '1.20.2') {
-		modImplementation(modrinth("yacl", "${prop('yacl_version')}-fabric"))
-	} else {
-		modImplementation("dev.isxander:yet-another-config-lib:${prop('yacl_version')}-fabric")
-	}
+	modImplementation(modrinth("yacl", "${prop('yacl_version')}-fabric"))
 
 	// Optional
 	if (minecraftVersion == '1.20.1') {

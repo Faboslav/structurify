@@ -23,11 +23,9 @@ public final class StructurifyResourcePackProvider
 	public static ArrayList<ResourcePackProvider> getVanillaResourcePackProviders() {
 		ArrayList<ResourcePackProvider> vanillaResourcePackProviders = new ArrayList<>();
 
-		/*? if >=1.20.6 {*/
+		/*? if >=1.21 {*/
 		/*vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor)VanillaDataPackProvider.createClientManager()).getProviders());
-		 *//*?} else if =1.20.4 {*/
-		/*vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor)VanillaDataPackProvider.createRealmsManager()).getProviders());
-		 *//*?} else {*/
+		*//*?} else {*/
 		vanillaResourcePackProviders.add(new VanillaDataPackProvider());
 		/*?}*/
 
