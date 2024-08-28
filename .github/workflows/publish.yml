@@ -54,18 +54,7 @@ jobs:
         strategy:
             max-parallel: 3
             fail-fast: false
-            matrix:
-                mod_loader: ${{ fromJson(needs.build.outputs.matrix.mod_loader) }}
-                version: ${{ fromJson(needs.build.outputs.matrix.version) }}
-                include:
-                    -   mod_loader: "fabric"
-                        supported_mod_loaders: [ "fabric", "quilt" ]
-
-                    -   mod_loader: "forge"
-                        supported_mod_loaders: [ "forge" ]
-
-                    -   mod_loader: "neoforge"
-                        supported_mod_loaders: [ "neoforge" ]
+            matrix: ${{ fromJson(needs.build.outputs.matrix) }}
 
         steps:
         -   name: "Checkout repository"
