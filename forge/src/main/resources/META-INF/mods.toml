@@ -33,8 +33,6 @@ versionRange = "[${minMinecraftVersion},)"
 modId = "yet_another_config_lib_v3"
 mandatory = true
 versionRange = "[${yaclVersion},)"
-ordering = "NONE"
-side = "CLIENT"
 
 [modproperties.${ modId }]
 catalogueImageIcon = "catalogue_icon.png"
