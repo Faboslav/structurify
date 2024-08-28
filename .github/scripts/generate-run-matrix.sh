@@ -1,15 +1,5 @@
 #!/bin/bash
 
-allowed_mod_loaders=$1
-allowed_versions=$2
-
-echo ${allowed_mod_loaders};
-echo ${allowed_versions};
-
-# Convert the allowed mod loaders and versions into arrays
-IFS=',' read -r -a allowed_mod_loaders_array <<< "${allowed_mod_loaders//[\[\]\']/}"
-IFS=',' read -r -a allowed_versions_array <<< "${allowed_versions//[\[\]\']/}"
-
 # Initialize the matrix JSON with the 'include' key
 matrix_content="{\"include\":["
 
@@ -18,18 +8,14 @@ enabled_platforms=$(awk -F= '/stonecutter_enabled_platforms/{print $2}' gradle.p
 
 # Iterate over each platform and gather versions
 for platform in $(echo $enabled_platforms | tr ',' ' '); do
-  if [[ " ${allowed_mod_loaders_array[@]} " =~ " ${platform} " ]]; then
-    versions=$(awk -F= '/stonecutter_enabled_'$platform'_versions/{print $2}' gradle.properties | tr -d ' ')
-    for version in $(echo $versions | tr ',' ' '); do
-      if [[ " ${allowed_versions_array[@]} " =~ " ${version} " ]]; then
-        # Create each entry with a JSON object for each combination
-        matrix_entry="{\"mod_loader\":\"$platform\",\"version\":\"$version\",\"script\":\"client\"},"
-        matrix_content+="$matrix_entry"
-        matrix_entry="{\"mod_loader\":\"$platform\",\"version\":\"$version\",\"script\":\"server\"},"
-        matrix_content+="$matrix_entry"
-      fi
-    done
-  fi
+  versions=$(awk -F= '/stonecutter_enabled_'$platform'_versions/{print $2}' gradle.properties | tr -d ' ')
+  for version in $(echo $versions | tr ',' ' '); do
+    # Create each entry with a JSON object for each combination
+    matrix_entry="{\"mod_loader\":\"$platform\",\"version\":\"$version\",\"script\":\"client\"},"
+    matrix_content+="$matrix_entry"
+    matrix_entry="{\"mod_loader\":\"$platform\",\"version\":\"$version\",\"script\":\"server\"},"
+    matrix_content+="$matrix_entry"
+  done
 done
 
 # Remove the trailing comma and close the JSON object
