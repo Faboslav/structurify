@@ -54,7 +54,7 @@ jobs:
         strategy:
             max-parallel: 3
             fail-fast: false
-            matrix: ${{ steps.set-matrix.outputs.matrix }}
+            matrix: ${{ fromJson(needs.build.outputs.matrix) }}
 
         steps:
         -   name: "Checkout repository"
