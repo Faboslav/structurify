@@ -6,7 +6,5 @@
 	"injectors": {
 		"defaultRequire": 1
 	},
-	"mixins": [
-		"RepurposedStructuresAdvancedRandomSpreadMixin"
-	]
+	"mixins": []
 }

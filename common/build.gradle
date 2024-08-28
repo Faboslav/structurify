@@ -58,11 +58,17 @@ dependencies {
 	} else if (minecraftVersion == '1.21.1') {
 		modCompileOnly(modrinth("globalpacks", "${prop('global_packs_version')}"))
 	}
+
+	// Repurposed Structures
+	modImplementation(modrinth("repurposed-structures-fabric", "${prop('repurposed_structures_version')}-fabric"))
 }
 
 processResources {
 	def expandProps = [
-		"modJavaVersion": prop('mod_java_version'),
+		"modJavaVersion"   : prop('mod_java_version'),
+		'modId'            : mod_id,
+		'modVersion'       : mod_version,
+		"minecraftVersion" : prop('minecraft_version'),
 	]
 
 	filesMatching(['*.mixins.json']) {

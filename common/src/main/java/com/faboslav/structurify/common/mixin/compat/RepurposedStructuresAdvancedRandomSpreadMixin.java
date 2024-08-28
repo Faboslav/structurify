@@ -1,4 +1,4 @@
-package com.faboslav.structurify.neoforge.mixin;
+package com.faboslav.structurify.common.mixin.compat;
 
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.util.RandomSpreadUtil;

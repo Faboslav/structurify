@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.gen.chunk.placement.StructurePlacement;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Optional;
 
-@Mixin(net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement.class)
+@Mixin(RandomSpreadStructurePlacement.class)
 public abstract class RandomSpreadStructurePlacementMixin extends StructurePlacement implements StructurifyRandomSpreadStructurePlacement
 {
 	@Shadow

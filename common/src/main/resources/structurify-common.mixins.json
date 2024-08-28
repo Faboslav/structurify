@@ -4,17 +4,19 @@
 	"compatibilityLevel": "JAVA_${modJavaVersion}",
 	"minVersion": "0.8",
 	"plugin": "com.faboslav.structurify.common.mixin.plugin.StructurifyMixinPlugin",
+	"injectors": {
+		"defaultRequire": 1
+	},
 	"mixins": [
 		"ChunkGeneratorMixin",
 		"JigsawStructureMixin",
 		"LocateCommandMixin",
 		"RandomSpreadStructurePlacementMixin",
 		"ResourcePackManagerAccessor",
-		"StructureMixin"
+		"StructureMixin",
+		"compat.RepurposedStructuresAdvancedRandomSpreadMixin"
 	],
-	"injectors": {
-		"defaultRequire": 1
-	},
+	"minMixinExtrasVersion": "0.4.1",
 	"client": [
 		"AnimatedDynamicTextureImageAccessor",
 		"ClickableWidgetAccessor"
