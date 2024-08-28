@@ -25,6 +25,9 @@ jobs:
                 with:
                     fetch-depth: 0
 
+            -   name: "Install missing flite"
+                run: sudo apt-get install -y flite
+
             -   name: "Set up JDK"
                 uses: actions/setup-java@v4
                 with:
@@ -58,6 +61,9 @@ jobs:
                 uses: actions/checkout@v4
                 with:
                     fetch-depth: 0
+
+            -   name: "Install missing flite"
+                run: sudo apt-get install -y flite
 
             -   name: "Parse gradle properties"
                 id: gradle-properties
