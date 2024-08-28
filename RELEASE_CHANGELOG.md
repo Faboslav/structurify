@@ -1,0 +1,2 @@
+- Fixed crash related to spacing/separation global modifier
+- Improved compatibility with other mods

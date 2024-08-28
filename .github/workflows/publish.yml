@@ -47,7 +47,7 @@ jobs:
 
             -   name: "Generate matrix for the run job"
                 id: set-matrix
-                run: ./.github/scripts/generate-run-matrix.sh
+                run: ./.github/scripts/generate-run-matrix.sh ${{ inputs.mod_loaders }} ${{ inputs.versions }}
 
     publish:
         runs-on: ubuntu-latest
