@@ -107,12 +107,12 @@ jobs:
                 github-tag: mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
                 github-commitish: ${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
 
-                #curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
-                #curseforge-token: ${{ secrets.CURSEFORGE_RELEASE_TOKEN }}
+                curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
+                curseforge-token: ${{ secrets.CURSEFORGE_RELEASE_TOKEN }}
 
-                #modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
-                #modrinth-featured: true
-                #modrinth-token: ${{ secrets.MODRINTH_RELEASE_TOKEN}}
+                modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
+                modrinth-featured: true
+                modrinth-token: ${{ secrets.MODRINTH_RELEASE_TOKEN}}
 
                 name: ${{ steps.gradle-properties.outputs.MOD_NAME }} ${{ steps.gradle-properties.outputs.MOD_VERSION }}
                 version: ${{ matrix.mod_loader }}-mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
