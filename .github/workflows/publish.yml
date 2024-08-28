@@ -93,10 +93,12 @@ jobs:
                 generate-job-summary: false
                 cache-read-only: true
                 gradle-version: wrapper
-                arguments: ${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
         -   name: "Switch active versions"
             run: ./gradlew "Set active project to ${{ matrix.version }}"
+
+        -   name: "Run build"
+            run: ./gradlew ${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
     clear-cache:
         needs: publish
