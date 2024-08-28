@@ -34,13 +34,13 @@ jobs:
                     java-version: 21
                     distribution: temurin
 
-            #-   name: "Setup Gradle and run build"
-            #    uses: gradle/actions/setup-gradle@v3
-            #    with:
-            #        cache-read-only: false
-            #        generate-job-summary: false
-            #        gradle-version: wrapper
-            #        arguments: build
+            -   name: "Setup Gradle and run build"
+                uses: gradle/actions/setup-gradle@v3
+                with:
+                    cache-read-only: false
+                    generate-job-summary: false
+                    gradle-version: wrapper
+                    arguments: build
 
             -   name: "Generate matrix for the run job"
                 id: set-matrix
@@ -101,7 +101,6 @@ jobs:
             run: ./gradlew ${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
         -   name: Publish ${{ matrix.mod_loader }}
-            if: steps.check-mod-loader.outputs.is_mod_loader_supported == 'true'
             uses: Kir-Antipov/mc-publish@v3.3.0
             with:
                 github-token: ${{ secrets.GITHUB_TOKEN }}
