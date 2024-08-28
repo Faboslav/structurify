@@ -3,117 +3,118 @@ name: "Publish"
 on:
     workflow_dispatch:
         inputs:
-            branches:
-                description: 'List of branches to be published'
+            mod_loaders:
+                description: 'List of mod loaders to be published'
                 required: true
-                default: "['1.20.1', '1.20.4', '1.20.6', '1.21.1']"
+                default: "['fabric', 'forge', 'neoforge']"
+                type: string
+            versions:
+                description: 'List of versions to be published'
+                required: true
+                default: "['1.20.1', '1.21.1']"
                 type: string
 
 jobs:
+    build:
+        name: "Build project"
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        outputs:
+            matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+        steps:
+            -   name: "Checkout repository"
+                uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0
+
+            -   name: "Install missing flite"
+                run: sudo apt-get install -y flite
+
+            -   name: "Set up JDK"
+                uses: actions/setup-java@v4
+                with:
+                    java-version: 21
+                    distribution: temurin
+
+            -   name: "Setup Gradle and run build"
+                uses: gradle/actions/setup-gradle@v3
+                with:
+                    cache-read-only: false
+                    generate-job-summary: false
+                    gradle-version: wrapper
+                    arguments: build
+
+            -   name: "Generate matrix for the run job"
+                id: set-matrix
+                run: ./.github/scripts/generate-run-matrix.sh
+
     publish:
         runs-on: ubuntu-latest
-        name: Publish ${{ matrix.branch }}
+        needs: build
+        name: Publish ${{ matrix.mod_loader }} ${{ matrix.version }}
         timeout-minutes: 60
         strategy:
             max-parallel: 3
             fail-fast: false
             matrix:
-                branch: ${{ fromJson(inputs.branches) }}
+                mod_loader: ${{fromJson(needs.build.outputs.matrix.mod_loader)}}
+                version: ${{fromJson(needs.build.outputs.matrix.version)}}
+                include:
+                    -   mod_loader: "fabric"
+                        supported_mod_loaders: [ "fabric", "quilt" ]
+
+                    -   mod_loader: "forge"
+                        supported_mod_loaders: [ "forge" ]
+
+                    -   mod_loader: "neoforge"
+                        supported_mod_loaders: [ "neoforge" ]
 
         steps:
-            -   name: "Checkout repository"
-                uses: actions/checkout@v4.1.1
-                with:
-                    ref: ${{ matrix.branch }}
-                    fetch-depth: 0
+        -   name: "Checkout repository"
+            uses: actions/checkout@v4
+            with:
+                fetch-depth: 0
 
-            -   name: "Set up JDK"
-                uses: actions/setup-java@v4.0.0
-                with:
-                    generate-job-summary: false
-                    java-version: 17
-                    distribution: temurin
+        -   name: "Install missing flite"
+            run: sudo apt-get install -y flite
 
-            -   name: "Parse gradle properties"
-                id: gradle-properties
-                run: |
-                    while IFS='=' read -r key value; do
-                      key=$(echo $key | awk '{$1=$1;print}')
-                        value=$(echo $value | awk '{$1=$1;print}')
-                    
-                        case "$key" in
-                          minecraft_version) echo "MINECRAFT_VERSION=$value" >> $GITHUB_OUTPUT ;;
-                          mod_name) echo "MOD_NAME=$value" >> $GITHUB_OUTPUT ;;
-                          mod_version) echo "MOD_VERSION=$value" >> $GITHUB_OUTPUT ;;
-                        esac
-                    done < gradle.properties
+        -   name: "Parse gradle properties"
+            id: gradle-properties
+            run: ./.github/scripts/parse-gradle-properties.sh ${{ matrix.version }}
 
-            -   name: "Parse changelog"
-                id: parse-changelog
-                run: |
-                    changelog=$(cat CHANGELOG.md)
-                    tag=${{ steps.gradle-properties.outputs.MOD_VERSION }}
+        -   name: "Parse changelog"
+            id: gradle-properties
+            run: ./.github/scripts/parse-changelog ${{ steps.gradle-properties.outputs.MOD_VERSION }}
 
-                    list=$(echo "$changelog" | sed -n "/^## $tag$/,/^## [0-9]/ {
-                    /^## [0-9]/d;
-                    p
-                    }" | sed '1d;/^$/d')
+        -   name: "Create github release"
+            continue-on-error: true
+            uses: ncipollo/release-action@v1
+            with:
+                skipIfReleaseExists: true
+                allowUpdates: true
+                omitNameDuringUpdate: true
+                omitBodyDuringUpdate: true
+                tag: mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
+                name: ${{ steps.gradle-properties.outputs.MOD_NAME }} ${{ steps.gradle-properties.outputs.MOD_VERSION }} for Minecraft ${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
+                bodyFile: RELEASE_CHANGELOG.md
 
-                    echo "$list" > RELEASE_CHANGELOG.md
+        -   name: "Set up JDK"
+            uses: actions/setup-java@v4
+            with:
+                java-version: 21
+                distribution: temurin
 
-            -   name: "Create github release"
-                continue-on-error: true
-                uses: ncipollo/release-action@v1
-                with:
-                    skipIfReleaseExists: true
-                    allowUpdates: true
-                    omitNameDuringUpdate: true
-                    omitBodyDuringUpdate: true
-                    tag: mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
-                    name: ${{ steps.gradle-properties.outputs.MOD_NAME }} ${{ steps.gradle-properties.outputs.MOD_VERSION }} for Minecraft ${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
-                    bodyFile: RELEASE_CHANGELOG.md
+        -   name: "Setup Gradle"
+            uses: gradle/actions/setup-gradle@v3
+            with:
+                generate-job-summary: false
+                cache-read-only: true
+                gradle-version: wrapper
+                arguments: ${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
-            -   name: "Run gradle build"
-                uses: gradle/gradle-build-action@v2.11.1
-                with:
-                    cache-read-only: true
-                    generate-job-summary: false
-                    gradle-version: wrapper
-                    arguments: build
-
-            -   name: "Run gradle mergeJars"
-                uses: gradle/gradle-build-action@v2.11.1
-                with:
-                    cache-read-only: true
-                    generate-job-summary: false
-                    gradle-version: wrapper
-                    arguments: mergeJars
-
-            -   name: Publish
-                uses: Kir-Antipov/mc-publish@v3.3.0
-                with:
-                    github-token: ${{ secrets.GITHUB_TOKEN }}
-                    github-tag: mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
-
-                    curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
-                    curseforge-token: ${{ secrets.CURSEFORGE_RELEASE_TOKEN }}
-
-                    modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
-                    modrinth-featured: true
-                    modrinth-token: ${{ secrets.MODRINTH_RELEASE_TOKEN }}
-
-                    name: ${{ steps.gradle-properties.outputs.MOD_NAME }} ${{ steps.gradle-properties.outputs.MOD_VERSION }}
-                    version: mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
-                    loaders: |
-                        fabric
-                        forge
-                        neoforge
-                        quilt
-                    game-versions: "${{ matrix.branch }}"
-                    dependencies: ""
-                    changelog-file: RELEASE_CHANGELOG.md
-                    files: |
-                        build/libs/merged/!(*-@(dev|dev-shadow|sources|javadoc)).jar
+        -   name: "Switch active versions"
+            run: ./gradlew "Set active project to ${{ matrix.version }}"
 
     clear-cache:
         needs: publish
