@@ -22,8 +22,15 @@ for platform in $(echo $enabled_platforms | tr ',' ' '); do
     versions=$(awk -F= '/stonecutter_enabled_'$platform'_versions/{print $2}' gradle.properties | tr -d ' ')
     for version in $(echo $versions | tr ',' ' '); do
       if [[ " ${allowed_versions_array[@]} " =~ " ${version} " ]]; then
+        # Check if the platform is 'fabric' to append 'quilt' to supported_mod_loaders
+        if [[ "$platform" == "fabric" ]]; then
+          supported_mod_loaders="\"fabric\",\"quilt\""
+        else
+          supported_mod_loaders="\"$platform\""
+        fi
+
         # Create each entry with a JSON object for each combination
-        matrix_entry="{\"mod_loader\":\"$platform\",\"version\":\"$version\"},"
+        matrix_entry="{\"mod_loader\":\"$platform\",\"version\":\"$version\",\"supported_mod_loaders\":[$supported_mod_loaders]},"
         matrix_content+="$matrix_entry"
       fi
     done

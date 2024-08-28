@@ -1,6 +1,27 @@
-# ⚙️ Structurify
+<br>
 
-<hr>
+<center>
+	<img title="Friends&amp;Foes" src="https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/logo/logo.png" alt="Structurify" width="743">
+</center>
+
+<br>
+
+<center>
+	<a style="text-decoration: none;" href="https://ko-fi.com/faboslav">
+		<img src="https://img.shields.io/static/v1?label=Donate&message=Ko-fi&color=4B4341&labelColor=4B4341&logoColor=ffffff&style=for-the-badge&logo=ko-fi" alt="Ko-fi">
+	</a>
+	<a style="text-decoration: none;" href="https://www.patreon.com/Faboslav">
+		<img src="https://img.shields.io/endpoint.svg?color=4B4341&label=Donate&labelColor=4B4341&logoColor=ffffff&url=https://shieldsio-patreon.vercel.app/api?username=Faboslav&type=patrons&style=for-the-badge" alt="Patreon">
+	</a>
+	<a style="text-decoration: none;" href="https://discord.gg/QGwFvvMQCn">
+		<img src="https://img.shields.io/discord/924964658169913404?style=for-the-badge&logo=discord&logoColor=ffffff&label=Discord&labelColor=4B4341&color=4B4341" alt="Discord">
+	</a>
+	<a style="text-decoration: none;" href="https://modrinth.com/mod/yacl">
+		<img src="https://img.shields.io/static/v1?label=&amp;message=Requires YACL&amp;color=4B4341&amp;labelColor=4B4341&amp;logoColor=white&amp;style=for-the-badge&amp;logo=modrinth" height="28" />
+	</a>
+</center>
+
+<br>
 
 Structurify is a configuration mod that makes configuring everything related to structures very easy and accessible, eliminating the hassle of creating multiple datapacks.
 
@@ -284,9 +305,18 @@ The following configuration complements the previous example by compensating for
 
 <br>
 
-## 💬 Community
 
-<hr>
+## ⚙️ Compatibility
+
+Structurify is designed to be fully compatible with most of the world generation mods and datapacks, and it currently offers enhanced compatibility with the following mods:
+
+* [Paxi](https://modrinth.com/mod/paxi)
+* [Global Packs](https://modrinth.com/mod/globalpacks)
+* [Global Datapacks](https://modrinth.com/mod/datapacks)
+
+<br>
+
+## 💬 Community
 
 Feel free to <a href="https://discord.gg/QGwFvvMQCn">join our community at the discord server</a> to chat, share your creations, ask any question or to simply be updated about the latest development of the mod and notified when the new release is out. Also don't hesitate to <a href="https://github.com/Faboslav/structurify/issues">report any crash or bug via GitHub issues</a>.
 
@@ -294,15 +324,11 @@ Feel free to <a href="https://discord.gg/QGwFvvMQCn">join our community at the d
 
 ## 👋 Support
 
-<hr>
-
 I will continue developing my mods as a hobby because I truly enjoy it. If you'd like to support me, you can do so on [Patreon](https://www.patreon.com/Faboslav) or [Ko-fi](https://ko-fi.com/faboslav). Your support is greatly appreciated.
 
 <br>
 
 ## 📜 License
-
-<hr>
 
 The mod is licensed with [CC BY-NC-ND 4.0](https://raw.githubusercontent.com/Faboslav/structurify/master/LICENSE.txt) license.
 

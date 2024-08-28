@@ -1,19 +1,25 @@
-# ⚙️ Structurify
+<br>
 
-<p>
+<center>
+	<img title="Friends&amp;Foes" src="https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/logo/logo.png" alt="Structurify" width="743">
+</center>
+
+<br>
+
+<center>
 	<a style="text-decoration: none;" href="https://ko-fi.com/faboslav">
-		<img src="https://img.shields.io/static/v1?label=&amp;message=Ko-fi&amp;color=ff5f5f&amp;labelColor=111214&amp;logoColor=white&amp;style=for-the-badge&amp;logo=ko-fi" height="28" />
+		<img src="https://img.shields.io/static/v1?label=Donate&message=Ko-fi&color=4B4341&labelColor=4B4341&logoColor=ffffff&style=for-the-badge&logo=ko-fi" alt="Ko-fi">
 	</a>
 	<a style="text-decoration: none;" href="https://www.patreon.com/Faboslav">
-		<img src="https://img.shields.io/endpoint.svg?url=https://shieldsio-patreon.vercel.app/api/?username=Faboslav&amp;type=patrons?color=c9d1d9&amp;label=&amp;labelColor=111214&amp;logoColor=white&amp;style=for-the-badge" height="28" />
+		<img src="https://img.shields.io/endpoint.svg?color=4B4341&label=Donate&labelColor=4B4341&logoColor=ffffff&url=https://shieldsio-patreon.vercel.app/api?username=Faboslav&type=patrons&style=for-the-badge" alt="Patreon">
 	</a>
 	<a style="text-decoration: none;" href="https://discord.gg/QGwFvvMQCn">
-		<img src="https://img.shields.io/discord/924964658169913404?color=5865F2&amp;label=&amp;labelColor=111214&amp;logoColor=white&amp;style=for-the-badge&amp;logo=discord" height="28" />
+		<img src="https://img.shields.io/discord/924964658169913404?style=for-the-badge&logo=discord&logoColor=ffffff&label=Discord&labelColor=4B4341&color=4B4341" alt="Discord">
 	</a>
 	<a style="text-decoration: none;" href="https://modrinth.com/mod/yacl">
-		<img src="https://img.shields.io/static/v1?label=&amp;message=Requires YACL&amp;color=c9d1d9&amp;labelColor=111214&amp;logoColor=white&amp;style=for-the-badge&amp;logo=curseforge" height="28" />
+		<img src="https://img.shields.io/static/v1?label=&amp;message=Requires YACL&amp;color=4B4341&amp;labelColor=4B4341&amp;logoColor=white&amp;style=for-the-badge&amp;logo=modrinth" height="28" />
 	</a>
-</p>
+</center>
 
 <br>
 
@@ -25,7 +31,7 @@ Structurify is a configuration mod that makes configuring everything related to 
 
 <p></p>
 
-Currently it is possible to:
+<strong>Currently it is possible to:</strong>
 
 * [Globally disable all structures](#structure-settings)
 * [Disable individual structures](#structure-settings)
@@ -33,7 +39,7 @@ Currently it is possible to:
 * [Globally set structure spread for all structures](#structure-spread-settings)
 * [Individually set structure spread](#structure-spread-settings)
 
-Possible future features that can be implemented:
+<strong>Possible future features that can be implemented:</strong>
 
 * Disable individual structure pieces
 * Change weight of individual structure pieces
@@ -187,11 +193,11 @@ Array of unique biome identifiers typically in the format `mod_id:biome_name`. A
 
 All structure sets related settings are saved to the `structure_sets` field of the json file.
 
-| Key                       | Description                 | Default value | Examples                |
-|---------------------------|-----------------------------|---------------|-------------------------|
-| [name](#name)             | Structure identifier        | `-`           | `minecraft:villages`    |
-| [spacing](#spacing)       | Disables the structure      | `-`           | `34` <br> `8` <br> `60` |
-| [separation](#separation) | Type of the biome blacklist | `-`           | `8` <br> `4` <br> `40`  |
+| Key                       | Description                                                                                                                                                                          | Default value | Examples                |
+|---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|-------------------------|
+| [name](#name)             | Structure identifier                                                                                                                                                                 | `-`           | `minecraft:villages`    |
+| [spacing](#spacing)       | Spacing is the average distance in chunks between structures within the same structure set (group of structures)                                                                     | `-`           | `34` <br> `8` <br> `60` |
+| [separation](#separation) | Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value.  | `-`           | `8` <br> `4` <br> `40`  |
 
 #### name
 
@@ -211,7 +217,7 @@ Spacing is the average distance in chunks between structures within the same str
 
 #### separation
 
-"Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value.
+Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value.
 
 ```json
 "spacing": 8
@@ -292,6 +298,16 @@ The following configuration complements the previous example by compensating for
 	]
 }
 ```
+
+<br>
+
+## ⚙️ Compatibility
+
+Structurify is designed to be fully compatible with most of the world generation mods and datapacks, and it currently offers enhanced compatibility with the following mods:
+
+* [Paxi](https://modrinth.com/mod/paxi)
+* [Global Packs](https://modrinth.com/mod/globalpacks)
+* [Global Datapacks](https://modrinth.com/mod/datapacks)
 
 <br>
 
