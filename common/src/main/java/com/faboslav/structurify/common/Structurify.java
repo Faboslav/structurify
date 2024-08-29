@@ -37,7 +37,7 @@ public final class Structurify {
 
 	public static ResourceLocation makeId(String path) {
 		/*? >=1.21 {*/
-		/*return Identifier.of(
+		/*return ResourceLocation.tryBuild(
 			MOD_ID,
 			path
 		);
@@ -51,7 +51,7 @@ public final class Structurify {
 
 	public static ResourceLocation makeVanillaId(String id) {
 		/*? >=1.21 {*/
-		/*return Identifier.of(
+		/*return ResourceLocation.parse(
 			id
 		);
 		*//*?} else {*/

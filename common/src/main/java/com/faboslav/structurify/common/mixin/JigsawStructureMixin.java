@@ -66,7 +66,7 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 
 				if (!blacklistedBiomeIds.isEmpty()) {
 					Set<ResourceKey<Biome>> blacklistedBiomeKeys = blacklistedBiomeIds.stream()
-						.map(id -> ResourceKey.create(Registries.BIOME, new ResourceLocation(id)))
+						.map(id -> ResourceKey.create(Registries.BIOME, Structurify.makeVanillaId(id)))
 						.collect(Collectors.toSet());
 
 					Predicate<Holder<Biome>> blackListedBiomesPredicate = biomeEntry -> {

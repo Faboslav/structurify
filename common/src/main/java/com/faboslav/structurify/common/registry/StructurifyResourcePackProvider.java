@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.server.packs.repository.ServerPacksSource;
 
+/*? if >=1.20.2 {*/
+/*import net.minecraft.world.level.validation.DirectoryValidator;
+*//*?}*/
+
 public final class StructurifyResourcePackProvider
 {
 	public static ArrayList<RepositorySource> getResourcePackProviders() {
@@ -26,7 +30,7 @@ public final class StructurifyResourcePackProvider
 		/*? if =1.20.1 {*/
 		vanillaResourcePackProviders.add(new ServerPacksSource());
 		/*?} else if >=1.20.2 {*/
-		/*vanillaResourcePackProviders.add(new VanillaDataPackProvider(new net.minecraft.util.path.SymlinkFinder(path -> true)));
+		/*vanillaResourcePackProviders.add(new ServerPacksSource(new DirectoryValidator(path -> true)));
 		 *//*?}*/
 
 		return vanillaResourcePackProviders;
@@ -41,7 +45,7 @@ public final class StructurifyResourcePackProvider
 		ArrayList<RepositorySource> modResourcePackProviders = new ArrayList<>();
 
 		for (ModCompat compat : ModChecker.CUSTOM_RESOURCE_PACK_PROVIDER_COMPATS) {
-			Structurify.getLogger().info("loading: " + compat.toString());
+			Structurify.getLogger().info("Loading: " + compat.toString());
 			var resourcePackProviders = compat.getResourcePackProviders();
 			modResourcePackProviders.addAll(resourcePackProviders);
 		}

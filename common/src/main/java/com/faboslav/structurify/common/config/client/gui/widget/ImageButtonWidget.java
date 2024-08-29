@@ -110,7 +110,7 @@ public class ImageButtonWidget extends AbstractWidget
 //            context.fill(textX, textY, endX, endY, 0xFFFF2F00);
 
 		/*? >1.20.1 {*/
-		/*renderScrollingString(context, client.textRenderer, getMessage(), textX, textY, endX, endY, 0xFFFFFF);
+		/*renderScrollingString(context, client.font, getMessage(), textX, textY, endX, endY, 0xFFFFFF);
 		 *//*?} else {*/
 		renderScrollingString(context, client.font, getMessage(), textX, textY, endX, endY, 0xFFFFFF);
 		/*?}*/
