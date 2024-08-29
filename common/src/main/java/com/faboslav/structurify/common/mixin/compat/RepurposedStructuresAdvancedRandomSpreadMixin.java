@@ -32,16 +32,8 @@ public abstract class RepurposedStructuresAdvancedRandomSpreadMixin extends Rand
 		super(vec3i, frequencyReductionMethod, f, i, optional, j, k, randomSpreadType);
 	}
 
-	public RepurposedStructuresAdvancedRandomSpreadMixin(int i, int j, RandomSpreadType randomSpreadType, int k) {
-		super(i, j, randomSpreadType, k);
-	}
-
 	@Shadow
 	public abstract int spacing();
-
-	@Shadow
-	@Final
-	private int spacing;
 
 	@ModifyReturnValue(
 		method = "spacing",
