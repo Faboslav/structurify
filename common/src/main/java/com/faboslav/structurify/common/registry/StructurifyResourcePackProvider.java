@@ -9,9 +9,9 @@ import net.minecraft.server.packs.repository.ServerPacksSource;
 
 import java.util.ArrayList;
 
-/*? if >=1.20.2 {*/
-/*import net.minecraft.world.level.validation.DirectoryValidator;
- *//*?}*/
+/*? if >=1.21 {*/
+/*import com.faboslav.structurify.common.mixin.ResourcePackManagerAccessor;
+*//*?}*/
 
 public final class StructurifyResourcePackProvider
 {
@@ -28,11 +28,11 @@ public final class StructurifyResourcePackProvider
 	public static ArrayList<RepositorySource> getVanillaResourcePackProviders() {
 		ArrayList<RepositorySource> vanillaResourcePackProviders = new ArrayList<>();
 
-		/*? if =1.20.1 {*/
+		/*? if >=1.21 {*/
+		/*vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor)ServerPacksSource.createVanillaTrustedRepository()).getSources());
+		 *//*?} else {*/
 		vanillaResourcePackProviders.add(new ServerPacksSource());
-		/*?} else if >=1.20.2 {*/
-		/*vanillaResourcePackProviders.add(new ServerPacksSource(new DirectoryValidator(path -> true)));
-		 *//*?}*/
+		/*?}*/
 
 		return vanillaResourcePackProviders;
 	}
