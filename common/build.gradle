@@ -53,7 +53,7 @@ dependencies {
 	}
 
 	// Repurposed Structures
-	modImplementation(modrinth("repurposed-structures-fabric", "${prop('repurposed_structures_version')}-fabric"))
+	modCompileOnly(modrinth("repurposed-structures-fabric", "${prop('repurposed_structures_version')}-fabric"))
 }
 
 processResources {

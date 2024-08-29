@@ -40,6 +40,10 @@ loom {
 
 		mixinConfig "structurify-common.mixins.json"
 		mixinConfig "structurify-forge.mixins.json"
+
+		mixin {
+			useLegacyMixinAp = true
+		}
 	}
 
 	runConfigs.all {
@@ -61,6 +65,10 @@ configurations {
 		canBeResolved = true
 		canBeConsumed = false
 	}
+}
+
+configurations.configureEach {
+	resolutionStrategy.force("net.sf.jopt-simple:jopt-simple:5.0.4")
 }
 
 java {
