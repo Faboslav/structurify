@@ -11,22 +11,24 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
 /*? if <1.20.6 {*/
 /*import net.neoforged.neoforge.client.ConfigScreenHandler;
-*//*?} else {*/
+ */
+/*?} else {*/
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
- /*?}*/
+	/*?}*/
 
 @OnlyIn(Dist.CLIENT)
-public final class StructurifyNeoForgeClient {
-    public static void init(IEventBus modEventBus, IEventBus eventBus) {
-        StructurifyClient.init();
+public final class StructurifyNeoForgeClient
+{
+	public static void init(IEventBus modEventBus, IEventBus eventBus) {
+		StructurifyClient.init();
 
-        modEventBus.addListener(StructurifyNeoForgeClient::onClientSetup);
-    }
+		modEventBus.addListener(StructurifyNeoForgeClient::onClientSetup);
+	}
 
-    private static void onClientSetup(final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            if (ModList.get().isLoaded("yet_another_config_lib_v3")) {
-                /*? if <1.20.6 {*/
+	private static void onClientSetup(final FMLClientSetupEvent event) {
+		event.enqueueWork(() -> {
+			if (ModList.get().isLoaded("yet_another_config_lib_v3")) {
+				/*? if <1.20.6 {*/
                 /*ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
                         new ConfigScreenHandler.ConfigScreenFactory(
                                 (mc, screen) -> new StructurifyConfigScreen(screen)
@@ -37,7 +39,7 @@ public final class StructurifyNeoForgeClient {
 					return new StructurifyConfigScreen(screen);
 				});
 				/*?}*/
-            }
-        });
-    }
+			}
+		});
+	}
 }

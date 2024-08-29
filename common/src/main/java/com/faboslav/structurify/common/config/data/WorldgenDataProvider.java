@@ -2,14 +2,15 @@ package com.faboslav.structurify.common.config.data;
 
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
-import java.lang.reflect.Field;
-import java.util.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+
+import java.lang.reflect.Field;
+import java.util.*;
 
 public final class WorldgenDataProvider
 {

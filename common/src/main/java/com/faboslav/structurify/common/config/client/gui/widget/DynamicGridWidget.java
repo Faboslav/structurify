@@ -1,11 +1,11 @@
 package com.faboslav.structurify.common.config.client.gui.widget;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.AbstractLayout;
 import net.minecraft.client.gui.layouts.LayoutElement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /*? <1.20.4 {*/
 import com.faboslav.structurify.common.mixin.ClickableWidgetAccessor;

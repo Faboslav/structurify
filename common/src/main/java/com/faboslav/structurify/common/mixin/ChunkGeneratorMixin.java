@@ -3,7 +3,6 @@ package com.faboslav.structurify.common.mixin;
 import com.faboslav.structurify.common.Structurify;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.ChunkPos;

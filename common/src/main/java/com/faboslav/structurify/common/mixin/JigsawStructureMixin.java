@@ -77,7 +77,8 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 					var biomeBlacklistType = Structurify.getConfig().getStructureData().get(structureId.toString()).getBiomeBlacklistType();
 
 					if (biomeBlacklistType == StructureData.BiomeBlacklistType.CENTER_PART) {
-						var structurePosition = new Structure.GenerationStub(blockPos, collector -> {});
+						var structurePosition = new Structure.GenerationStub(blockPos, collector -> {
+						});
 						var isBiomeBlacklisted = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.randomState(), blackListedBiomesPredicate);
 
 						if (isBiomeBlacklisted) {

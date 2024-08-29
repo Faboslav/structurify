@@ -4,13 +4,14 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import com.faboslav.structurify.common.modcompat.ModCompat;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import java.util.ArrayList;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.server.packs.repository.ServerPacksSource;
 
+import java.util.ArrayList;
+
 /*? if >=1.20.2 {*/
 /*import net.minecraft.world.level.validation.DirectoryValidator;
-*//*?}*/
+ *//*?}*/
 
 public final class StructurifyResourcePackProvider
 {

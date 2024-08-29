@@ -15,10 +15,12 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.Map;
 
-public final class Structurify {
+public final class Structurify
+{
 	public static final String MOD_ID = "structurify";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Structurify.MOD_ID);
 	private static final StructurifyConfig CONFIG = new StructurifyConfig();

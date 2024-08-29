@@ -13,7 +13,7 @@ import java.util.EnumSet;
 
 /*? if >1.20.1 {*/
 /*import net.minecraft.world.level.validation.DirectoryValidator;
-*//*?}*/
+ *//*?}*/
 
 public final class GlobalDatapacksCompat implements ModCompat
 {

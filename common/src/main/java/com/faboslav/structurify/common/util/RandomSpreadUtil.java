@@ -29,7 +29,11 @@ public final class RandomSpreadUtil
 		return getCorrectedModifiedSpacingValue(spacing);
 	}
 
-	public static int getModifiedSeparation(ResourceLocation structureSetIdentifier, int spacing, int originalSeparation) {
+	public static int getModifiedSeparation(
+		ResourceLocation structureSetIdentifier,
+		int spacing,
+		int originalSeparation
+	) {
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 		int separation = originalSeparation;
 

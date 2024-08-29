@@ -58,10 +58,10 @@ dependencies {
 
 processResources {
 	def expandProps = [
-		"modJavaVersion"   : prop('mod_java_version'),
-		'modId'            : mod_id,
-		'modVersion'       : mod_version,
-		"minecraftVersion" : prop('minecraft_version'),
+		"modJavaVersion"  : prop('mod_java_version'),
+		'modId'           : mod_id,
+		'modVersion'      : mod_version,
+		"minecraftVersion": prop('minecraft_version'),
 	]
 
 	filesMatching(['*.mixins.json']) {
