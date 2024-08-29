@@ -79,7 +79,7 @@ dependencies {
 
 
 	// Compat
-	modImplementation(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-neoforge"))
+	// modImplementation(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-neoforge")) { transitive = false }
 
 	def availableVersions = stonecutter_enabled_neoforge_versions.split(',').collect { it.trim() }
 

@@ -82,8 +82,8 @@ dependencies {
 	}
 
 	// Repurposed Structures
-	modImplementation(modrinth("repurposed-structures-fabric", "${prop('repurposed_structures_version')}-fabric"))
-	modImplementation(modrinth("midnightlib", "${prop('midnight_lib_version')}-fabric"))
+	// modImplementation(modrinth("repurposed-structures-fabric", "${prop('repurposed_structures_version')}-fabric")) { transitive = false }
+	// modImplementation(modrinth("midnightlib", "${prop('midnight_lib_version')}-fabric")) { transitive = false }
 
 	modCompileOnly(modRuntimeOnly(group: 'com.electronwill.night-config', name: 'core', version: '3.6.5'))
 	modCompileOnly(modRuntimeOnly(group: 'com.electronwill.night-config', name: 'toml', version: '3.6.5'))
