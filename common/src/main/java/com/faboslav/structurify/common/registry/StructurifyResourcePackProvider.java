@@ -46,7 +46,6 @@ public final class StructurifyResourcePackProvider
 		ArrayList<RepositorySource> modResourcePackProviders = new ArrayList<>();
 
 		for (ModCompat compat : ModChecker.CUSTOM_RESOURCE_PACK_PROVIDER_COMPATS) {
-			Structurify.getLogger().info("Loading: " + compat.toString());
 			var resourcePackProviders = compat.getResourcePackProviders();
 			modResourcePackProviders.addAll(resourcePackProviders);
 		}
