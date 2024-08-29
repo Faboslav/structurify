@@ -3,8 +3,8 @@ package com.faboslav.structurify.common.config.client.api.controller.element;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.TextScaledButtonWidget;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import org.jetbrains.annotations.Nullable;
 
 public final class DualControllerElement extends AbstractWidget
@@ -125,7 +125,7 @@ public final class DualControllerElement extends AbstractWidget
 	}
 
 	@Override
-	public void render(DrawContext graphics, int mouseX, int mouseY, float tickDelta) {
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float tickDelta) {
 		labelElement.render(graphics, mouseX, mouseY, tickDelta);
 		firstElement.render(graphics, mouseX, mouseY, tickDelta);
 		secondElement.render(graphics, mouseX, mouseY, tickDelta);
@@ -137,8 +137,8 @@ public final class DualControllerElement extends AbstractWidget
 	}
 
 	@Override
-	public SelectionType getType() {
-		return SelectionType.NONE;
+	public NarrationPriority narrationPriority() {
+		return NarrationPriority.NONE;
 	}
 
 	@Override
@@ -151,9 +151,9 @@ public final class DualControllerElement extends AbstractWidget
 	}
 
 	@Override
-	public void appendNarrations(NarrationMessageBuilder builder) {
-		labelElement.appendNarrations(builder);
-		firstElement.appendNarrations(builder);
-		secondElement.appendNarrations(builder);
+	public void updateNarration(NarrationElementOutput builder) {
+		labelElement.updateNarration(builder);
+		firstElement.updateNarration(builder);
+		secondElement.updateNarration(builder);
 	}
 }

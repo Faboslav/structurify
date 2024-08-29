@@ -6,51 +6,57 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import net.minecraft.command.argument.RegistryPredicateArgumentType;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.command.LocateCommand;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-import net.minecraft.world.gen.structure.Structure;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import java.util.Optional;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.commands.LocateCommand;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 @Mixin(LocateCommand.class)
 public class LocateCommandMixin
 {
 	@WrapMethod(
-		method = "executeLocateStructure"
+		method = "locateStructure"
 	)
 	private static int structurify$executeLocateStructure(
-		ServerCommandSource source,
-		RegistryPredicateArgumentType.RegistryPredicate<Structure> predicate,
+		CommandSourceStack source,
+		ResourceOrTagKeyArgument.Result<Structure> predicate,
 		Operation<Integer> original
 	) throws CommandSyntaxException {
 		if (Structurify.getConfig().disableAllStructures) {
-			throw new SimpleCommandExceptionType(Text.translatable("command.structurify.locate.exception.all_structures_are_disabled")).create();
+			throw new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.exception.all_structures_are_disabled")).create();
 		}
 
-		Optional<RegistryKey<Structure>> structureRegistryKey = predicate.getKey().left();
-		Optional<TagKey<Structure>> structureTagKey = predicate.getKey().right();
+		Optional<ResourceKey<Structure>> structureRegistryKey = predicate.unwrap().left();
+		Optional<TagKey<Structure>> structureTagKey = predicate.unwrap().right();
 
 		if (structureRegistryKey.isPresent()) {
-			String structureId = structureRegistryKey.get().getValue().toString();
+			String structureId = structureRegistryKey.get().location().toString();
 
 			if (structurify$isStructureDisabled(structureId)) {
-				throw new SimpleCommandExceptionType(Text.translatable("command.structurify.locate.structure_is_disabled", structureId)).create();
+				throw new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.structure_is_disabled", structureId)).create();
 			}
 		} else if (structureTagKey.isPresent()) {
-			var structureRegistry = source.getWorld().getRegistryManager().get(RegistryKeys.STRUCTURE);
+			var structureRegistry = source.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
 
 			try {
-				structureRegistry.getEntryList(structureTagKey.get()).ifPresent(tagStructures -> {
+				structureRegistry.getTag(structureTagKey.get()).ifPresent(tagStructures -> {
 					boolean areAllStructuresInTagDisabled = true;
 
 					for (var tagStructure : tagStructures) {
-						String tagStructureId = tagStructure.getKey().get().getValue().toString();
+						String tagStructureId = tagStructure.unwrapKey().get().location().toString();
 
 						if (!structurify$isStructureDisabled(tagStructureId)) {
 							areAllStructuresInTagDisabled = false;
@@ -58,7 +64,7 @@ public class LocateCommandMixin
 					}
 
 					if (areAllStructuresInTagDisabled) {
-						throw new RuntimeException(new SimpleCommandExceptionType(Text.translatable("command.structurify.locate.structure_is_disabled", "#" + structureTagKey.get().id().toString())).create());
+						throw new RuntimeException(new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.structure_is_disabled", "#" + structureTagKey.get().location().toString())).create());
 					}
 				});
 			} catch (RuntimeException e) {

@@ -9,7 +9,7 @@ import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.TextScaledButtonWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 public class DualController<K extends Option<?>, V extends Option<?>> implements Controller<OptionPair<K, V>>
 {
@@ -30,7 +30,7 @@ public class DualController<K extends Option<?>, V extends Option<?>> implements
 	}
 
 	@Override
-	public Text formatValue() {
+	public Component formatValue() {
 		return optionPair.getFirstOption().controller().formatValue().copy().append(" | ").append(optionPair.getSecondOption().controller().formatValue());
 	}
 
@@ -50,7 +50,7 @@ public class DualController<K extends Option<?>, V extends Option<?>> implements
 			firstOptionWidget.setDimension(firstOptionWidget.getDimension().expanded(-10, 0));
 			secondOptionWidget.setDimension(secondOptionWidget.getDimension().expanded(-10, 0));
 
-			resetButtonWidget = new TextScaledButtonWidget(screen, secondOptionWidget.getDimension().xLimit() - 10, 0, 20, 20, 2f, Text.literal("\u21BB"), button -> {
+			resetButtonWidget = new TextScaledButtonWidget(screen, secondOptionWidget.getDimension().xLimit() - 10, 0, 20, 20, 2f, Component.literal("\u21BB"), button -> {
 				this.optionPair.getFirstOption().requestSetDefault();
 				this.optionPair.getSecondOption().requestSetDefault();
 			});

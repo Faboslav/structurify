@@ -5,17 +5,17 @@ import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeCoords;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.noise.NoiseConfig;
-import net.minecraft.world.gen.structure.JigsawStructure;
-import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,18 +31,18 @@ import java.util.stream.Collectors;
 public abstract class JigsawStructureMixin extends Structure implements StructurifyStructure
 {
 	@Nullable
-	public Identifier structureIdentifier = null;
+	public ResourceLocation structureIdentifier = null;
 
-	protected JigsawStructureMixin(Config config) {
+	protected JigsawStructureMixin(StructureSettings config) {
 		super(config);
 	}
 
-	public void structurify$setStructureIdentifier(Identifier structureIdentifier) {
+	public void structurify$setStructureIdentifier(ResourceLocation structureIdentifier) {
 		this.structureIdentifier = structureIdentifier;
 	}
 
 	@Nullable
-	public Identifier structurify$getStructureIdentifier() {
+	public ResourceLocation structurify$getStructureIdentifier() {
 		return this.structureIdentifier;
 	}
 
@@ -51,35 +51,34 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 	private int maxDistanceFromCenter;
 
 	@WrapMethod(
-		method = "getStructurePosition"
+		method = "findGenerationPoint"
 	)
-	private Optional<StructurePosition> structurify$getStructurePosition(
-		Context context,
-		Operation<Optional<StructurePosition>> original
+	private Optional<GenerationStub> structurify$getStructurePosition(
+		GenerationContext context,
+		Operation<Optional<GenerationStub>> original
 	) {
 		var originalStructurePosition = original.call(context);
-		Identifier structureId = structurify$getStructureIdentifier();
+		ResourceLocation structureId = structurify$getStructureIdentifier();
 
 		if (structureId != null) {
 			if (Structurify.getConfig().getStructureData().containsKey(structureId.toString())) {
 				List<String> blacklistedBiomeIds = Structurify.getConfig().getStructureData().get(structureId.toString()).getBlacklistedBiomes();
 
 				if (!blacklistedBiomeIds.isEmpty()) {
-					Set<RegistryKey<Biome>> blacklistedBiomeKeys = blacklistedBiomeIds.stream()
-						.map(id -> RegistryKey.of(RegistryKeys.BIOME, Structurify.makeVanillaId(id)))
+					Set<ResourceKey<Biome>> blacklistedBiomeKeys = blacklistedBiomeIds.stream()
+						.map(id -> ResourceKey.create(Registries.BIOME, new ResourceLocation(id)))
 						.collect(Collectors.toSet());
 
-					Predicate<RegistryEntry<Biome>> blackListedBiomesPredicate = biomeEntry -> {
-						return blacklistedBiomeKeys.contains(biomeEntry.getKey().orElse(null));
+					Predicate<Holder<Biome>> blackListedBiomesPredicate = biomeEntry -> {
+						return blacklistedBiomeKeys.contains(biomeEntry.unwrapKey().orElse(null));
 					};
 
-					BlockPos blockPos = new BlockPos(context.chunkPos().getStartX(), 63, context.chunkPos().getStartZ());
+					var blockPos = new BlockPos(context.chunkPos().getMinBlockX(), 63, context.chunkPos().getMinBlockZ());
 					var biomeBlacklistType = Structurify.getConfig().getStructureData().get(structureId.toString()).getBiomeBlacklistType();
 
 					if (biomeBlacklistType == StructureData.BiomeBlacklistType.CENTER_PART) {
-						var structurePosition = new Structure.StructurePosition(blockPos, collector -> {
-						});
-						var isBiomeBlacklisted = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.noiseConfig(), blackListedBiomesPredicate);
+						var structurePosition = new Structure.GenerationStub(blockPos, collector -> {});
+						var isBiomeBlacklisted = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.randomState(), blackListedBiomesPredicate);
 
 						if (isBiomeBlacklisted) {
 							return Optional.empty();
@@ -94,9 +93,9 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 								int y = blockPos.getY();
 								int z = zOffset + blockPos.getZ();
 
-								var structurePosition = new Structure.StructurePosition(new BlockPos(x, y, z), collector -> {
+								var structurePosition = new Structure.GenerationStub(new BlockPos(x, y, z), collector -> {
 								});
-								var isBiomeBlacklisted = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.noiseConfig(), blackListedBiomesPredicate);
+								var isBiomeBlacklisted = this.structurify$isBiomeValid(structurePosition, context.chunkGenerator(), context.randomState(), blackListedBiomesPredicate);
 
 								if (isBiomeBlacklisted) {
 									return Optional.empty();
@@ -112,12 +111,12 @@ public abstract class JigsawStructureMixin extends Structure implements Structur
 	}
 
 	private boolean structurify$isBiomeValid(
-		Structure.StructurePosition result,
+		Structure.GenerationStub result,
 		ChunkGenerator chunkGenerator,
-		NoiseConfig noiseConfig,
-		Predicate<RegistryEntry<Biome>> validBiomes
+		RandomState noiseConfig,
+		Predicate<Holder<Biome>> validBiomes
 	) {
-		BlockPos blockPos = result.position();
-		return validBiomes.test(chunkGenerator.getBiomeSource().getBiome(BiomeCoords.fromBlock(blockPos.getX()), BiomeCoords.fromBlock(blockPos.getY()), BiomeCoords.fromBlock(blockPos.getZ()), noiseConfig.getMultiNoiseSampler()));
+		var blockPos = result.position();
+		return validBiomes.test(chunkGenerator.getBiomeSource().getNoiseBiome(QuartPos.fromBlock(blockPos.getX()), QuartPos.fromBlock(blockPos.getY()), QuartPos.fromBlock(blockPos.getZ()), noiseConfig.sampler()));
 	}
 }

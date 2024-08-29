@@ -7,8 +7,8 @@ import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.TextScaledButtonWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.BooleanController;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 
 import java.util.function.Function;
 
@@ -20,7 +20,7 @@ public class StructureButtonController extends BooleanController
 	public StructureButtonController(
 		Option<Boolean> option,
 		String structureId,
-		Function<Boolean, Text> valueFormatter,
+		Function<Boolean, Component> valueFormatter,
 		boolean coloured
 	) {
 		super(option, valueFormatter, coloured);
@@ -46,7 +46,7 @@ public class StructureButtonController extends BooleanController
 			super(control, screen, dim);
 
 			this.setDimension(this.getDimension().expanded(-20, 0));
-			this.configurationButton = new TextScaledButtonWidget(screen, this.getDimension().xLimit(), -50, 20, 20, 1.0f, Text.literal("\u2699").styled(style -> style.withBold(true)), button -> {
+			this.configurationButton = new TextScaledButtonWidget(screen, this.getDimension().xLimit(), -50, 20, 20, 1.0f, Component.literal("\u2699").withStyle(style -> style.withBold(true)), button -> {
 				var structureScreen = StructureConfigScreen.create(screen, structureId);
 				this.client.setScreen(structureScreen);
 			});
@@ -54,7 +54,7 @@ public class StructureButtonController extends BooleanController
 		}
 
 		@Override
-		public void render(DrawContext graphics, int mouseX, int mouseY, float delta) {
+		public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 			this.configurationButton.setY(getDimension().y());
 			this.configurationButton.render(graphics, mouseX, mouseY, delta);
 			super.render(graphics, mouseX, mouseY, delta);

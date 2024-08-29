@@ -1,10 +1,10 @@
 package com.faboslav.structurify.common.api;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public interface StructurifyStructure
 {
-	void structurify$setStructureIdentifier(Identifier structureSetIdentifier);
+	void structurify$setStructureIdentifier(ResourceLocation structureSetIdentifier);
 
-	Identifier structurify$getStructureIdentifier();
+	ResourceLocation structurify$getStructureIdentifier();
 }

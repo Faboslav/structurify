@@ -2,11 +2,11 @@ package com.faboslav.structurify.common.util;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.StructureSetData;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public final class RandomSpreadUtil
 {
-	private static StructureSetData getStructureSetData(Identifier structureSetIdentifier) {
+	private static StructureSetData getStructureSetData(ResourceLocation structureSetIdentifier) {
 		if (structureSetIdentifier == null || !Structurify.getConfig().getStructureSetData().containsKey(structureSetIdentifier.toString())) {
 			return null;
 		}
@@ -14,7 +14,7 @@ public final class RandomSpreadUtil
 		return Structurify.getConfig().getStructureSetData().get(structureSetIdentifier.toString());
 	}
 
-	public static int getModifiedSpacing(Identifier structureSetIdentifier, int originalSpacing) {
+	public static int getModifiedSpacing(ResourceLocation structureSetIdentifier, int originalSpacing) {
 		int spacing = originalSpacing;
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 
@@ -29,7 +29,7 @@ public final class RandomSpreadUtil
 		return getCorrectedModifiedSpacingValue(spacing);
 	}
 
-	public static int getModifiedSeparation(Identifier structureSetIdentifier, int spacing, int originalSeparation) {
+	public static int getModifiedSeparation(ResourceLocation structureSetIdentifier, int spacing, int originalSeparation) {
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 		int separation = originalSeparation;
 

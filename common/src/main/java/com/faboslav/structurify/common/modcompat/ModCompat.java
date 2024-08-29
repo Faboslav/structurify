@@ -1,7 +1,6 @@
 package com.faboslav.structurify.common.modcompat;
 
-
-import net.minecraft.resource.ResourcePackProvider;
+import net.minecraft.server.packs.repository.RepositorySource;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -20,7 +19,7 @@ public interface ModCompat
 		return EnumSet.noneOf(Type.class);
 	}
 
-	default ArrayList<ResourcePackProvider> getResourcePackProviders() {
+	default ArrayList<RepositorySource> getResourcePackProviders() {
 		return new ArrayList<>();
 	}
 

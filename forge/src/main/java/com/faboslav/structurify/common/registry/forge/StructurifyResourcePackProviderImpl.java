@@ -1,6 +1,6 @@
 package com.faboslav.structurify.common.registry.forge;
 
-import net.minecraft.resource.ResourcePackProvider;
+import net.minecraft.server.packs.repository.RepositorySource;
 
 import java.util.ArrayList;
 
@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 public final class StructurifyResourcePackProviderImpl
 {
-	public static ArrayList<ResourcePackProvider> getPlatformResourcePackProviders() {
-		ArrayList<ResourcePackProvider> platformResourcePackProviders = new ArrayList<>();
+	public static ArrayList<RepositorySource> getPlatformResourcePackProviders() {
+		ArrayList<RepositorySource> platformResourcePackProviders = new ArrayList<>();
 		return platformResourcePackProviders;
 	}
 }

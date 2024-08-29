@@ -5,8 +5,8 @@ import com.google.common.collect.ImmutableSet;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.ControllerBuilder;
 import dev.isxander.yacl3.impl.utils.YACLConstants;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -17,11 +17,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-
 @ApiStatus.Internal
 public final class HolderOption<K extends Option<?>, V extends Option<?>> implements Option<OptionPair<K, V>>
 {
-	private final Text name;
+	private final Component name;
 	private OptionDescription description;
 	private final DualController<K, V> controller;
 	private final OptionPair<K, V> optionPair;
@@ -35,7 +34,7 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 	private int listenerTriggerDepth = 0;
 
 	public HolderOption(
-		@NotNull Text name,
+		@NotNull Component name,
 		@NotNull Function<OptionPair<K, V>, OptionDescription> descriptionFunction,
 		@NotNull Function<Option<OptionPair<K, V>>, DualController<K, V>> controlGetter,
 		boolean available,
@@ -60,7 +59,7 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 	}
 
 	@Override
-	public @NotNull Text name() {
+	public @NotNull Component name() {
 		return optionPair.getFirstOption().name().copy().append(" & ").append(optionPair.getSecondOption().name().copy());
 	}
 
@@ -70,7 +69,7 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 	}
 
 	@Override
-	public @NotNull Text tooltip() {
+	public @NotNull Component tooltip() {
 		return description().text();
 	}
 
@@ -192,7 +191,7 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 	@ApiStatus.Internal
 	public static class HolderOptionBuilder<K extends Option<?>, V extends Option<?>> implements Builder<OptionPair<K, V>>
 	{
-		private Text name = Text.literal("Name not specified!").formatted(Formatting.RED);
+		private Component name = Component.literal("Name not specified!").withStyle(ChatFormatting.RED);
 
 		private Function<OptionPair<K, V>, OptionDescription> descriptionFunction = pending -> OptionDescription.EMPTY;
 
@@ -209,7 +208,7 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 		private final List<BiConsumer<Option<OptionPair<K, V>>, OptionPair<K, V>>> listeners = new ArrayList<>();
 
 		@Override
-		public Builder<OptionPair<K, V>> name(@NotNull Text name) {
+		public Builder<OptionPair<K, V>> name(@NotNull Component name) {
 			Validate.notNull(name, "`name` cannot be null");
 
 			this.name = name;

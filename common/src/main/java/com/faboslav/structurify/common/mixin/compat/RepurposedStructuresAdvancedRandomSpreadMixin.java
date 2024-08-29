@@ -5,10 +5,11 @@ import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement;
-import net.minecraft.world.gen.chunk.placement.SpreadType;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,24 +19,32 @@ import java.util.Optional;
 @Mixin(AdvancedRandomSpread.class)
 public abstract class RepurposedStructuresAdvancedRandomSpreadMixin extends RandomSpreadStructurePlacement implements StructurifyRandomSpreadStructurePlacement
 {
-	@Shadow
-	public abstract int getSpacing();
-
 	public RepurposedStructuresAdvancedRandomSpreadMixin(
-		Vec3i locateOffset,
+		Vec3i vec3i,
 		FrequencyReductionMethod frequencyReductionMethod,
-		float frequency,
-		int salt,
-		Optional<ExclusionZone> exclusionZone,
-		int spacing,
-		int separation,
-		SpreadType spreadType
+		float f,
+		int i,
+		Optional<ExclusionZone> optional,
+		int j,
+		int k,
+		RandomSpreadType randomSpreadType
 	) {
-		super(locateOffset, frequencyReductionMethod, frequency, salt, exclusionZone, spacing, separation, spreadType);
+		super(vec3i, frequencyReductionMethod, f, i, optional, j, k, randomSpreadType);
 	}
 
+	public RepurposedStructuresAdvancedRandomSpreadMixin(int i, int j, RandomSpreadType randomSpreadType, int k) {
+		super(i, j, randomSpreadType, k);
+	}
+
+	@Shadow
+	public abstract int spacing();
+
+	@Shadow
+	@Final
+	private int spacing;
+
 	@ModifyReturnValue(
-		method = "getSpacing",
+		method = "spacing",
 		at = @At("RETURN")
 	)
 	protected int structurify$getSpacing(int originalSpacing) {
@@ -43,15 +52,15 @@ public abstract class RepurposedStructuresAdvancedRandomSpreadMixin extends Rand
 	}
 
 	@ModifyReturnValue(
-		method = "getSeparation",
+		method = "separation",
 		at = @At("RETURN")
 	)
 	protected int structurify$getSeparation(int originalSeparation) {
-		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.getSpacing(), originalSeparation);
+		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalSeparation);
 	}
 
 	@ModifyExpressionValue(
-		method = "getStartChunk",
+		method = "getPotentialStructureChunk",
 		at = @At(
 			value = "FIELD",
 			target = "Lcom/telepathicgrunt/repurposedstructures/world/structures/placements/AdvancedRandomSpread;spacing:I",
@@ -63,7 +72,7 @@ public abstract class RepurposedStructuresAdvancedRandomSpreadMixin extends Rand
 	}
 
 	@ModifyExpressionValue(
-		method = "getStartChunk",
+		method = "getPotentialStructureChunk",
 		at = @At(
 			value = "FIELD",
 			target = "Lcom/telepathicgrunt/repurposedstructures/world/structures/placements/AdvancedRandomSpread;separation:I",
@@ -71,6 +80,6 @@ public abstract class RepurposedStructuresAdvancedRandomSpreadMixin extends Rand
 		)
 	)
 	protected int structurify$getStartChunkGetSeparation(int originalSeparation) {
-		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.getSpacing(), originalSeparation);
+		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalSeparation);
 	}
 }

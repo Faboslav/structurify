@@ -5,8 +5,8 @@ import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.PrepareRegistriesEvent;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.resource.LifecycledResourceManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.resources.CloseableResourceManager;
 
 public final class StructurifyFabric implements ModInitializer
 {
@@ -20,18 +20,18 @@ public final class StructurifyFabric implements ModInitializer
 
 	private void onServerStarting(MinecraftServer minecraftServer) {
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
-		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(minecraftServer.getRegistryManager().toImmutable()));
+		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(minecraftServer.registryAccess().freeze()));
 	}
 
 	private void onDatapackReload(
 		MinecraftServer minecraftServer,
-		LifecycledResourceManager serverResourceManager,
+		CloseableResourceManager serverResourceManager,
 		boolean success
 	) {
 		if (!success) {
 			return;
 		}
 
-		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(minecraftServer.getRegistryManager().toImmutable()));
+		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(minecraftServer.registryAccess().freeze()));
 	}
 }

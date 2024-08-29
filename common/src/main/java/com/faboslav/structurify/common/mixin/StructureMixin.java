@@ -1,8 +1,8 @@
 package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.api.StructurifyStructure;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -10,14 +10,14 @@ import org.spongepowered.asm.mixin.Mixin;
 public abstract class StructureMixin implements StructurifyStructure
 {
 	@Nullable
-	public Identifier structureIdentifier = null;
+	public ResourceLocation structureIdentifier = null;
 
-	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
+	public void structurify$setStructureIdentifier(ResourceLocation structureSetIdentifier) {
 		this.structureIdentifier = structureSetIdentifier;
 	}
 
 	@Nullable
-	public Identifier structurify$getStructureIdentifier() {
+	public ResourceLocation structurify$getStructureIdentifier() {
 		return this.structureIdentifier;
 	}
 }

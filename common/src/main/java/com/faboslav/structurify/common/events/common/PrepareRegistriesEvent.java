@@ -1,7 +1,7 @@
 package com.faboslav.structurify.common.events.common;
 
 import com.faboslav.structurify.common.events.base.EventHandler;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
 
 /**
  * Event related is code based on The Bumblezone/Resourceful Lib mods with permissions from the authors
@@ -11,7 +11,7 @@ import net.minecraft.registry.DynamicRegistryManager;
  * @author ThatGravyBoat
  * <a href="https://github.com/Team-Resourceful/ResourcefulLib">https://github.com/Team-Resourceful/ResourcefulLib</a>
  */
-public record PrepareRegistriesEvent(DynamicRegistryManager.Immutable registryManager)
+public record PrepareRegistriesEvent(RegistryAccess.Frozen registryManager)
 {
 	public static final EventHandler<PrepareRegistriesEvent> EVENT = new EventHandler<>();
 }

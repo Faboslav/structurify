@@ -16,7 +16,6 @@
 		"StructureMixin",
 		"compat.RepurposedStructuresAdvancedRandomSpreadMixin"
 	],
-	"minMixinExtrasVersion": "0.4.1",
 	"client": [
 		"AnimatedDynamicTextureImageAccessor",
 		"ClickableWidgetAccessor"

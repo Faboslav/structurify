@@ -1,8 +1,8 @@
 package com.faboslav.structurify.common.util;
 
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Language;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
@@ -12,11 +12,11 @@ public final class LanguageUtil
 	private static final String FIRST_LETTER_REGEX = "\\b(.)(.*?)\\b";
 	private static final Pattern FIRST_LETTER_PATTERN = Pattern.compile(FIRST_LETTER_REGEX);
 
-	public static MutableText translateId(@Nullable String prefix, String id) {
+	public static MutableComponent translateId(@Nullable String prefix, String id) {
 		String langKey = transformToLangKey(prefix, id);
 		Language language = Language.getInstance();
 
-		if (!language.hasTranslation(langKey)) {
+		if (!language.has(langKey)) {
 			if (prefix == null) {
 				langKey = id;
 			} else {
@@ -30,7 +30,7 @@ public final class LanguageUtil
 				.replaceAll(matchResult -> matchResult.group(1).toUpperCase() + matchResult.group(2));
 		}
 
-		return Text.translatable(langKey);
+		return Component.translatable(langKey);
 	}
 
 	private static String transformToLangKey(@Nullable String prefix, String identifier) {

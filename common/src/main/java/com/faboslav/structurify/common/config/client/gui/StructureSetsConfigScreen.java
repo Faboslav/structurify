@@ -14,10 +14,10 @@ import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public final class StructureSetsConfigScreen
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 
 		var yacl = YetAnotherConfigLib.createBuilder()
-			.title(Text.translatable("gui.structurify.title"))
+			.title(Component.translatable("gui.structurify.title"))
 			.save(config::save);
 
 		createStructureSetsTab(yacl, config);
@@ -40,19 +40,19 @@ public final class StructureSetsConfigScreen
 
 	public static void createStructureSetsTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
 		var structureSetCategoryBuilder = ConfigCategory.createBuilder()
-			.name(Text.translatable("gui.structurify.structure_sets_category.title"))
-			.tooltip(Text.translatable("gui.structurify.structure_sets_category.description").append("\n\n").append(Text.translatable("gui.structurify.structure_sets.spacing.description")).append("\n\n").append(Text.translatable("gui.structurify.structure_sets.separation.description")));
+			.name(Component.translatable("gui.structurify.structure_sets_category.title"))
+			.tooltip(Component.translatable("gui.structurify.structure_sets_category.description").append("\n\n").append(Component.translatable("gui.structurify.structure_sets.spacing.description")).append("\n\n").append(Component.translatable("gui.structurify.structure_sets.separation.description")));
 
 		var generalStructuresSetsGroupBuilder = OptionGroup.createBuilder()
-			.name(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation.title"))
-			.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation.description")));
+			.name(Component.translatable("gui.structurify.structure_sets.global_spacing_and_separation.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structure_sets.global_spacing_and_separation.description")));
 
 		var enableGlobalSpacingAndSeparationDescriptionBuilder = OptionDescription.createBuilder();
-		enableGlobalSpacingAndSeparationDescriptionBuilder.text(Text.translatable("gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.description"));
-		enableGlobalSpacingAndSeparationDescriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("gui.structurify.structure_sets.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
+		enableGlobalSpacingAndSeparationDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.description"));
+		enableGlobalSpacingAndSeparationDescriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structure_sets.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
 
 		var enableGlobalSpacingAndSeparationOption = Option.<Boolean>createBuilder()
-			.name(Text.translatable("gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.title"))
+			.name(Component.translatable("gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.title"))
 			.description(enableGlobalSpacingAndSeparationDescriptionBuilder.build())
 			.binding(
 				true,
@@ -60,17 +60,17 @@ public final class StructureSetsConfigScreen
 				enableGlobalSpacingAndSeparationModifier -> config.enableGlobalSpacingAndSeparationModifier = enableGlobalSpacingAndSeparationModifier
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(val -> val ? Text.translatable("gui.structurify.label.yes"):Text.translatable("gui.structurify.label.no"))
+				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
 				.coloured(true)).build();
 
 		generalStructuresSetsGroupBuilder.option(enableGlobalSpacingAndSeparationOption);
 
 		var globalSpacingAndSeparationModifierDescriptionBuilder = OptionDescription.createBuilder();
-		globalSpacingAndSeparationModifierDescriptionBuilder.text(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.description"));
-		globalSpacingAndSeparationModifierDescriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("gui.structurify.structure_sets.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
+		globalSpacingAndSeparationModifierDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.description"));
+		globalSpacingAndSeparationModifierDescriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structure_sets.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
 
 		var globalSpacingAndSeparationModifierOption = Option.<Double>createBuilder()
-			.name(Text.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.title"))
+			.name(Component.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.title"))
 			.description(globalSpacingAndSeparationModifierDescriptionBuilder.build())
 			.binding(
 				1.0D,
@@ -93,7 +93,7 @@ public final class StructureSetsConfigScreen
 		for (Map.Entry<String, StructureSetData> entry : structureSets.entrySet()) {
 			String structureSetStringId = entry.getKey();
 
-			Identifier structureSetId = Structurify.makeVanillaId(structureSetStringId);
+			ResourceLocation structureSetId = Structurify.makeVanillaId(structureSetStringId);
 			String namespace = structureSetId.getNamespace();
 
 			// Create new group for each namespace
@@ -104,16 +104,16 @@ public final class StructureSetsConfigScreen
 
 				// Create new group
 				currentGroupBuilder = OptionGroup.createBuilder()
-					.name(Text.translatable("gui.structurify.structure_sets.structure_group.title", LanguageUtil.translateId(null, namespace)))
-					.description(OptionDescription.of(Text.translatable("gui.structurify.structure_sets.structure_group.description", namespace)));
+					.name(Component.translatable("gui.structurify.structure_sets.structure_group.title", LanguageUtil.translateId(null, namespace)))
+					.description(OptionDescription.of(Component.translatable("gui.structurify.structure_sets.structure_group.description", namespace)));
 				currentNamespace = namespace;
 			}
 
 			var spacingDescriptionBuilder = OptionDescription.createBuilder();
-			spacingDescriptionBuilder.text(Text.translatable("gui.structurify.structure_sets.spacing.description"));
+			spacingDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.spacing.description"));
 
 			var spacingOption = Option.<Integer>createBuilder()
-				.name(Text.translatable("gui.structurify.structure_sets.spacing.title"))
+				.name(Component.translatable("gui.structurify.structure_sets.spacing.title"))
 				.description(spacingDescriptionBuilder.build())
 				.binding(
 					config.getStructureSetData().get(structureSetStringId).getDefaultSpacing(),
@@ -123,11 +123,11 @@ public final class StructureSetsConfigScreen
 				.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SPACING).step(1)).build();
 
 			var separationDescriptionBuilder = OptionDescription.createBuilder();
-			separationDescriptionBuilder.text(Text.translatable("gui.structurify.structure_sets.separation.description"));
-			separationDescriptionBuilder.text(Text.literal("\n\n").append(Text.translatable("gui.structurify.structure_sets.warning")).styled(style -> style.withColor(Formatting.YELLOW)));
+			separationDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.separation.description"));
+			separationDescriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structure_sets.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
 
 			var separationOption = Option.<Integer>createBuilder()
-				.name(Text.translatable("gui.structurify.structure_sets.separation.title"))
+				.name(Component.translatable("gui.structurify.structure_sets.separation.title"))
 				.description(separationDescriptionBuilder.build())
 				.binding(
 					config.getStructureSetData().get(structureSetStringId).getDefaultSeparation(),

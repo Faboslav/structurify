@@ -8,7 +8,7 @@ import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.dropdown.AbstractDropdownController;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 public final class BiomeStringController extends AbstractDropdownController<String>
 {
@@ -27,7 +27,7 @@ public final class BiomeStringController extends AbstractDropdownController<Stri
 	}
 
 	@Override
-	public Text formatValue() {
+	public Component formatValue() {
 		return LanguageUtil.translateId("biome", getString());
 	}
 

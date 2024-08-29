@@ -5,8 +5,8 @@ import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.dropdown.AbstractDropdownControllerElement;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	@Override
-	protected void drawValueText(DrawContext graphics, int mouseX, int mouseY, float delta) {
+	protected void drawValueText(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 		var oldDimension = getDimension();
 		setDimension(getDimension().withWidth(getDimension().width() - getDecorationPadding()));
 		super.drawValueText(graphics, mouseX, mouseY, delta);
@@ -75,13 +75,13 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	@Override
-	protected Text getValueText() {
+	protected Component getValueText() {
 		if (inputField.isEmpty() || biomeStringController == null) {
 			return super.getValueText();
 		}
 
 		if (inputFieldFocused) {
-			return Text.literal(inputField);
+			return Component.literal(inputField);
 		}
 
 		return LanguageUtil.translateId("string", this.biomeStringController.option().pendingValue());

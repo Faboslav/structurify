@@ -35,14 +35,7 @@ loom {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${minecraftVersion}"
-	mappings loom.layered {
-		it.mappings "net.fabricmc:yarn:${prop('yarn_mappings')}:v2"
-		if (stonecutter.compare(minecraftVersion, '1.20.4') == 0) {
-			it.mappings "dev.architectury:yarn-mappings-patch-forge:${prop('yarn_mappings_patch')}"
-		} else if (stonecutter.compare(minecraftVersion, '1.20.6') >= 0) {
-			it.mappings "dev.architectury:yarn-mappings-patch-neoforge:${prop('yarn_mappings_patch')}"
-		}
-	}
+	mappings loom.officialMojangMappings()
 
 	// General
 	modImplementation("net.fabricmc:fabric-loader:${prop('fabric_loader_version')}")

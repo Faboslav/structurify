@@ -1,12 +1,12 @@
 package com.faboslav.structurify.common.api;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public interface StructurifyRandomSpreadStructurePlacement
 {
-	void structurify$setStructureSetIdentifier(Identifier structureSetIdentifier);
+	void structurify$setStructureSetIdentifier(ResourceLocation structureSetIdentifier);
 
-	Identifier structurify$getStructureSetIdentifier();
+	ResourceLocation structurify$getStructureSetIdentifier();
 
 	int structurify$getOriginalSpacing();
 

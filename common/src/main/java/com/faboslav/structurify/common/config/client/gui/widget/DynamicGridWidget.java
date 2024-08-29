@@ -1,17 +1,17 @@
 package com.faboslav.structurify.common.config.client.gui.widget;
 
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.WrapperWidget;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.layouts.AbstractLayout;
+import net.minecraft.client.gui.layouts.LayoutElement;
 
 /*? <1.20.4 {*/
 import com.faboslav.structurify.common.mixin.ClickableWidgetAccessor;
 /*?}*/
 
-public class DynamicGridWidget extends WrapperWidget
+public class DynamicGridWidget extends AbstractLayout
 {
 	private final List<GridItem> children = new ArrayList<>();
 	private int padding = 0;
@@ -20,11 +20,11 @@ public class DynamicGridWidget extends WrapperWidget
 		super(x, y, width, height);
 	}
 
-	public void addChild(ClickableWidget widget, int cellHeight, int cellWidth) {
+	public void addChild(AbstractWidget widget, int cellHeight, int cellWidth) {
 		this.children.add(new GridItem(cellHeight, cellWidth, widget));
 	}
 
-	public void addChild(ClickableWidget widget) {
+	public void addChild(AbstractWidget widget) {
 		this.children.add(new GridItem(-1, -1, widget));
 	}
 
@@ -155,11 +155,16 @@ public class DynamicGridWidget extends WrapperWidget
 	}
 
 	@Override
-	public void forEachElement(Consumer<Widget> consumer) {
+	public void visitChildren(Consumer<LayoutElement> consumer) {
 		this.children.stream().map(GridItem::widget).forEach(consumer);
 	}
 
-	public record GridItem(int cellHeight, int cellWidth, ClickableWidget widget)
+	@Override
+	public void visitWidgets(Consumer<AbstractWidget> consumer) {
+		this.children.stream().map(GridItem::widget).forEach(consumer);
+	}
+
+	public record GridItem(int cellHeight, int cellWidth, AbstractWidget widget)
 	{
 	}
 }

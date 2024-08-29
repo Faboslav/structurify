@@ -31,10 +31,10 @@ public final class StructurifyNeoForge
 
 	private static void onServerStarting(ServerStartingEvent event) {
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
-		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(event.getServer().getRegistryManager().toImmutable()));
+		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(event.getServer().registryAccess().freeze()));
 	}
 
 	private static void onTagsUpdate(TagsUpdatedEvent event) {
-		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(event.getRegistryAccess().toImmutable()));
+		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(event.getRegistryAccess().freeze()));
 	}
 }

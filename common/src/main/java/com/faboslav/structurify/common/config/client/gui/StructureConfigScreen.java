@@ -9,8 +9,8 @@ import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +20,12 @@ public final class StructureConfigScreen
 {
 	public static Screen create(Screen parent, String structureId) {
 		var yacl = YetAnotherConfigLib.createBuilder()
-			.title(Text.literal(structureId))
+			.title(Component.literal(structureId))
 			.save(Structurify.getConfig()::save);
 
 		var structureCategoryBuilder = ConfigCategory.createBuilder()
-			.name(Text.translatable("gui.structurify.structures.structure.title", LanguageUtil.translateId("structure", structureId)))
-			.tooltip(Text.translatable("gui.structurify.structures.structure.description"));
+			.name(Component.translatable("gui.structurify.structures.structure.title", LanguageUtil.translateId("structure", structureId)))
+			.tooltip(Component.translatable("gui.structurify.structures.structure.description"));
 
 		/*
 		var structureBlacklistedBiomesGroup = OptionGroup.createBuilder()
@@ -34,17 +34,17 @@ public final class StructureConfigScreen
 		*/
 
 		var biomeBlacklistTypeOption = Option.<StructureData.BiomeBlacklistType>createBuilder()
-			.name(Text.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"))
+			.name(Component.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"))
 			.binding(
 				StructureData.DEFAULT_BIOME_BLACKLIST_TYPE,
 				() -> Structurify.getConfig().getStructureData().get(structureId).getBiomeBlacklistType(),
 				biomeBlacklistType -> Structurify.getConfig().getStructureData().get(structureId).setBiomeBlacklistType(biomeBlacklistType)
 			).controller(opt -> EnumControllerBuilder.create(opt)
 				.enumClass(StructureData.BiomeBlacklistType.class)
-				.valueFormatter(v -> Text.translatable("gui.structurify.structures.structure.biome_blacklist_type." + v.name().toLowerCase())))
+				.valueFormatter(v -> Component.translatable("gui.structurify.structures.structure.biome_blacklist_type." + v.name().toLowerCase())))
 			.available(!Structurify.getConfig().getStructureData().get(structureId).isBiomeBlacklistTypeLocked());
 
-		var biomeBlacklistTypeDescription = OptionDescription.of(Text.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"));
+		var biomeBlacklistTypeDescription = OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"));
 
 		biomeBlacklistTypeOption.description(biomeBlacklistTypeDescription);
 
@@ -65,8 +65,8 @@ public final class StructureConfigScreen
 			*/
 
 		var blackListedBiomesOption = ListOption.<String>createBuilder()
-			.name(Text.translatable("gui.structurify.structures.structure.blacklisted_biomes.title"))
-			.description(OptionDescription.of(Text.translatable("gui.structurify.structures.structure.blacklisted_biomes.description")))
+			.name(Component.translatable("gui.structurify.structures.structure.blacklisted_biomes.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.blacklisted_biomes.description")))
 			.insertEntriesAtEnd(true)
 			.binding(
 				new ArrayList<>(),

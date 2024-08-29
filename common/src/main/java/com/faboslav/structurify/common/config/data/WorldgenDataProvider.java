@@ -2,14 +2,14 @@ package com.faboslav.structurify.common.config.data;
 
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.structure.StructureSet;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.structure.Structure;
-
 import java.lang.reflect.Field;
 import java.util.*;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 
 public final class WorldgenDataProvider
 {
@@ -56,11 +56,11 @@ public final class WorldgenDataProvider
 			return Collections.emptyList();
 		}
 
-		var biomeRegistry = registryManager.get(RegistryKeys.BIOME);
+		var biomeRegistry = registryManager.registryOrThrow(Registries.BIOME);
 		List<String> biomes = new ArrayList<>();
 
-		for (var biome : biomeRegistry.streamEntries().toList()) {
-			biomes.add(biome.getKey().get().getValue().toString());
+		for (var biome : biomeRegistry.holders().toList()) {
+			biomes.add(biome.unwrapKey().get().location().toString());
 		}
 
 		return biomes;
@@ -73,25 +73,25 @@ public final class WorldgenDataProvider
 			return Collections.emptyMap();
 		}
 
-		var structureRegistry = registryManager.get(RegistryKeys.STRUCTURE);
-		var biomeRegistry = registryManager.get(RegistryKeys.BIOME);
+		var structureRegistry = registryManager.registryOrThrow(Registries.STRUCTURE);
+		var biomeRegistry = registryManager.registryOrThrow(Registries.BIOME);
 		Map<String, StructureData> structures = new TreeMap<>(alphabeticallComparator);
 
 		for (Structure structure : structureRegistry) {
-			RegistryKey<Structure> structureRegistryKey = structureRegistry.getKey(structure).orElse(null);
+			ResourceKey<Structure> structureRegistryKey = structureRegistry.getResourceKey(structure).orElse(null);
 
 			if (structureRegistryKey == null) {
 				continue;
 			}
 
-			String structureId = structureRegistryKey.getValue().toString();
-			var biomeStorage = structure.getValidBiomes().getStorage();
+			String structureId = structureRegistryKey.location().toString();
+			var biomeStorage = structure.biomes().unwrap();
 			Set<String> defaultBiomes = new HashSet<>();
 
 			biomeStorage.mapLeft(biomeTagKey -> {
-				biomeRegistry.getEntryList(biomeTagKey).ifPresent(biomes -> {
+				biomeRegistry.getTag(biomeTagKey).ifPresent(biomes -> {
 					for (var biome : biomes) {
-						String biomeKey = biome.getKey().get().getValue().toString();
+						String biomeKey = biome.unwrapKey().get().location().toString();
 						defaultBiomes.add(biomeKey);
 					}
 				});
@@ -123,22 +123,21 @@ public final class WorldgenDataProvider
 			return Collections.emptyMap();
 		}
 
-		var structureSetRegistry = registryManager.get(RegistryKeys.STRUCTURE_SET);
+		var structureSetRegistry = registryManager.registryOrThrow(Registries.STRUCTURE_SET);
 		Map<String, StructureSetData> structureSets = new TreeMap<>();
 
 		for (StructureSet structureSet : structureSetRegistry) {
-			RegistryKey<StructureSet> structureSetRegistryKey = structureSetRegistry.getKey(structureSet).orElse(null);
+			ResourceKey<StructureSet> structureSetRegistryKey = structureSetRegistry.getResourceKey(structureSet).orElse(null);
 
 			if (structureSetRegistryKey == null) {
 				continue;
 			}
 
-			Identifier structureSetId = structureSetRegistryKey.getValue();
+			ResourceLocation structureSetId = structureSetRegistryKey.location();
 			String structureSetStringId = structureSetId.toString();
 
-			if (structureSet.placement() instanceof net.minecraft.world.gen.chunk.placement.RandomSpreadStructurePlacement randomSpreadStructurePlacement) {
-				structureSets.put(structureSetStringId, new StructureSetData(
-					((StructurifyRandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$getOriginalSpacing(), ((StructurifyRandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$getOriginalSeparation()));
+			if (structureSet.placement() instanceof RandomSpreadStructurePlacement randomSpreadStructurePlacement) {
+				structureSets.put(structureSetStringId, new StructureSetData(((StructurifyRandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$getOriginalSpacing(), ((StructurifyRandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$getOriginalSeparation()));
 			}
 		}
 
