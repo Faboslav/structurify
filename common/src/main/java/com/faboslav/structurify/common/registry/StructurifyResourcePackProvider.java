@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.registry;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import com.faboslav.structurify.common.modcompat.ModCompat;
 import dev.architectury.injectables.annotations.ExpectPlatform;
