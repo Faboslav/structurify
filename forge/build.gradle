@@ -42,7 +42,7 @@ loom {
 		mixinConfig "structurify-forge.mixins.json"
 
 		mixin {
-			useLegacyMixinAp = true
+			useLegacyMixinAp = false
 		}
 	}
 

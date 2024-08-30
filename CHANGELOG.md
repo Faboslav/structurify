@@ -1,3 +1,8 @@
+## 1.0.3
+
+- Fixed lock on biome blacklist type
+- Improved compatibility with other mods
+
 ## 1.0.2
 
 - 1.21.1 port

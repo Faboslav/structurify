@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.data;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import net.minecraft.core.registries.Registries;
@@ -8,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -100,15 +102,10 @@ public final class WorldgenDataProvider
 				return null;
 			});
 
-			Class<?> clazz = structure.getClass();
-			Field[] fields = clazz.getDeclaredFields();
 			boolean hasMaxDistanceFromCenter = false;
 
-			for (Field field : fields) {
-				if (field.getName().equals("maxDistanceFromCenter")) {
-					hasMaxDistanceFromCenter = true;
-					break;
-				}
+			if (structure instanceof JigsawStructure) {
+				hasMaxDistanceFromCenter = true;
 			}
 
 			structures.put(structureId, new StructureData(defaultBiomes, !hasMaxDistanceFromCenter));

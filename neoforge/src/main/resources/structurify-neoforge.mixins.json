@@ -3,6 +3,7 @@
 	"package": "com.faboslav.structurify.neoforge.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"minVersion": "0.8",
+	"plugin": "com.faboslav.structurify.common.mixin.plugin.StructurifyMixinPlugin",
 	"injectors": {
 		"defaultRequire": 1
 	},
