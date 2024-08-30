@@ -13,8 +13,7 @@
 		"LocateCommandMixin",
 		"RandomSpreadStructurePlacementMixin",
 		"ResourcePackManagerAccessor",
-		"StructureMixin",
-		"compat.RepurposedStructuresAdvancedRandomSpreadMixin"
+		"StructureMixin"
 	],
 	"client": [
 		"AnimatedDynamicTextureImageAccessor",
