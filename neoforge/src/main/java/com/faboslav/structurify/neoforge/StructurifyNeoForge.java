@@ -7,10 +7,11 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 
 @Mod(Structurify.MOD_ID)
 public final class StructurifyNeoForge
@@ -24,12 +25,19 @@ public final class StructurifyNeoForge
 			StructurifyNeoForgeClient.init(modEventBus, eventBus);
 		}
 
-		eventBus.addListener(StructurifyNeoForge::onServerStarting);
+		modEventBus.addListener(StructurifyNeoForge::onCommonSetup);
+
+		eventBus.addListener(StructurifyNeoForge::onServerAboutToStart);
 		eventBus.addListener(StructurifyNeoForge::onTagsUpdate);
 	}
 
+	private static void onCommonSetup(FMLCommonSetupEvent event) {
+		event.enqueueWork(() -> {
+			LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
+		});
+	}
 
-	private static void onServerStarting(ServerStartingEvent event) {
+	private static void onServerAboutToStart(ServerAboutToStartEvent event) {
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 		PrepareRegistriesEvent.EVENT.invoke(new PrepareRegistriesEvent(event.getServer().registryAccess().freeze()));
 	}

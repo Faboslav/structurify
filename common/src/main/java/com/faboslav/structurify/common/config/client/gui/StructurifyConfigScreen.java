@@ -15,14 +15,14 @@ import org.jetbrains.annotations.Nullable;
 public class StructurifyConfigScreen extends Screen
 {
 	private final Screen parent;
-	private final Screen structuresScreen;
-	private final Screen structureSetsScreen;
+	@Nullable
+	private Screen structuresScreen = null;
+	@Nullable
+	private Screen structureSetsScreen = null;
 
 	public StructurifyConfigScreen(@Nullable Screen parent) {
 		super(Component.translatable("structurify"));
 		this.parent = parent;
-		this.structuresScreen = StructuresConfigScreen.createConfigGui(Structurify.getConfig(), this);
-		this.structureSetsScreen = StructureSetsConfigScreen.createConfigGui(Structurify.getConfig(), this);
 	}
 
 	@Override
@@ -54,10 +54,18 @@ public class StructurifyConfigScreen extends Screen
 		grid.setPadding(3);
 
 		grid.addChild(new ImageButtonWidget(0, 0, 0, 0, Component.translatable("gui.structurify.structures.title"), Structurify.makeId("textures/gui/config/images/buttons/structures.webp"), btn -> {
+			if (this.structuresScreen == null) {
+				this.structuresScreen = StructuresConfigScreen.createConfigGui(Structurify.getConfig(), this);
+			}
+
 			this.minecraft.setScreen(this.structuresScreen);
 		}), 2, 1);
 
 		grid.addChild(new ImageButtonWidget(0, 0, 0, 0, Component.translatable("gui.structurify.structure_sets.title"), Structurify.makeId("textures/gui/config/images/buttons/structure_sets.webp"), btn -> {
+			if (this.structureSetsScreen == null) {
+				this.structureSetsScreen = StructureSetsConfigScreen.createConfigGui(Structurify.getConfig(), this);
+			}
+
 			this.minecraft.setScreen(this.structureSetsScreen);
 		}), 2, 1);
 
