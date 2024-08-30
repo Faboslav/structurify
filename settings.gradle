@@ -10,7 +10,7 @@ pluginManagement {
 }
 
 plugins {
-	id "dev.kikugie.stonecutter" version "0.5-alpha.4"
+	id "dev.kikugie.stonecutter" version "0.5-project-trees.3"
 }
 
 rootProject.name = 'structurify'
@@ -25,6 +25,7 @@ def dists = [
 def uniqueVersions = dists.values().flatten().unique().collect { "'${it}'" }.join(", ")
 
 stonecutter {
+	/*
 	for (def dist : dists.entrySet()) {
 		def platform = dist.getKey()
 		def platformVersions = dist.getValue()
@@ -42,5 +43,17 @@ stonecutter {
 		versions uniqueVersions.split(", ").collect { it.replaceAll("'", "") }
 	}
 
-	create(rootProject)
+	create(rootProject)*/
+
+	create(rootProject) {
+		versions("1.20.1", "1.21.1")
+		branch("common")
+		branch("fabric")
+		branch("forge") {
+			versions("1.20.1")
+		}
+		branch("neoforge") {
+			versions("1.21.1")
+		}
+	}
 }
