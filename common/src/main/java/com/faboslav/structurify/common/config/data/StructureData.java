@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class StructureData
 {
-	public static StructureData.BiomeBlacklistType DEFAULT_BIOME_BLACKLIST_TYPE = StructureData.BiomeBlacklistType.NONE;
+	public static StructureData.BiomeBlacklistType DEFAULT_BIOME_BLACKLIST_TYPE = BiomeBlacklistType.CENTER_PART;
 
 	private boolean isDisabled = false;
 	private final Set<String> biomes;

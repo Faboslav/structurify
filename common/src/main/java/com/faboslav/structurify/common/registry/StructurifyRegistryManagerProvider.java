@@ -48,7 +48,15 @@ public final class StructurifyRegistryManagerProvider
 			var saveLoader = Util.blockUntilDone(executor ->
 				WorldLoader.load(serverConfig, loadContextSupplierContext -> {
 					var registry = new MappedRegistry<>(Registries.LEVEL_STEM, Lifecycle.stable()).freeze();
-					var dimensionsConfig = loadContextSupplierContext.datapackWorldgen().registryOrThrow(Registries.WORLD_PRESET).getHolderOrThrow(WorldPresets.FLAT).value().createWorldDimensions().bake(registry);
+
+					var dimensionsConfig = loadContextSupplierContext
+						.datapackWorldgen()
+						.registryOrThrow(Registries.WORLD_PRESET)
+						.getHolderOrThrow(WorldPresets.FLAT)
+						.value()
+						.createWorldDimensions()
+						.bake(registry);
+
 					return new WorldLoader.DataLoadOutput<PrimaryLevelData>(null, dimensionsConfig.dimensionsRegistryAccess());
 				}, WorldStem::new, Util.backgroundExecutor(), executor)
 			).get();

@@ -16,6 +16,7 @@ import java.util.TreeMap;
 public final class StructurifyConfig
 {
 	public boolean isLoaded = false;
+	public boolean isLoading = false;
 	private final Path configPath = Path.of("config", Structurify.MOD_ID + ".json");
 	private final Path backupConfigPath = Path.of("config", Structurify.MOD_ID + "_backup.json");
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -44,9 +45,14 @@ public final class StructurifyConfig
 	}
 
 	public void load() {
-		Structurify.getLogger().info("Loading Structurify config...");
+		if(this.isLoading) {
+			return;
+		}
 
 		try {
+			Structurify.getLogger().info("Loading Structurify config...");
+			this.isLoading = true;
+
 			WorldgenDataProvider.reload();
 			this.structureData = WorldgenDataProvider.getStructures();
 			this.structureSetData = WorldgenDataProvider.getStructureSets();
@@ -186,6 +192,8 @@ public final class StructurifyConfig
 		} catch (Exception e) {
 			Structurify.getLogger().error("Failed to load Structurify config");
 			e.printStackTrace();
+		} finally {
+			this.isLoading = false;
 		}
 	}
 

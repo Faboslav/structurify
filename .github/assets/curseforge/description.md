@@ -47,6 +47,7 @@ Structurify is a configuration mod that makes configuring everything related to 
 * Presets for specific settings
 
 <br>
+<br>
 
 # 🖥️ In-Game configuration
 <hr>
@@ -81,6 +82,7 @@ Custom structure spread can be configured via global spacing and separation modi
 ![Structure Spread settings](https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/structure_spread_settings.webp)
 
 <br>
+<br>
 
 # 📝 JSON file configuration
 <hr>
@@ -90,8 +92,7 @@ This file is particularly useful for managing configurations on the server side.
 
 The default content of the structurify.json file looks like this:
 
-```json
-{
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">{
 	"general": {
 		"disabled_all_structures": false,
 		"enable_global_spacing_and_separation_modifier": true,
@@ -100,7 +101,7 @@ The default content of the structurify.json file looks like this:
 	"structures": [],
   	"structure_sets": []
 }
-```
+</code></pre></blockquote>
 
 <br>
 
@@ -119,25 +120,22 @@ The general section contains settings that apply globally across all structures 
 
 If set to `true` all structures will be disabled and will not be generated in the world regardless of the specific structure options.
 
-```json
-"disabled_all_structures": false
-```
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">"disabled_all_structures": false
+</code></pre></blockquote>
 
 ### enable_global_spacing_and_separation_modifier
 
 If set to `true` all structure sets (groups of structures) will have modified spacing and separation.
 
-```json
-"enable_global_spacing_and_separation_modifier": true
-```
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">"enable_global_spacing_and_separation_modifier": true
+</code></pre></blockquote>
 
 ### global_spacing_and_separation_modifier
 
 When set to a value different from `1.0`, all structure sets (groups of structures) will be either more concentrated or more spread out.
 
-```json
-"global_spacing_and_separation_modifier": 1.0
-```
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">"global_spacing_and_separation_modifier": 1.0
+</code></pre></blockquote>
 
 - `< 1.0` - more concentrated
 - `= 1.0` - unaffected (default value)
@@ -162,25 +160,22 @@ All structures related settings are saved to the `structures` field of the json 
 
 The unique identifier for the structure, typically in the format `mod_id:structure_name`.
 
-```json
-"name": "minecraft:shipwreck"
-```
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">"name": "minecraft:shipwreck"
+</code></pre></blockquote>
 
 ### is_disabled
 
 If set to `true` the structure will be disabled and will not be generated in the world.
 
-```json
-"is_disabled": false
-```
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">"is_disabled": false
+</code></pre></blockquote>
 
 ### biome_blacklist_type
 
 When set to a value different from `1.0`, all structure sets will be either more concentrated or more spread out.
 
-```json
-"biome_blacklist_type": "NONE"
-```
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">"biome_blacklist_type": "NONE"
+</code></pre></blockquote>
 
 - `NONE` - The blacklist will be inactive even if values are provided.
 - `CENTER_PART` - Only the starting piece (center part) of the structure cannot be in any of the blacklisted biomes.
@@ -190,9 +185,8 @@ When set to a value different from `1.0`, all structure sets will be either more
 
 Array of unique biome identifiers typically in the format `mod_id:biome_name`. An empty array means no biomes are blacklisted.
 
-```json
-"blacklisted_biomes": []
-```
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">"blacklisted_biomes": []
+</code></pre></blockquote>
 
 <br>
 
@@ -211,25 +205,22 @@ All structure sets related settings are saved to the `structure_sets` field of t
 
 The unique identifier for the structure, typically in the format `mod_id:structure_name`.
 
-```json
-"name": "minecraft:villages"
-```
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">"name": "minecraft:villages"
+</code></pre></blockquote>
 
 ### spacing
 
 Spacing is the average distance in chunks between structures within the same structure set (group of structures).
 
-```json
-"spacing": 34
-```
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">"spacing": 34
+</code></pre></blockquote>
 
 ### separation
 
 Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value.
 
-```json
-"spacing": 8
-```
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">"separation": 8
+</code></pre></blockquote>
 
 <br>
 
@@ -238,8 +229,7 @@ Separation is the minimum distance in chunks between structures within the same 
 
 Example of disabling all of the vanilla mineshaft structures can be done with the following configuration:
 
-```json
-{
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">{
 	"structures": [
 		{
 		  "name": "minecraft:mineshaft",
@@ -254,15 +244,13 @@ Example of disabling all of the vanilla mineshaft structures can be done with th
 		  "blacklisted_biomes": []
 		}
 	]
-}
-```
+}</code></pre></blockquote>
 
 <br>
 
 Forbidding the shipwreck structure to spawn in deep cold and frozen oceans can be done via the following configuration:
 
-```json
-{
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">{
 	"structures": [
 		{
 			"name": "minecraft:shipwreck",
@@ -274,15 +262,13 @@ Forbidding the shipwreck structure to spawn in deep cold and frozen oceans can b
 			]
 		}
 	]
-}
-```
+}</code></pre></blockquote>
 
 <br>
 
 With the following configuration plains village will not be generated at all if any part of the village would be placed on the river biome:
 
-```json
-{
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">{
 	"structures": [
 		{
 			"name": "minecraft:village_plains",
@@ -293,16 +279,13 @@ With the following configuration plains village will not be generated at all if 
 			]
 		}
 	]
-}
-```
+}</code></pre></blockquote>
 
 <br>
 
 To balance the effect of blacklisted biomes, the following configuration complements the previous example by compensating for blacklisted biomes with more frequent generations:
 
-
-```json
-{
+<blockquote><pre style="background-color: #262626;border: 1px solid #4d4d4d;"><code style="border: 0px solid;">{
 	"structure_sets": [
 		{
 			"name": "minecraft:villages",
@@ -310,9 +293,9 @@ To balance the effect of blacklisted biomes, the following configuration complem
 			"separation": 8
 		}
 	]
-}
-```
+}</code></pre></blockquote>
 
+<br>
 <br>
 
 # ⚙️ Compatibility
@@ -325,6 +308,7 @@ Structurify is designed to be fully compatible with most of the world generation
 * [Global Datapacks](https://www.curseforge.com/minecraft/mc-mods/global-datapacks)
 
 <br>
+<br>
 
 # 💬 Community
 <hr>
@@ -332,12 +316,14 @@ Structurify is designed to be fully compatible with most of the world generation
 Feel free to <a href="https://discord.gg/QGwFvvMQCn">join our community at the discord server</a> to chat, share your creations, ask any question or to simply be updated about the latest development of the mod and notified when the new release is out. Also don't hesitate to <a href="https://github.com/Faboslav/structurify/issues">report any crash or bug via GitHub issues</a>.
 
 <br>
+<br>
 
 # 👋 Support
 <hr>
 
 I will continue developing my mods as a hobby because I truly enjoy it. If you'd like to support me, you can do so on [Patreon](https://www.patreon.com/Faboslav) or [Ko-fi](https://ko-fi.com/faboslav). Your support is greatly appreciated.
 
+<br>
 <br>
 
 # 📜 License
