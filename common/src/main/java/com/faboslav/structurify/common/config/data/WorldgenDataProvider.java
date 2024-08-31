@@ -104,8 +104,20 @@ public final class WorldgenDataProvider
 
 			boolean hasMaxDistanceFromCenter = false;
 
-			if (structure instanceof JigsawStructure) {
+			if(structure instanceof JigsawStructure) {
 				hasMaxDistanceFromCenter = true;
+			}
+
+			if(!hasMaxDistanceFromCenter) {
+				Class<?> clazz = structure.getClass();
+				Field[] fields = clazz.getDeclaredFields();
+
+				for (Field field : fields) {
+					if (field.getName().equals("maxDistanceFromCenter")) {
+						hasMaxDistanceFromCenter = true;
+						break;
+					}
+				}
 			}
 
 			structures.put(structureId, new StructureData(defaultBiomes, !hasMaxDistanceFromCenter));

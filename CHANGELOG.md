@@ -1,3 +1,8 @@
+## 1.0.4
+
+- Fixed incompatibility with Placebo/Apothic Enchanting mods
+- Improved performance by creating the config screens lazily on demand
+
 ## 1.0.3
 
 - Fixed lock on biome blacklist type

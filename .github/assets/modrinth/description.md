@@ -220,7 +220,7 @@ Spacing is the average distance in chunks between structures within the same str
 Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value.
 
 ```json
-"spacing": 8
+"separation": 8
 ```
 
 <br>
