@@ -53,7 +53,7 @@ public final class StructurifyConfig
 			Structurify.getLogger().info("Loading Structurify config...");
 			this.isLoading = true;
 
-			WorldgenDataProvider.reload();
+			WorldgenDataProvider.loadWorldgenData();
 			this.structureData = WorldgenDataProvider.getStructures();
 			this.structureSetData = WorldgenDataProvider.getStructureSets();
 

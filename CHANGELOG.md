@@ -1,3 +1,9 @@
+## 1.0.5
+
+- Fixed incompatibility with GregTech CEu: Modern and some other mods
+- Improved performance up to 50% in some cases by correctly handling registry access
+- Prepared infrastructure for caching to possibly enhance performance further
+
 ## 1.0.4
 
 - Fixed incompatibility with Placebo/Apothic Enchanting mods

@@ -45,8 +45,7 @@ public final class WorldgenDataProvider
 		return structureSetData;
 	}
 
-	public static void reload() {
-		StructurifyRegistryManagerProvider.reloadRegistryManager();
+	public static void loadWorldgenData() {
 		biomes = loadBiomes();
 		structureData = loadStructures();
 		structureSetData = loadStructureSets();

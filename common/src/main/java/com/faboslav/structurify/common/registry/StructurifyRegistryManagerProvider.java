@@ -19,15 +19,23 @@ import org.jetbrains.annotations.Nullable;
 public final class StructurifyRegistryManagerProvider
 {
 	@Nullable
-	private static RegistryAccess.Frozen registryManager = null;
+	private static RegistryAccess registryManager = null;
 	private static boolean isLoading = false;
 
 	@Nullable
-	public static RegistryAccess.Frozen getRegistryManager() {
+	public static RegistryAccess getRegistryManager() {
+		if(registryManager == null) {
+			loadRegistryManager();
+		}
+
 		return registryManager;
 	}
 
-	public static void reloadRegistryManager() {
+	public static void setRegistryManager(RegistryAccess registryAccess) {
+		registryManager = registryAccess;
+	}
+
+	public static void loadRegistryManager() {
 		if (isLoading) {
 			return;
 		}
@@ -66,7 +74,7 @@ public final class StructurifyRegistryManagerProvider
 				return;
 			}
 
-			registryManager = saveLoader.registries().compositeAccess();
+			setRegistryManager(saveLoader.registries().compositeAccess());
 			Structurify.getLogger().info("Finished loading registry manager");
 		} catch (Exception exception) {
 			Structurify.getLogger().error("Failed to load registry manager.", exception);
