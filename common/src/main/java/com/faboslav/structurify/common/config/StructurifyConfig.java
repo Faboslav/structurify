@@ -45,7 +45,7 @@ public final class StructurifyConfig
 	}
 
 	public void load() {
-		if(this.isLoading) {
+		if (this.isLoading) {
 			return;
 		}
 

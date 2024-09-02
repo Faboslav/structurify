@@ -21,7 +21,7 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
 		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.compat.RepurposedStructuresAdvancedRandomSpreadMixin")) {
-			if(this.isClassAvailable("com.faboslav.structurify.forge.StructurifyForge")) {
+			if (this.isClassAvailable("com.faboslav.structurify.forge.StructurifyForge")) {
 				return false;
 			}
 

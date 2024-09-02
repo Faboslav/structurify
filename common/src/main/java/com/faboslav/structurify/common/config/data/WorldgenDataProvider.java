@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.config.data;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import net.minecraft.core.registries.Registries;
@@ -10,7 +9,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
-
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -103,11 +101,11 @@ public final class WorldgenDataProvider
 
 			boolean hasMaxDistanceFromCenter = false;
 
-			if(structure instanceof JigsawStructure) {
+			if (structure instanceof JigsawStructure) {
 				hasMaxDistanceFromCenter = true;
 			}
 
-			if(!hasMaxDistanceFromCenter) {
+			if (!hasMaxDistanceFromCenter) {
 				Class<?> clazz = structure.getClass();
 				Field[] fields = clazz.getDeclaredFields();
 

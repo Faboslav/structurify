@@ -24,7 +24,7 @@ public final class StructurifyRegistryManagerProvider
 
 	@Nullable
 	public static RegistryAccess getRegistryManager() {
-		if(registryManager == null) {
+		if (registryManager == null) {
 			loadRegistryManager();
 		}
 

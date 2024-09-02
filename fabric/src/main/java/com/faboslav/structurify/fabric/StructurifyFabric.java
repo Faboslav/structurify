@@ -21,7 +21,7 @@ public final class StructurifyFabric implements ModInitializer
 	}
 
 	private void onDatapackReload(RegistryAccess registryAccess, boolean isClient) {
-		if(isClient) {
+		if (isClient) {
 			return;
 		}
 
