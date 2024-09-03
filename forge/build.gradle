@@ -101,7 +101,7 @@ dependencies {
 	}
 
 	// Special compat
-	// modImplementation(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-forge")) { transitive = false }
+	modCompileOnly(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-forge")) { transitive = false }
 
 	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.imageio:imageio-core:3.10.0")))
 	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.imageio:imageio-webp:3.10.0")))

@@ -33,6 +33,7 @@ public final class StructureConfigScreen
 			.description(OptionDescription.of(Text.literal("gui.structurify.structures.general.description")));
 		*/
 
+		/*
 		var biomeBlacklistTypeOption = Option.<StructureData.BiomeBlacklistType>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"))
 			.binding(
@@ -46,9 +47,9 @@ public final class StructureConfigScreen
 
 		var biomeBlacklistTypeDescription = OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biome_blacklist_type.title"));
 
-		biomeBlacklistTypeOption.description(biomeBlacklistTypeDescription);
+		biomeBlacklistTypeOption.description(biomeBlacklistTypeDescription);*/
 
-		List<String> biomes = WorldgenDataProvider.getBiomes().stream().toList();
+		// List<String> biomes = WorldgenDataProvider.getBiomes().stream().toList();
 
 		/*
 		Map<String, String> biomeTranslatedBiomePair = WorldgenDataProvider.getBiomes().stream()
@@ -64,6 +65,7 @@ public final class StructureConfigScreen
 			));
 			*/
 
+		/*
 		var blackListedBiomesOption = ListOption.<String>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.blacklisted_biomes.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.blacklisted_biomes.description")))
@@ -74,12 +76,30 @@ public final class StructureConfigScreen
 				blacklistedBiomes -> Structurify.getConfig().getStructureData().get(structureId).setBlacklistedBiomes(blacklistedBiomes)
 			)
 			.controller(BiomeStringControllerBuilder::create)
+			.initial("").build();*/
+
+
+		//DropdownStringControllerBuilder
+		//structureCategoryBuilder.option(biomeBlacklistTypeOption.build());
+		//structureCategoryBuilder.group(blackListedBiomesOption);
+
+		var biomesOption = ListOption.<String>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.structure.biomes.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biomes.description")))
+			.insertEntriesAtEnd(true)
+			.binding(
+				Structurify.getConfig().getStructureData().get(structureId).getDefaultBiomes().stream().toList(),
+				() -> Structurify.getConfig().getStructureData().get(structureId).getBiomes(),
+				biomes -> Structurify.getConfig().getStructureData().get(structureId).setBiomes(biomes)
+			)
+			.controller(BiomeStringControllerBuilder::create)
 			.initial("").build();
 
 
 		//DropdownStringControllerBuilder
-		structureCategoryBuilder.option(biomeBlacklistTypeOption.build());
-		structureCategoryBuilder.group(blackListedBiomesOption);
+		//structureCategoryBuilder.option(biomeBlacklistTypeOption.build());
+		structureCategoryBuilder.group(biomesOption);
+		//structureCategoryBuilder.group(whitelistedBiomesOption);
 
 		yacl.category(structureCategoryBuilder.build());
 

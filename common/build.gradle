@@ -52,8 +52,11 @@ dependencies {
 		modCompileOnly(modrinth("globalpacks", "${prop('global_packs_version')}"))
 	}
 
+	// Yungs api
+	modImplementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:${prop('yungsapi_minecraft_version')}-Fabric-${prop('yungsapi_version')}")
+
 	// Repurposed Structures
-	modCompileOnly(modrinth("repurposed-structures-fabric", "${prop('repurposed_structures_version')}-fabric"))
+	modImplementation(modrinth("repurposed-structures-fabric", "${prop('repurposed_structures_version')}-fabric"))
 }
 
 processResources {

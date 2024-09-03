@@ -28,6 +28,8 @@
 	"gui.structurify.structures.structure.biome_blacklist_type.all_parts": "All Parts",
 	"gui.structurify.structures.structure.blacklisted_biomes.title": "Blacklisted biomes",
 	"gui.structurify.structures.structure.blacklisted_biomes.description": "Choose in which biomes structure should not generate.",
+	"gui.structurify.structures.structure.whitelisted_biomes.title": "Whitelisted biomes",
+	"gui.structurify.structures.structure.whitelisted_biomes.description": "Choose in which biomes structure should generate in addition to the original biomes.",
 	"gui.structurify.structure_sets.warning": "Bear in mind that each structure set may have unique placement rules and overrides defined by individual mods and datapacks, which means that changing this value might not always produce the intended structure spread.",
 	"gui.structurify.structure_sets_category.title": "Structure Spread settings",
 	"gui.structurify.structure_sets_category.description": "Configure custom structure spread either via global spacing and separation modifier or per structure specific spacing and separation values.",

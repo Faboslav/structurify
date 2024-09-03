@@ -6,17 +6,15 @@ import java.util.Set;
 
 public class StructureData
 {
-	public static StructureData.BiomeBlacklistType DEFAULT_BIOME_BLACKLIST_TYPE = BiomeBlacklistType.CENTER_PART;
-
 	private boolean isDisabled = false;
-	private final Set<String> biomes;
-	private List<String> blacklistedBiomes = new ArrayList<>();
-	private BiomeBlacklistType biomeBlacklistType = DEFAULT_BIOME_BLACKLIST_TYPE;
-	private boolean isBiomeBlacklistTypeLocked = false;
+	private final Set<String> defaultBiomes;
+	private boolean enableBiomeCheck = false;
+	private int biomeCheckDistance;
+	private List<String> biomes = new ArrayList<>();
 
-	public StructureData(Set<String> biomes, boolean isBiomeBlacklistTypeLocked) {
-		this.biomes = biomes;
-		this.isBiomeBlacklistTypeLocked = isBiomeBlacklistTypeLocked;
+	public StructureData(Set<String> biomes, int biomeCheckDistance) {
+		this.defaultBiomes = biomes;
+		this.biomeCheckDistance = biomeCheckDistance;
 	}
 
 	public boolean isDisabled() {
@@ -27,38 +25,31 @@ public class StructureData
 		this.isDisabled = isDisabled;
 	}
 
-	public Set<String> getBiomes() {
+	public boolean isBiomeCheckEnabled() {
+		return this.enableBiomeCheck;
+	}
+
+	public void setEnableBiomeCheck(boolean enableBiomeCheck) {
+		this.enableBiomeCheck = enableBiomeCheck;
+	}
+
+	public int getBiomeCheckDistance() {
+		return this.biomeCheckDistance;
+	}
+
+	public void setBiomeCheckDistance(int biomeCheckDistance) {
+		this.biomeCheckDistance = biomeCheckDistance;
+	}
+
+	public Set<String> getDefaultBiomes() {
+		return this.defaultBiomes;
+	}
+
+	public List<String> getBiomes() {
 		return this.biomes;
 	}
 
-	public List<String> getBlacklistedBiomes() {
-		return this.blacklistedBiomes;
-	}
-
-	public void setBlacklistedBiomes(List<String> blacklistedBiomes) {
-		this.blacklistedBiomes = blacklistedBiomes;
-	}
-
-	public BiomeBlacklistType getBiomeBlacklistType() {
-		return this.biomeBlacklistType;
-	}
-
-	public void setBiomeBlacklistType(BiomeBlacklistType biomeBlacklistType) {
-		this.biomeBlacklistType = biomeBlacklistType;
-	}
-
-	public void lockBlacklistType() {
-		this.isBiomeBlacklistTypeLocked = true;
-	}
-
-	public boolean isBiomeBlacklistTypeLocked() {
-		return this.isBiomeBlacklistTypeLocked;
-	}
-
-	public enum BiomeBlacklistType
-	{
-		NONE,
-		CENTER_PART,
-		ALL_PARTS;
+	public void setBiomes(List<String> biomes) {
+		this.biomes = biomes;
 	}
 }

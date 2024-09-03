@@ -42,7 +42,7 @@ public final class StructurifyRegistryUpdater
 			return;
 		}
 
-		for (var structure : structureRegistry) {
+		for (Structure structure : structureRegistry) {
 			ResourceKey<Structure> structureRegistryKey = structureRegistry.getResourceKey(structure).orElse(null);
 
 			if (structureRegistryKey == null) {

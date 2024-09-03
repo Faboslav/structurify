@@ -26,5 +26,6 @@ public interface ModCompat
 	enum Type
 	{
 		CUSTOM_RESOURCE_PACK_PROVIDERS,
+		MOD
 	}
 }

@@ -1,7 +1,11 @@
 package com.faboslav.structurify.common.config.data;
 
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
+import com.faboslav.structurify.common.mixin.structure.jigsaw.MaxDistanceFromCenterAccessor;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+import com.faboslav.structurify.common.util.Platform;
+import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
+import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -99,25 +103,33 @@ public final class WorldgenDataProvider
 				return null;
 			});
 
-			boolean hasMaxDistanceFromCenter = false;
+			int biomeRadiusCheck = 0;
 
 			if (structure instanceof JigsawStructure) {
-				hasMaxDistanceFromCenter = true;
-			}
-
-			if (!hasMaxDistanceFromCenter) {
+				biomeRadiusCheck = ((MaxDistanceFromCenterAccessor) structure).structurify$getMaxDistanceFromCenter();
+			} else if (Platform.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+				biomeRadiusCheck = ((YungJigsawStructure) structure).maxDistanceFromCenter;
+			} else if (Platform.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+				biomeRadiusCheck = ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
+			} else {
 				Class<?> clazz = structure.getClass();
 				Field[] fields = clazz.getDeclaredFields();
 
 				for (Field field : fields) {
 					if (field.getName().equals("maxDistanceFromCenter")) {
-						hasMaxDistanceFromCenter = true;
+						field.setAccessible(true);
+
+						try {
+							biomeRadiusCheck = field.getInt(structure);
+						} catch (IllegalAccessException e) {
+						}
+
 						break;
 					}
 				}
 			}
 
-			structures.put(structureId, new StructureData(defaultBiomes, !hasMaxDistanceFromCenter));
+			structures.put(structureId, new StructureData(defaultBiomes, biomeRadiusCheck));
 		}
 
 		return structures;
