@@ -10,7 +10,7 @@ pluginManagement {
 }
 
 plugins {
-	id "dev.kikugie.stonecutter" version "0.5-project-trees.4"
+	id "dev.kikugie.stonecutter" version "0.5-project-trees.5"
 }
 
 rootProject.name = 'structurify'
@@ -45,15 +45,20 @@ stonecutter {
 
 	create(rootProject)*/
 
+
 	create(rootProject) {
 		versions("1.20.1", "1.21.1")
-		branch("common")
-		branch("fabric")
-		branch("forge") {
-			versions("1.20.1")
-		}
-		branch("neoforge") {
-			versions("1.21.1")
-		}
+		branch("common", b -> {
+			b.versions("1.20.1", "1.21.1")
+		})
+		branch("fabric", b -> {
+			b.versions("1.20.1", "1.21.1")
+		})
+		branch("forge", b -> {
+			b.versions("1.20.1")
+		})
+		branch("neoforge", b -> {
+			b.versions("1.21.1")
+		})
 	}
 }
