@@ -1,3 +1,9 @@
+## 1.0.6
+
+- Improved GUI of structure settings
+- In structure settings it is now possible to add and/or remove specific biomes
+- 
+
 ## 1.0.5
 
 - Fixed incompatibility with GregTech CEu: Modern and some other mods

@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.data;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.mixin.structure.jigsaw.MaxDistanceFromCenterAccessor;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
@@ -12,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -120,8 +122,14 @@ public final class WorldgenDataProvider
 						field.setAccessible(true);
 
 						try {
-							biomeRadiusCheck = field.getInt(structure);
-						} catch (IllegalAccessException e) {
+							if (Optional.class.isAssignableFrom(field.getType())) {
+								Optional<?> optionalValue = (Optional<?>) field.get(structure);
+								biomeRadiusCheck = optionalValue.map(val -> (Integer) val).orElse(0);
+							} else {
+								biomeRadiusCheck = field.getInt(structure);
+							}
+						} catch (IllegalAccessException | IllegalArgumentException e) {
+							Structurify.getLogger().error(e.getMessage());
 						}
 
 						break;

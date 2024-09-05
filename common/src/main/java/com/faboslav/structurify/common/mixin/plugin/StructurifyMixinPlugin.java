@@ -22,18 +22,7 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.compat.RepurposedStructuresAdvancedRandomSpreadMixin")) {
-			if (this.isClassAvailable("com.faboslav.structurify.forge.StructurifyForge")) {
-				Structurify.getLogger().info("deny");
-				return false;
-			}
-
-			Structurify.getLogger().info("loading: " + this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread"));
-			return this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread");
-		}
-
-		if (mixinClassName.equals("com.faboslav.structurify.forge.mixin.compat.RepurposedStructuresAdvancedRandomSpreadMixin")) {
-			Structurify.getLogger().info("loading2: " + this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread"));
+		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.compat.RepurposedStructuresModifySpreadMixin")) {
 			return this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread");
 		}
 
