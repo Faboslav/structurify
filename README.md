@@ -44,8 +44,6 @@ Possible future features that can be implemented:
 * Disable individual structure pieces
 * Change weight of individual structure pieces
 * Utility commands related to the structures
-* Disable specific structure tags
-* Biome Tags in the biome blacklist
 * Presets for specific settings
 
 <br>

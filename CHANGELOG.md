@@ -1,7 +1,7 @@
 ## 1.0.6
 
 - Improved GUI of structure settings
-- In structure settings it is now possible to add and/or remove specific biomes
+- Removed biome blacklist in favor of direct biome editing (allowing to add or remove any biome) along with the optional biome check feature
 - Fixed incompatibility with Repurposed Structures
 
 ## 1.0.5
