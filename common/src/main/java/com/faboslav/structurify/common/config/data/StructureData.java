@@ -7,13 +7,16 @@ import java.util.Set;
 public class StructureData
 {
 	private boolean isDisabled = false;
-	private final Set<String> defaultBiomes;
+	private final List<String> defaultBiomes;
 	private boolean enableBiomeCheck = false;
+	private int defaultBiomeCheckDistance;
 	private int biomeCheckDistance;
-	private List<String> biomes = new ArrayList<>();
+	private List<String> biomes;
 
-	public StructureData(Set<String> biomes, int biomeCheckDistance) {
+	public StructureData(List<String> biomes, int biomeCheckDistance) {
 		this.defaultBiomes = biomes;
+		this.biomes = biomes.stream().toList();
+		this.defaultBiomeCheckDistance = biomeCheckDistance;
 		this.biomeCheckDistance = biomeCheckDistance;
 	}
 
@@ -33,6 +36,10 @@ public class StructureData
 		this.enableBiomeCheck = enableBiomeCheck;
 	}
 
+	public int getDefaultBiomeCheckDistance() {
+		return this.defaultBiomeCheckDistance;
+	}
+
 	public int getBiomeCheckDistance() {
 		return this.biomeCheckDistance;
 	}
@@ -41,7 +48,7 @@ public class StructureData
 		this.biomeCheckDistance = biomeCheckDistance;
 	}
 
-	public Set<String> getDefaultBiomes() {
+	public List<String> getDefaultBiomes() {
 		return this.defaultBiomes;
 	}
 

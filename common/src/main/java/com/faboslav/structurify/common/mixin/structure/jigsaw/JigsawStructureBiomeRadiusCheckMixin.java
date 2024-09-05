@@ -71,7 +71,7 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 			return original.call(generationContext);
 		}
 
-		var biomeCheckDistance = structureData.getBiomeCheckDistance();
+		var biomeCheckDistance = (int) Math.ceil(structureData.getBiomeCheckDistance() / 16.0);
 
 		if (biomeCheckDistance != 0 && !(generationContext.biomeSource() instanceof CheckerboardColumnBiomeSource)) {
 			ChunkPos chunkPos = generationContext.chunkPos();

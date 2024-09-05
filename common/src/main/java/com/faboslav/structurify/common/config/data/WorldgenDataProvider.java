@@ -90,7 +90,7 @@ public final class WorldgenDataProvider
 
 			String structureId = structureRegistryKey.location().toString();
 			var biomeStorage = structure.biomes().unwrap();
-			Set<String> defaultBiomes = new HashSet<>();
+			var defaultBiomes = new ArrayList<String>();
 
 			biomeStorage.mapLeft(biomeTagKey -> {
 				biomeRegistry.getTag(biomeTagKey).ifPresent(biomes -> {

@@ -51,7 +51,7 @@ public abstract class StructureModifyBiomesMixin implements StructurifyStructure
 		ArrayList<Holder<Biome>> biomeHolders = new ArrayList<>();
 
 		for(var biomeId : biomes) {
-			var biomeKey = ResourceKey.create(Registries.BIOME, Structurify.makeId(biomeId));
+			var biomeKey = ResourceKey.create(Registries.BIOME, Structurify.makeVanillaId(biomeId));
 			var biomeHolder = biomeRegistry.getHolder(biomeKey).orElse(null);
 
 			if (biomeHolder == null) {

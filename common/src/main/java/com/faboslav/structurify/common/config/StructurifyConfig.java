@@ -8,10 +8,7 @@ import com.google.gson.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public final class StructurifyConfig
 {
@@ -242,7 +239,21 @@ public final class StructurifyConfig
 		JsonArray structures = new JsonArray();
 
 		this.structureData.entrySet().stream()
-			.filter(entry -> entry.getValue().isDisabled() || !entry.getValue().getBiomes().isEmpty() || entry.getValue().isBiomeCheckEnabled())
+			.filter(entry -> {
+				if(entry.getValue().isDisabled()) {
+					return true;
+				} else if(entry.getValue().isBiomeCheckEnabled()) {
+					return true;
+				}
+
+				var biomes = new ArrayList<>(entry.getValue().getBiomes());
+				var defaultBiomes = new ArrayList<>(entry.getValue().getDefaultBiomes());
+
+				Collections.sort(biomes);
+				Collections.sort(defaultBiomes);
+
+				return !biomes.equals(defaultBiomes);
+			})
 			.forEach(entry -> {
 				JsonObject structure = new JsonObject();
 				structure.addProperty("name", entry.getKey());
