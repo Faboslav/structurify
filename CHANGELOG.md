@@ -2,7 +2,7 @@
 
 - Improved GUI of structure settings
 - In structure settings it is now possible to add and/or remove specific biomes
-- 
+- Fixed incompatibility with Repurposed Structures
 
 ## 1.0.5
 
