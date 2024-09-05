@@ -240,9 +240,9 @@ public final class StructurifyConfig
 
 		this.structureData.entrySet().stream()
 			.filter(entry -> {
-				if(entry.getValue().isDisabled()) {
+				if (entry.getValue().isDisabled()) {
 					return true;
-				} else if(entry.getValue().isBiomeCheckEnabled()) {
+				} else if (entry.getValue().isBiomeCheckEnabled()) {
 					return true;
 				}
 

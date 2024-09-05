@@ -2,22 +2,14 @@ package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
-import com.faboslav.structurify.common.config.data.StructureData;
-import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
-import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
-import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public final class StructureConfigScreen

@@ -1,25 +1,25 @@
 {
-  "required": true,
-  "package": "com.faboslav.structurify.common.mixin",
-  "compatibilityLevel": "JAVA_${modJavaVersion}",
-  "minVersion": "0.8",
-  "plugin": "com.faboslav.structurify.common.mixin.plugin.StructurifyMixinPlugin",
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "mixins": [
-    "ChunkGeneratorMixin",
-    "LocateCommandMixin",
-    "RandomSpreadStructurePlacementMixin",
-    "ResourcePackManagerAccessor",
-    "StructureMixin",
-    "compat.RepurposedStructuresModifySpreadMixin",
-    "structure.StructureModifyBiomesMixin",
-    "structure.jigsaw.JigsawStructureBiomeRadiusCheckMixin",
-    "structure.jigsaw.MaxDistanceFromCenterAccessor"
-  ],
-  "client": [
-    "AnimatedDynamicTextureImageAccessor",
-    "ClickableWidgetAccessor"
+	"required": true,
+	"package": "com.faboslav.structurify.common.mixin",
+	"compatibilityLevel": "JAVA_${modJavaVersion}",
+	"minVersion": "0.8",
+	"plugin": "com.faboslav.structurify.common.mixin.plugin.StructurifyMixinPlugin",
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"mixins": [
+		"ChunkGeneratorMixin",
+		"LocateCommandMixin",
+		"RandomSpreadStructurePlacementMixin",
+		"ResourcePackManagerAccessor",
+		"StructureMixin",
+		"compat.RepurposedStructuresModifySpreadMixin",
+		"structure.StructureModifyBiomesMixin",
+		"structure.jigsaw.JigsawStructureBiomeRadiusCheckMixin",
+		"structure.jigsaw.MaxDistanceFromCenterAccessor"
+	],
+	"client": [
+		"AnimatedDynamicTextureImageAccessor",
+		"ClickableWidgetAccessor"
 	]
 }

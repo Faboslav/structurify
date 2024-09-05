@@ -3,20 +3,15 @@ package com.faboslav.structurify.common.config.client.api.controller.element;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.client.api.controller.BiomeStringController;
 import com.faboslav.structurify.common.util.LanguageUtil;
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.dropdown.AbstractDropdownControllerElement;
-import dev.isxander.yacl3.gui.controllers.dropdown.ItemControllerElement;
 import dev.isxander.yacl3.gui.image.impl.ResourceTextureImage;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-
 import java.io.FileNotFoundException;
 import java.util.List;
 

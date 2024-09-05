@@ -1,8 +1,6 @@
 package com.faboslav.structurify.common.config.data;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class StructureData
 {

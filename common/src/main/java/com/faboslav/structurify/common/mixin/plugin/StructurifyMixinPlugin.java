@@ -1,11 +1,9 @@
 package com.faboslav.structurify.common.mixin.plugin;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.util.Platform;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
-
 import java.util.List;
 import java.util.Set;
 
