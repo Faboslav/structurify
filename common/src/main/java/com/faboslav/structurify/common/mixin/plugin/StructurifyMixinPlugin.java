@@ -1,9 +1,9 @@
 package com.faboslav.structurify.common.mixin.plugin;
 
+import com.faboslav.structurify.common.Structurify;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
-
 import java.util.List;
 import java.util.Set;
 
@@ -20,17 +20,15 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.compat.RepurposedStructuresAdvancedRandomSpreadMixin")) {
-			if(this.isClassAvailable("com.faboslav.structurify.forge.StructurifyForge")) {
-				return false;
-			}
-
+		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.compat.RepurposedStructuresModifySpreadMixin")) {
 			return this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread");
 		}
 
 		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.AnimatedDynamicTextureImageAccessor")) {
 			return isClassAvailable("dev.isxander.yacl3.gui.image.impl.AnimatedDynamicTextureImage");
 		}
+
+		Structurify.getLogger().info(mixinClassName);
 
 		return true;
 	}

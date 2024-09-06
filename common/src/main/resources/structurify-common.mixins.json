@@ -9,11 +9,14 @@
 	},
 	"mixins": [
 		"ChunkGeneratorMixin",
-		"JigsawStructureMixin",
 		"LocateCommandMixin",
 		"RandomSpreadStructurePlacementMixin",
 		"ResourcePackManagerAccessor",
-		"StructureMixin"
+		"StructureMixin",
+		"compat.RepurposedStructuresModifySpreadMixin",
+		"structure.StructureModifyBiomesMixin",
+		"structure.jigsaw.JigsawStructureBiomeRadiusCheckMixin",
+		"structure.jigsaw.MaxDistanceFromCenterAccessor"
 	],
 	"client": [
 		"AnimatedDynamicTextureImageAccessor",

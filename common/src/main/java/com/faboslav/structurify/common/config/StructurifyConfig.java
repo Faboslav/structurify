@@ -8,10 +8,7 @@ import com.google.gson.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public final class StructurifyConfig
 {
@@ -45,7 +42,7 @@ public final class StructurifyConfig
 	}
 
 	public void load() {
-		if(this.isLoading) {
+		if (this.isLoading) {
 			return;
 		}
 
@@ -53,7 +50,7 @@ public final class StructurifyConfig
 			Structurify.getLogger().info("Loading Structurify config...");
 			this.isLoading = true;
 
-			WorldgenDataProvider.reload();
+			WorldgenDataProvider.loadWorldgenData();
 			this.structureData = WorldgenDataProvider.getStructures();
 			this.structureSetData = WorldgenDataProvider.getStructureSets();
 
@@ -100,8 +97,9 @@ public final class StructurifyConfig
 					if (
 						!structureJson.has("name")
 						|| !structureJson.has("is_disabled")
-						|| !structureJson.has("biome_blacklist_type")
-						|| !structureJson.has("blacklisted_biomes")
+						|| !structureJson.has("biomes")
+						|| !structureJson.has("enable_biome_check")
+						|| !structureJson.has("biome_check_distance")
 					) {
 						Structurify.getLogger().info("Found invalid structure entry, skipping.");
 						continue;
@@ -115,29 +113,24 @@ public final class StructurifyConfig
 					var structureData = this.structureData.get(structureJson.get("name").getAsString());
 					structureData.setDisabled(structureJson.get("is_disabled").getAsBoolean());
 
-					String possibleBiomeBlacklistType = structureJson.get("biome_blacklist_type").getAsString();
-					StructureData.BiomeBlacklistType biomeBlacklistType;
+					var biomesJson = structureJson.getAsJsonArray("biomes");
+					List<String> biomes = new ArrayList<>();
 
-					try {
-						biomeBlacklistType = StructureData.BiomeBlacklistType.valueOf(possibleBiomeBlacklistType);
-					} catch (IllegalArgumentException ignored) {
-						biomeBlacklistType = StructureData.DEFAULT_BIOME_BLACKLIST_TYPE;
-					}
-
-					structureData.setBiomeBlacklistType(biomeBlacklistType);
-
-					var blacklistedBiomesJson = structureJson.getAsJsonArray("blacklisted_biomes");
-					List<String> blacklistedBiomes = new ArrayList<>();
-
-					for (JsonElement blacklistedBiome : blacklistedBiomesJson) {
-						if (blacklistedBiomes.contains(blacklistedBiome.getAsString())) {
+					for (JsonElement biome : biomesJson) {
+						if (biomes.contains(biome.getAsString())) {
 							continue;
 						}
 
-						blacklistedBiomes.add(blacklistedBiome.getAsString());
+						biomes.add(biome.getAsString());
 					}
 
-					structureData.setBlacklistedBiomes(blacklistedBiomes);
+					structureData.setBiomes(biomes);
+
+					var isBiomeCheckEnabled = structureJson.get("enable_biome_check").getAsBoolean();
+					structureData.setEnableBiomeCheck(isBiomeCheckEnabled);
+
+					var biomeCheckDistance = structureJson.get("biome_check_distance").getAsInt();
+					structureData.setBiomeCheckDistance(biomeCheckDistance);
 				}
 			}
 
@@ -246,17 +239,33 @@ public final class StructurifyConfig
 		JsonArray structures = new JsonArray();
 
 		this.structureData.entrySet().stream()
-			.filter(entry -> entry.getValue().isDisabled() || !entry.getValue().getBlacklistedBiomes().isEmpty())
+			.filter(entry -> {
+				if (entry.getValue().isDisabled()) {
+					return true;
+				} else if (entry.getValue().isBiomeCheckEnabled()) {
+					return true;
+				}
+
+				var biomes = new ArrayList<>(entry.getValue().getBiomes());
+				var defaultBiomes = new ArrayList<>(entry.getValue().getDefaultBiomes());
+
+				Collections.sort(biomes);
+				Collections.sort(defaultBiomes);
+
+				return !biomes.equals(defaultBiomes);
+			})
 			.forEach(entry -> {
 				JsonObject structure = new JsonObject();
 				structure.addProperty("name", entry.getKey());
 				structure.addProperty("is_disabled", entry.getValue().isDisabled());
-				structure.addProperty("biome_blacklist_type", entry.getValue().getBiomeBlacklistType().toString());
 
 				JsonArray blacklistedBiomes = new JsonArray();
-				entry.getValue().getBlacklistedBiomes().stream().distinct().forEach(blacklistedBiomes::add);
-				structure.add("blacklisted_biomes", blacklistedBiomes);
+				entry.getValue().getBiomes().stream().distinct().forEach(blacklistedBiomes::add);
+				structure.add("biomes", blacklistedBiomes);
 				structures.add(structure);
+
+				structure.addProperty("enable_biome_check", entry.getValue().isBiomeCheckEnabled());
+				structure.addProperty("biome_check_distance", entry.getValue().getBiomeCheckDistance());
 			});
 
 		json.add("structures", structures);

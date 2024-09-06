@@ -2,7 +2,11 @@ package com.faboslav.structurify.common.config.data;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
+import com.faboslav.structurify.common.mixin.structure.jigsaw.MaxDistanceFromCenterAccessor;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+import com.faboslav.structurify.common.util.Platform;
+import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
+import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -10,7 +14,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
-
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -45,8 +48,7 @@ public final class WorldgenDataProvider
 		return structureSetData;
 	}
 
-	public static void reload() {
-		StructurifyRegistryManagerProvider.reloadRegistryManager();
+	public static void loadWorldgenData() {
 		biomes = loadBiomes();
 		structureData = loadStructures();
 		structureSetData = loadStructureSets();
@@ -89,7 +91,7 @@ public final class WorldgenDataProvider
 
 			String structureId = structureRegistryKey.location().toString();
 			var biomeStorage = structure.biomes().unwrap();
-			Set<String> defaultBiomes = new HashSet<>();
+			var defaultBiomes = new ArrayList<String>();
 
 			biomeStorage.mapLeft(biomeTagKey -> {
 				biomeRegistry.getTag(biomeTagKey).ifPresent(biomes -> {
@@ -102,25 +104,39 @@ public final class WorldgenDataProvider
 				return null;
 			});
 
-			boolean hasMaxDistanceFromCenter = false;
+			int biomeRadiusCheck = 0;
 
-			if(structure instanceof JigsawStructure) {
-				hasMaxDistanceFromCenter = true;
-			}
-
-			if(!hasMaxDistanceFromCenter) {
+			if (structure instanceof JigsawStructure) {
+				biomeRadiusCheck = ((MaxDistanceFromCenterAccessor) structure).structurify$getMaxDistanceFromCenter();
+			} else if (Platform.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+				biomeRadiusCheck = ((YungJigsawStructure) structure).maxDistanceFromCenter;
+			} else if (Platform.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+				biomeRadiusCheck = ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
+			} else {
 				Class<?> clazz = structure.getClass();
 				Field[] fields = clazz.getDeclaredFields();
 
 				for (Field field : fields) {
 					if (field.getName().equals("maxDistanceFromCenter")) {
-						hasMaxDistanceFromCenter = true;
+						field.setAccessible(true);
+
+						try {
+							if (Optional.class.isAssignableFrom(field.getType())) {
+								Optional<?> optionalValue = (Optional<?>) field.get(structure);
+								biomeRadiusCheck = optionalValue.map(val -> (Integer) val).orElse(0);
+							} else {
+								biomeRadiusCheck = field.getInt(structure);
+							}
+						} catch (IllegalAccessException | IllegalArgumentException e) {
+							Structurify.getLogger().error(e.getMessage());
+						}
+
 						break;
 					}
 				}
 			}
 
-			structures.put(structureId, new StructureData(defaultBiomes, !hasMaxDistanceFromCenter));
+			structures.put(structureId, new StructureData(defaultBiomes, biomeRadiusCheck));
 		}
 
 		return structures;
