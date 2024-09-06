@@ -81,8 +81,6 @@ dependencies {
 	// Compat
 	modCompileOnly(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-neoforge")) { transitive = false }
 
-	def availableVersions = stonecutter_enabled_neoforge_versions.split(',').collect { it.trim() }
-
 	common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
 	shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionNeoForge')) { transitive false }
 }

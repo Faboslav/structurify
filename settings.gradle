@@ -16,49 +16,22 @@ plugins {
 rootProject.name = 'structurify'
 
 def dists = [
-	common: stonecutter_enabled_common_versions.split(',').collect { it.trim() },
-	fabric: stonecutter_enabled_fabric_versions.split(',').collect { it.trim() },
-	forge: stonecutter_enabled_forge_versions.split(',').collect { it.trim() },
-	neoforge: stonecutter_enabled_neoforge_versions.split(',').collect { it.trim() }
+	common: stonecutter_enabled_common_versions.split(',').collect { it.trim() }.toList(),
+	fabric: stonecutter_enabled_fabric_versions.split(',').collect { it.trim() }.toList(),
+	forge: stonecutter_enabled_forge_versions.split(',').collect { it.trim() }.toList(),
+	neoforge: stonecutter_enabled_neoforge_versions.split(',').collect { it.trim() }.toList(),
 ]
 
-def uniqueVersions = dists.values().flatten().unique().collect { "'${it}'" }.join(", ")
+def uniqueVersions = dists.values().flatten().collect { it.trim() }.unique()
 
 stonecutter {
-	/*
-	for (def dist : dists.entrySet()) {
-		def platform = dist.getKey()
-		def platformVersions = dist.getValue()
-
-		include(platform)
-
-		shared {
-			versions(platformVersions)
-		}
-
-		create(project(":$platform"))
-	}
-
-	shared {
-		versions uniqueVersions.split(", ").collect { it.replaceAll("'", "") }
-	}
-
-	create(rootProject)*/
-
-
 	create(rootProject) {
-		versions("1.20.1", "1.21.1")
-		branch("common", b -> {
-			b.versions("1.20.1", "1.21.1")
-		})
-		branch("fabric", b -> {
-			b.versions("1.20.1", "1.21.1")
-		})
-		branch("forge", b -> {
-			b.versions("1.20.1")
-		})
-		branch("neoforge", b -> {
-			b.versions("1.21.1")
-		})
+		versions(uniqueVersions as String[])
+
+		dists.each { branchName, branchVersions ->
+			branch(branchName, b -> {
+				b.versions(branchVersions as String[])
+			})
+		}
 	}
 }
