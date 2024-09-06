@@ -112,15 +112,8 @@ dependencies {
 	forgeRuntimeLibrary((implementation include("org.quiltmc.parsers:json:0.2.1")))
 	forgeRuntimeLibrary((implementation include("org.quiltmc.parsers:gson:0.2.1")))
 
-	def availableVersions = stonecutter_enabled_forge_versions.split(',').collect { it.trim() }
-
-	if (!availableVersions.contains(currentRootVersion) && minecraftVersion != currentRootVersion) {
-		common(project(path: ":common:$currentRootVersion", configuration: 'namedElements')) { transitive false }
-		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionForge')) { transitive false }
-	} else {
-		common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
-		shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionForge')) { transitive false }
-	}
+	common(project(path: ":common:$subproject", configuration: 'namedElements')) { transitive false }
+	shadowBundle(project(path: ":common:$subproject", configuration: 'transformProductionForge')) { transitive false }
 }
 
 processResources {
@@ -190,12 +183,5 @@ repositories {
 		content {
 			includeGroup("maven.modrinth")
 		}
-	}
-}
-
-if (stonecutter.current.isActive) {
-	rootProject.tasks.register("buildActiveForge") {
-		group = "project"
-		dependsOn(tasks.named("build"))
 	}
 }
