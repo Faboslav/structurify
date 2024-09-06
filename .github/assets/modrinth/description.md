@@ -31,11 +31,11 @@ Structurify is a configuration mod that makes configuring everything related to 
 
 **Currently it is possible to:**
 
-* **Globally disable all structures:** Easily disable all structures across your world with a single setting, streamlining your world generation experience.
-* **Disable individual structures:** Disable specific structures individually, giving you precise control over which structures appear in your game.
-* **Blacklist specific structures in individual biomes:** Customize structure generation by blacklisting specific structures in selected biomes, ensuring certain structures never generate in undesirable areas.
-* **Globally set structure spread for all structures:** Set global spacing and separation modifiers for all structures, enabling consistent structure distribution throughout your world.
-* **Individually set structure spread:** Adjust spacing and separation values for individual structures, allowing for tailored generation distances between specific structures.
+* **Globally disable all structures:** Easily disable all structures across your world with a single setting, simplifying your world generation process.
+* **Disable individual structures:** Disable specific structures individually, giving you precise control over which ones generate in your world.
+* **Manage biomes for specific structures:** Customize the list of biomes for individual structures, ensuring they only generate in selected biomes.
+* **Globally set structure spread for all structures:** Set global spacing and separation modifiers for all structures, enabling consistent structure spread throughout your world.
+* **Individually set structure spread:** Adjust spacing and separation values for specific structures, allowing for customized generation distances between them.
 
 **Possible future features that can be implemented:**
 
@@ -51,7 +51,7 @@ Structurify is a configuration mod that makes configuring everything related to 
 ## Structure settings
 
 Structures are organized into categories based on the mods and datapacks in use, making them easier to manage.
-It is possible to disable the generation of structures and [manage a blacklist of biomes](#biome-blacklist-for-specific-structures) where specific structures should not generate.
+It is possible to disable the generation of structures and manage a list of biomes where specific structures should generate.
 
 ![Structures settings](https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/structures_settings.webp)
 
@@ -59,9 +59,9 @@ Specific structures can also be easily searched for across these categories.
 
 ![Search](https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/structures_search.webp)
 
-## Biome Blacklist for specific structures
+## Biome managment for specific structures
 
-Each structure has its own configuration, allowing specific biomes to be blacklisted to prevent structure generation.
+Each structure has its own configuration, allowing specific biomes to be added and/or removed to adjust structure generation.
 
 ![Search](https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/structures_structure_biome_blacklist.webp)
 
@@ -101,11 +101,11 @@ The default content of the structurify.json file looks like this:
 
 The general section contains settings that apply globally across all structures and structure sets.
 
-| Key                                                                                             | Description                                    | Default value | Examples                     |
-|-------------------------------------------------------------------------------------------------|------------------------------------------------|---------------|------------------------------|
-| [disabled_all_structures](#disable_all_structures)                                              | Disable all structures                         | `false`       | `true` <br> `false`          |
-| [enable_global_spacing_and_separation_modifier](#enable_global_spacing_and_separation_modifier) | Enables global spacing and separation modifier | `true`        | `true` <br> `false`          |
-| [global_spacing_and_separation_modifier](#global_spacing_and_separation_modifier)               | The global spacing and separation modifier     | `1.0`         | `0.1` <br> `1.0` <br> `2.0`  |
+| Key                                           | Description                                    | Default value | Examples                    |
+|-----------------------------------------------|------------------------------------------------|---------------|-----------------------------|
+| disabled_all_structures                       | Disable all structures                         | `false`       | `true` <br> `false`         |
+| enable_global_spacing_and_separation_modifier | Enables global spacing and separation modifier | `true`        | `true` <br> `false`         |
+| global_spacing_and_separation_modifier        | The global spacing and separation modifier     | `1.0`         | `0.1` <br> `1.0` <br> `2.0` |
 
 ### disable_all_structures
 
@@ -142,12 +142,13 @@ When set to a value different from `1.0`, all structure sets (groups of structur
 All structures related settings are saved to the `structures` field of the json file.
 
 
-| Key                                                             | Description                 | Default value | Examples                                   |
-|-----------------------------------------------------------------|-----------------------------|---------------|--------------------------------------------|
-| [name](#name)                                                   | Structure identifier        | `-`           | `minecraft:shipwreck`                      |
-| [is_disabled](#enable_global_spacing_and_separation_modifier)   | Disables the structure      | `false`       | `true` <br> `false`                        |
-| [biome_blacklist_type](#global_spacing_and_separation_modifier) | Type of the biome blacklist | `NONE`        | `NONE` <br> `CENTER_PART` <br> `ALL_PARTS` |
-| [blacklisted_biomes](#global_spacing_and_separation_modifier)   | Array of biome identifiers  | `[]`          | `["minecraft:deep_cold_ocean"]`            |
+| Key                  | Description                      | Default value | Examples                        |
+|----------------------|----------------------------------|---------------|---------------------------------|
+| name                 | Structure identifier             | `-`           | `minecraft:shipwreck`           |
+| is_disabled          | Disables the structure           | `false`       | `true` <br> `false`             |
+| biomes               | Array of biome identifiers       | `[]`          | `["minecraft:deep_cold_ocean"]` |
+| enable_biome_check   | Enables the biome check          | `false`       | `true` <br> `false`             |
+| biome_check_distance | Biome check distance (in blocks) | `-`           | `8` <br> `16` <br> `128`        |
 
 ### name
 
@@ -165,24 +166,28 @@ If set to `true` the structure will be disabled and will not be generated in the
 "is_disabled": false
 ```
 
-### biome_blacklist_type
+### biomes
 
-When set to a value different from `1.0`, all structure sets will be either more concentrated or more spread out.
+Array of unique biome identifiers typically in the format `mod_id:biome_name`. An empty array means that structures won't generate anywhere.
 
 ```json
-"biome_blacklist_type": "NONE"
+"biomes": []
 ```
 
-- `NONE` - The blacklist will be inactive even if values are provided.
-- `CENTER_PART` - Only the starting piece (center part) of the structure cannot be in any of the blacklisted biomes.
-- `ALL_PARTS` - All structure pieces cannot be in any of the blacklisted biomes.
+### enable_biome_check
 
-### blacklisted_biomes
-
-Array of unique biome identifiers typically in the format `mod_id:biome_name`. An empty array means no biomes are blacklisted.
+If set to `true` the structure will only generate if all biomes within the specified distance are present in the list of biomes.
 
 ```json
-"blacklisted_biomes": []
+"enable_biome_check": false
+```
+
+### biome_check_distance
+
+The distance in blocks from the structure’s center within which biomes will be checked.
+
+```json
+"biome_check_distance": 32
 ```
 
 <br>
@@ -191,11 +196,11 @@ Array of unique biome identifiers typically in the format `mod_id:biome_name`. A
 
 All structure sets related settings are saved to the `structure_sets` field of the json file.
 
-| Key                       | Description                                                                                                                                                                          | Default value | Examples                |
-|---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|-------------------------|
-| [name](#name)             | Structure identifier                                                                                                                                                                 | `-`           | `minecraft:villages`    |
-| [spacing](#spacing)       | Spacing is the average distance in chunks between structures within the same structure set (group of structures)                                                                     | `-`           | `34` <br> `8` <br> `60` |
-| [separation](#separation) | Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value.  | `-`           | `8` <br> `4` <br> `40`  |
+| Key         | Description                                                                                                                                                                         | Default value | Examples                |
+|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|-------------------------|
+| name        | Structure identifier                                                                                                                                                                | `-`           | `minecraft:villages`    |
+| spacing     | Spacing is the average distance in chunks between structures within the same structure set (group of structures)                                                                    | `-`           | `34` <br> `8` <br> `60` |
+| separation  | Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value. | `-`           | `8` <br> `4` <br> `40`  |
 
 ### name
 
@@ -219,87 +224,6 @@ Separation is the minimum distance in chunks between structures within the same 
 
 ```json
 "separation": 8
-```
-
-<br>
-
-## Examples
-
-Example of disabling all of the vanilla mineshaft structures can be done with the following configuration:
-
-```json
-{
-	"structures": [
-		{
-		  "name": "minecraft:mineshaft",
-		  "is_disabled": true,
-		  "biome_blacklist_type": "CENTER_PART",
-		  "blacklisted_biomes": []
-		},
-		{
-		  "name": "minecraft:mineshaft_mesa",
-		  "is_disabled": true,
-		  "biome_blacklist_type": "NONE",
-		  "blacklisted_biomes": []
-		}
-	]
-}
-```
-
-<br>
-
-Forbidding the shipwreck structure to spawn in deep cold and frozen oceans can be done via the following configuration:
-
-```json
-{
-	"structures": [
-		{
-			"name": "minecraft:shipwreck",
-			"is_disabled": false,
-			"biome_blacklist_type": "CENTER_PART",
-			"blacklisted_biomes": [
-				"minecraft:deep_cold_ocean",
-				"minecraft:deep_frozen_ocean"
-			]
-		}
-	]
-}
-```
-
-<br>
-
-With the following configuration plains village will not be generated at all if any part of the village would be placed on the river biome:
-
-```json
-{
-	"structures": [
-		{
-			"name": "minecraft:village_plains",
-			"is_disabled": false,
-			"biome_blacklist_type": "ALL_PARTS",
-			"blacklisted_biomes": [
-				"minecraft:river"
-			]
-		}
-	]
-}
-```
-
-<br>
-
-To balance the effect of blacklisted biomes, the following configuration complements the previous example by compensating for blacklisted biomes with more frequent generations:
-
-
-```json
-{
-	"structure_sets": [
-		{
-			"name": "minecraft:villages",
-			"spacing": 16,
-			"separation": 8
-		}
-	]
-}
 ```
 
 <br>
