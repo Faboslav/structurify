@@ -19,72 +19,74 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+
 import java.util.Optional;
 
 @Mixin(JigsawStructure.class)
-public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure implements StructurifyStructure {
-    @Nullable
-    public ResourceLocation structureIdentifier = null;
+public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure implements StructurifyStructure
+{
+	@Nullable
+	public ResourceLocation structureIdentifier = null;
 
-    protected JigsawStructureBiomeRadiusCheckMixin(StructureSettings config) {
-        super(config);
-    }
+	protected JigsawStructureBiomeRadiusCheckMixin(StructureSettings config) {
+		super(config);
+	}
 
-    public void structurify$setStructureIdentifier(ResourceLocation structureIdentifier) {
-        this.structureIdentifier = structureIdentifier;
-    }
+	public void structurify$setStructureIdentifier(ResourceLocation structureIdentifier) {
+		this.structureIdentifier = structureIdentifier;
+	}
 
-    @Nullable
-    public ResourceLocation structurify$getStructureIdentifier() {
-        return this.structureIdentifier;
-    }
+	@Nullable
+	public ResourceLocation structurify$getStructureIdentifier() {
+		return this.structureIdentifier;
+	}
 
-    @Shadow
-    @Final
-    private HeightProvider startHeight;
+	@Shadow
+	@Final
+	private HeightProvider startHeight;
 
-    @WrapMethod(
-            method = "findGenerationPoint"
-    )
-    private Optional<GenerationStub> structurify$getStructurePosition(
-            GenerationContext generationContext,
-            Operation<Optional<GenerationStub>> original
-    ) {
-        ResourceLocation structureId = structurify$getStructureIdentifier();
+	@WrapMethod(
+		method = "findGenerationPoint"
+	)
+	private Optional<GenerationStub> structurify$getStructurePosition(
+		GenerationContext generationContext,
+		Operation<Optional<GenerationStub>> original
+	) {
+		ResourceLocation structureId = structurify$getStructureIdentifier();
 
-        if (
-                structureId == null
-                        || !Structurify.getConfig().getStructureData().containsKey(structureId.toString())
-        ) {
-            return original.call(generationContext);
-        }
+		if (
+			structureId == null
+			|| !Structurify.getConfig().getStructureData().containsKey(structureId.toString())
+		) {
+			return original.call(generationContext);
+		}
 
-        var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
+		var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
 
-        if (!structureData.isBiomeCheckEnabled()) {
-            return original.call(generationContext);
-        }
+		if (!structureData.isBiomeCheckEnabled()) {
+			return original.call(generationContext);
+		}
 
-        var biomeCheckDistance = (int) Math.ceil(structureData.getBiomeCheckDistance() / 16.0);
+		var biomeCheckDistance = (int) Math.ceil(structureData.getBiomeCheckDistance() / 16.0);
 
-        if (biomeCheckDistance != 0 && !(generationContext.biomeSource() instanceof CheckerboardColumnBiomeSource)) {
-            ChunkPos chunkPos = generationContext.chunkPos();
-            int y = this.startHeight.sample(generationContext.random(), new WorldGenerationContext(generationContext.chunkGenerator(), generationContext.heightAccessor()));
-            var blockPos = new BlockPos(generationContext.chunkPos().getMinBlockX(), y, generationContext.chunkPos().getMinBlockZ());
+		if (biomeCheckDistance != 0 && !(generationContext.biomeSource() instanceof CheckerboardColumnBiomeSource)) {
+			ChunkPos chunkPos = generationContext.chunkPos();
+			int y = this.startHeight.sample(generationContext.random(), new WorldGenerationContext(generationContext.chunkGenerator(), generationContext.heightAccessor()));
+			var blockPos = new BlockPos(generationContext.chunkPos().getMinBlockX(), y, generationContext.chunkPos().getMinBlockZ());
 
-            int sectionY = blockPos.getY();
-            sectionY = QuartPos.fromBlock(sectionY);
+			int sectionY = blockPos.getY();
+			sectionY = QuartPos.fromBlock(sectionY);
 
-            for (int curChunkX = chunkPos.x - biomeCheckDistance; curChunkX <= chunkPos.x + biomeCheckDistance; curChunkX++) {
-                for (int curChunkZ = chunkPos.z - biomeCheckDistance; curChunkZ <= chunkPos.z + biomeCheckDistance; curChunkZ++) {
-                    Holder<Biome> biome = generationContext.biomeSource().getNoiseBiome(QuartPos.fromSection(curChunkX), sectionY, QuartPos.fromSection(curChunkZ), generationContext.randomState().sampler());
-                    if (!generationContext.validBiome().test(biome)) {
-                        return Optional.empty();
-                    }
-                }
-            }
-        }
+			for (int curChunkX = chunkPos.x - biomeCheckDistance; curChunkX <= chunkPos.x + biomeCheckDistance; curChunkX++) {
+				for (int curChunkZ = chunkPos.z - biomeCheckDistance; curChunkZ <= chunkPos.z + biomeCheckDistance; curChunkZ++) {
+					Holder<Biome> biome = generationContext.biomeSource().getNoiseBiome(QuartPos.fromSection(curChunkX), sectionY, QuartPos.fromSection(curChunkZ), generationContext.randomState().sampler());
+					if (!generationContext.validBiome().test(biome)) {
+						return Optional.empty();
+					}
+				}
+			}
+		}
 
-        return original.call(generationContext);
-    }
+		return original.call(generationContext);
+	}
 }

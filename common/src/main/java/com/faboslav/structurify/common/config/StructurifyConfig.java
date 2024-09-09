@@ -77,17 +77,6 @@ public final class StructurifyConfig
 				}
 			}
 
-			if (json.has("disabled_structures")) {
-				var disabledStructuresIds = json.getAsJsonArray("disabled_structures");
-
-				for (JsonElement disabledStructureId : disabledStructuresIds) {
-					if (!this.structureData.containsKey(disabledStructureId.getAsString())) {
-						continue;
-					}
-					this.structureData.get(disabledStructureId.getAsString()).setDisabled(true);
-				}
-			}
-
 			if (json.has("structures")) {
 				var structures = json.getAsJsonArray("structures");
 
@@ -97,9 +86,10 @@ public final class StructurifyConfig
 					if (
 						!structureJson.has("name")
 						|| !structureJson.has("is_disabled")
-						|| !structureJson.has("biomes")
 						|| !structureJson.has("enable_biome_check")
 						|| !structureJson.has("biome_check_distance")
+						|| !structureJson.has("whitelisted_biomes")
+						|| !structureJson.has("blacklisted_biomes")
 					) {
 						Structurify.getLogger().info("Found invalid structure entry, skipping.");
 						continue;
@@ -113,24 +103,33 @@ public final class StructurifyConfig
 					var structureData = this.structureData.get(structureJson.get("name").getAsString());
 					structureData.setDisabled(structureJson.get("is_disabled").getAsBoolean());
 
-					var biomesJson = structureJson.getAsJsonArray("biomes");
-					List<String> biomes = new ArrayList<>();
-
-					for (JsonElement biome : biomesJson) {
-						if (biomes.contains(biome.getAsString())) {
-							continue;
-						}
-
-						biomes.add(biome.getAsString());
-					}
-
-					structureData.setBiomes(biomes);
-
 					var isBiomeCheckEnabled = structureJson.get("enable_biome_check").getAsBoolean();
 					structureData.setEnableBiomeCheck(isBiomeCheckEnabled);
 
 					var biomeCheckDistance = structureJson.get("biome_check_distance").getAsInt();
 					structureData.setBiomeCheckDistance(biomeCheckDistance);
+
+					List<String> biomes = new ArrayList<>(structureData.getDefaultBiomes());
+					var whitelistedBiomes = structureJson.getAsJsonArray("whitelisted_biomes");
+					for (JsonElement whitelistedBiome : whitelistedBiomes) {
+						if (biomes.contains(whitelistedBiome.getAsString())) {
+							continue;
+						}
+
+						biomes.add(whitelistedBiome.getAsString());
+					}
+
+					var blacklistedBiomes = structureJson.getAsJsonArray("blacklisted_biomes");
+
+					for (JsonElement blacklistedBiome : blacklistedBiomes) {
+						if (!biomes.contains(blacklistedBiome.getAsString())) {
+							continue;
+						}
+
+						biomes.remove(blacklistedBiome.getAsString());
+					}
+
+					structureData.setBiomes(biomes);
 				}
 			}
 
@@ -239,33 +238,45 @@ public final class StructurifyConfig
 		JsonArray structures = new JsonArray();
 
 		this.structureData.entrySet().stream()
-			.filter(entry -> {
-				if (entry.getValue().isDisabled()) {
+			.filter(structureDataEntry -> {
+				if (structureDataEntry.getValue().isDisabled()) {
 					return true;
-				} else if (entry.getValue().isBiomeCheckEnabled()) {
+				} else if (structureDataEntry.getValue().isBiomeCheckEnabled()) {
 					return true;
 				}
 
-				var biomes = new ArrayList<>(entry.getValue().getBiomes());
-				var defaultBiomes = new ArrayList<>(entry.getValue().getDefaultBiomes());
+				var biomes = new ArrayList<>(structureDataEntry.getValue().getBiomes());
+				var defaultBiomes = new ArrayList<>(structureDataEntry.getValue().getDefaultBiomes());
 
 				Collections.sort(biomes);
 				Collections.sort(defaultBiomes);
 
 				return !biomes.equals(defaultBiomes);
 			})
-			.forEach(entry -> {
+			.forEach(structureDataEntry -> {
 				JsonObject structure = new JsonObject();
-				structure.addProperty("name", entry.getKey());
-				structure.addProperty("is_disabled", entry.getValue().isDisabled());
+				structure.addProperty("name", structureDataEntry.getKey());
+				structure.addProperty("is_disabled", structureDataEntry.getValue().isDisabled());
 
-				JsonArray blacklistedBiomes = new JsonArray();
-				entry.getValue().getBiomes().stream().distinct().forEach(blacklistedBiomes::add);
-				structure.add("biomes", blacklistedBiomes);
+				structure.addProperty("enable_biome_check", structureDataEntry.getValue().isBiomeCheckEnabled());
+				structure.addProperty("biome_check_distance", structureDataEntry.getValue().getBiomeCheckDistance());
+
+				var whitelistedBiomes = new ArrayList<>(structureDataEntry.getValue().getBiomes());
+				whitelistedBiomes.removeAll(structureDataEntry.getValue().getDefaultBiomes());
+				JsonArray whitelistedBiomesJson = new JsonArray();
+				whitelistedBiomes.stream().distinct().forEach(whitelistedBiomesJson::add);
+				structure.add("whitelisted_biomes", whitelistedBiomesJson);
+
+				// taiga, plains, slope
+				// birch, bamboo, taiga, plains
+
+				var blacklistedBiomes = new ArrayList<>(structureDataEntry.getValue().getDefaultBiomes());
+				blacklistedBiomes.removeAll(structureDataEntry.getValue().getBiomes());
+				JsonArray blacklistedBiomesJson = new JsonArray();
+				blacklistedBiomes.stream().distinct().forEach(blacklistedBiomesJson::add);
+				structure.add("blacklisted_biomes", blacklistedBiomesJson);
+
 				structures.add(structure);
-
-				structure.addProperty("enable_biome_check", entry.getValue().isBiomeCheckEnabled());
-				structure.addProperty("biome_check_distance", entry.getValue().getBiomeCheckDistance());
 			});
 
 		json.add("structures", structures);

@@ -1,3 +1,7 @@
+## 1.0.8
+
+- Structure "biome" field in json is now de/composed based on "whitelisted_biomes" and "blacklisted_biomes" fields instead to possibly avoid the list of 280 biome entries in modded environments
+
 ## 1.0.7
 
 - Added compatibility with the Structure Gel API, ensuring that mods like Dungeons Enhanced are now fully affected by all settings
