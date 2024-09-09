@@ -73,7 +73,7 @@ public final class StructurifyConfig
 				}
 
 				if (general.has("global_spacing_and_separation_modifier")) {
-					this.globalSpacingAndSeparationModifier = general.get("global_spacing_and_separation_modifier").getAsDouble();
+					this.globalSpacingAndSeparationModifier = Math.round(general.get("global_spacing_and_separation_modifier").getAsDouble() * 10.0) / 10.0;
 				}
 			}
 
@@ -230,7 +230,7 @@ public final class StructurifyConfig
 
 		general.addProperty("disabled_all_structures", this.disableAllStructures);
 		general.addProperty("enable_global_spacing_and_separation_modifier", this.enableGlobalSpacingAndSeparationModifier);
-		general.addProperty("global_spacing_and_separation_modifier", this.globalSpacingAndSeparationModifier);
+		general.addProperty("global_spacing_and_separation_modifier", Math.round(this.globalSpacingAndSeparationModifier * 10.0) / 10.0);
 
 		json.add("general", general);
 	}

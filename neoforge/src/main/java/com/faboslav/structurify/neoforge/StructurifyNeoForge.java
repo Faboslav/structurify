@@ -11,6 +11,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 
 @Mod(Structurify.MOD_ID)
@@ -29,12 +30,17 @@ public final class StructurifyNeoForge
 		eventBus.addListener(StructurifyNeoForge::onServerAboutToStart);
 	}
 
-	private static void onResourceManagerReload(AddReloadListenerEvent event) {
+	private static void onResourceManagerReload(TagsUpdatedEvent event) {
+		if(event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED) {
+			return;
+		}
+
 		StructurifyRegistryManagerProvider.setRegistryManager(event.getRegistryAccess());
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 	}
 
 	private static void onServerAboutToStart(ServerAboutToStartEvent event) {
+		StructurifyRegistryManagerProvider.setRegistryManager(event.getServer().registryAccess());
 		UpdateRegistriesEvent.EVENT.invoke(new UpdateRegistriesEvent(event.getServer().registryAccess()));
 	}
 }

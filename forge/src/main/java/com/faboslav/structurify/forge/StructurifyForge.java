@@ -7,6 +7,7 @@ import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvid
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -30,12 +31,17 @@ public final class StructurifyForge
 		eventBus.addListener(StructurifyForge::onServerAboutToStart);
 	}
 
-	private static void onResourceManagerReload(AddReloadListenerEvent event) {
+	private static void onResourceManagerReload(TagsUpdatedEvent event) {
+		if(event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED) {
+			return;
+		}
+
 		StructurifyRegistryManagerProvider.setRegistryManager(event.getRegistryAccess());
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 	}
 
 	private static void onServerAboutToStart(ServerAboutToStartEvent event) {
+		StructurifyRegistryManagerProvider.setRegistryManager(event.getServer().registryAccess());
 		UpdateRegistriesEvent.EVENT.invoke(new UpdateRegistriesEvent(event.getServer().registryAccess()));
 	}
 }

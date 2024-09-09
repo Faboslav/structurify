@@ -162,8 +162,8 @@ public final class WorldgenDataProvider
 			ResourceLocation structureSetId = structureSetRegistryKey.location();
 			String structureSetStringId = structureSetId.toString();
 
-			if (structureSet.placement() instanceof RandomSpreadStructurePlacement randomSpreadStructurePlacement) {
-				structureSets.put(structureSetStringId, new StructureSetData(((StructurifyRandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$getOriginalSpacing(), ((StructurifyRandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$getOriginalSeparation()));
+			if (structureSet.placement() instanceof StructurifyRandomSpreadStructurePlacement randomSpreadStructurePlacement) {
+				structureSets.put(structureSetStringId, new StructureSetData(randomSpreadStructurePlacement.structurify$getOriginalSpacing(), randomSpreadStructurePlacement.structurify$getOriginalSeparation()));
 			}
 		}
 

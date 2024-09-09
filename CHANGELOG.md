@@ -1,3 +1,8 @@
+## 1.0.7
+
+- Added compatibility with the Structure Gel API, ensuring that mods like Dungeons Enhanced are now fully affected by all settings
+- Fixed a bug in Forge (and possibly NeoForge) where structures were not generating as expected
+
 ## 1.0.6
 
 - Improved GUI of structure settings

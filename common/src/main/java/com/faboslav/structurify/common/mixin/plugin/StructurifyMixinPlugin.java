@@ -24,11 +24,16 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 			return this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread");
 		}
 
+		if (
+			mixinClassName.equals("com.faboslav.structurify.forge.mixin.compat.StructureGelApiModifySpreadMixin")
+			|| mixinClassName.equals("com.faboslav.structurify.neoforge.mixin.compat.StructureGelApiModifySpreadMixin")
+		) {
+			return this.isClassAvailable("com.legacy.structure_gel.api.structure.GridStructurePlacement");
+		}
+
 		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.AnimatedDynamicTextureImageAccessor")) {
 			return isClassAvailable("dev.isxander.yacl3.gui.image.impl.AnimatedDynamicTextureImage");
 		}
-
-		Structurify.getLogger().info(mixinClassName);
 
 		return true;
 	}
