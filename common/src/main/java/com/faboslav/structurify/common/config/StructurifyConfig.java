@@ -9,6 +9,7 @@ import com.google.gson.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class StructurifyConfig
 {
@@ -88,8 +89,13 @@ public final class StructurifyConfig
 						|| !structureJson.has("is_disabled")
 						|| !structureJson.has("enable_biome_check")
 						|| !structureJson.has("biome_check_distance")
-						|| !structureJson.has("whitelisted_biomes")
-						|| !structureJson.has("blacklisted_biomes")
+						|| (
+							!structureJson.has("biomes")
+							&& (
+								!structureJson.has("whitelisted_biomes")
+								|| !structureJson.has("blacklisted_biomes")
+							)
+						)
 					) {
 						Structurify.getLogger().info("Found invalid structure entry, skipping.");
 						continue;
@@ -110,23 +116,36 @@ public final class StructurifyConfig
 					structureData.setBiomeCheckDistance(biomeCheckDistance);
 
 					List<String> biomes = new ArrayList<>(structureData.getDefaultBiomes());
-					var whitelistedBiomes = structureJson.getAsJsonArray("whitelisted_biomes");
-					for (JsonElement whitelistedBiome : whitelistedBiomes) {
-						if (biomes.contains(whitelistedBiome.getAsString())) {
-							continue;
+
+					if(structureJson.has("biomes")) {
+						var whitelistedBiomes = structureJson.getAsJsonArray("biomes").asList().stream().map(JsonElement::getAsString).collect(Collectors.toCollection(ArrayList::new));
+						whitelistedBiomes.removeAll(structureData.getDefaultBiomes());
+						whitelistedBiomes.stream().distinct().forEach(biomes::add);
+						Structurify.getLogger().info("will add: " + whitelistedBiomes.toString());
+
+						var blacklistedBiomes = new ArrayList<>(structureData.getDefaultBiomes());
+						blacklistedBiomes.removeAll(structureJson.getAsJsonArray("biomes").asList().stream().map(JsonElement::getAsString).collect(Collectors.toCollection(ArrayList::new)));
+						blacklistedBiomes.stream().distinct().forEach(biomes::remove);
+						Structurify.getLogger().info("will remove: " + blacklistedBiomes.toString());
+					} else {
+						var whitelistedBiomes = structureJson.getAsJsonArray("whitelisted_biomes");
+						for (JsonElement whitelistedBiome : whitelistedBiomes) {
+							if (biomes.contains(whitelistedBiome.getAsString())) {
+								continue;
+							}
+
+							biomes.add(whitelistedBiome.getAsString());
 						}
 
-						biomes.add(whitelistedBiome.getAsString());
-					}
+						var blacklistedBiomes = structureJson.getAsJsonArray("blacklisted_biomes");
 
-					var blacklistedBiomes = structureJson.getAsJsonArray("blacklisted_biomes");
+						for (JsonElement blacklistedBiome : blacklistedBiomes) {
+							if (!biomes.contains(blacklistedBiome.getAsString())) {
+								continue;
+							}
 
-					for (JsonElement blacklistedBiome : blacklistedBiomes) {
-						if (!biomes.contains(blacklistedBiome.getAsString())) {
-							continue;
+							biomes.remove(blacklistedBiome.getAsString());
 						}
-
-						biomes.remove(blacklistedBiome.getAsString());
 					}
 
 					structureData.setBiomes(biomes);
@@ -266,9 +285,6 @@ public final class StructurifyConfig
 				JsonArray whitelistedBiomesJson = new JsonArray();
 				whitelistedBiomes.stream().distinct().forEach(whitelistedBiomesJson::add);
 				structure.add("whitelisted_biomes", whitelistedBiomesJson);
-
-				// taiga, plains, slope
-				// birch, bamboo, taiga, plains
 
 				var blacklistedBiomes = new ArrayList<>(structureDataEntry.getValue().getDefaultBiomes());
 				blacklistedBiomes.removeAll(structureDataEntry.getValue().getBiomes());
