@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -97,7 +98,7 @@ public final class WorldgenDataProvider
 					for (var biome : biomes) {
 						String biomeKey = biome.unwrapKey().get().location().toString();
 
-						if(defaultBiomes.contains(biomeKey)) {
+						if (defaultBiomes.contains(biomeKey)) {
 							continue;
 						}
 
@@ -112,7 +113,7 @@ public final class WorldgenDataProvider
 				for (var biome : biomes) {
 					String biomeKey = biome.unwrapKey().get().location().toString();
 
-					if(defaultBiomes.contains(biomeKey)) {
+					if (defaultBiomes.contains(biomeKey)) {
 						continue;
 					}
 

@@ -117,7 +117,7 @@ public final class StructurifyConfig
 
 					List<String> biomes = new ArrayList<>(structureData.getDefaultBiomes());
 
-					if(structureJson.has("biomes")) {
+					if (structureJson.has("biomes")) {
 						var whitelistedBiomes = structureJson.getAsJsonArray("biomes").asList().stream().map(JsonElement::getAsString).collect(Collectors.toCollection(ArrayList::new));
 						whitelistedBiomes.removeAll(structureData.getDefaultBiomes());
 						whitelistedBiomes.stream().distinct().forEach(biomes::add);
