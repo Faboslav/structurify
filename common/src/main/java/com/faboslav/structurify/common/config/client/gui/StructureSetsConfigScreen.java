@@ -92,8 +92,7 @@ public final class StructureSetsConfigScreen
 
 		for (Map.Entry<String, StructureSetData> entry : structureSets.entrySet()) {
 			String structureSetStringId = entry.getKey();
-
-			ResourceLocation structureSetId = Structurify.makeVanillaId(structureSetStringId);
+			ResourceLocation structureSetId = Structurify.makeNamespacedId(structureSetStringId);
 			String namespace = structureSetId.getNamespace();
 
 			// Create new group for each namespace

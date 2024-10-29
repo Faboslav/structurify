@@ -66,7 +66,7 @@ public final class StructuresConfigScreen
 			String structureStringId = entry.getKey();
 			StructureData structureData = entry.getValue();
 
-			ResourceLocation structureId = Structurify.makeVanillaId(structureStringId);
+			ResourceLocation structureId = Structurify.makeNamespacedId(structureStringId);
 			String namespace = structureId.getNamespace();
 
 			// Create new group for each namespace

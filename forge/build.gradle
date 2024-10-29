@@ -104,6 +104,9 @@ dependencies {
 	modImplementation(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-forge")) { transitive = false }
 	modImplementation(modrinth("structure-gel-api", "${prop('structure_gel_api_version')}")) { transitive = false }
 
+	// For debugging
+	// modImplementation(modrinth("blue-skies", "1.3.31")) { transitive = false }
+
 	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.imageio:imageio-core:3.10.0")))
 	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.imageio:imageio-webp:3.10.0")))
 	forgeRuntimeLibrary((implementation include("com.twelvemonkeys.imageio:imageio-metadata:3.10.0")))

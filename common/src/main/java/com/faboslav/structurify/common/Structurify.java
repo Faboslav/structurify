@@ -42,7 +42,7 @@ public final class Structurify
 		/*?}*/
 	}
 
-	public static ResourceLocation makeVanillaId(String id) {
+	public static ResourceLocation makeNamespacedId(String id) {
 		/*? >=1.21 {*/
 		/*return ResourceLocation.parse(
 			id

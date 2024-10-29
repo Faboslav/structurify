@@ -1,5 +1,6 @@
 ## 1.0.8
 
+- Fixed critical compatibility issue which prevented structure generation in the non vanilla biomes (for example Blue Skies)
 - Structure "biome" field in json is now de/composed based on "whitelisted_biomes" and "blacklisted_biomes" fields instead to possibly avoid the list of 280 biome entries in modded environments
 
 ## 1.0.7

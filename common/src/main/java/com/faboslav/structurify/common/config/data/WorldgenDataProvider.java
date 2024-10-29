@@ -96,9 +96,28 @@ public final class WorldgenDataProvider
 				biomeRegistry.getTag(biomeTagKey).ifPresent(biomes -> {
 					for (var biome : biomes) {
 						String biomeKey = biome.unwrapKey().get().location().toString();
+
+						if(defaultBiomes.contains(biomeKey)) {
+							continue;
+						}
+
 						defaultBiomes.add(biomeKey);
 					}
 				});
+
+				return null;
+			});
+
+			biomeStorage.mapRight(biomes -> {
+				for (var biome : biomes) {
+					String biomeKey = biome.unwrapKey().get().location().toString();
+
+					if(defaultBiomes.contains(biomeKey)) {
+						continue;
+					}
+
+					defaultBiomes.add(biomeKey);
+				}
 
 				return null;
 			});

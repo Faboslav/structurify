@@ -100,7 +100,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	private void renderBiomeImage(String biomeName, GuiGraphics graphics, int x, int y, float delta) {
-		biomeName = Structurify.makeVanillaId(biomeName).getPath();
+		biomeName = Structurify.makeNamespacedId(biomeName).getPath();
 		ResourceLocation imageId = Structurify.makeId("textures/gui/config/images/biomes/" + biomeName + ".png");
 
 		ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
