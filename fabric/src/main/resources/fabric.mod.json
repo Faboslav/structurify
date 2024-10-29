@@ -32,10 +32,9 @@
 		"structurify-fabric.mixins.json"
 	],
 	"depends": {
-		"java": ">=${modJavaVersion}",
-		"minecraft": ">=${minMinecraftVersion}",
-		"fabricloader": ">=${fabricLoaderVersion}",
-		"fabric": ">=${fabricApiVersion}",
+		"minecraft": ">=${minMinecraftVersion}-",
+		"fabricloader": "*",
+		"fabric": "*",
 		"yet_another_config_lib_v3": ">=${yaclVersion}"
 	},
 	"custom": {

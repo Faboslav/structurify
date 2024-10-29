@@ -20,11 +20,6 @@ config = "structurify-common.mixins.json"
 config = "structurify-neoforge.mixins.json"
 
 [[dependencies.${ modId }]]
-modId = "minecraft"
-required = true
-versionRange = "[${minMinecraftVersion},)"
-
-[[dependencies.${ modId }]]
 modId = "yet_another_config_lib_v3"
 required = true
 versionRange = "[${yaclVersion},)"
