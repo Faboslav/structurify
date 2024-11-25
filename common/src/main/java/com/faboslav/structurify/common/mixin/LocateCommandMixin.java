@@ -44,10 +44,8 @@ public class LocateCommandMixin
 				throw new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.structure_is_disabled", structureId)).create();
 			}
 		} else if (structureTagKey.isPresent()) {
-			var structureRegistry = source.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
-
 			try {
-				structureRegistry.getTag(structureTagKey.get()).ifPresent(tagStructures -> {
+				source.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE).get(structureTagKey.get()).ifPresent(tagStructures -> {
 					boolean areAllStructuresInTagDisabled = true;
 
 					for (var tagStructure : tagStructures) {

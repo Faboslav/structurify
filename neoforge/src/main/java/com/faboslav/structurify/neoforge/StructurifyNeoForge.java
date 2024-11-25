@@ -4,6 +4,8 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -35,7 +37,13 @@ public final class StructurifyNeoForge
 			return;
 		}
 
-		StructurifyRegistryManagerProvider.setRegistryManager(event.getRegistryAccess());
+		/*? if >=1.21.3 {*/
+		/*var registryAccess = event.getLookupProvider();
+		*//*?} else {*/
+		var registryAccess = event.getRegistryAccess();
+		/*?}*/
+
+		StructurifyRegistryManagerProvider.setRegistryManager(registryAccess);
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 	}
 

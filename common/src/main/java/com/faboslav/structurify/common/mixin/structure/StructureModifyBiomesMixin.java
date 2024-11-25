@@ -7,7 +7,6 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -41,7 +40,7 @@ public abstract class StructureModifyBiomesMixin implements StructurifyStructure
 			return original.call();
 		}
 
-		Registry<Biome> biomeRegistry = registryManager.registry(Registries.BIOME).orElse(null);
+		var biomeRegistry = registryManager.lookup(Registries.BIOME).orElse(null);
 
 		if (biomeRegistry == null) {
 			return original.call();
@@ -53,7 +52,7 @@ public abstract class StructureModifyBiomesMixin implements StructurifyStructure
 
 		for (var biomeId : biomes) {
 			var biomeKey = ResourceKey.create(Registries.BIOME, Structurify.makeNamespacedId(biomeId));
-			var biomeHolder = biomeRegistry.getHolder(biomeKey).orElse(null);
+			var biomeHolder = biomeRegistry.get(biomeKey).orElse(null);
 
 			if (biomeHolder == null) {
 				continue;

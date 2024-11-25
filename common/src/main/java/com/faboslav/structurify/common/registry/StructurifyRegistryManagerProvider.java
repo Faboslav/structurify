@@ -4,26 +4,31 @@ import com.faboslav.structurify.common.Structurify;
 import com.mojang.serialization.Lifecycle;
 import net.minecraft.Util;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.WorldLoader;
 import net.minecraft.server.WorldStem;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.FolderRepositorySource;
 import net.minecraft.server.packs.repository.PackRepository;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.world.level.WorldDataConfiguration;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.storage.PrimaryLevelData;
+import net.minecraft.world.level.validation.DirectoryValidator;
 import org.jetbrains.annotations.Nullable;
 
 public final class StructurifyRegistryManagerProvider
 {
 	@Nullable
-	private static RegistryAccess registryManager = null;
+	private static HolderLookup.Provider registryManager = null;
 	private static boolean isLoading = false;
 
 	@Nullable
-	public static RegistryAccess getRegistryManager() {
+	public static HolderLookup.Provider getRegistryManager() {
 		if (registryManager == null) {
 			loadRegistryManager();
 		}
@@ -31,7 +36,7 @@ public final class StructurifyRegistryManagerProvider
 		return registryManager;
 	}
 
-	public static void setRegistryManager(RegistryAccess registryAccess) {
+	public static void setRegistryManager(HolderLookup.Provider registryAccess) {
 		registryManager = registryAccess;
 	}
 
@@ -57,6 +62,15 @@ public final class StructurifyRegistryManagerProvider
 				WorldLoader.load(serverConfig, loadContextSupplierContext -> {
 					var registry = new MappedRegistry<>(Registries.LEVEL_STEM, Lifecycle.stable()).freeze();
 
+					/*? if >=1.21.3 {*/
+					/*var dimensionsConfig = loadContextSupplierContext
+						.datapackWorldgen()
+						.lookupOrThrow(Registries.WORLD_PRESET)
+						.getOrThrow(WorldPresets.FLAT)
+						.value()
+						.createWorldDimensions()
+						.bake(registry);
+					*//*?} else {*/
 					var dimensionsConfig = loadContextSupplierContext
 						.datapackWorldgen()
 						.registryOrThrow(Registries.WORLD_PRESET)
@@ -64,6 +78,7 @@ public final class StructurifyRegistryManagerProvider
 						.value()
 						.createWorldDimensions()
 						.bake(registry);
+					/*?}*/
 
 					return new WorldLoader.DataLoadOutput<PrimaryLevelData>(null, dimensionsConfig.dimensionsRegistryAccess());
 				}, WorldStem::new, Util.backgroundExecutor(), executor)

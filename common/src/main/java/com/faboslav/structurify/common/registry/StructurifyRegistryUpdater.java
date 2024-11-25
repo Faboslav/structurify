@@ -4,12 +4,9 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 
 public final class StructurifyRegistryUpdater
@@ -35,19 +32,16 @@ public final class StructurifyRegistryUpdater
 		}
 	}
 
-	private static void updateStructures(RegistryAccess registryManager) {
-		var structureRegistry = registryManager.registry(Registries.STRUCTURE).orElse(null);
+	private static void updateStructures(HolderLookup.Provider registryManager) {
+		var structureRegistry = registryManager.lookup(Registries.STRUCTURE).orElse(null);
 
 		if (structureRegistry == null) {
 			return;
 		}
 
-		for (Structure structure : structureRegistry) {
-			ResourceKey<Structure> structureRegistryKey = structureRegistry.getResourceKey(structure).orElse(null);
-
-			if (structureRegistryKey == null) {
-				continue;
-			}
+		for (var structureReference : structureRegistry.listElements().toList()) {
+			var structure = structureReference.value();
+			var structureRegistryKey = structureReference.key();
 
 			ResourceLocation structureId = structureRegistryKey.location();
 			((StructurifyStructure) structure).structurify$setStructureIdentifier(structureId);
@@ -56,19 +50,16 @@ public final class StructurifyRegistryUpdater
 		Structurify.getLogger().info("Structure registries updated");
 	}
 
-	private static void updateStructureSets(RegistryAccess registryManager) {
-		var structureSetRegistry = registryManager.registry(Registries.STRUCTURE_SET).orElse(null);
+	private static void updateStructureSets(HolderLookup.Provider registryManager) {
+		var structureSetRegistry = registryManager.lookup(Registries.STRUCTURE_SET).orElse(null);
 
 		if (structureSetRegistry == null) {
 			return;
 		}
 
-		for (StructureSet structureSet : structureSetRegistry) {
-			ResourceKey<StructureSet> structureSetRegistryKey = structureSetRegistry.getResourceKey(structureSet).orElse(null);
-
-			if (structureSetRegistryKey == null) {
-				continue;
-			}
+		for (var structureSetReference : structureSetRegistry.listElements().toList()) {
+			var structureSet = structureSetReference.value();
+			var structureSetRegistryKey = structureSetReference.key();
 
 			ResourceLocation structureSetId = structureSetRegistryKey.location();
 

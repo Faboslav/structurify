@@ -78,6 +78,13 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 		return controller;
 	}
 
+	/*? if >=1.21.3 {*/
+	/*@Override
+	public @NotNull StateManager<OptionPair<K, V>> stateManager() {
+		return null;
+	}
+	*//*?}*/
+
 	@Override
 	public @NotNull Binding<OptionPair<K, V>> binding() {
 		return null;
@@ -158,6 +165,12 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 	public boolean isPendingValueDefault() {
 		return this.firstOption.isPendingValueDefault() && this.secondOption.isPendingValueDefault();
 	}
+
+	/*? if >=1.21.3 {*/
+	/*@Override
+	public void addEventListener(OptionEventListener<OptionPair<K, V>> optionEventListener) {
+	}
+	*//*?}*/
 
 	@Override
 	public void addListener(BiConsumer<Option<OptionPair<K, V>>, OptionPair<K, V>> changedListener) {
@@ -240,6 +253,13 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 			return this;
 		}
 
+		/*? if >=1.21.3 {*/
+		/*@Override
+		public Builder<OptionPair<K, V>> stateManager(@NotNull StateManager<OptionPair<K, V>> stateManager) {
+			return null;
+		}
+		*//*?}*/
+
 		@Override
 		public Builder<OptionPair<K, V>> binding(@NotNull Binding<OptionPair<K, V>> binding) {
 			return null;
@@ -281,6 +301,18 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 			this.flags.addAll(flags);
 			return this;
 		}
+
+		/*? if >=1.21.3 {*/
+		/*@Override
+		public Builder<OptionPair<K, V>> addListener(@NotNull OptionEventListener<OptionPair<K, V>> optionEventListener) {
+			return null;
+		}
+
+		@Override
+		public Builder<OptionPair<K, V>> addListeners(@NotNull Collection<OptionEventListener<OptionPair<K, V>>> collection) {
+			return null;
+		}
+		*//*?}*/
 
 		@Override
 		public Builder<OptionPair<K, V>> instant(boolean instant) {

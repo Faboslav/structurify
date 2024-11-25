@@ -1,3 +1,4 @@
+/*? if <=1.21.1 {*/
 package com.faboslav.structurify.common.mixin.compat;
 
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
@@ -78,3 +79,4 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalSeparation);
 	}
 }
+/*?}*/

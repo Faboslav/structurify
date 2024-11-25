@@ -10,7 +10,6 @@ import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,6 +17,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL20.*;
+
+/*? if <=1.21.1 {*/
+import net.minecraft.util.FastColor;
+/*?} else {*/
+/*import net.minecraft.util.ARGB;
+*//*?}*/
 
 public class ImageButtonWidget extends AbstractWidget
 {
@@ -48,7 +53,6 @@ public class ImageButtonWidget extends AbstractWidget
 
 	@Override
 	protected void renderWidget(GuiGraphics context, int mouseX, int mouseY, float delta) {
-		/*?} else {*/
 		context.enableScissor(getX(), getY(), getX() + width, getY() + height);
 		this.isHovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
 
@@ -85,9 +89,11 @@ public class ImageButtonWidget extends AbstractWidget
 			}
 		}
 
-//        context.drawTexture(image, getX(), getY(), this.width, this.height, 0, 0, 1920, 1080, 1920, 1080);
-
-		int greyColor = FastColor.ARGB32.color((int) (alphaScale * 255), 0, 0, 0);
+		/*? if <=1.21.1 {*/
+		int greyColor = FastColor.ABGR32.color((int) (alphaScale * 255), 0, 0, 0);
+		/*?} else {*/
+		/*int greyColor = ARGB.color((int) (alphaScale * 255), 0, 0, 0);
+		*//*?}*/
 		context.fill(getX(), getY(), getX() + width, getY() + height, greyColor);
 
 		// Draw text.
@@ -111,7 +117,7 @@ public class ImageButtonWidget extends AbstractWidget
 
 		/*? >1.20.1 {*/
 		/*renderScrollingString(context, client.font, getMessage(), textX, textY, endX, endY, 0xFFFFFF);
-		 *//*?} else {*/
+		*//*?} else {*/
 		renderScrollingString(context, client.font, getMessage(), textX, textY, endX, endY, 0xFFFFFF);
 		/*?}*/
 

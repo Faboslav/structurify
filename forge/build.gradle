@@ -101,8 +101,13 @@ dependencies {
 	}
 
 	// Special compat
-	modImplementation(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-forge")) { transitive = false }
-	modImplementation(modrinth("structure-gel-api", "${prop('structure_gel_api_version')}")) { transitive = false }
+	if(prop('repurposed_structures_version') != '') {
+		modImplementation(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-forge")) { transitive = false }
+	}
+
+	if(prop('structure_gel_api_version') != '') {
+		modImplementation(modrinth("structure-gel-api", "${prop('structure_gel_api_version')}")) { transitive = false }
+	}
 
 	// For debugging
 	// modImplementation(modrinth("blue-skies", "1.3.31")) { transitive = false }
