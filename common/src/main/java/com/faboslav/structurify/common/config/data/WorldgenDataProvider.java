@@ -4,21 +4,20 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.mixin.structure.jigsaw.MaxDistanceFromCenterAccessor;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+
+
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /*? if <=1.21.1 {*/
 import com.faboslav.structurify.common.util.Platform;
 import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
 import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
 /*?}*/
-
-import java.lang.reflect.Field;
-import java.util.*;
 
 public final class WorldgenDataProvider
 {
@@ -66,7 +65,7 @@ public final class WorldgenDataProvider
 
 		var biomeRegistry = registryManager.lookup(Registries.BIOME).orElse(null);
 
-		if(biomeRegistry == null) {
+		if (biomeRegistry == null) {
 			return Collections.emptyList();
 		}
 

@@ -4,15 +4,12 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 
@@ -33,13 +30,13 @@ public final class StructurifyNeoForge
 	}
 
 	private static void onResourceManagerReload(TagsUpdatedEvent event) {
-		if(event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED) {
+		if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED) {
 			return;
 		}
 
 		/*? if >=1.21.3 {*/
 		/*var registryAccess = event.getLookupProvider();
-		*//*?} else {*/
+		 *//*?} else {*/
 		var registryAccess = event.getRegistryAccess();
 		/*?}*/
 

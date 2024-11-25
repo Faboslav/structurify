@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 /*? if >=1.21 {*/
 /*import com.faboslav.structurify.common.mixin.ResourcePackManagerAccessor;
-*//*?}*/
+ *//*?}*/
 
 public final class StructurifyResourcePackProvider
 {
