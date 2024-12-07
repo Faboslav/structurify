@@ -56,7 +56,7 @@ dependencies {
 
 	// Core dependencies
 	modImplementation "net.fabricmc:fabric-loader:${prop('fabric_loader_version')}"
-	modApi "net.fabricmc.fabric-api:fabric-api:${prop('fabric_api_version')}"
+	modApi "net.fabricmc.fabric-api:fabric-api:${prop('fabric_api_version')}+${prop('minecraft_version')}"
 
 	// Required client
 	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
