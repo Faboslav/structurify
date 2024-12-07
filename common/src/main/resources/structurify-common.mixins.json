@@ -20,6 +20,7 @@
 	],
 	"client": [
 		"AnimatedDynamicTextureImageAccessor",
-		"ClickableWidgetAccessor"
+		"ClickableWidgetAccessor",
+		"WorldOpenFlowsMixin"
 	]
 }

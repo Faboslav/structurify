@@ -1,5 +1,9 @@
-/*? if <=1.21.1 {*/
 package com.faboslav.structurify.common.mixin.compat;
+
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import org.spongepowered.asm.mixin.Mixin;
+
+/*? if <=1.21.1 {*/
 
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.util.RandomSpreadUtil;
@@ -7,11 +11,9 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread;
 import net.minecraft.core.Vec3i;
-import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -79,4 +81,10 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalSeparation);
 	}
 }
-/*?}*/
+/*?} else {*/
+/*// This is just a placeholder mixin
+@Mixin(RandomSpreadStructurePlacement.class)
+public abstract class RepurposedStructuresModifySpreadMixin
+{
+}
+*//*?}*/

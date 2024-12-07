@@ -1,6 +1,7 @@
 package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.checks.StructureDistanceFromWorldCenterCheck;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -33,6 +34,8 @@ public class LocateCommandMixin
 		if (Structurify.getConfig().disableAllStructures) {
 			throw new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.exception.all_structures_are_disabled")).create();
 		}
+
+		// TODO handle the custom checks here?
 
 		Optional<ResourceKey<Structure>> structureRegistryKey = predicate.unwrap().left();
 		Optional<TagKey<Structure>> structureTagKey = predicate.unwrap().right();

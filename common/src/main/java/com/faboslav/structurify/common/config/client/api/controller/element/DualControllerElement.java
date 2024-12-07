@@ -40,22 +40,20 @@ public final class DualControllerElement extends AbstractWidget
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		boolean labelMouseClicked = labelElement.mouseClicked(mouseX, mouseY, button);
 		boolean firstElementMouseClicked = firstElement.mouseClicked(mouseX, mouseY, button);
 		boolean secondElementMouseClicked = secondElement.mouseClicked(mouseX, mouseY, button);
 		boolean resetButtonMouseClicked = resetButton.mouseClicked(mouseX, mouseY, button);
 
-		return labelMouseClicked || firstElementMouseClicked || secondElementMouseClicked || resetButtonMouseClicked;
+		return firstElementMouseClicked || secondElementMouseClicked || resetButtonMouseClicked;
 	}
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		boolean labelMouseReleased = labelElement.mouseReleased(mouseX, mouseY, button);
 		boolean firstElementMouseReleased = firstElement.mouseReleased(mouseX, mouseY, button);
 		boolean secondElementMouseReleased = secondElement.mouseReleased(mouseX, mouseY, button);
 		boolean resetButtonMouseReleased = resetButton.mouseReleased(mouseX, mouseY, button);
 
-		return labelMouseReleased || firstElementMouseReleased || secondElementMouseReleased || resetButtonMouseReleased;
+		return firstElementMouseReleased || secondElementMouseReleased || resetButtonMouseReleased;
 	}
 
 	@Override
@@ -87,23 +85,20 @@ public final class DualControllerElement extends AbstractWidget
 
 	@Override
 	public void setFocused(boolean focused) {
-		labelElement.setFocused(focused);
 		firstElement.setFocused(focused);
 		secondElement.setFocused(focused);
 	}
 
 	@Override
 	public boolean isFocused() {
-		return labelElement.isFocused() || firstElement.isFocused() || secondElement.isFocused();
+		return firstElement.isFocused() || secondElement.isFocused();
 	}
 
 	@Override
 	public void setDimension(Dimension<Integer> dim) {
-		Dimension<Integer> labelElementDimension = dim.moved(0, 0).withWidth(labelElement.getDimension().width()).withHeight(labelElement.getDimension().height());
-		Dimension<Integer> firstElementDimension = dim.moved(0, labelElement.getDimension().height()).withWidth(firstElement.getDimension().width()).withHeight(firstElement.getDimension().height());
-		Dimension<Integer> secondElementDimension = dim.moved(firstElement.getDimension().width(), labelElement.getDimension().height()).withWidth(secondElement.getDimension().width()).withHeight(secondElement.getDimension().height());
+		Dimension<Integer> firstElementDimension = dim.moved(0, 0).withWidth(firstElement.getDimension().width()).withHeight(firstElement.getDimension().height());
+		Dimension<Integer> secondElementDimension = dim.moved(firstElement.getDimension().width(), 0).withWidth(secondElement.getDimension().width()).withHeight(secondElement.getDimension().height());
 
-		labelElement.setDimension(labelElementDimension);
 		firstElement.setDimension(firstElementDimension);
 		secondElement.setDimension(secondElementDimension);
 
@@ -118,7 +113,6 @@ public final class DualControllerElement extends AbstractWidget
 
 	@Override
 	public void unfocus() {
-		labelElement.unfocus();
 		firstElement.unfocus();
 		secondElement.unfocus();
 		super.unfocus();
@@ -126,12 +120,11 @@ public final class DualControllerElement extends AbstractWidget
 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float tickDelta) {
-		labelElement.render(graphics, mouseX, mouseY, tickDelta);
 		firstElement.render(graphics, mouseX, mouseY, tickDelta);
 		secondElement.render(graphics, mouseX, mouseY, tickDelta);
 
 		if (resetButton != null) {
-			resetButton.setY(getDimension().y() + labelElement.getDimension().height());
+			resetButton.setY(getDimension().y());
 			resetButton.render(graphics, mouseX, mouseY, tickDelta);
 		}
 	}
@@ -152,7 +145,6 @@ public final class DualControllerElement extends AbstractWidget
 
 	@Override
 	public void updateNarration(NarrationElementOutput builder) {
-		labelElement.updateNarration(builder);
 		firstElement.updateNarration(builder);
 		secondElement.updateNarration(builder);
 	}

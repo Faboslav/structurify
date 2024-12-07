@@ -2,6 +2,7 @@ package com.faboslav.structurify.common.mixin.structure.jigsaw;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
+import com.faboslav.structurify.common.config.data.StructureData;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.core.BlockPos;
@@ -11,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.CheckerboardColumnBiomeSource;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -63,30 +65,84 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 
 		var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
 
-		if (!structureData.isBiomeCheckEnabled()) {
-			return original.call(generationContext);
+		Structurify.getLogger().info(String.valueOf(structureData.isFlatnessCheckEnabled()));
+		if (structureData.isFlatnessCheckEnabled()) {
+			var biomeCheckResult = this.structurify$performFlatnessCheck(structureData, generationContext);
+
+			if(!biomeCheckResult) {
+				return Optional.empty();
+			}
 		}
 
-		var biomeCheckDistance = (int) Math.ceil(structureData.getBiomeCheckDistance() / 16.0);
+		if (structureData.isBiomeCheckEnabled()) {
+			var biomeCheckResult = this.structurify$performBiomeCheck(structureData, generationContext);
 
-		if (biomeCheckDistance != 0 && !(generationContext.biomeSource() instanceof CheckerboardColumnBiomeSource)) {
-			ChunkPos chunkPos = generationContext.chunkPos();
-			int y = this.startHeight.sample(generationContext.random(), new WorldGenerationContext(generationContext.chunkGenerator(), generationContext.heightAccessor()));
-			var blockPos = new BlockPos(generationContext.chunkPos().getMinBlockX(), y, generationContext.chunkPos().getMinBlockZ());
-
-			int sectionY = blockPos.getY();
-			sectionY = QuartPos.fromBlock(sectionY);
-
-			for (int curChunkX = chunkPos.x - biomeCheckDistance; curChunkX <= chunkPos.x + biomeCheckDistance; curChunkX++) {
-				for (int curChunkZ = chunkPos.z - biomeCheckDistance; curChunkZ <= chunkPos.z + biomeCheckDistance; curChunkZ++) {
-					Holder<Biome> biome = generationContext.biomeSource().getNoiseBiome(QuartPos.fromSection(curChunkX), sectionY, QuartPos.fromSection(curChunkZ), generationContext.randomState().sampler());
-					if (!generationContext.validBiome().test(biome)) {
-						return Optional.empty();
-					}
-				}
+			if(!biomeCheckResult) {
+				return Optional.empty();
 			}
 		}
 
 		return original.call(generationContext);
+	}
+
+	private boolean structurify$performBiomeCheck(StructureData structureData, GenerationContext generationContext) {
+		var biomeCheckDistance = (int) Math.ceil(structureData.getBiomeCheckDistance() / 16.0);
+
+		if(biomeCheckDistance == 0 || generationContext.biomeSource() instanceof CheckerboardColumnBiomeSource) {
+			return true;
+		}
+
+		ChunkPos chunkPos = generationContext.chunkPos();
+		int y = this.startHeight.sample(generationContext.random(), new WorldGenerationContext(generationContext.chunkGenerator(), generationContext.heightAccessor()));
+		var blockPos = new BlockPos(generationContext.chunkPos().getMinBlockX(), y, generationContext.chunkPos().getMinBlockZ());
+
+		int sectionY = QuartPos.fromBlock(blockPos.getY());
+
+		for (int curChunkX = chunkPos.x - biomeCheckDistance; curChunkX <= chunkPos.x + biomeCheckDistance; curChunkX++) {
+			for (int curChunkZ = chunkPos.z - biomeCheckDistance; curChunkZ <= chunkPos.z + biomeCheckDistance; curChunkZ++) {
+				Holder<Biome> biome = generationContext.biomeSource().getNoiseBiome(QuartPos.fromSection(curChunkX), sectionY, QuartPos.fromSection(curChunkZ), generationContext.randomState().sampler());
+				if (!generationContext.validBiome().test(biome)) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private boolean structurify$performFlatnessCheck(StructureData structureData, GenerationContext generationContext) {
+		var flatnessCheckDistance = structureData.getFlatnessCheckDistance();
+		var offsetStep = (int) Math.ceil(flatnessCheckDistance / 2.0F);
+		var flatnessCheckThreshold = structureData.getFlatnessCheckThreshold();
+
+		if(flatnessCheckDistance == 0 || flatnessCheckThreshold == 0) {
+			return true;
+		}
+
+		ChunkPos chunkPos = generationContext.chunkPos();
+		int y = this.startHeight.sample(generationContext.random(), new WorldGenerationContext(generationContext.chunkGenerator(), generationContext.heightAccessor()));
+		var blockPos = new BlockPos(chunkPos.getMinBlockX(), y, chunkPos.getMinBlockZ());
+
+		int baseX = blockPos.getX();
+		int baseZ = blockPos.getZ();
+		int minHeight = Integer.MAX_VALUE;
+		int maxHeight = Integer.MIN_VALUE;
+
+		for (int xOffset = -flatnessCheckDistance; xOffset <= flatnessCheckDistance; xOffset += offsetStep) {
+			for (int zOffset = -flatnessCheckDistance; zOffset <= flatnessCheckDistance; zOffset += offsetStep) {
+				int x = xOffset + baseX;
+				int z = zOffset + baseZ;
+				int height = generationContext.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, generationContext.heightAccessor(), generationContext.randomState());
+
+				minHeight = Math.min(minHeight, height);
+				maxHeight = Math.max(maxHeight, height);
+
+				if (maxHeight - minHeight > flatnessCheckThreshold) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 }

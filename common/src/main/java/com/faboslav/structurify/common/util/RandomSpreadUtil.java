@@ -18,12 +18,14 @@ public final class RandomSpreadUtil
 		int spacing = originalSpacing;
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 
-		if (structureSetData != null && !structureSetData.isUsingDefaultSpacing()) {
-			spacing = structureSetData.getSpacing();
-		}
-
 		if (Structurify.getConfig().enableGlobalSpacingAndSeparationModifier) {
-			spacing = (int) (spacing * Structurify.getConfig().globalSpacingAndSeparationModifier);
+			if (structureSetData != null && structureSetData.overrideGlobalSpacingAndSeparationModifier()) {
+				spacing = structureSetData.getSpacing();
+			} else {
+				spacing = (int) (spacing * Structurify.getConfig().globalSpacingAndSeparationModifier);
+			}
+		} else if (structureSetData != null) {
+			spacing = structureSetData.getSpacing();
 		}
 
 		return getCorrectedModifiedSpacingValue(spacing);
@@ -37,12 +39,14 @@ public final class RandomSpreadUtil
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 		int separation = originalSeparation;
 
-		if (structureSetData != null && !structureSetData.isUsingDefaultSpacing()) {
-			separation = structureSetData.getSeparation();
-		}
-
 		if (Structurify.getConfig().enableGlobalSpacingAndSeparationModifier) {
-			separation = (int) (separation * Structurify.getConfig().globalSpacingAndSeparationModifier);
+			if (structureSetData != null && structureSetData.overrideGlobalSpacingAndSeparationModifier()) {
+				separation = structureSetData.getSeparation();
+			} else {
+				separation = (int) (separation * Structurify.getConfig().globalSpacingAndSeparationModifier);
+			}
+		} else if (structureSetData != null) {
+			separation = structureSetData.getSeparation();
 		}
 
 		return getCorrectedModifiedSeparationValue(spacing, separation);

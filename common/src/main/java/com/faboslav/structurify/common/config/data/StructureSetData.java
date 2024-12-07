@@ -2,9 +2,11 @@ package com.faboslav.structurify.common.config.data;
 
 public final class StructureSetData
 {
+	public static final boolean OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = false;
 	public static final int MAX_SPACING = 128;
 	public static final int MAX_SEPARATION = 128;
 
+	private boolean overrideGlobalSpacingAndSeparationModifier = OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	private final int defaultSpacing;
 	private final int defaultSeparation;
 	private int spacing;
@@ -15,6 +17,20 @@ public final class StructureSetData
 		this.defaultSeparation = separation;
 		this.spacing = spacing;
 		this.separation = separation;
+	}
+
+	public boolean isUsingDefaultValues() {
+		return this.overrideGlobalSpacingAndSeparationModifier == OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE
+			   && this.spacing == defaultSpacing
+			   && this.separation == this.defaultSeparation;
+	}
+
+	public boolean overrideGlobalSpacingAndSeparationModifier() {
+		return this.overrideGlobalSpacingAndSeparationModifier;
+	}
+
+	public void setOverrideGlobalSpacingAndSeparationModifier(boolean overrideGlobalSpacingAndSeparationModifier) {
+		this.overrideGlobalSpacingAndSeparationModifier = overrideGlobalSpacingAndSeparationModifier;
 	}
 
 	public int getDefaultSpacing() {
@@ -39,17 +55,5 @@ public final class StructureSetData
 
 	public void setSeparation(int separation) {
 		this.separation = separation;
-	}
-
-	public boolean isUsingDefaultSpacing() {
-		return this.spacing == this.defaultSpacing;
-	}
-
-	public boolean isUsingDefaultSeparation() {
-		return this.separation == this.defaultSeparation;
-	}
-
-	public boolean isUsingDefaultSpacingAndSeparation() {
-		return isUsingDefaultSpacing() && isUsingDefaultSeparation();
 	}
 }

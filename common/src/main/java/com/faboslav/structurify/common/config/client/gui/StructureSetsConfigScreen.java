@@ -4,6 +4,7 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.DualControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.HolderOption;
+import com.faboslav.structurify.common.config.client.api.option.OptionPair;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
@@ -19,9 +20,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Environment(EnvType.CLIENT)
 public final class StructureSetsConfigScreen
@@ -39,6 +38,8 @@ public final class StructureSetsConfigScreen
 	}
 
 	public static void createStructureSetsTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
+		var structureSetOptions = new HashMap<String, AbstractMap.SimpleEntry<Option<Boolean>, Option<OptionPair<Option<Integer>, Option<Integer>>>>>();
+
 		var structureSetCategoryBuilder = ConfigCategory.createBuilder()
 			.name(Component.translatable("gui.structurify.structure_sets_category.title"))
 			.tooltip(Component.translatable("gui.structurify.structure_sets_category.description").append("\n\n").append(Component.translatable("gui.structurify.structure_sets.spacing.description")).append("\n\n").append(Component.translatable("gui.structurify.structure_sets.separation.description")));
@@ -55,7 +56,7 @@ public final class StructureSetsConfigScreen
 			.name(Component.translatable("gui.structurify.structure_sets.enable_global_spacing_and_separation_modifier.title"))
 			.description(enableGlobalSpacingAndSeparationDescriptionBuilder.build())
 			.binding(
-				true,
+				StructurifyConfig.ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE,
 				() -> config.enableGlobalSpacingAndSeparationModifier,
 				enableGlobalSpacingAndSeparationModifier -> config.enableGlobalSpacingAndSeparationModifier = enableGlobalSpacingAndSeparationModifier
 			)
@@ -65,6 +66,12 @@ public final class StructureSetsConfigScreen
 
 		generalStructuresSetsGroupBuilder.option(enableGlobalSpacingAndSeparationOption);
 
+		enableGlobalSpacingAndSeparationOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
+			for(var structureSetOption : structureSetOptions.values()) {
+				structureSetOption.getValue().setAvailable(!enableGlobalSpacingAndSeparationModifier || structureSetOption.getKey().pendingValue());
+			}
+		});
+
 		var globalSpacingAndSeparationModifierDescriptionBuilder = OptionDescription.createBuilder();
 		globalSpacingAndSeparationModifierDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.description"));
 		globalSpacingAndSeparationModifierDescriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structure_sets.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
@@ -73,7 +80,7 @@ public final class StructureSetsConfigScreen
 			.name(Component.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.title"))
 			.description(globalSpacingAndSeparationModifierDescriptionBuilder.build())
 			.binding(
-				1.0D,
+				StructurifyConfig.GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE,
 				() -> config.globalSpacingAndSeparationModifier,
 				modifier -> config.globalSpacingAndSeparationModifier = modifier
 			)
@@ -107,6 +114,28 @@ public final class StructureSetsConfigScreen
 					.description(OptionDescription.of(Component.translatable("gui.structurify.structure_sets.structure_group.description", namespace)));
 				currentNamespace = namespace;
 			}
+
+			var translatedStructureSetName = LanguageUtil.translateId("structure", structureSetStringId);
+
+			var overrideGlobalSpacingAndSeparationModifierDescriptionBuilder = OptionDescription.createBuilder();
+			overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.description"));
+
+			var overrideGlobalSpacingAndSeparationModifierOption = Option.<Boolean>createBuilder()
+				.name(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.title"))
+				.description(overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.build())
+				.binding(
+					StructureSetData.OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE,
+					() -> config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier(),
+					overrideGlobalSpacingAndSeparationModifier -> config.getStructureSetData().get(structureSetStringId).setOverrideGlobalSpacingAndSeparationModifier(overrideGlobalSpacingAndSeparationModifier)
+				)
+				.controller(opt -> BooleanControllerBuilder.create(opt)
+					.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+					.coloured(true)).build();
+
+			overrideGlobalSpacingAndSeparationModifierOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
+				var structureSetOption = structureSetOptions.get(structureSetStringId);
+				structureSetOption.getValue().setAvailable(!enableGlobalSpacingAndSeparationOption.pendingValue() || structureSetOption.getKey().pendingValue());
+			});
 
 			var spacingDescriptionBuilder = OptionDescription.createBuilder();
 			spacingDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.spacing.description"));
@@ -146,10 +175,15 @@ public final class StructureSetsConfigScreen
 					separationOption.requestSet(spacingOption.pendingValue() - 1);
 				}
 			});
-			var spacingAndSeparationOptionBuilder = HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
-				.controller(opt -> DualControllerBuilder.create(LabelOption.createBuilder().line(LanguageUtil.translateId("structure", structureSetStringId)).build(), spacingOption, separationOption));
+			var spacingAndSeparationOption = HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
+				.controller(opt -> DualControllerBuilder.create(LabelOption.createBuilder().line(translatedStructureSetName).build(), spacingOption, separationOption))
+				.available(!config.enableGlobalSpacingAndSeparationModifier || config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier()).build();
 
-			currentGroupBuilder.option(spacingAndSeparationOptionBuilder.build());
+			currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName).build());
+			currentGroupBuilder.option(overrideGlobalSpacingAndSeparationModifierOption);
+			currentGroupBuilder.option(spacingAndSeparationOption);
+
+			structureSetOptions.put(structureSetStringId, new AbstractMap.SimpleEntry<>(overrideGlobalSpacingAndSeparationModifierOption, spacingAndSeparationOption));
 		}
 
 		if (currentGroupBuilder != null) {

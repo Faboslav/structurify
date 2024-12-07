@@ -125,9 +125,9 @@ public final class WorldgenDataProvider
 				return null;
 			});
 
-			int biomeRadiusCheck = getBiomeRadiusForStructure(structure);
+			int checkRadius = getCheckRadiusForStructure(structure);
 
-			structures.put(structureId, new StructureData(defaultBiomes, biomeRadiusCheck));
+			structures.put(structureId, new StructureData(defaultBiomes, checkRadius));
 		}
 
 		return structures;
@@ -156,7 +156,7 @@ public final class WorldgenDataProvider
 		return structureSets;
 	}
 
-	private static int getBiomeRadiusForStructure(Structure structure) {
+	private static int getCheckRadiusForStructure(Structure structure) {
 		if (structure instanceof JigsawStructure) {
 			return ((MaxDistanceFromCenterAccessor) structure).structurify$getMaxDistanceFromCenter();
 		}

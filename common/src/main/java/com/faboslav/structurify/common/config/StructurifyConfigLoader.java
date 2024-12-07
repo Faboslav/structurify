@@ -27,7 +27,7 @@ public final class StructurifyConfigLoader
 
 		List<String> changedStructureSets = Structurify.getConfig().getStructureSetData().entrySet()
 			.stream()
-			.filter(entry -> !entry.getValue().isUsingDefaultSpacingAndSeparation())
+			.filter(entry -> !entry.getValue().isUsingDefaultValues())
 			.map(Map.Entry::getKey)
 			.toList();
 

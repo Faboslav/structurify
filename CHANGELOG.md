@@ -1,3 +1,11 @@
+## 1.0.9
+
+- Fixed typo causing invalid saving and loading of "disable_all_structures" option
+- Improved GUI behavior, it should be more clear what is now possible and what is not
+- Added new "Min structure distance from world center" (min_structure_distance_from_world_center) global setting
+- Added new "terrain flatness" check configuration to each structure
+- Added new "config_version" property, so migrating between different config versions in the future is more manageable
+
 ## 1.0.8
 
 - Fixed critical compatibility issue which prevented structure generation in the non vanilla biomes (for example Blue Skies)

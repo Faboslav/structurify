@@ -4,6 +4,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,10 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.WorldOpenFlowsMixin")) {
+			return this.isClassAvailable("me.earth.mc_runtime_test.McRuntimeTest");
+		}
+
 		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.compat.RepurposedStructuresModifySpreadMixin")) {
 			return this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread");
 		}

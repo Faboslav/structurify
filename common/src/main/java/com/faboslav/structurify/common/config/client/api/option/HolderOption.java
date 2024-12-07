@@ -100,12 +100,14 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 		boolean changed = this.available != available;
 
 		this.available = available;
+		this.firstOption.setAvailable(available);
+		this.secondOption.setAvailable(available);
 
 		if (changed) {
 			if (!available) {
-				firstOption.forgetPendingValue();
-				secondOption.forgetPendingValue();
+				this.forgetPendingValue();
 			}
+
 			this.triggerListeners(!available);
 		}
 	}
