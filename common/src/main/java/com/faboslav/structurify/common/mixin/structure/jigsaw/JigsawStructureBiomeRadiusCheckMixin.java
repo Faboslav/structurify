@@ -65,7 +65,6 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 
 		var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
 
-		Structurify.getLogger().info(String.valueOf(structureData.isFlatnessCheckEnabled()));
 		if (structureData.isFlatnessCheckEnabled()) {
 			var biomeCheckResult = this.structurify$performFlatnessCheck(structureData, generationContext);
 

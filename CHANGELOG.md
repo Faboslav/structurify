@@ -1,3 +1,7 @@
+## 1.0.11
+
+- Removed the dev console spam (sorry for the troubles and multiple releases)
+
 ## 1.0.10
 
 - Fixed crash related to invalid catalogue compat setup
