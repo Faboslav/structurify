@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screens.Screen;
 
 public final class CatalogueCompat
 {
-	public static Screen createConfigScreen(Screen screen, ModContainer container) {
+	public static Screen createConfigScreen(Screen currentScreen, ModContainer container) {
 		if (
 			!FabricLoader.getInstance().isModLoaded("catalogue")
 			|| !FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")
@@ -15,6 +15,6 @@ public final class CatalogueCompat
 			return null;
 		}
 
-		return new StructurifyConfigScreen(screen);
+		return new StructurifyConfigScreen(currentScreen);
 	}
 }

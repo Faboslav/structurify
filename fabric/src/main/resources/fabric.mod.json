@@ -46,7 +46,7 @@
 			}
 		},
 		"catalogue": {
-			"configFactory": "com.faboslav.structurify.fabric.CatalogueCompat",
+			"configFactory": "com.faboslav.structurify.common.modcompat.fabric.CatalogueCompat",
 			"icon": {
 				"image": "catalogue_icon.png"
 			},

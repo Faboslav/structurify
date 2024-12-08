@@ -1,3 +1,7 @@
+## 1.0.10
+
+- Fixed crash related to invalid catalogue compat setup
+
 ## 1.0.9
 
 - Fixed typo causing invalid saving and loading of "disable_all_structures" option
