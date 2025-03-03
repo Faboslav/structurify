@@ -78,12 +78,15 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 		return controller;
 	}
 
-	/*? if >=1.21.3 {*/
-	/*@Override
-	public @NotNull StateManager<OptionPair<K, V>> stateManager() {
+
+	//? >=1.21.1 {
+	/*public @NotNull StateManager<OptionPair<K, V>> stateManager() {
 		return null;
 	}
-	*//*?}*/
+
+	public void addEventListener(OptionEventListener<OptionPair<K, V>> optionEventListener) {
+	}
+	*///?}
 
 	@Override
 	public @NotNull Binding<OptionPair<K, V>> binding() {
@@ -168,12 +171,6 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 		return this.firstOption.isPendingValueDefault() && this.secondOption.isPendingValueDefault();
 	}
 
-	/*? if >=1.21.3 {*/
-	/*@Override
-	public void addEventListener(OptionEventListener<OptionPair<K, V>> optionEventListener) {
-	}
-	*//*?}*/
-
 	@Override
 	public void addListener(BiConsumer<Option<OptionPair<K, V>>, OptionPair<K, V>> changedListener) {
 		this.listeners.add(changedListener);
@@ -255,12 +252,11 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 			return this;
 		}
 
-		/*? if >=1.21.3 {*/
-		/*@Override
-		public Builder<OptionPair<K, V>> stateManager(@NotNull StateManager<OptionPair<K, V>> stateManager) {
+		//? >=1.21.1 {
+		/*public Builder<OptionPair<K, V>> stateManager(@NotNull StateManager<OptionPair<K, V>> stateManager) {
 			return null;
 		}
-		*//*?}*/
+		*///?}
 
 		@Override
 		public Builder<OptionPair<K, V>> binding(@NotNull Binding<OptionPair<K, V>> binding) {
@@ -304,17 +300,15 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 			return this;
 		}
 
-		/*? if >=1.21.3 {*/
-		/*@Override
-		public Builder<OptionPair<K, V>> addListener(@NotNull OptionEventListener<OptionPair<K, V>> optionEventListener) {
+		//? >=1.21.1 {
+		/*public Builder<OptionPair<K, V>> addListener(@NotNull OptionEventListener<OptionPair<K, V>> optionEventListener) {
 			return null;
 		}
 
-		@Override
 		public Builder<OptionPair<K, V>> addListeners(@NotNull Collection<OptionEventListener<OptionPair<K, V>>> collection) {
 			return null;
 		}
-		*//*?}*/
+		*///?}
 
 		@Override
 		public Builder<OptionPair<K, V>> instant(boolean instant) {

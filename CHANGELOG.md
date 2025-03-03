@@ -1,3 +1,7 @@
+## 1.0.12
+
+- Fixed mod crash related to latest YACL
+
 ## 1.0.11
 
 - Removed the dev console spam (sorry for the troubles and multiple releases)
