@@ -1,6 +1,7 @@
 ## 1.0.12
 
 - Fixed mod crash related to latest YACL
+- Increased spacing/separation slider range from 128 to 256
 
 ## 1.0.11
 

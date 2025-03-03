@@ -3,8 +3,8 @@ package com.faboslav.structurify.common.config.data;
 public final class StructureSetData
 {
 	public static final boolean OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = false;
-	public static final int MAX_SPACING = 128;
-	public static final int MAX_SEPARATION = 128;
+	public static final int MAX_SPACING = 256;
+	public static final int MAX_SEPARATION = 256;
 
 	private boolean overrideGlobalSpacingAndSeparationModifier = OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	private final int defaultSpacing;
