@@ -118,14 +118,10 @@ jobs:
                 with:
                     fetch-depth: 0
 
-            -   name: "Parse gradle properties"
-                id: gradle-properties
-                run: ./.github/scripts/parse-gradle-properties.sh ${{ matrix.version }}
-
             -   name: "Set up JDK"
                 uses: actions/setup-java@v4
                 with:
-                    java-version: ${{ steps.gradle-properties.outputs.MOD_JAVA_VERSION }}
+                    java-version: 21
                     distribution: temurin
 
             -   name: "Setup Gradle"
