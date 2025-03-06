@@ -20,9 +20,29 @@ config = "structurify-common.mixins.json"
 config = "structurify-forge.mixins.json"
 
 [[dependencies.${ modId }]]
+modId = "neoforge"
+type = "required"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${ modId }]]
+modId = "minecraft"
+required = true
+versionRange = "[${minMinecraftVersion},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${ modId }]]
 modId = "yet_another_config_lib_v3"
-mandatory = true
+required = true
 versionRange = "[${yaclVersion},)"
+ordering = "NONE"
+side = "BOTH"
+[dependencies.${modId}.mc-publish]
+    ignore=false
+    modrinth="yacl"
+    curseforge="yacl"
 
 [modproperties.${ modId }]
 catalogueImageIcon = "catalogue_icon.png"

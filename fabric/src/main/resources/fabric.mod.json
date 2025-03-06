@@ -52,6 +52,13 @@
 			},
 			"banner": "catalogue_logo.png",
 			"background": "catalogue_background.png"
+		},
+		"mc-publish": {
+			"dependencies": [
+				"fabric-api(required){curseforge:306612}{modrinth:P7dR8mSH}",
+				"yet_another_config_lib_v3(required){curseforge:667299}{modrinth:1eAoo2KR}",
+				"modmenu(optional){curseforge:308702}{modrinth:mOgUt4GM}"
+			]
 		}
 	}
 }
