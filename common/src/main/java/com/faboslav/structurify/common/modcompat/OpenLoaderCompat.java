@@ -2,8 +2,6 @@ package com.faboslav.structurify.common.modcompat;
 
 //? open_loader: >0 {
 import com.faboslav.structurify.common.util.Platform;
-import net.darkhax.openloader.common.impl.packs.OpenLoaderRepositorySource;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.RepositorySource;
 
 import java.util.ArrayList;
@@ -13,7 +11,10 @@ import java.util.EnumSet;
 import net.darkhax.openloader.config.ConfigSchema;
 import net.darkhax.openloader.packs.OpenLoaderRepositorySource;
 import net.darkhax.openloader.packs.RepoType;
-//?}
+//?} else {
+/*import net.darkhax.openloader.common.impl.packs.OpenLoaderRepositorySource;
+import net.minecraft.server.packs.PackType;
+*///?}
 
 public final class OpenLoaderCompat implements ModCompat
 {
