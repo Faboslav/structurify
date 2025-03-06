@@ -71,6 +71,10 @@ public final class WorldgenDataProvider
 
 		List<String> biomes = new ArrayList<>();
 
+		for (var biomeTag : biomeRegistry.listTags().toList()) {
+			biomes.add('#' + biomeTag.unwrapKey().get().location().toString());
+		}
+
 		for (var biome : biomeRegistry.listElements().toList()) {
 			biomes.add(biome.unwrapKey().get().location().toString());
 		}
@@ -97,15 +101,7 @@ public final class WorldgenDataProvider
 
 			biomeStorage.mapLeft(biomeTagKey -> {
 				biomeRegistry.get(biomeTagKey).ifPresent(biomes -> {
-					for (var biome : biomes) {
-						String biomeKey = biome.unwrapKey().get().location().toString();
-
-						if (defaultBiomes.contains(biomeKey)) {
-							continue;
-						}
-
-						defaultBiomes.add(biomeKey);
-					}
+					defaultBiomes.add(biomeTagKey.location().toString());
 				});
 
 				return null;

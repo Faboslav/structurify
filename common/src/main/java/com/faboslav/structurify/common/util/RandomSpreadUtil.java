@@ -15,8 +15,12 @@ public final class RandomSpreadUtil
 	}
 
 	public static int getModifiedSpacing(ResourceLocation structureSetIdentifier, int originalSpacing) {
-		int spacing = originalSpacing;
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
+		return getModifiedSpacing(structureSetData, originalSpacing);
+	}
+
+	public static int getModifiedSpacing(StructureSetData structureSetData, int originalSpacing) {
+		int spacing = originalSpacing;
 
 		if (Structurify.getConfig().enableGlobalSpacingAndSeparationModifier) {
 			if (structureSetData != null && structureSetData.overrideGlobalSpacingAndSeparationModifier()) {
@@ -37,6 +41,14 @@ public final class RandomSpreadUtil
 		int originalSeparation
 	) {
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
+		return getModifiedSeparation(structureSetData, spacing, originalSeparation);
+	}
+
+	public static int getModifiedSeparation(
+		StructureSetData structureSetData,
+		int spacing,
+		int originalSeparation
+	) {
 		int separation = originalSeparation;
 
 		if (Structurify.getConfig().enableGlobalSpacingAndSeparationModifier) {
@@ -56,7 +68,7 @@ public final class RandomSpreadUtil
 		return Math.max(1, spacingValue);
 	}
 
-	public static int getCorrectedModifiedSeparationValue(int spacing, int separation) {
+	private static int getCorrectedModifiedSeparationValue(int spacing, int separation) {
 		separation = Math.max(0, separation);
 
 		if (separation >= spacing) {

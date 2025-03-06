@@ -93,7 +93,7 @@ dependencies {
 	compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${prop('mixin_extras_version')}"))
 	implementation(include("io.github.llamalad7:mixinextras-forge:${prop('mixin_extras_version')}"))
 
-	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
+	// YetAnotherConfigLib (https://docs.isxa nder.dev/yet-another-config-lib)
 	if (minecraftVersion == '1.20.2') {
 		modImplementation(modrinth("yacl", "${prop('yacl_version')}-forge")) { transitive false }
 	} else {
@@ -101,6 +101,10 @@ dependencies {
 	}
 
 	// Special compat
+	if(prop('open_loader_version') != '') {
+		modImplementation(modrinth("open-loader", "${prop('open_loader_version')}")) { transitive = false }
+	}
+
 	if(prop('repurposed_structures_version') != '') {
 		modImplementation(modrinth("repurposed-structures-forge", "${prop('repurposed_structures_version')}-forge")) { transitive = false }
 	}

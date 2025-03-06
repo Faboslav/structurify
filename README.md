@@ -234,6 +234,7 @@ Separation is the minimum distance in chunks between structures within the same 
 Structurify is designed to be fully compatible with most of the world generation mods and datapacks, and it currently offers enhanced compatibility with the following mods:
 
 * [Paxi](https://modrinth.com/mod/paxi)
+* [Open Loader](https://modrinth.com/mod/open-loader)
 * [Global Packs](https://modrinth.com/mod/globalpacks)
 * [Global Datapacks](https://modrinth.com/mod/datapacks)
 

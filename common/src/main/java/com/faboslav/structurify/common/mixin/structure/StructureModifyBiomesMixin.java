@@ -10,9 +10,11 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 
@@ -22,45 +24,71 @@ public abstract class StructureModifyBiomesMixin implements StructurifyStructure
 	@WrapMethod(
 		method = "biomes"
 	)
-	private HolderSet<Biome> structurify$getModifiedBiomes(
+	private HolderSet<Biome> structurify$biomes(
 		Operation<HolderSet<Biome>> original
 	) {
-		ResourceLocation structureId = structurify$getStructureIdentifier();
-
-		if (
-			structureId == null
-			|| !Structurify.getConfig().getStructureData().containsKey(structureId.toString())
-		) {
-			return original.call();
+		if(this.structurify$getStructureBiomes() == null) {
+			var biomeHolderSet = this.structurify$getBiomeHolderSet(original);
+			this.structurify$setStructureBiomes(biomeHolderSet);
 		}
 
-		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+		return this.structurify$getStructureBiomes();
+	}
 
-		if (registryManager == null) {
-			return original.call();
-		}
+	@Unique
+	private HolderSet<Biome> structurify$getBiomeHolderSet(
+		Operation<HolderSet<Biome>> original
+	) {
+			ResourceLocation structureId = structurify$getStructureIdentifier();
 
-		var biomeRegistry = registryManager.lookup(Registries.BIOME).orElse(null);
-
-		if (biomeRegistry == null) {
-			return original.call();
-		}
-
-		var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
-		var biomes = structureData.getBiomes();
-		ArrayList<Holder<Biome>> biomeHolders = new ArrayList<>();
-
-		for (var biomeId : biomes) {
-			var biomeKey = ResourceKey.create(Registries.BIOME, Structurify.makeNamespacedId(biomeId));
-			var biomeHolder = biomeRegistry.get(biomeKey).orElse(null);
-
-			if (biomeHolder == null) {
-				continue;
+			if (
+				structureId == null
+				|| !Structurify.getConfig().getStructureData().containsKey(structureId.toString())
+			) {
+				return original.call();
 			}
 
-			biomeHolders.add(biomeHolder);
-		}
+			var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
 
-		return HolderSet.direct(biomeHolders);
+			if (registryManager == null) {
+				return original.call();
+			}
+
+			var biomeRegistry = registryManager.lookup(Registries.BIOME).orElse(null);
+
+			if (biomeRegistry == null) {
+				return original.call();
+			}
+
+			var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
+			var biomeIds = structureData.getBiomes();
+			ArrayList<Holder<Biome>> biomeHolders = new ArrayList<>();
+
+
+			for (var biomeId : biomeIds) {
+				if(biomeId.contains("#")) {
+					var biomeTagKey = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId(biomeId.replace("#", "")));
+					var biomeTagHolder = biomeRegistry.get(biomeTagKey).orElse(null);
+
+					if(biomeTagHolder == null) {
+						continue;
+					}
+
+					for (var biomeHolder : biomeTagHolder.stream().toList()) {
+						biomeHolders.add(biomeHolder);
+					}
+				} else {
+					var biomeResourceKey = ResourceKey.create(Registries.BIOME, Structurify.makeNamespacedId(biomeId.replace("#", "")));
+					var biomeHolder = biomeRegistry.get(biomeResourceKey).orElse(null);
+
+					if (biomeHolder == null) {
+						continue;
+					}
+
+					biomeHolders.add(biomeHolder);
+				}
+			}
+
+			return HolderSet.direct(biomeHolders);
 	}
 }

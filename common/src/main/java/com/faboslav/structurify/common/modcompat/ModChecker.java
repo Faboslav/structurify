@@ -24,12 +24,17 @@ public final class ModChecker
 		String modId = "";
 
 		try {
-			modId = "globalpacks";
-			loadModCompat(modId, () -> new GlobalPacksCompat());
+			//? global_packs: >0 {
+			loadModCompat("globalpacks", () -> new GlobalPacksCompat());
+			//?}
+
+			//? open_loader: >0 {
+			loadModCompat("openloader", () -> new OpenLoaderCompat());
+			//?}
 
 			setupPlatformModCompat();
 		} catch (Throwable e) {
-			Structurify.getLogger().error("Failed to setup compat with " + modId);
+			Structurify.getLogger().error("Failed to setup mod compats");
 			e.printStackTrace();
 		}
 	}

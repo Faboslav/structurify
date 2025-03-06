@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Optional;
 
@@ -84,6 +85,7 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 		return original.call(generationContext);
 	}
 
+	@Unique
 	private boolean structurify$performBiomeCheck(StructureData structureData, GenerationContext generationContext) {
 		var biomeCheckDistance = (int) Math.ceil(structureData.getBiomeCheckDistance() / 16.0);
 
@@ -109,6 +111,7 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 		return true;
 	}
 
+	@Unique
 	private boolean structurify$performFlatnessCheck(StructureData structureData, GenerationContext generationContext) {
 		var flatnessCheckDistance = structureData.getFlatnessCheckDistance();
 		var offsetStep = (int) Math.ceil(flatnessCheckDistance / 2.0F);

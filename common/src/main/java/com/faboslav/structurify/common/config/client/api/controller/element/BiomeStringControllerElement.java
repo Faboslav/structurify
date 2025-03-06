@@ -46,29 +46,39 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 
 	@Override
 	public List<String> computeMatchingValues() {
-		return this.biomeStringController.getAllowedValues(this.inputField).stream().filter(this::matchingValue).sorted((s1, s2) -> {
+		var matchingValues = this.biomeStringController.getAllowedValues(this.inputField).stream().filter(this::matchingValue).sorted((s1, s2) -> {
+
 			if (s1.startsWith(this.inputField) && !s2.startsWith(this.inputField)) {
 				return -1;
 			} else {
 				return !s1.startsWith(this.inputField) && s2.startsWith(this.inputField) ? 1:s1.compareTo(s2);
 			}
 		}).toList();
+
+		return matchingValues;
+	}
+
+	@Override
+	public boolean matchingValue(String value) {
+		var slugifiedValue = inputField.toLowerCase().replace(" ", "_");
+		var slugifiedBiome = value.toLowerCase().replace(" ", "_");
+		var slugifiedTranslatedBiome = LanguageUtil.translateId("biome", value).getString().toLowerCase().replace(" ", "_");
+
+		return slugifiedBiome.contains(slugifiedValue) || slugifiedTranslatedBiome.contains(slugifiedValue) || super.matchingValue(value);
 	}
 
 	@Override
 	public String getString(String biome) {
-		return LanguageUtil.translateId("string", biome).getString();
+		return LanguageUtil.translateId("biome", biome).getString();
 	}
 
 	@Override
 	protected int getDecorationPadding() {
 		return 16;
-		// return super.getXPadding();
 	}
 
 	@Override
 	protected int getDropdownEntryPadding() {
-		// return 0;
 		return 4;
 	}
 
@@ -96,20 +106,32 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 			return Component.literal(inputField);
 		}
 
-		return LanguageUtil.translateId("string", this.biomeStringController.option().pendingValue());
+		var pendingValue = this.biomeStringController.option().pendingValue();
+
+		if(pendingValue.contains(":")) {
+			return LanguageUtil.translateId("biome", this.biomeStringController.option().pendingValue());
+		}
+
+		return Component.literal(pendingValue);
 	}
 
 	private void renderBiomeImage(String biomeName, GuiGraphics graphics, int x, int y, float delta) {
-		biomeName = Structurify.makeNamespacedId(biomeName).getPath();
-		ResourceLocation imageId = Structurify.makeId("textures/gui/config/images/biomes/" + biomeName + ".png");
+		ResourceLocation imageId;
 
-		ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-
-		try {
-			var resource = resourceManager.getResourceOrThrow(imageId);
-			resource.source().close();
-		} catch (FileNotFoundException e) {
+		if(biomeName.contains("#") || !biomeName.contains(":")) {
 			imageId = Structurify.makeId("textures/gui/config/images/biomes/unknown.png");
+		} else {
+			biomeName = Structurify.makeNamespacedId(biomeName).getPath();
+			imageId = Structurify.makeId("textures/gui/config/images/biomes/" + biomeName + ".png");
+
+			ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+
+			try {
+				var resource = resourceManager.getResourceOrThrow(imageId);
+				resource.source().close();
+			} catch (FileNotFoundException e) {
+				imageId = Structurify.makeId("textures/gui/config/images/biomes/unknown.png");
+			}
 		}
 
 

@@ -72,8 +72,8 @@ public class StructurifyConfigScreen extends Screen
 		grid.calculateLayout();
 		grid.visitWidgets(this::addRenderableWidget);
 
-		int kofiButtonWidth = 150;
-		int discordButtonWidth = 150;
+		int kofiButtonWidth = 135;
+		int discordButtonWidth = 135;
 		int discordAndKoFiButtonsWidth = kofiButtonWidth + discordButtonWidth + 30; // button widths + left margin of Ko-Fi button + right margin of Discord button
 		int doneButtonWidth = this.width - discordAndKoFiButtonsWidth;
 		var buttonWidget = Button.builder(CommonComponents.GUI_DONE, (btn) -> this.minecraft.setScreen(this.parent)).bounds(this.width / 2 - doneButtonWidth / 2, this.height - 30, doneButtonWidth, 20).build();

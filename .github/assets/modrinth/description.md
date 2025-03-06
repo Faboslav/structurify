@@ -46,6 +46,20 @@ Structurify is a configuration mod that makes configuring everything related to 
 
 <br>
 
+# 💡 How to use the mod
+
+This mod is designed for in-game configuration, so it requires the **[YACL (YetAnotherConfigLib)](https://www.curseforge.com/minecraft/mc-mods/yacl)** mod.
+
+## Fabric/Quilt
+
+If you’re using Fabric or Quilt, you’ll also need the [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu) mod or another mod that provides access to mod configs.
+
+## NeoForge/Forge
+
+No extra mods are needed.
+
+<br>
+
 # 🖥️ In-Game configuration
 
 ## Structure settings
@@ -233,6 +247,7 @@ Separation is the minimum distance in chunks between structures within the same 
 Structurify is designed to be fully compatible with most of the world generation mods and datapacks, and it currently offers enhanced compatibility with the following mods:
 
 * [Paxi](https://modrinth.com/mod/paxi)
+* [Open Loader](https://modrinth.com/mod/open-loader)
 * [Global Packs](https://modrinth.com/mod/globalpacks)
 * [Global Datapacks](https://modrinth.com/mod/datapacks)
 

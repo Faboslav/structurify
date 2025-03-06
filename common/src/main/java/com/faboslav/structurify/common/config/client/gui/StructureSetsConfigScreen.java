@@ -9,6 +9,7 @@ import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.util.LanguageUtil;
+import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
@@ -67,8 +68,21 @@ public final class StructureSetsConfigScreen
 		generalStructuresSetsGroupBuilder.option(enableGlobalSpacingAndSeparationOption);
 
 		enableGlobalSpacingAndSeparationOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
-			for(var structureSetOption : structureSetOptions.values()) {
-				structureSetOption.getValue().setAvailable(!enableGlobalSpacingAndSeparationModifier || structureSetOption.getKey().pendingValue());
+			for(var structureSetOption : structureSetOptions.entrySet()) {
+				var structureSetData = config.getStructureSetData().get(structureSetOption.getKey());
+				var structureSetOptionOverride = structureSetOption.getValue().getKey();
+				var structureSetOptionPair = structureSetOption.getValue().getValue();
+
+				structureSetOptionOverride.setAvailable(enableGlobalSpacingAndSeparationModifier);
+				structureSetOptionPair.setAvailable(!enableGlobalSpacingAndSeparationModifier || structureSetOptionOverride.pendingValue());
+
+				/*
+				if(!structureSetOptionOverride.available()) {
+					var spacingOption = structureSetOptionPair.pendingValue().getFirstOption();
+					var separationOption = structureSetOptionPair.pendingValue().getSecondOption();
+					spacingOption.requestSet(RandomSpreadUtil.getModifiedSpacing(structureSetData, spacingOption.pendingValue()));
+					separationOption.requestSet(RandomSpreadUtil.getModifiedSeparation(structureSetData, spacingOption.pendingValue(), separationOption.pendingValue()));
+				}*/
 			}
 		});
 
@@ -130,7 +144,9 @@ public final class StructureSetsConfigScreen
 				)
 				.controller(opt -> BooleanControllerBuilder.create(opt)
 					.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
-					.coloured(true)).build();
+					.coloured(true)
+				).available(config.enableGlobalSpacingAndSeparationModifier)
+				.build();
 
 			overrideGlobalSpacingAndSeparationModifierOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
 				var structureSetOption = structureSetOptions.get(structureSetStringId);

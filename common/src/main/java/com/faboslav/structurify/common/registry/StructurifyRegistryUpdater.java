@@ -44,7 +44,9 @@ public final class StructurifyRegistryUpdater
 			var structureRegistryKey = structureReference.key();
 
 			ResourceLocation structureId = structureRegistryKey.location();
-			((StructurifyStructure) structure).structurify$setStructureIdentifier(structureId);
+			var structurifyStructure = ((StructurifyStructure) structure);
+			structurifyStructure.structurify$setStructureIdentifier(structureId);
+			structurifyStructure.structurify$setStructureBiomes(null);
 		}
 
 		Structurify.getLogger().info("Structure registries updated");
