@@ -61,7 +61,7 @@ jobs:
             matrix: ${{ fromJson(needs.build.outputs.matrix) }}
 
         name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }} client
-        timeout-minutes: 30
+        timeout-minutes: 10
 
         steps:
             -   name: "Checkout repository"
@@ -110,7 +110,7 @@ jobs:
             matrix: ${{ fromJson(needs.build.outputs.matrix) }}
 
         name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }} server
-        timeout-minutes: 30
+        timeout-minutes: 10
 
         steps:
             -   name: "Checkout repository"
@@ -125,7 +125,7 @@ jobs:
             -   name: "Set up JDK"
                 uses: actions/setup-java@v4
                 with:
-                    java-version: ${{ steps.gradle-properties.outputs.JAVA_VERSION }}
+                    java-version: ${{ steps.gradle-properties.outputs.MOD_JAVA_VERSION }}
                     distribution: temurin
 
             -   name: "Setup Gradle"
