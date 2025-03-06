@@ -51,7 +51,7 @@ jobs:
 
             -   name: "Generate matrix for the run job"
                 id: set-matrix
-                run: ./.github/scripts/generate-run-matrix.sh "[]" "[]"
+                run: ./.github/scripts/generate-run-matrix.sh
 
     run:
         runs-on: ubuntu-latest
@@ -69,6 +69,12 @@ jobs:
                 with:
                     fetch-depth: 0
 
+            - name: "Set up JDK"
+              uses: actions/setup-java@v4
+              with:
+                  java-version: 21
+                  distribution: temurin
+
             -   name: "Download Built JARs"
                 uses: actions/download-artifact@v4
                 with:
@@ -85,14 +91,13 @@ jobs:
                 run: wget -P run/mods https://api.modrinth.com/maven/maven/modrinth/yacl/${{ matrix.yacl_version }}-${{ matrix.mod_loader }}/yacl-${{ matrix.yacl_version }}-${{ matrix.mod_loader }}.jar
 
             -   name: Run ${{ matrix.version }} ${{ matrix.mod_loader }}
-                uses: 3arthqu4ke/mc-runtime-test@2.4.2
+                uses: 3arthqu4ke/mc-runtime-test@3.0.0
                 with:
                     mc: ${{ matrix.version }}
                     modloader: ${{ matrix.mod_loader }}
                     regex: .*${{ matrix.mod_loader }}.*
                     mc-runtime-test: ${{ matrix.mod_loader_alias }}
                     java: ${{ steps.gradle-properties.outputs.MOD_JAVA_VERSION }}
-                    java-distribution: temurin
                     fabric-api: ${{ steps.gradle-properties.outputs.FABRIC_API_VERSION }}
                     xvfb: false
                     headlessmc-command: -lwjgl --retries 3 --jvm -Djava.awt.headless=true
