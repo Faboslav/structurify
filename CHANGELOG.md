@@ -1,5 +1,7 @@
 ## 1.0.12
 
+- Added support for biome tags
+- Added compatibility with the Open Loader
 - Fixed mod crash related to latest YACL
 - Increased spacing/separation slider range from 128 to 256
 
