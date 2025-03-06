@@ -3,7 +3,7 @@
 mod_loader=$1
 version=$2
 
-mkdir -p $mod_loader/versions/$version/run && echo "eula=true" > $1/run/eula.txt
+mkdir -p $mod_loader/versions/$version/run && echo "eula=true" > $mod_loader/versions/$version/run/eula.txt
 
 ./gradlew $mod_loader:$version:runServer --no-daemon --args="nogui" 2>&1 | tee gradle_server_output.txt &
 

@@ -131,6 +131,9 @@ jobs:
                     generate-job-summary: false
                     gradle-version: wrapper
 
+            -   name: "Accept eula"
+                run: mkdir -p ${{ matrix.mod_loader }}/versions/${{ matrix.version }}/run && echo "eula=true" > ${{ matrix.mod_loader }}/versions/${{ matrix.version }}/run/eula.txt
+
             -   name: Run ${{ matrix.version }} ${{ matrix.mod_loader }} server
                 uses: modmuss50/xvfb-action@v1
                 with:
