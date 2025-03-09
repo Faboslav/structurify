@@ -99,9 +99,26 @@ public final class WorldgenDataProvider
 			var biomeStorage = structure.biomes().unwrap();
 			var defaultBiomes = new ArrayList<String>();
 
+			/*
 			biomeStorage.mapLeft(biomeTagKey -> {
 				biomeRegistry.get(biomeTagKey).ifPresent(biomes -> {
 					defaultBiomes.add(biomeTagKey.location().toString());
+				});
+
+				return null;
+			});*/
+
+			biomeStorage.mapLeft(biomeTagKey -> {
+				biomeRegistry.get(biomeTagKey).ifPresent(biomes -> {
+					for (var biome : biomes) {
+						String biomeKey = biome.unwrapKey().get().location().toString();
+
+						if (defaultBiomes.contains(biomeKey)) {
+							continue;
+						}
+
+						defaultBiomes.add(biomeKey);
+					}
 				});
 
 				return null;
