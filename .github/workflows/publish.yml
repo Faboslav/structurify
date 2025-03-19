@@ -6,12 +6,12 @@ on:
             mod_loaders:
                 description: 'List of mod loaders to be published'
                 required: true
-                default: "['fabric', 'neoforge', 'forge']"
+                default: "['fabric', 'neoforge']"
                 type: string
             versions:
                 description: 'List of versions to be published'
                 required: true
-                default: "['1.20.1', '1.21.1', '1.21.3', '1.21.4']"
+                default: "['1.21.1', '1.21.3', '1.21.4']"
                 type: string
 
 jobs:
@@ -59,70 +59,70 @@ jobs:
             matrix: ${{ fromJson(needs.build.outputs.matrix) }}
 
         steps:
-            -   name: "Checkout repository"
-                uses: actions/checkout@v4
-                with:
-                    fetch-depth: 0
+        -   name: "Checkout repository"
+            uses: actions/checkout@v4
+            with:
+                fetch-depth: 0
 
-            -   name: "Parse gradle properties"
-                id: gradle-properties
-                run: ./.github/scripts/parse-gradle-properties.sh ${{ matrix.version }}
+        -   name: "Parse gradle properties"
+            id: gradle-properties
+            run: ./.github/scripts/parse-gradle-properties.sh ${{ matrix.version }}
 
-            -   name: "Parse changelog"
-                run: ./.github/scripts/parse-changelog.sh ${{ steps.gradle-properties.outputs.MOD_VERSION }}
+        -   name: "Parse changelog"
+            run: ./.github/scripts/parse-changelog.sh ${{ steps.gradle-properties.outputs.MOD_VERSION }}
 
-            -   name: "Create github release"
-                continue-on-error: true
-                uses: ncipollo/release-action@v1
-                with:
-                    skipIfReleaseExists: true
-                    allowUpdates: true
-                    omitNameDuringUpdate: true
-                    omitBodyDuringUpdate: true
-                    tag: mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
-                    name: ${{ steps.gradle-properties.outputs.MOD_NAME }} ${{ steps.gradle-properties.outputs.MOD_VERSION }} for Minecraft ${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
-                    bodyFile: RELEASE_CHANGELOG.md
+        -   name: "Create github release"
+            continue-on-error: true
+            uses: ncipollo/release-action@v1
+            with:
+                skipIfReleaseExists: true
+                allowUpdates: true
+                omitNameDuringUpdate: true
+                omitBodyDuringUpdate: true
+                tag: mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
+                name: ${{ steps.gradle-properties.outputs.MOD_NAME }} ${{ steps.gradle-properties.outputs.MOD_VERSION }} for Minecraft ${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
+                bodyFile: RELEASE_CHANGELOG.md
 
-            -   name: "Set up JDK"
-                uses: actions/setup-java@v4
-                with:
-                    java-version: 21
-                    distribution: temurin
+        -   name: "Set up JDK"
+            uses: actions/setup-java@v4
+            with:
+                java-version: 21
+                distribution: temurin
 
-            -   name: "Setup Gradle"
-                uses: gradle/actions/setup-gradle@v3
-                with:
-                    generate-job-summary: false
-                    cache-read-only: true
-                    gradle-version: wrapper
+        -   name: "Setup Gradle"
+            uses: gradle/actions/setup-gradle@v3
+            with:
+                generate-job-summary: false
+                cache-read-only: true
+                gradle-version: wrapper
 
-            -   name: "Switch active versions"
-                run: ./gradlew "Set active project to ${{ matrix.version }}"
+        -   name: "Switch active versions"
+            run: ./gradlew "Set active project to ${{ matrix.version }}"
 
-            -   name: "Run build"
-                run: ./gradlew ${{ matrix.mod_loader }}:${{ matrix.version }}:build
+        -   name: "Run build"
+            run: ./gradlew ${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
-            -   name: Publish ${{ matrix.mod_loader }}
-                uses: Kir-Antipov/mc-publish@v3.3.0
-                with:
-                    github-token: ${{ secrets.GITHUB_TOKEN }}
-                    github-tag: mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
-                    github-commitish: ${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
+        -   name: Publish ${{ matrix.mod_loader }}
+            uses: Kir-Antipov/mc-publish@v3.3.0
+            with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                github-tag: mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
+                github-commitish: ${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
 
-                    curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
-                    curseforge-token: ${{ secrets.CURSEFORGE_RELEASE_TOKEN }}
+                curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
+                curseforge-token: ${{ secrets.CURSEFORGE_RELEASE_TOKEN }}
 
-                    modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
-                    modrinth-featured: true
-                    modrinth-token: ${{ secrets.MODRINTH_RELEASE_TOKEN}}
+                modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
+                modrinth-featured: true
+                modrinth-token: ${{ secrets.MODRINTH_RELEASE_TOKEN}}
 
-                    name: ${{ steps.gradle-properties.outputs.MOD_NAME }} ${{ steps.gradle-properties.outputs.MOD_VERSION }}
-                    version: ${{ matrix.mod_loader }}-mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
-                    loaders: ${{ join(matrix.supported_mod_loaders, ' ') }}
-                    game-versions: "${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}\n${{ steps.gradle-properties.outputs.MIN_MINECRAFT_VERSION }}"
-                    changelog-file: RELEASE_CHANGELOG.md
-                    files: |
-                        ${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/!(*-@(dev|dev-shadow|sources|javadoc)).jar
+                name: ${{ steps.gradle-properties.outputs.MOD_NAME }} ${{ steps.gradle-properties.outputs.MOD_VERSION }}
+                version: ${{ matrix.mod_loader }}-mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
+                loaders: ${{ join(matrix.supported_mod_loaders, ' ') }}
+                game-versions: "${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}\n${{ steps.gradle-properties.outputs.MIN_MINECRAFT_VERSION }}"
+                changelog-file: RELEASE_CHANGELOG.md
+                files: |
+                    ${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/!(*-@(dev|dev-shadow|sources|javadoc)).jar
 
     clear-cache:
         needs: publish

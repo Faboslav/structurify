@@ -47,4 +47,4 @@ run-forge-server: ## Runs forge server
 	./gradlew forge:runServer
 
 run-neoforge-server: ## Runs neoforge server
-	./gradlew neoforge:1.21.1:runServer
+	./gradlew neoforge:1.21.1:testProductionServer

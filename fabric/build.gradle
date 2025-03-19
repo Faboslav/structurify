@@ -60,11 +60,7 @@ dependencies {
 
 	// Required client
 	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
-	if (minecraftVersion == '1.20.2') {
-		modImplementation(modrinth("yacl", "${prop('yacl_version')}-fabric"))
-	} else {
-		modImplementation(modrinth("yacl", "${prop('yacl_version')}-fabric"))
-	}
+	modImplementation(modrinth("yacl", "${prop('yacl_version')}-fabric"))
 
 	// Optional client
 	// Mod menu (https://modrinth.com/mod/modmenu)
