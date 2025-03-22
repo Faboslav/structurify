@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.modcompat.fabric;
 
+import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.client.gui.StructurifyConfigScreen;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
@@ -10,11 +11,13 @@ public final class ModMenuCompat implements ModMenuApi
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
 		return (screen) -> {
-			if (!FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")) {
+			if (
+				!FabricLoader.getInstance().isModLoaded("modmenu")
+			) {
 				return null;
 			}
 
-			return new StructurifyConfigScreen(screen);
+			return StructurifyClient.getConfigScreen(screen);
 		};
 	}
 }

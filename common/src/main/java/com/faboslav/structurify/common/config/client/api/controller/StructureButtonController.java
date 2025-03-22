@@ -1,6 +1,9 @@
 package com.faboslav.structurify.common.config.client.api.controller;
 
+import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.client.gui.StructureConfigScreen;
+import com.faboslav.structurify.common.mixin.yacl.CategoryTabAccessor;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
@@ -47,8 +50,19 @@ public class StructureButtonController extends BooleanController
 
 			this.setDimension(this.getDimension().expanded(-20, 0));
 			this.configurationButton = new TextScaledButtonWidget(screen, this.getDimension().xLimit(), -50, 20, 20, 1.0f, Component.literal("\u2699").withStyle(style -> style.withBold(true)), button -> {
-				var structureScreen = StructureConfigScreen.create(screen, structureId);
+				var configScreen = StructurifyClient.getConfigScreen();
+				YACLScreen structureScreen;
+
+				if(!configScreen.structureScreens.containsKey(structureId)) {
+					structureScreen = StructureConfigScreen.create(screen, structureId);
+					configScreen.structureScreens.put(structureId, structureScreen);
+				} else {
+					structureScreen = configScreen.structureScreens.get(structureId);
+				}
+
+				configScreen.saveScreenState(screen);
 				this.client.setScreen(structureScreen);
+				configScreen.loadScreenState(structureScreen);
 			});
 			this.configurationButton.active = true;
 		}

@@ -21,6 +21,9 @@
 	"client": [
 		"AnimatedDynamicTextureImageAccessor",
 		"ClickableWidgetAccessor",
-		"WorldOpenFlowsMixin"
+		"WorldOpenFlowsMixin",
+		"yacl.CategoryTabAccessor",
+		"yacl.SearchFieldWidgetInvoker",
+		"yacl.YACLScreenMixin"
 	]
 }

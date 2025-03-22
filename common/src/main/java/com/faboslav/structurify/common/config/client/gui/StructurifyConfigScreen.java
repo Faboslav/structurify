@@ -3,6 +3,10 @@ package com.faboslav.structurify.common.config.client.gui;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.client.gui.widget.DynamicGridWidget;
 import com.faboslav.structurify.common.config.client.gui.widget.ImageButtonWidget;
+import com.faboslav.structurify.common.mixin.yacl.CategoryTabAccessor;
+import dev.isxander.yacl3.gui.YACLScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,13 +16,24 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Environment(EnvType.CLIENT)
 public class StructurifyConfigScreen extends Screen
 {
 	private final Screen parent;
+
 	@Nullable
-	private Screen structuresScreen = null;
+	public YACLScreen structuresScreen = null;
+
 	@Nullable
-	private Screen structureSetsScreen = null;
+	public YACLScreen structureSetsScreen = null;
+
+	@Nullable
+	public Map<String, YACLScreen> structureScreens = new HashMap<>();
+
+	public Map<String, StructurifyConfigScreenState> screenStates = new HashMap<>();
 
 	public StructurifyConfigScreen(@Nullable Screen parent) {
 		super(Component.translatable("structurify"));
@@ -59,6 +74,7 @@ public class StructurifyConfigScreen extends Screen
 			}
 
 			this.minecraft.setScreen(this.structuresScreen);
+			this.loadScreenState(this.structuresScreen);
 		}), 2, 1);
 
 		grid.addChild(new ImageButtonWidget(0, 0, 0, 0, Component.translatable("gui.structurify.structure_sets.title"), Structurify.makeId("textures/gui/config/images/buttons/structure_sets.webp"), btn -> {
@@ -67,6 +83,7 @@ public class StructurifyConfigScreen extends Screen
 			}
 
 			this.minecraft.setScreen(this.structureSetsScreen);
+			this.loadScreenState(this.structureSetsScreen);
 		}), 2, 1);
 
 		grid.calculateLayout();
@@ -83,5 +100,33 @@ public class StructurifyConfigScreen extends Screen
 		this.addRenderableWidget(buttonWidget);
 		this.addRenderableWidget(donateButton);
 		this.addRenderableWidget(discordButton);
+	}
+
+	public void saveScreenState(YACLScreen yaclScreen) {
+		var currentTab = yaclScreen.tabNavigationBar.getTabManager().getCurrentTab();
+
+		if(currentTab instanceof YACLScreen.CategoryTab yaclCategoryTab) {
+			var categoryTab = ((CategoryTabAccessor) yaclCategoryTab);
+			var optionListWidget = categoryTab.getOptionList().getList();
+
+			this.screenStates.put(yaclScreen.getTitle().getString(), new StructurifyConfigScreenState(
+				categoryTab.getSearchField().getValue(),
+				optionListWidget.getScrollAmount()
+			));
+		}
+	}
+
+	public void loadScreenState(YACLScreen yaclScreen) {
+		var currentTab = yaclScreen.tabNavigationBar.getTabManager().getCurrentTab();
+
+		if(currentTab instanceof YACLScreen.CategoryTab categoryTab) {
+			var screenState = this.screenStates.get(yaclScreen.getTitle().getString());
+
+			if(screenState != null) {
+				var yaclScreenCategoryTab = ((CategoryTabAccessor) categoryTab);
+				yaclScreenCategoryTab.getSearchField().setValue(screenState.lastSearchText());
+				yaclScreenCategoryTab.getOptionList().getList().setScrollAmount(screenState.lastScrollAmount());
+			}
+		}
 	}
 }

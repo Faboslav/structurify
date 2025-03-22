@@ -7,17 +7,23 @@ import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.util.Platform;
 import com.google.gson.*;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public final class StructurifyConfig
 {
+	private static final Path BACKUP_CONFIG_DIR = Path.of("config/structurify");
+	private static final String BACKUP_PREFIX = Structurify.MOD_ID + "_backup_";
+	private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+
 	public boolean isLoaded = false;
 	public boolean isLoading = false;
 	private final Path configPath = Path.of("config", Structurify.MOD_ID + ".json");
-	private final Path backupConfigPath = Path.of("config", Structurify.MOD_ID + "_backup.json");
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 	public boolean disableAllStructures = false;
@@ -32,6 +38,7 @@ public final class StructurifyConfig
 	public final static double GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = 1.0D;
 
 	private static final String CONFIG_VERSION_PROPERTY = "config_version";
+	private static final String CONFIG_DATETIME_PROPERTY = "config_datetime";
 	private static final String GENERAL_PROPERTY = "general";
 	private static final String MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY = "min_structure_distance_from_world_center";
 	private static final String DISABLE_ALL_STRUCTURES_PROPERTY = "disable_all_structures";
@@ -262,20 +269,28 @@ public final class StructurifyConfig
 
 		try {
 			if (Files.exists(configPath)) {
-				Files.deleteIfExists(backupConfigPath);
-				Files.move(configPath, backupConfigPath);
+				// TODO delete all old backups here
+				Path backupConfigPath = this.getBackupConfigPath();
+
+				if(!Files.exists(BACKUP_CONFIG_DIR) || !Files.isDirectory(BACKUP_CONFIG_DIR)) {
+					Files.createDirectories(BACKUP_CONFIG_DIR);
+				}
+
+				if(!Files.exists(backupConfigPath)) {
+					Files.move(configPath, backupConfigPath);
+				}
 			}
 
 			JsonObject json = new JsonObject();
 
 			json.addProperty(CONFIG_VERSION_PROPERTY, Platform.getModVersion());
+			json.addProperty(CONFIG_DATETIME_PROPERTY, LocalDateTime.now().format(DATETIME_FORMATTER));
 			this.saveGeneralData(json);
 			this.saveStructuresData(json);
 			this.saveStructureSetsData(json);
 
 			Files.createFile(configPath);
 			Files.writeString(configPath, gson.toJson(json));
-			Files.deleteIfExists(backupConfigPath);
 
 			Structurify.getLogger().info("Structurify config saved");
 		} catch (Exception e) {
@@ -283,9 +298,16 @@ public final class StructurifyConfig
 			e.printStackTrace();
 
 			try {
-				Structurify.getLogger().error("Restoring Structurify backup config...");
-				Files.delete(backupConfigPath);
-				Files.move(backupConfigPath, configPath);
+				Path possibleLatestBackupConfigPath = this.getLatestBackupConfigPath();
+
+				if(possibleLatestBackupConfigPath != null) {
+					Structurify.getLogger().error("Restoring Structurify backup config...");
+					if (Files.exists(configPath)) {
+						Files.delete(configPath);
+					}
+
+					Files.move(possibleLatestBackupConfigPath, configPath);
+				}
 			} catch (Exception fe) {
 				Structurify.getLogger().error("Failed to restore Structurify backup config");
 				fe.printStackTrace();
@@ -373,5 +395,38 @@ public final class StructurifyConfig
 			});
 
 		json.add(STRUCTURE_SETS_PROPERTY, structureSets);
+	}
+
+	private Path getBackupConfigPath() {
+		String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+		return Path.of(BACKUP_CONFIG_DIR.toString(), Structurify.MOD_ID + "_backup_"+ dateTime +".json");
+	}
+
+	private Path getLatestBackupConfigPath() {
+		try {
+			if (!Files.exists(BACKUP_CONFIG_DIR) || !Files.isDirectory(BACKUP_CONFIG_DIR)) {
+				return null;
+			}
+
+			Optional<Path> latest = Files.list(BACKUP_CONFIG_DIR)
+				.filter(path -> path.getFileName().toString().startsWith(BACKUP_PREFIX) && path.toString().endsWith(".json"))
+				.max(Comparator.comparing(path -> {
+					String timestamp = path.getFileName().toString()
+						.replace(BACKUP_PREFIX, "")
+						.replace(".json", "");
+					try {
+						return LocalDateTime.parse(timestamp, DATETIME_FORMATTER);
+					} catch (Exception e) {
+						return LocalDateTime.MIN;
+					}
+				}));
+
+			return latest.orElse(null);
+
+		} catch (IOException e) {
+			Structurify.getLogger().error("Failed to load Structurify backup configs");
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

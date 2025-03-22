@@ -1,8 +1,10 @@
 ## 1.0.12
 
+- A lot of quality of life features like keeping search, scroll position and more
 - Added support for biome tags
 - Added compatibility with the Open Loader
 - Fixed mod crash related to latest YACL
+- Fixed mod crash related to missing/incorrect translations for biomes
 - Increased spacing/separation slider range from 128 to 256
 
 ## 1.0.11

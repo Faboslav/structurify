@@ -10,8 +10,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.CheckerboardColumnBiomeSource;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
@@ -115,7 +117,12 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 	private boolean structurify$performFlatnessCheck(StructureData structureData, GenerationContext generationContext) {
 		var flatnessCheckDistance = structureData.getFlatnessCheckDistance();
 		var offsetStep = (int) Math.ceil(flatnessCheckDistance / 2.0F);
+		int stepAmount = (int) Math.pow((double) (2 * flatnessCheckDistance) / offsetStep + 1, 2);
+		int allowedAirBlockSteps = stepAmount / 2;
+		int allowedLiquidBlockSteps = stepAmount / 2;
 		var flatnessCheckThreshold = structureData.getFlatnessCheckThreshold();
+		var areAirBlocksAllowed = structureData.areAirBlocksAllowedInFlatnessCheck();
+		var areLiquidBlocksAllowed = structureData.areLiquidBlocksAllowedInFlatnessCheck();
 
 		if(flatnessCheckDistance == 0 || flatnessCheckThreshold == 0) {
 			return true;
@@ -125,10 +132,15 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 		int y = this.startHeight.sample(generationContext.random(), new WorldGenerationContext(generationContext.chunkGenerator(), generationContext.heightAccessor()));
 		var blockPos = new BlockPos(chunkPos.getMinBlockX(), y, chunkPos.getMinBlockZ());
 
+		Structurify.getLogger().info("Flatness check starting at height: " + y);
+
 		int baseX = blockPos.getX();
 		int baseZ = blockPos.getZ();
 		int minHeight = Integer.MAX_VALUE;
 		int maxHeight = Integer.MIN_VALUE;
+
+		int airBlockSteps = 0;
+		int fluidBlockSteps = 0;
 
 		for (int xOffset = -flatnessCheckDistance; xOffset <= flatnessCheckDistance; xOffset += offsetStep) {
 			for (int zOffset = -flatnessCheckDistance; zOffset <= flatnessCheckDistance; zOffset += offsetStep) {
@@ -141,6 +153,37 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 
 				if (maxHeight - minHeight > flatnessCheckThreshold) {
 					return false;
+				}
+
+				if(!areAirBlocksAllowed || !areLiquidBlocksAllowed) {
+					NoiseColumn blockView = generationContext.chunkGenerator().getBaseColumn(
+						x,
+						z,
+						generationContext.heightAccessor(),
+						generationContext.randomState()
+					);
+
+					BlockState blockState = blockView.getBlock(height);
+
+					Structurify.getLogger().info("blockstate: " + blockState + " at: " + x + ", " + height + ", " + z);
+
+					if(!areAirBlocksAllowed && blockState.isAir()) {
+						airBlockSteps++;
+
+						if(airBlockSteps >= allowedAirBlockSteps) {
+							Structurify.getLogger().info("air");
+							return false;
+						}
+					}
+
+					if(!areLiquidBlocksAllowed && !blockState.getFluidState().isEmpty()) {
+						fluidBlockSteps++;
+
+						if(fluidBlockSteps >= allowedLiquidBlockSteps) {
+							Structurify.getLogger().info("liquid");
+							return false;
+						}
+					}
 				}
 			}
 		}

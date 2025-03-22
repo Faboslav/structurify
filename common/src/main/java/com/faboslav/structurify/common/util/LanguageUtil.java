@@ -19,7 +19,7 @@ public final class LanguageUtil
 		if (!language.has(langKey)) {
 			if (prefix == null) {
 				langKey = id;
-			} else {
+			} else if(id.contains(":")) {
 				langKey = id.split(":")[1];
 			}
 

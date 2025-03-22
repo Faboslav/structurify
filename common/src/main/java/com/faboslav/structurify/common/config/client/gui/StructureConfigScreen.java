@@ -7,6 +7,7 @@ import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
+import dev.isxander.yacl3.gui.YACLScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,7 +16,7 @@ import net.minecraft.network.chat.Component;
 @Environment(EnvType.CLIENT)
 public final class StructureConfigScreen
 {
-	public static Screen create(Screen parent, String structureId) {
+	public static YACLScreen create(Screen parent, String structureId) {
 		var yacl = YetAnotherConfigLib.createBuilder()
 			.title(Component.literal(structureId))
 			.save(Structurify.getConfig()::save);
@@ -109,6 +110,6 @@ public final class StructureConfigScreen
 
 		yacl.category(structureCategoryBuilder.build());
 
-		return yacl.build().generateScreen(parent);
+		return (YACLScreen) yacl.build().generateScreen(parent);
 	}
 }

@@ -2,10 +2,14 @@ package com.faboslav.structurify.common;
 
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.StructurifyConfigLoader;
+import com.faboslav.structurify.common.config.client.gui.StructurifyConfigScreen;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import com.faboslav.structurify.common.registry.StructurifyRegistryUpdater;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

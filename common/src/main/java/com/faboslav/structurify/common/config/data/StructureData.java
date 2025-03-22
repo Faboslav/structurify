@@ -10,6 +10,8 @@ public class StructureData
 	public final static boolean ENABLE_FLATNESS_CHECK_DEFAULT_VALUE = false;
 	public final static int FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE = 10;
 	public final static boolean ENABLE_BIOME_CHECK_DEFAULT_VALUE = false;
+	public final static boolean ALLOW_AIR_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE = false;
+	public final static boolean ALLOW_LIQUID_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE = false;
 
 	private final List<String> defaultBiomes;
 	private final int defaultCheckDistance;
@@ -18,6 +20,8 @@ public class StructureData
 	private boolean enableFlatnessCheck = ENABLE_FLATNESS_CHECK_DEFAULT_VALUE;
 	private int flatnessCheckDistance;
 	private int flatnessCheckThreshold = FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE;
+	private boolean allowAirBlocksInFlatnessCheck = ALLOW_AIR_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE;
+	private boolean allowLiquidBlocksInFlatnessCheck = ALLOW_LIQUID_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE;
 	private boolean enableBiomeCheck = ENABLE_BIOME_CHECK_DEFAULT_VALUE;
 	private int biomeCheckDistance;
 	private List<String> biomes;
@@ -64,6 +68,22 @@ public class StructureData
 
 	public void setEnableFlatnessCheck(boolean enableFlatnessCheck) {
 		this.enableFlatnessCheck = enableFlatnessCheck;
+	}
+
+	public boolean areAirBlocksAllowedInFlatnessCheck() {
+		return this.allowAirBlocksInFlatnessCheck;
+	}
+
+	public void setAllowAirBlocksInFlatnessCheck(boolean allowAirBlocksInFlatnessCheck) {
+		this.allowAirBlocksInFlatnessCheck = allowAirBlocksInFlatnessCheck;
+	}
+
+	public boolean areLiquidBlocksAllowedInFlatnessCheck() {
+		return this.allowLiquidBlocksInFlatnessCheck;
+	}
+
+	public void setAllowLiquidBlocksInFlatnessCheck(boolean allowLiquidBlocksInFlatnessCheck) {
+		this.allowLiquidBlocksInFlatnessCheck = allowLiquidBlocksInFlatnessCheck;
 	}
 
 	public int getFlatnessCheckDistance() {
