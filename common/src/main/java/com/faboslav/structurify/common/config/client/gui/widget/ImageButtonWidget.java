@@ -1,6 +1,6 @@
 package com.faboslav.structurify.common.config.client.gui.widget;
 
-import com.faboslav.structurify.common.mixin.AnimatedDynamicTextureImageAccessor;
+import com.faboslav.structurify.common.mixin.yacl.AnimatedDynamicTextureImageAccessor;
 import dev.isxander.yacl3.gui.image.ImageRendererManager;
 import dev.isxander.yacl3.gui.image.impl.AnimatedDynamicTextureImage;
 import net.minecraft.client.Minecraft;

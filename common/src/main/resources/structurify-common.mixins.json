@@ -19,7 +19,7 @@
 		"structure.jigsaw.MaxDistanceFromCenterAccessor"
 	],
 	"client": [
-		"AnimatedDynamicTextureImageAccessor",
+		"yacl.AnimatedDynamicTextureImageAccessor",
 		"ClickableWidgetAccessor",
 		"WorldOpenFlowsMixin",
 		"yacl.CategoryTabAccessor",

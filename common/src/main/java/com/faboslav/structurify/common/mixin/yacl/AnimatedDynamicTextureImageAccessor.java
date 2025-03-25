@@ -1,4 +1,4 @@
-package com.faboslav.structurify.common.mixin;
+package com.faboslav.structurify.common.mixin.yacl;
 
 import dev.isxander.yacl3.gui.image.impl.AnimatedDynamicTextureImage;
 import net.fabricmc.api.EnvType;
