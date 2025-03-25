@@ -15,8 +15,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ public final class StructuresConfigScreen
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 
 		var yacl = YetAnotherConfigLib.createBuilder()
-			.title(Component.translatable("gui.structurify.title"))
+			.title(Component.translatable("gui.structurify.structures_category.title"))
 			.save(config::save);
 
 		createStructuresTab(yacl, config);
@@ -122,6 +124,19 @@ public final class StructuresConfigScreen
 			descriptionBuilder.text(Component.translatable("gui.structurify.structures.biomes_description").append(Component.literal("\n")));
 
 			for (String biome : structureData.getBiomes()) {
+				if(biome.contains("#")) {
+					/*
+					var biomeTagKey = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId(biome.replace("#", "")));
+					var biomeTagHolder = biomeRegistry.get(biomeTagKey).orElse(null);
+
+					if(biomeTagHolder == null) {
+						continue;
+					}
+
+					for (var biomeHolder : biomeTagHolder.stream().toList()) {
+						biomeHolders.add(biomeHolder);
+					}*/
+				}
 				descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biome)));
 			}
 

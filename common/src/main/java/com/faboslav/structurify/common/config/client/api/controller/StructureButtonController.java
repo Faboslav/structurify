@@ -51,6 +51,11 @@ public class StructureButtonController extends BooleanController
 			this.setDimension(this.getDimension().expanded(-20, 0));
 			this.configurationButton = new TextScaledButtonWidget(screen, this.getDimension().xLimit(), -50, 20, 20, 1.0f, Component.literal("\u2699").withStyle(style -> style.withBold(true)), button -> {
 				var configScreen = StructurifyClient.getConfigScreen();
+
+				if(configScreen == null) {
+					return;
+				}
+
 				YACLScreen structureScreen;
 
 				if(!configScreen.structureScreens.containsKey(structureId)) {

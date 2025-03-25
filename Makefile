@@ -13,9 +13,6 @@ build-active: ## Builds the active version
 	./gradlew buildActiveForge
 	./gradlew buildActiveNeoForge
 
-merge-jars: ## Builds project
-	./gradlew mergeJars
-
 refresh: ## Refresh dependencies
 	./gradlew --refresh-dependencies
 

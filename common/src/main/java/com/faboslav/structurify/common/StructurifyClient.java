@@ -22,6 +22,7 @@ public final class StructurifyClient
 		return CONFIG_SCREEN;
 	}
 
+	@Nullable
 	public static StructurifyConfigScreen getConfigScreen() {
 		return CONFIG_SCREEN;
 	}

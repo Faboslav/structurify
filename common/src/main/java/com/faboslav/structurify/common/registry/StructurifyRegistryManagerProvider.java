@@ -12,6 +12,7 @@ import net.minecraft.server.WorldStem;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.world.level.WorldDataConfiguration;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.storage.PrimaryLevelData;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +30,23 @@ public final class StructurifyRegistryManagerProvider
 		}
 
 		return registryManager;
+	}
+
+	@Nullable
+	public static HolderLookup.RegistryLookup<Biome> getBiomeRegistry() {
+		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+
+		if (registryManager == null) {
+			return null;
+		}
+
+		var biomeRegistry = registryManager.lookup(Registries.BIOME).orElse(null);
+
+		if (biomeRegistry == null) {
+			return null;
+		}
+
+		return biomeRegistry;
 	}
 
 	public static void setRegistryManager(HolderLookup.Provider registryAccess) {

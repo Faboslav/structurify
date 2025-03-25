@@ -29,7 +29,10 @@ public abstract class YACLScreenMixin extends Screen
 		if(this.minecraft != null) {
 			if(this.minecraft.screen instanceof YACLScreen yaclsScreen) {
 				var configScreen = StructurifyClient.getConfigScreen();
-				configScreen.saveScreenState(yaclsScreen);
+
+				if(configScreen != null) {
+					configScreen.saveScreenState(yaclsScreen);
+				}
 			}
 		}
 	}
@@ -42,7 +45,10 @@ public abstract class YACLScreenMixin extends Screen
 		if(this.minecraft != null) {
 			if(this.minecraft.screen instanceof YACLScreen yaclsScreen) {
 				var configScreen = StructurifyClient.getConfigScreen();
-				configScreen.loadScreenState(yaclsScreen);
+
+				if(configScreen != null) {
+					configScreen.loadScreenState(yaclsScreen);
+				}
 			}
 		}
 	}

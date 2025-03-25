@@ -31,7 +31,7 @@ public final class StructureSetsConfigScreen
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 
 		var yacl = YetAnotherConfigLib.createBuilder()
-			.title(Component.translatable("gui.structurify.title"))
+			.title(Component.translatable("gui.structurify.structure_sets_category.title"))
 			.save(config::save);
 
 		createStructureSetsTab(yacl, config);

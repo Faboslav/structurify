@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 @Mixin(Structure.class)
 public abstract class StructureModifyBiomesMixin implements StructurifyStructure
@@ -48,22 +49,15 @@ public abstract class StructureModifyBiomesMixin implements StructurifyStructure
 				return original.call();
 			}
 
-			var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+			var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
 
-			if (registryManager == null) {
-				return original.call();
-			}
-
-			var biomeRegistry = registryManager.lookup(Registries.BIOME).orElse(null);
-
-			if (biomeRegistry == null) {
+			if(biomeRegistry == null) {
 				return original.call();
 			}
 
 			var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
 			var biomeIds = structureData.getBiomes();
 			ArrayList<Holder<Biome>> biomeHolders = new ArrayList<>();
-
 
 			for (var biomeId : biomeIds) {
 				if(biomeId.contains("#")) {

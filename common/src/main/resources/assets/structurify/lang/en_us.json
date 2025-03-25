@@ -7,8 +7,6 @@
 	"gui.structurify.label.enabled": "Enabled",
 	"gui.structurify.label.disabled": "Disabled",
 	"gui.structurify.title": "Structurify configuration",
-	"gui.structurify.structures.title": "Structure settings",
-	"gui.structurify.structure_sets.title": "Structure Spread settings",
 	"gui.structurify.structures_category.title": "Structure settings",
 	"gui.structurify.structures_category.description": "Disable or enable the generation of structures within the game. Additionally, manage a blacklist of biomes where specific structures should not generate.",
 	"gui.structurify.structures.structures_group.title": "„%s“ structures",

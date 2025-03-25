@@ -57,15 +57,9 @@ public final class WorldgenDataProvider
 	}
 
 	public static List<String> loadBiomes() {
-		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
 
-		if (registryManager == null) {
-			return Collections.emptyList();
-		}
-
-		var biomeRegistry = registryManager.lookup(Registries.BIOME).orElse(null);
-
-		if (biomeRegistry == null) {
+		if(biomeRegistry == null) {
 			return Collections.emptyList();
 		}
 

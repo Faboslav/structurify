@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.config.client.gui.widget;
 
-import com.faboslav.structurify.common.mixin.yacl.AnimatedDynamicTextureImageAccessor;
 import dev.isxander.yacl3.gui.image.ImageRendererManager;
 import dev.isxander.yacl3.gui.image.impl.AnimatedDynamicTextureImage;
 import net.minecraft.client.Minecraft;
@@ -13,6 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 
 
 import net.minecraft.util.Mth;
+
+import java.lang.reflect.Field;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -24,6 +25,12 @@ import net.minecraft.util.FastColor;
 /*import net.minecraft.util.ARGB;
  *//*?}*/
 
+/**
+ * Inspired by use in Sounds mod
+ *
+ * @author IMB11
+ * <a href="https://github.com/IMB11/Sounds/blob/main/src/main/java/dev/imb11/sounds/gui/ImageButtonWidget.java"https://github.com/IMB11/Sounds/blob/main/src/main/java/dev/imb11/sounds/gui/ImageButtonWidget.java</a>
+ */
 public class ImageButtonWidget extends AbstractWidget
 {
 	float durationHovered = 1f;
@@ -40,7 +47,7 @@ public class ImageButtonWidget extends AbstractWidget
 		Consumer<AbstractWidget> clickEvent
 	) {
 		super(x, y, width, height, message);
-		this.image = ImageRendererManager.registerImage(image, AnimatedDynamicTextureImage.createWEBPFromTexture(image));
+		this.image = ImageRendererManager.registerOrGetImage(image, () -> AnimatedDynamicTextureImage.createWEBPFromTexture(image));
 		this.onPress = clickEvent;
 	}
 
@@ -56,7 +63,7 @@ public class ImageButtonWidget extends AbstractWidget
 		context.enableScissor(getX(), getY(), getX() + width, getY() + height);
 		this.isHovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
 
-		if (this.isHovered || this.isFocused()) {
+		if (this.isHovered() || this.isFocused()) {
 			durationHovered += delta / 2f;
 		} else {
 			if (durationHovered < 0) {
@@ -70,22 +77,45 @@ public class ImageButtonWidget extends AbstractWidget
 		float alphaScale = Mth.clampedLerp(0.7f, 0.2f, Mth.clamp(durationHovered - 1f, 0.0f, 1.0f));
 
 		if (image.isDone()) {
+			int minFilterScalingTypePrev = glGetTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER);
+			int magFilterScalingTypePrev = glGetTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER);
+
 			try {
 				var contentImage = image.get();
 				if (contentImage != null) {
+					// Using reflection, get value of contentImage.frameWidth and frameHeight
+					try {
+						Field frameWidthField = contentImage.getClass().getDeclaredField("frameWidth");
+						frameWidthField.setAccessible(true);
+						int frameWidth = frameWidthField.getInt(contentImage);
 
-					// Scale the image so that the image height is the same as the button height.
-					float neededWidth = ((AnimatedDynamicTextureImageAccessor) contentImage).structurify$getFrameWidth() * ((float) this.height / ((AnimatedDynamicTextureImageAccessor) contentImage).structurify$getFrameHeight());
+						Field frameHeightField = contentImage.getClass().getDeclaredField("frameHeight");
+						frameHeightField.setAccessible(true);
+						int frameHeight = frameHeightField.getInt(contentImage);
 
-					// Scale the image to fit within the width and height of the button.
-					context.pose().pushPose();
-					// gl bilinear scaling.
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-					contentImage.render(context, getX(), getY(), (int) Math.max(neededWidth, this.width), delta);
-					context.pose().popPose();
+						// Use frameWidth and frameHeight as needed
+						// Scale the image so that the image height is the same as the button height.
+						float neededWidth = frameWidth * ((float) this.height / frameHeight);
+
+						// Scale the image to fit within the width and height of the button.
+						context.pose().pushPose();
+						// gl bilinear scaling.
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+						contentImage.render(context, getX(), getY(), (int) Math.max(neededWidth, this.width), delta);
+						context.pose().popPose();
+
+						// reset gl scaling
+
+					} catch (NoSuchFieldException | IllegalAccessException e) {
+						e.printStackTrace();
+					}
 				}
 			} catch (InterruptedException | ExecutionException ignored) {
+			} finally {
+				// reset gl scaling
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilterScalingTypePrev);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilterScalingTypePrev);
 			}
 		}
 
@@ -93,7 +123,7 @@ public class ImageButtonWidget extends AbstractWidget
 		int greyColor = FastColor.ABGR32.color((int) (alphaScale * 255), 0, 0, 0);
 		/*?} else {*/
 		/*int greyColor = ARGB.color((int) (alphaScale * 255), 0, 0, 0);
-		 *//*?}*/
+		*//*?}*/
 		context.fill(getX(), getY(), getX() + width, getY() + height, greyColor);
 
 		// Draw text.
@@ -113,13 +143,7 @@ public class ImageButtonWidget extends AbstractWidget
 		context.pose().pushPose();
 		context.pose().scale(fontScaling, fontScaling, 1.0f);
 
-//            context.fill(textX, textY, endX, endY, 0xFFFF2F00);
-
-		/*? >1.20.1 {*/
-		/*renderScrollingString(context, client.font, getMessage(), textX, textY, endX, endY, 0xFFFFFF);
-		 *//*?} else {*/
 		renderScrollingString(context, client.font, getMessage(), textX, textY, endX, endY, 0xFFFFFF);
-		/*?}*/
 
 		context.pose().popPose();
 
