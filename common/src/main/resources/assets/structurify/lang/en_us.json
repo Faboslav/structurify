@@ -47,7 +47,7 @@
 	"gui.structurify.structure_sets.structure_group.title": "„%s“ structures",
 	"gui.structurify.structure_sets.structure_group.description": "Structure set settings for „%s“ namespace.",
 	"gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.title": "Override global settings",
-	"gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.description": "Whenever to override global spacing and separation modifier from global settings with structure set specific settings.",
+	"gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.description": "Whenever to override global spacing and separation modifier from global settings with specific settings of the „%s“ structure set.",
 	"gui.structurify.structure_sets.spacing.title": "Spacing",
 	"gui.structurify.structure_sets.spacing.description": "Spacing is the average distance in chunks between structures within the same structure set (group of structures).",
 	"gui.structurify.structure_sets.separation.title": "Separation",

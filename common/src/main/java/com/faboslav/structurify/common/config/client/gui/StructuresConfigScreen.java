@@ -6,6 +6,7 @@ import com.faboslav.structurify.common.config.client.api.controller.builder.Stru
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
+import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
@@ -87,6 +88,8 @@ public final class StructuresConfigScreen
 		OptionGroup.Builder currentGroupBuilder = null;
 		String currentNamespace = null;
 
+		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
+
 		for (Map.Entry<String, StructureData> entry : structures.entrySet()) {
 			String structureStringId = entry.getKey();
 			StructureData structureData = entry.getValue();
@@ -125,7 +128,10 @@ public final class StructuresConfigScreen
 
 			for (String biome : structureData.getBiomes()) {
 				if(biome.contains("#")) {
-					/*
+					if(biomeRegistry == null) {
+						continue;
+					}
+
 					var biomeTagKey = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId(biome.replace("#", "")));
 					var biomeTagHolder = biomeRegistry.get(biomeTagKey).orElse(null);
 
@@ -134,10 +140,11 @@ public final class StructuresConfigScreen
 					}
 
 					for (var biomeHolder : biomeTagHolder.stream().toList()) {
-						biomeHolders.add(biomeHolder);
-					}*/
+						descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biomeHolder.unwrap().left().get().location().toLanguageKey())));
+					}
+				} else {
+					descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biome)));
 				}
-				descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biome)));
 			}
 
 			descriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structures.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));

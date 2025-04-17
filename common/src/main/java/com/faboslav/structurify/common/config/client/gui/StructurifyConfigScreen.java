@@ -24,11 +24,10 @@ public class StructurifyConfigScreen extends Screen
 {
 	private final Screen parent;
 
-	@Nullable
-	public YACLScreen structuresScreen = null;
+	private final StructureSetsConfigScreen structureSetsConfigScreen = new StructureSetsConfigScreen();
 
 	@Nullable
-	public YACLScreen structureSetsScreen = null;
+	public YACLScreen structuresScreen = null;
 
 	@Nullable
 	public Map<String, YACLScreen> structureScreens = new HashMap<>();
@@ -38,6 +37,10 @@ public class StructurifyConfigScreen extends Screen
 	public StructurifyConfigScreen(@Nullable Screen parent) {
 		super(Component.translatable("structurify"));
 		this.parent = parent;
+	}
+
+	public StructureSetsConfigScreen getStructureSetsScreen() {
+		return this.structureSetsConfigScreen;
 	}
 
 	@Override
@@ -78,12 +81,15 @@ public class StructurifyConfigScreen extends Screen
 		}), 2, 1);
 
 		grid.addChild(new ImageButtonWidget(0, 0, 0, 0, Component.translatable("gui.structurify.structure_sets_category.title"), Structurify.makeId("textures/gui/config/images/buttons/structure_sets.webp"), btn -> {
-			if (this.structureSetsScreen == null) {
-				this.structureSetsScreen = StructureSetsConfigScreen.createConfigGui(Structurify.getConfig(), this);
+			YACLScreen structureSetsScreen = this.structureSetsConfigScreen.getStructureSetsScreen();
+
+			if (structureSetsScreen == null) {
+				this.structureSetsConfigScreen.createStructureSetsScreen(Structurify.getConfig(), this);
+				structureSetsScreen = this.structureSetsConfigScreen.getStructureSetsScreen();
 			}
 
-			this.minecraft.setScreen(this.structureSetsScreen);
-			this.loadScreenState(this.structureSetsScreen);
+			this.minecraft.setScreen(structureSetsScreen);
+			this.loadScreenState(structureSetsScreen);
 		}), 2, 1);
 
 		grid.calculateLayout();
@@ -109,8 +115,6 @@ public class StructurifyConfigScreen extends Screen
 			var categoryTab = ((CategoryTabAccessor) yaclCategoryTab);
 			var optionListWidget = categoryTab.getOptionList().getList();
 
-			Structurify.getLogger().info("Saving config screen: " + yaclScreen.getTitle().getString());
-
 			this.screenStates.put(yaclScreen.getTitle().getString(), new StructurifyConfigScreenState(
 				categoryTab.getSearchField().getValue(),
 				//? >= 1.21.4 {
@@ -129,7 +133,6 @@ public class StructurifyConfigScreen extends Screen
 			var screenState = this.screenStates.get(yaclScreen.getTitle().getString());
 
 			if(screenState != null) {
-				Structurify.getLogger().info("Loading config screen: " + yaclScreen.getTitle().getString());
 				var yaclScreenCategoryTab = ((CategoryTabAccessor) categoryTab);
 				yaclScreenCategoryTab.getSearchField().setValue(screenState.lastSearchText());
 				yaclScreenCategoryTab.getOptionList().getList().setScrollAmount(screenState.lastScrollAmount());
