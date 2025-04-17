@@ -64,7 +64,7 @@ dependencies {
 	implementation(include("io.github.llamalad7:mixinextras-neoforge:${mixin_extras_version}"))
 
 	// Dependencies
-	modImplementation(modrinth("yacl", "${prop('yacl_version')}-neoforge"))
+	modImplementation("dev.isxander:yet-another-config-lib:${prop('yacl_version')}-neoforge")
 
 	// For YACL to work
 	forgeRuntimeLibrary(implementation(include("com.twelvemonkeys.imageio:imageio-core:3.10.0")))

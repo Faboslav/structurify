@@ -25,12 +25,12 @@ public final class ModChecker
 
 		try {
 			//? global_packs: >0 {
-			loadModCompat("globalpacks", () -> new GlobalPacksCompat());
-			//?}
+			/*loadModCompat("globalpacks", () -> new GlobalPacksCompat());
+			*///?}
 
 			//? open_loader: >0 {
-			loadModCompat("openloader", () -> new OpenLoaderCompat());
-			//?}
+			/*loadModCompat("openloader", () -> new OpenLoaderCompat());
+			*///?}
 
 			setupPlatformModCompat();
 		} catch (Throwable e) {

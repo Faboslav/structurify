@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 /*? if >1.20.1 {*/
-/*import net.minecraft.world.level.validation.DirectoryValidator;
- *//*?}*/
+import net.minecraft.world.level.validation.DirectoryValidator;
+ /*?}*/
 
 public final class GlobalDatapacksCompat implements ModCompat
 {
@@ -32,10 +32,10 @@ public final class GlobalDatapacksCompat implements ModCompat
 			Path globalPackFolder = (Path) globalPackFolderField.get(null);
 
 			/*? if =1.20.1 {*/
-			resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD));
-			/*?} else {*/
-			/*resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD, new DirectoryValidator(path -> true)));
-			 *//*?}*/
+			/*resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD));
+			*//*?} else {*/
+			resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD, new DirectoryValidator(path -> true)));
+			 /*?}*/
 		} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
 			System.out.println("Dependency not found or field access failed: " + e.getMessage());
 		}

@@ -1,7 +1,7 @@
 package com.faboslav.structurify.common.modcompat;
 
 //? global_packs: >0 {
-import net.dark_roleplay.gdarp.CommonClass;
+/*import net.dark_roleplay.gdarp.CommonClass;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.RepositorySource;
 
@@ -25,4 +25,4 @@ public final class GlobalPacksCompat implements ModCompat
 		return resourcePackProviders;
 	}
 }
-//?}
+*///?}

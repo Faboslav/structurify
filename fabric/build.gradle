@@ -60,7 +60,8 @@ dependencies {
 
 	// Required client
 	// YetAnotherConfigLib (https://docs.isxander.dev/yet-another-config-lib)
-	modImplementation(modrinth("yacl", "${prop('yacl_version')}-fabric"))
+	modImplementation("dev.isxander:yet-another-config-lib:${prop('yacl_version')}-fabric")
+
 
 	// Optional client
 	// Mod menu (https://modrinth.com/mod/modmenu)

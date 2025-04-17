@@ -52,10 +52,10 @@ public class StructurifyConfigScreen extends Screen
 	@Override
 	public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
 		/*? if <1.20.2 {*/
-		super.renderBackground(context);
-		/*?} else {*/
-		/*super.renderBackground(context, mouseX, mouseY, delta);
-		 *//*?}*/
+		/*super.renderBackground(context);
+		*//*?} else {*/
+		super.renderBackground(context, mouseX, mouseY, delta);
+		 /*?}*/
 		super.render(context, mouseX, mouseY, delta);
 
 		assert this.minecraft != null;
@@ -118,10 +118,10 @@ public class StructurifyConfigScreen extends Screen
 			this.screenStates.put(yaclScreen.getTitle().getString(), new StructurifyConfigScreenState(
 				categoryTab.getSearchField().getValue(),
 				//? >= 1.21.4 {
-				/*optionListWidget.scrollAmount()
-				*///?} else {
-				optionListWidget.getScrollAmount()
-				//?}
+				optionListWidget.scrollAmount()
+				//?} else {
+				/*optionListWidget.getScrollAmount()
+				*///?}
 			));
 		}
 	}

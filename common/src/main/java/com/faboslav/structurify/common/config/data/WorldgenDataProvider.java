@@ -14,10 +14,10 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 /*? if <=1.21.1 {*/
-import com.faboslav.structurify.common.util.Platform;
+/*import com.faboslav.structurify.common.util.Platform;
 import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
 import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
-/*?}*/
+*//*?}*/
 
 public final class WorldgenDataProvider
 {
@@ -169,14 +169,14 @@ public final class WorldgenDataProvider
 		}
 
 		/*? if <=1.21.1 {*/
-		if (Platform.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+		/*if (Platform.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
 			return ((YungJigsawStructure) structure).maxDistanceFromCenter;
 		}
 
 		if (Platform.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
 		}
-		/*?}*/
+		*//*?}*/
 
 		Class<?> clazz = structure.getClass();
 		Field[] fields = clazz.getDeclaredFields();
