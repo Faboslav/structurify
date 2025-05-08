@@ -132,7 +132,7 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 		int y = this.startHeight.sample(generationContext.random(), new WorldGenerationContext(generationContext.chunkGenerator(), generationContext.heightAccessor()));
 		var blockPos = new BlockPos(chunkPos.getMinBlockX(), y, chunkPos.getMinBlockZ());
 
-		Structurify.getLogger().info("Flatness check starting at height: " + y);
+		// Structurify.getLogger().info("Flatness check starting at height: " + y);
 
 		int baseX = blockPos.getX();
 		int baseZ = blockPos.getZ();
@@ -165,13 +165,13 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 
 					BlockState blockState = blockView.getBlock(height);
 
-					Structurify.getLogger().info("blockstate: " + blockState + " at: " + x + ", " + height + ", " + z);
+					// Structurify.getLogger().info("blockstate: " + blockState + " at: " + x + ", " + height + ", " + z);
 
 					if(!areAirBlocksAllowed && blockState.isAir()) {
 						airBlockSteps++;
 
 						if(airBlockSteps >= allowedAirBlockSteps) {
-							Structurify.getLogger().info("air");
+							// Structurify.getLogger().info("air");
 							return false;
 						}
 					}
@@ -180,7 +180,7 @@ public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure imp
 						fluidBlockSteps++;
 
 						if(fluidBlockSteps >= allowedLiquidBlockSteps) {
-							Structurify.getLogger().info("liquid");
+							// Structurify.getLogger().info("liquid");
 							return false;
 						}
 					}

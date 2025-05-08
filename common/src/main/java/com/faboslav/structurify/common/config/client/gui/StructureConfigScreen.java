@@ -66,6 +66,34 @@ public final class StructureConfigScreen
 
 		structureCategoryBuilder.option(flatnessCheckThresholdOption);
 
+		var allowAirBlocksInFlatnessCheckOption = Option.<Boolean>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.structure.allow_air_blocks_in_flatness_check.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.allow_air_blocks_in_flatness_check.description")))
+			.binding(
+				StructureData.ALLOW_AIR_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE,
+				() -> Structurify.getConfig().getStructureData().get(structureId).areAirBlocksAllowedInFlatnessCheck(),
+				allowAirBlocksInFlatnessCheck -> Structurify.getConfig().getStructureData().get(structureId).setAllowAirBlocksInFlatnessCheck(allowAirBlocksInFlatnessCheck)
+			)
+			.controller(opt -> BooleanControllerBuilder.create(opt)
+				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+				.coloured(true)).build();
+
+		structureCategoryBuilder.option(allowAirBlocksInFlatnessCheckOption);
+
+		var allowLiquidBlocksInFlatnessCheckOption = Option.<Boolean>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.structure.allow_liquid_blocks_in_flatness_check.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.allow_liquid_blocks_in_flatness_check.description")))
+			.binding(
+				StructureData.ALLOW_LIQUID_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE,
+				() -> Structurify.getConfig().getStructureData().get(structureId).areLiquidBlocksAllowedInFlatnessCheck(),
+				allowLiquidBlocksInFlatnessCheck -> Structurify.getConfig().getStructureData().get(structureId).setAllowLiquidBlocksInFlatnessCheck(allowLiquidBlocksInFlatnessCheck)
+			)
+			.controller(opt -> BooleanControllerBuilder.create(opt)
+				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+				.coloured(true)).build();
+
+		structureCategoryBuilder.option(allowLiquidBlocksInFlatnessCheckOption);
+
 		structureCategoryBuilder.option(LabelOption.create(Component.translatable("gui.structurify.structures.biome_check_group.title")));
 
 		var enableBiomeCheckOption = Option.<Boolean>createBuilder()

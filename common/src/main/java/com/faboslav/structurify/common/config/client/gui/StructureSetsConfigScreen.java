@@ -159,6 +159,7 @@ public final class StructureSetsConfigScreen
 
 		if (currentGroupBuilder != null) {
 			OptionGroup buildedGroup = currentGroupBuilder.build();
+			currentGroupBuilder.collapsed(true);
 			this.optionGroups.put(buildedGroup.name().getString(), buildedGroup);
 			optionGroups.add(buildedGroup);
 		}
