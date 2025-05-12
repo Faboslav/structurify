@@ -1,6 +1,6 @@
 package com.faboslav.structurify.common.modcompat;
 
-//? global_packs: >0 {
+//? global_packs {
 /*import net.dark_roleplay.gdarp.CommonClass;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.RepositorySource;

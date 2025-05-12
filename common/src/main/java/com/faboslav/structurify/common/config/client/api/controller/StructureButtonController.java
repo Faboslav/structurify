@@ -101,10 +101,10 @@ public class StructureButtonController extends BooleanController
 		}
 
 		/*? >=1.20.4 {*/
-		@Override
+		/*@Override
 		public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
 			return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || this.configurationButton.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
 		}
-		/*?}*/
+		*//*?}*/
 	}
 }

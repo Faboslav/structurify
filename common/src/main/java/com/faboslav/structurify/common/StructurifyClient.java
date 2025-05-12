@@ -1,12 +1,9 @@
 package com.faboslav.structurify.common;
 
 import com.faboslav.structurify.common.config.client.gui.StructurifyConfigScreen;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Nullable;
 
-@Environment(EnvType.CLIENT)
 public final class StructurifyClient
 {
 	private static StructurifyConfigScreen CONFIG_SCREEN;

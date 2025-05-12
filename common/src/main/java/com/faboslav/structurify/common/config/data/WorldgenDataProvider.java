@@ -3,9 +3,8 @@ package com.faboslav.structurify.common.config.data;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.mixin.structure.jigsaw.MaxDistanceFromCenterAccessor;
+import com.faboslav.structurify.common.platform.PlatformHooks;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
-
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -14,10 +13,9 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 /*? if <=1.21.1 {*/
-/*import com.faboslav.structurify.common.util.Platform;
 import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
-import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
-*//*?}*/
+//import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
+/*?}*/
 
 public final class WorldgenDataProvider
 {
@@ -169,14 +167,15 @@ public final class WorldgenDataProvider
 		}
 
 		/*? if <=1.21.1 {*/
-		/*if (Platform.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+		/*
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
 			return ((YungJigsawStructure) structure).maxDistanceFromCenter;
-		}
+		}*/
 
-		if (Platform.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
 		}
-		*//*?}*/
+		/*?}*/
 
 		Class<?> clazz = structure.getClass();
 		Field[] fields = clazz.getDeclaredFields();

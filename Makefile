@@ -35,7 +35,7 @@ run-forge-client: ## Runs forge client
 	./gradlew :forge:1.20.1:runClient
 
 run-neoforge-client: ## Runs neoforge client
-	./gradlew neoforge:1.20.1:runClient
+	./gradlew neoforge:1.21.5:runClient
 
 run-fabric-server: ## Runs fabric server
 	./gradlew fabric:1.21.1:runServer
@@ -45,3 +45,9 @@ run-forge-server: ## Runs forge server
 
 run-neoforge-server: ## Runs neoforge server
 	./gradlew neoforge:1.21.1:testProductionServer
+
+nuke: ## Nuke the project
+	./gradlew --stop
+	rm -rf $GRADLE_HOME/caches/transforms-*
+	rm -rf $GRADLE_HOME/caches/build-cache-*
+	find . -type d \( -name ".idea" -o -name ".kotlin" -o -name ".gradle" -o -name "build" -o -name "run" \) -exec rm -rf {} +

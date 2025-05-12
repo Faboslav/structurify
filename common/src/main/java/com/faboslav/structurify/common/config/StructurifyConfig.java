@@ -4,7 +4,8 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
-import com.faboslav.structurify.common.util.Platform;
+import com.faboslav.structurify.common.platform.PlatformHelper;
+import com.faboslav.structurify.common.platform.PlatformHooks;
 import com.google.gson.*;
 
 import java.io.IOException;
@@ -283,7 +284,7 @@ public final class StructurifyConfig
 
 			JsonObject json = new JsonObject();
 
-			json.addProperty(CONFIG_VERSION_PROPERTY, Platform.getModVersion());
+			json.addProperty(CONFIG_VERSION_PROPERTY, PlatformHooks.PLATFORM_HELPER.getModVersion());
 			json.addProperty(CONFIG_DATETIME_PROPERTY, LocalDateTime.now().format(DATETIME_FORMATTER));
 			this.saveGeneralData(json);
 			this.saveStructuresData(json);

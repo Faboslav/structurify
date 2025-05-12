@@ -2,15 +2,15 @@ package com.faboslav.structurify.common.registry;
 
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import com.faboslav.structurify.common.modcompat.ModCompat;
-import dev.architectury.injectables.annotations.ExpectPlatform;
+import com.faboslav.structurify.common.platform.PlatformHooks;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.server.packs.repository.ServerPacksSource;
 
 import java.util.ArrayList;
 
 /*? if >=1.21 {*/
-import com.faboslav.structurify.common.mixin.ResourcePackManagerAccessor;
- /*?}*/
+/*import com.faboslav.structurify.common.mixin.ResourcePackManagerAccessor;
+ *//*?}*/
 
 public final class StructurifyResourcePackProvider
 {
@@ -18,7 +18,7 @@ public final class StructurifyResourcePackProvider
 		ArrayList<RepositorySource> resourcePackProviders = new ArrayList<>();
 
 		resourcePackProviders.addAll(getVanillaResourcePackProviders());
-		resourcePackProviders.addAll(getPlatformResourcePackProviders());
+		resourcePackProviders.addAll(PlatformHooks.PLATFORM_RESOURCE_PACK_PROVIDER.getPlatformResourcePackProviders());
 		resourcePackProviders.addAll(getModsResourcePackProviders());
 
 		return resourcePackProviders;
@@ -28,17 +28,12 @@ public final class StructurifyResourcePackProvider
 		ArrayList<RepositorySource> vanillaResourcePackProviders = new ArrayList<>();
 
 		/*? if >=1.21 {*/
-		vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor)ServerPacksSource.createVanillaTrustedRepository()).getSources());
-		 /*?} else {*/
-		/*vanillaResourcePackProviders.add(new ServerPacksSource());
-		*//*?}*/
+		/*vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor)ServerPacksSource.createVanillaTrustedRepository()).getSources());
+		 *//*?} else {*/
+		vanillaResourcePackProviders.add(new ServerPacksSource());
+		/*?}*/
 
 		return vanillaResourcePackProviders;
-	}
-
-	@ExpectPlatform
-	public static ArrayList<RepositorySource> getPlatformResourcePackProviders() {
-		throw new AssertionError();
 	}
 
 	public static ArrayList<RepositorySource> getModsResourcePackProviders() {

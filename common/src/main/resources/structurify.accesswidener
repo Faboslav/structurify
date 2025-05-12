@@ -1,5 +1,1 @@
 accessWidener v2 named
-
-extendable method net/minecraft/client/gui/components/events/ContainerEventHandler children ()Ljava/util/List;
-extendable method net/minecraft/client/gui/components/AbstractSelectionList children ()Ljava/util/List;
-accessible field net/minecraft/client/gui/components/AbstractWidget height I

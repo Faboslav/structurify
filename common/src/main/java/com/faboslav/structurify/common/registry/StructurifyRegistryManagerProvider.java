@@ -76,22 +76,22 @@ public final class StructurifyRegistryManagerProvider
 					var registry = new MappedRegistry<>(Registries.LEVEL_STEM, Lifecycle.stable()).freeze();
 
 					/*? if >=1.21.3 {*/
-					var dimensionsConfig = loadContextSupplierContext
+					/*var dimensionsConfig = loadContextSupplierContext
 						.datapackWorldgen()
 						.lookupOrThrow(Registries.WORLD_PRESET)
 						.getOrThrow(WorldPresets.FLAT)
 						.value()
 						.createWorldDimensions()
 						.bake(registry);
-					/*?} else {*/
-					/*var dimensionsConfig = loadContextSupplierContext
+					*//*?} else {*/
+					var dimensionsConfig = loadContextSupplierContext
 						.datapackWorldgen()
 						.registryOrThrow(Registries.WORLD_PRESET)
 						.getHolderOrThrow(WorldPresets.FLAT)
 						.value()
 						.createWorldDimensions()
 						.bake(registry);
-					*//*?}*/
+					/*?}*/
 
 					return new WorldLoader.DataLoadOutput<PrimaryLevelData>(null, dimensionsConfig.dimensionsRegistryAccess());
 				}, WorldStem::new, Util.backgroundExecutor(), executor)

@@ -13,7 +13,7 @@
 		"issues": "https://github.com/Faboslav/structurify/issues",
 		"discord": "https://discord.com/invite/QGwFvvMQCn"
 	},
-	"license": "CC BY-NC-ND 4.0",
+	"license": "${modLicense}",
 	"icon": "icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -24,7 +24,7 @@
 			"com.faboslav.structurify.fabric.StructurifyFabricClient"
 		],
 		"modmenu": [
-			"com.faboslav.structurify.common.modcompat.fabric.ModMenuCompat"
+			"com.faboslav.structurify.fabric.modcompat.ModMenuCompat"
 		]
 	},
 	"mixins": [
@@ -35,7 +35,8 @@
 		"minecraft": ">=${minMinecraftVersion}-",
 		"fabricloader": "*",
 		"fabric": "*",
-		"yet_another_config_lib_v3": ">=${yaclVersion}"
+		"yet_another_config_lib_v3": ">=${yaclVersion}",
+		"modmenu": ">=${modMenuVersion}"
 	},
 	"custom": {
 		"modmenu": {
@@ -57,7 +58,7 @@
 			"dependencies": [
 				"fabric-api(required){curseforge:306612}{modrinth:P7dR8mSH}",
 				"yet_another_config_lib_v3(required){curseforge:667299}{modrinth:1eAoo2KR}",
-				"modmenu(optional){curseforge:308702}{modrinth:mOgUt4GM}"
+				"modmenu(required){curseforge:308702}{modrinth:mOgUt4GM}"
 			]
 		}
 	}

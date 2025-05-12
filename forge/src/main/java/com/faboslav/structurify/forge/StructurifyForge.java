@@ -14,6 +14,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 @Mod(Structurify.MOD_ID)
+@SuppressWarnings("all")
 public final class StructurifyForge
 {
 	public StructurifyForge() {

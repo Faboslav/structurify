@@ -1,6 +1,6 @@
 package com.faboslav.structurify.common.modcompat;
 
-//? open_loader: >0 {
+//? open_loader {
 /*import com.faboslav.structurify.common.util.Platform;
 import net.minecraft.server.packs.repository.RepositorySource;
 

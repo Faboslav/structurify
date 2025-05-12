@@ -1,0 +1,63 @@
+plugins {
+	`multiloader-loader`
+	id("net.neoforged.moddev")
+	id("dev.kikugie.j52j") version "2.0"
+}
+
+stonecutter {
+	const("curios", commonMod.depOrNull("curios") != null)
+}
+
+neoForge {
+	enable {
+		version = commonMod.dep("neoforge")
+	}
+}
+
+dependencies {
+	// Required dependencies
+	implementation("dev.isxander:yet-another-config-lib:${commonMod.dep("yacl")}-neoforge")
+
+	// Compat dependencies
+	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
+		implementation(commonMod.modrinth("repurposed-structures-forge", "${repurposedStructuresVersion}-neoforge")) { isTransitive = false }
+	}
+}
+
+neoForge {
+	accessTransformers.from(project.file("../../src/main/resources/META-INF/accesstransformer.cfg").absolutePath)
+
+	runs {
+		register("client") {
+			client()
+			ideName = "NeoForge Client (${project.path})"
+		}
+		register("server") {
+			server()
+			ideName = "NeoForge Server (${project.path})"
+		}
+	}
+
+	parchment {
+		commonMod.depOrNull("parchment")?.let {
+			mappingsVersion = it
+			minecraftVersion = commonMod.mc
+		}
+	}
+
+	mods {
+		register(commonMod.id) {
+			sourceSet(sourceSets.main.get())
+		}
+	}
+}
+
+sourceSets.main {
+	resources.srcDir("src/generated/resources")
+}
+
+tasks {
+	processResources {
+		exclude("${mod.id}.accesswidener")
+	}
+}

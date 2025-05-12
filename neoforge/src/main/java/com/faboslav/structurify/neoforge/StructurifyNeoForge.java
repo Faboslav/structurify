@@ -35,10 +35,10 @@ public final class StructurifyNeoForge
 		}
 
 		/*? if >=1.21.3 {*/
-		var registryAccess = event.getLookupProvider();
-		 /*?} else {*/
-		/*var registryAccess = event.getRegistryAccess();
-		*//*?}*/
+		/*var registryAccess = event.getLookupProvider();
+		 *//*?} else {*/
+		var registryAccess = event.getRegistryAccess();
+		/*?}*/
 
 		StructurifyRegistryManagerProvider.setRegistryManager(registryAccess);
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());

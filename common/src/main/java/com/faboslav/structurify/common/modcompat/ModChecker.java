@@ -1,8 +1,8 @@
 package com.faboslav.structurify.common.modcompat;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.util.Platform;
-import dev.architectury.injectables.annotations.ExpectPlatform;
+import com.faboslav.structurify.common.platform.PlatformHelper;
+import com.faboslav.structurify.common.platform.PlatformHooks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,29 +24,24 @@ public final class ModChecker
 		String modId = "";
 
 		try {
-			//? global_packs: >0 {
+			//? global_packs {
 			/*loadModCompat("globalpacks", () -> new GlobalPacksCompat());
 			*///?}
 
-			//? open_loader: >0 {
+			//? open_loader {
 			/*loadModCompat("openloader", () -> new OpenLoaderCompat());
 			*///?}
 
-			setupPlatformModCompat();
+			PlatformHooks.PLATFORM_COMPAT.setupPlatformModCompat();
 		} catch (Throwable e) {
 			Structurify.getLogger().error("Failed to setup mod compats");
 			e.printStackTrace();
 		}
 	}
 
-	@ExpectPlatform
-	public static void setupPlatformModCompat() {
-		throw new AssertionError();
-	}
-
 	public static void loadModCompat(String modId, Supplier<ModCompat> loader) {
 		try {
-			if (Platform.isModLoaded(modId)) {
+			if (PlatformHooks.PLATFORM_HELPER.isModLoaded(modId)) {
 				ModCompat compat = loader.get();
 				if (compat.compatTypes().contains(ModCompat.Type.CUSTOM_RESOURCE_PACK_PROVIDERS)) {
 					CUSTOM_RESOURCE_PACK_PROVIDER_COMPATS.add(compat);

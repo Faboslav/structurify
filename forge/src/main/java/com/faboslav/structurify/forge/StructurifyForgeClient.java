@@ -9,6 +9,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @OnlyIn(Dist.CLIENT)
+@SuppressWarnings("all")
 public final class StructurifyForgeClient
 {
 	public static void init(IEventBus modEventBus, IEventBus eventBus) {
