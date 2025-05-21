@@ -100,6 +100,12 @@ jobs:
                     MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "yacl" "${{ steps.gradle-properties.outputs.DEPS_YACL }}-${{ matrix.mod_loader }}" "${{ matrix.mod_loader }}")
                     wget -P run/mods "$MOD_URL"
 
+            -   name: "Download ModMenu"
+                if: ${{ matrix.mod_loader == 'fabric' }}
+                run: |
+                    MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "modmenu" "${{ steps.gradle-properties.outputs.DEPS_MOD_MENU }}" "${{ matrix.mod_loader }}")
+                    wget -P run/mods "$MOD_URL"
+
             -   name: Run ${{ matrix.version }} ${{ matrix.mod_loader }} client
                 uses: 3arthqu4ke/mc-runtime-test@3.1.0
                 with:
