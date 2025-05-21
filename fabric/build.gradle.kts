@@ -38,16 +38,31 @@ dependencies {
 	// Open Loader
 	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
 		if (commonMod.mc == "1.21.1") {
-			implementation(group = "net.darkhax.openloader", name = "openloader-fabric-${commonMod.mc}", version = openLoaderVersion)
+			implementation(
+				group = "net.darkhax.openloader",
+				name = "openloader-fabric-${commonMod.mc}",
+				version = openLoaderVersion
+			)
 		} else {
-			implementation(group = "net.darkhax.openloader", name = "OpenLoader-Fabric-${commonMod.mc}", version = openLoaderVersion)
+			implementation(
+				group = "net.darkhax.openloader",
+				name = "OpenLoader-Fabric-${commonMod.mc}",
+				version = openLoaderVersion
+			)
 		}
 	}
 
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
 		commonMod.depOrNull("midnight_lib")?.let { midnightLibVersion ->
-			modImplementation(commonMod.modrinth("repurposed-structures-fabric", "${repurposedStructuresVersion}-fabric")) { isTransitive = false }
-			modImplementation(commonMod.modrinth("midnightlib", "${midnightLibVersion}-fabric")) { isTransitive = false }
+			modImplementation(
+				commonMod.modrinth(
+					"repurposed-structures-fabric",
+					"${repurposedStructuresVersion}-fabric"
+				)
+			) { isTransitive = false }
+			modImplementation(commonMod.modrinth("midnightlib", "${midnightLibVersion}-fabric")) {
+				isTransitive = false
+			}
 
 			modCompileOnly(modRuntimeOnly(group = "com.electronwill.night-config", name = "core", version = "3.6.5"))
 			modCompileOnly(modRuntimeOnly(group = "com.electronwill.night-config", name = "toml", version = "3.6.5"))

@@ -41,11 +41,20 @@ dependencies {
 
 	// Open Loader
 	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
-		implementation(group = "net.darkhax.openloader", name = "OpenLoader-Forge-${commonMod.mc}", version = openLoaderVersion) { isTransitive = false }
+		implementation(
+			group = "net.darkhax.openloader",
+			name = "OpenLoader-Forge-${commonMod.mc}",
+			version = openLoaderVersion
+		) { isTransitive = false }
 	}
 
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
-		modImplementation(commonMod.modrinth("repurposed-structures-forge", "${repurposedStructuresVersion}-forge")) { isTransitive = false }
+		modImplementation(
+			commonMod.modrinth(
+				"repurposed-structures-forge",
+				"${repurposedStructuresVersion}-forge"
+			)
+		) { isTransitive = false }
 	}
 
 	commonMod.depOrNull("structure_gel_api")?.let { structureGelApiVersion ->

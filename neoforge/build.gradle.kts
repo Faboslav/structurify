@@ -23,14 +23,27 @@ dependencies {
 	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
 		println("including")
 		if (commonMod.mc == "1.21.1") {
-			implementation(group = "net.darkhax.openloader", name = "openloader-neoforge-${commonMod.mc}", version = openLoaderVersion)
+			implementation(
+				group = "net.darkhax.openloader",
+				name = "openloader-neoforge-${commonMod.mc}",
+				version = openLoaderVersion
+			)
 		} else {
-			implementation(group = "net.darkhax.openloader", name = "OpenLoader-NeoForge-${commonMod.mc}", version = openLoaderVersion)
+			implementation(
+				group = "net.darkhax.openloader",
+				name = "OpenLoader-NeoForge-${commonMod.mc}",
+				version = openLoaderVersion
+			)
 		}
 	}
 
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
-		implementation(commonMod.modrinth("repurposed-structures-forge", "${repurposedStructuresVersion}-neoforge")) { isTransitive = false }
+		implementation(
+			commonMod.modrinth(
+				"repurposed-structures-forge",
+				"${repurposedStructuresVersion}-neoforge"
+			)
+		) { isTransitive = false }
 	}
 }
 

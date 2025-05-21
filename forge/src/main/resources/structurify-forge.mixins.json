@@ -1,7 +1,8 @@
 {
 	"required": true,
 	"package": "com.faboslav.structurify.forge.mixin",
-	"compatibilityLevel": "JAVA_17",
+	"refmap": "${modId}.refmap.json",
+	"compatibilityLevel": "JAVA_${javaVersion}",
 	"minVersion": "0.8",
 	"plugin": "com.faboslav.structurify.common.mixin.plugin.StructurifyMixinPlugin",
 	"injectors": {
