@@ -4,6 +4,8 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.platform.PlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
+import java.nio.file.Path;
+
 public final class FabricPlatformHelper implements PlatformHelper
 {
 	@Override
@@ -14,5 +16,10 @@ public final class FabricPlatformHelper implements PlatformHelper
 	@Override
 	public String getModVersion() {
 		return FabricLoader.getInstance().getModContainer(Structurify.MOD_ID).map(modContainer -> modContainer.getMetadata().getVersion().toString()).orElse(null);
+	}
+
+	@Override
+	public Path getConfigDirectory() {
+		return FabricLoader.getInstance().getConfigDir();
 	}
 }

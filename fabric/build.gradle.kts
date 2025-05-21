@@ -20,16 +20,27 @@ dependencies {
 	modImplementation("dev.isxander:yet-another-config-lib:${commonMod.dep("yacl")}-fabric")
 	modImplementation("com.terraformersmc:modmenu:${commonMod.dep("mod_menu")}")
 
-	// Compat dependencies
+
+	// Global DataPacks
 	commonMod.depOrNull("global_datapacks")?.let { globalDatapacksVersion ->
 		modCompileOnly(commonMod.modrinth("datapacks", globalDatapacksVersion)) { isTransitive = false }
 	}
 
+	// Global Packs
 	commonMod.depOrNull("global_packs")?.let { globalPacksVersion ->
 		if (commonMod.mc == "1.20.1") {
 			modCompileOnly(commonMod.modrinth("globalpacks", "${globalPacksVersion}_fabric")) { isTransitive = false }
 		} else {
 			modCompileOnly(commonMod.modrinth("globalpacks", globalPacksVersion)) { isTransitive = false }
+		}
+	}
+
+	// Open Loader
+	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
+		if (commonMod.mc == "1.21.1") {
+			implementation(group = "net.darkhax.openloader", name = "openloader-fabric-${commonMod.mc}", version = openLoaderVersion)
+		} else {
+			implementation(group = "net.darkhax.openloader", name = "OpenLoader-Fabric-${commonMod.mc}", version = openLoaderVersion)
 		}
 	}
 

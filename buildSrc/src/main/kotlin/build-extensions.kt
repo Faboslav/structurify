@@ -1,4 +1,5 @@
 import dev.kikugie.stonecutter.build.StonecutterBuild
+import dev.kikugie.stonecutter.controller.StonecutterController
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.kotlin.dsl.*
@@ -13,6 +14,7 @@ fun RepositoryHandler.strictMaven(url: String, alias: String, vararg groups: Str
 }
 
 val Project.stonecutterBuild get() = extensions.getByType<StonecutterBuild>()
+val Project.stonecutterController get() = extensions.getByType<StonecutterController>()
 
 val Project.common get() = requireNotNull(stonecutterBuild.node.sibling("common")) {
     "No common project for $project"
@@ -37,7 +39,7 @@ value class ModData(private val project: Project) {
     fun prop(key: String) = requireNotNull(propOrNull(key)) { "Missing '$key'" }
     fun modPropOrNull(key: String) = project.prop("mod.$key")
     fun modProp(key: String) = requireNotNull(modPropOrNull(key)) { "Missing 'mod.$key'" }
-	fun depOrNull(key: String): String? = project.prop("deps.$key")?.takeIf { it.isNotEmpty() }
+	fun depOrNull(key: String): String? = project.prop("deps.$key")?.takeIf { it.isNotEmpty() && it != "" }
     fun dep(key: String) = requireNotNull(depOrNull(key)) { "Missing 'deps.$key'" }
 	fun modrinth(name: String, version:String) = "maven.modrinth:$name:$version"
 }

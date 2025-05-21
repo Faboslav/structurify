@@ -1,7 +1,6 @@
 package com.faboslav.structurify.common.modcompat;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.platform.PlatformHelper;
 import com.faboslav.structurify.common.platform.PlatformHooks;
 
 import java.util.ArrayList;
@@ -25,12 +24,12 @@ public final class ModChecker
 
 		try {
 			//? global_packs {
-			/*loadModCompat("globalpacks", () -> new GlobalPacksCompat());
-			*///?}
+			loadModCompat("globalpacks", () -> new GlobalPacksCompat());
+			//?}
 
 			//? open_loader {
-			/*loadModCompat("openloader", () -> new OpenLoaderCompat());
-			*///?}
+			loadModCompat("openloader", () -> new OpenLoaderCompat());
+			//?}
 
 			PlatformHooks.PLATFORM_COMPAT.setupPlatformModCompat();
 		} catch (Throwable e) {

@@ -4,10 +4,6 @@ plugins {
 	id("dev.kikugie.j52j") version "2.0"
 }
 
-stonecutter {
-	const("curios", commonMod.depOrNull("curios") != null)
-}
-
 neoForge {
 	enable {
 		version = commonMod.dep("neoforge")
@@ -18,7 +14,21 @@ dependencies {
 	// Required dependencies
 	implementation("dev.isxander:yet-another-config-lib:${commonMod.dep("yacl")}-neoforge")
 
-	// Compat dependencies
+	// Global Packs
+	commonMod.depOrNull("global_packs")?.let { globalPacksVersion ->
+		implementation(commonMod.modrinth("globalpacks", globalPacksVersion)) { isTransitive = false }
+	}
+
+	// Open Loader
+	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
+		println("including")
+		if (commonMod.mc == "1.21.1") {
+			implementation(group = "net.darkhax.openloader", name = "openloader-neoforge-${commonMod.mc}", version = openLoaderVersion)
+		} else {
+			implementation(group = "net.darkhax.openloader", name = "OpenLoader-NeoForge-${commonMod.mc}", version = openLoaderVersion)
+		}
+	}
+
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
 		implementation(commonMod.modrinth("repurposed-structures-forge", "${repurposedStructuresVersion}-neoforge")) { isTransitive = false }
 	}

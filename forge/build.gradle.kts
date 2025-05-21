@@ -4,12 +4,9 @@ plugins {
 	id("dev.kikugie.j52j") version "2.0"
 }
 
-stonecutter {
-	const("curios", commonMod.depOrNull("curios") != null)
-}
 
 mixin {
-	add(sourceSets.main.get(), "${mod.id}.refmap.json")
+	//add(sourceSets.main.get(), "${mod.id}.refmap.json")
 
 	config("${mod.id}-common.mixins.json")
 	config("${mod.id}-forge.mixins.json")
@@ -37,9 +34,14 @@ dependencies {
 	// Required dependencies
 	modImplementation("dev.isxander:yet-another-config-lib:${commonMod.dep("yacl")}-forge")
 
-	// Compat dependencies
+	// Global Packs
+	commonMod.depOrNull("global_packs")?.let { globalPacksVersion ->
+		modImplementation(commonMod.modrinth("globalpacks", "${globalPacksVersion}_forge")) { isTransitive = false }
+	}
+
+	// Open Loader
 	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
-		modImplementation(commonMod.modrinth("open-loader", openLoaderVersion)) { isTransitive = false }
+		implementation(group = "net.darkhax.openloader", name = "OpenLoader-Forge-${commonMod.mc}", version = openLoaderVersion) { isTransitive = false }
 	}
 
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->

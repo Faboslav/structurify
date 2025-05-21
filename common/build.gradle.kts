@@ -5,8 +5,8 @@ plugins {
 }
 
 stonecutter {
-	const("global_packs", commonMod.depOrNull("global_packs") != null)
-	const("open_loader", commonMod.depOrNull("open_loader") != null)
+	const("global_packs", rootProject.project(stonecutter.current.project).property("deps.global_packs").toString() != "")
+	const("open_loader", rootProject.project(stonecutter.current.project).property("deps.open_loader").toString() != "")
 }
 
 loom {
@@ -39,15 +39,19 @@ dependencies {
 	// Global Packs
 	commonMod.depOrNull("global_packs")?.let { globalPacksVersion ->
 		if (commonMod.mc == "1.20.1") {
-			modCompileOnly(commonMod.modrinth("globalpacks", "${globalPacksVersion}_fabric"))
+			modImplementation(commonMod.modrinth("globalpacks", "${globalPacksVersion}_fabric"))
 		} else {
-			modCompileOnly(commonMod.modrinth("globalpacks", globalPacksVersion))
+			modImplementation(commonMod.modrinth("globalpacks", globalPacksVersion))
 		}
 	}
 
-	// Open loader
+	// Open Loader
 	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
-		modCompileOnly(commonMod.modrinth("open-loader", openLoaderVersion))
+		if (commonMod.mc == "1.21.1") {
+			implementation(group = "net.darkhax.openloader", name = "openloader-common-${commonMod.mc}", version = openLoaderVersion)
+		} else {
+			implementation(group = "net.darkhax.openloader", name = "OpenLoader-Common-${commonMod.mc}", version = openLoaderVersion)
+		}
 	}
 
 	// Yungs api

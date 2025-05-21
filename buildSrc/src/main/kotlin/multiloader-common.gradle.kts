@@ -24,6 +24,7 @@ repositories {
         }
         filter { includeGroupAndSubgroups("org.spongepowered") }
     }
+
     exclusiveContent {
         forRepositories(
             maven("https://maven.parchmentmc.org") { name = "ParchmentMC" },
@@ -31,6 +32,7 @@ repositories {
         )
         filter { includeGroup("org.parchmentmc.data") }
     }
+
 	maven("https://www.cursemaven.com")
 	maven("https://api.modrinth.com/maven") {
 		name = "Modrinth"
@@ -56,10 +58,11 @@ repositories {
 			includeGroup("com.jamieswhitefshirt")
 		}
 	}
+
+	maven("https://maven.blamejared.com")
 }
 
 tasks {
-
 	processResources {
 		val expandProps = mapOf(
 			"javaVersion" to commonMod.propOrNull("java.version"),
