@@ -7,7 +7,7 @@ plugins {
     id("fabric-loom") version "1.10-SNAPSHOT" apply false
 }
 
-stonecutter active "1.20.1" /* [SC] DO NOT EDIT */
+stonecutter active "1.21.1" /* [SC] DO NOT EDIT */
 
 stonecutter registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) {
 	group = mod.id

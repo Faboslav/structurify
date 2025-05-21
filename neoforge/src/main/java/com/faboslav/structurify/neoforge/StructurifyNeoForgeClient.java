@@ -9,11 +9,11 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
 /*? if <1.20.6 {*/
-import net.neoforged.neoforge.client.ConfigScreenHandler;
+/*import net.neoforged.neoforge.client.ConfigScreenHandler;
 
-/*?} else {*/
-/*import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
- *//*?}*/
+*//*?} else {*/
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+ /*?}*/
 
 @OnlyIn(Dist.CLIENT)
 public final class StructurifyNeoForgeClient
@@ -27,16 +27,16 @@ public final class StructurifyNeoForgeClient
 	private static void onClientSetup(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
 			/*? if <1.20.6 {*/
-			ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
+			/*ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
 				new ConfigScreenHandler.ConfigScreenFactory(
 					(mc, screen) -> StructurifyClient.getConfigScreen(screen)
 				)
 			);
-			/*?} else {*/
-			/*ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (client, screen) -> {
+			*//*?} else {*/
+			ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () -> (client, screen) -> {
 				return StructurifyClient.getConfigScreen(screen);
 			});
-			*//*?}*/
+			/*?}*/
 		});
 	}
 }

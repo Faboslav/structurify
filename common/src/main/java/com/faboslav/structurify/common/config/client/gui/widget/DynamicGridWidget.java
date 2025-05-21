@@ -141,10 +141,10 @@ public class DynamicGridWidget extends AbstractLayout {
 			child.widget().setWidth(thisCellWidth - padding * 2);
 
 			/*? >=1.21 {*/
-			/*child.widget().setHeight(thisCellHeight - padding * 2);
-			*//*?} else {*/
-			((AbstractWidgetInvoker)child.widget()).setHeight((thisCellHeight - padding * 2));
-			/*?}*/
+			child.widget().setHeight(thisCellHeight - padding * 2);
+			/*?} else {*/
+			/*((AbstractWidgetInvoker)child.widget()).setHeight((thisCellHeight - padding * 2));
+			*//*?}*/
 
 			currentX += thisCellWidth;
 			if (currentX >= this.width) {
