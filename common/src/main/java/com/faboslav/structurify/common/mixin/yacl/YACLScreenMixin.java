@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
-@Mixin(value = YACLScreen.class, remap = false)
+@Mixin(value = YACLScreen.class)
 public abstract class YACLScreenMixin extends Screen
 {
 	protected YACLScreenMixin(Component component) {

@@ -4,7 +4,7 @@ import dev.isxander.yacl3.gui.SearchFieldWidget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(value = SearchFieldWidget.class, remap = false)
+@Mixin(value = SearchFieldWidget.class)
 public interface SearchFieldWidgetInvoker
 {
 	@Invoker("update")

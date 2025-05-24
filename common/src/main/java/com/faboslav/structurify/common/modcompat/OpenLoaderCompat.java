@@ -2,7 +2,7 @@ package com.faboslav.structurify.common.modcompat;
 
 
 //? open_loader {
-import net.minecraft.server.packs.repository.RepositorySource;
+/*import net.minecraft.server.packs.repository.RepositorySource;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -10,11 +10,11 @@ import java.nio.file.Paths;
 import java.nio.file.InvalidPathException;
 
 //? <=1.20.1 {
-/*import net.darkhax.openloader.config.ConfigSchema;
+/^import net.darkhax.openloader.config.ConfigSchema;
 import net.darkhax.openloader.packs.OpenLoaderRepositorySource;
 import net.darkhax.openloader.packs.RepoType;
 import com.faboslav.structurify.common.platform.PlatformHooks;
-*///?} else {
+^///?} else {
 import net.darkhax.openloader.common.impl.packs.OpenLoaderRepositorySource;
 import net.minecraft.server.packs.PackType;
 import java.util.LinkedList;
@@ -35,8 +35,8 @@ public final class OpenLoaderCompat implements ModCompat
 		var resourcePackProviders = new ArrayList<RepositorySource>();
 
 		//? <=1.20.1 {
-		/*var configDir = PlatformHooks.PLATFORM_HELPER.getConfigDirectory().resolve("openloader");
-		*///?} else {
+		/^var configDir = PlatformHooks.PLATFORM_HELPER.getConfigDirectory().resolve("openloader");
+		^///?} else {
 		//?}
 
 		return resourcePackProviders;
@@ -51,7 +51,7 @@ public final class OpenLoaderCompat implements ModCompat
 		return true;
 	}
 }
-//?}
+*///?}
 
 //var config = ConfigSchema.load(configDir);
 //resourcePackProviders.add(new OpenLoaderRepositorySource(RepoType.DATA, config, config.dataPacks, configDir));

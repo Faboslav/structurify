@@ -115,10 +115,10 @@ public class StructurifyConfigScreen extends Screen
 			this.screenStates.put(yaclScreen.getTitle().getString(), new StructurifyConfigScreenState(
 				categoryTab.getSearchField().getValue(),
 				//? >= 1.21.4 {
-				/*optionListWidget.scrollAmount()
-				*///?} else {
-				optionListWidget.getScrollAmount()
-				//?}
+				optionListWidget.scrollAmount()
+				//?} else {
+				/*optionListWidget.getScrollAmount()
+				*///?}
 			));
 		}
 	}

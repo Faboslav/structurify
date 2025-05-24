@@ -20,10 +20,10 @@ import java.util.function.Consumer;
 import static org.lwjgl.opengl.GL20.*;
 
 /*? if <=1.21.1 {*/
-import net.minecraft.util.FastColor;
-/*?} else {*/
-/*import net.minecraft.util.ARGB;
- *//*?}*/
+/*import net.minecraft.util.FastColor;
+*//*?} else {*/
+import net.minecraft.util.ARGB;
+ /*?}*/
 
 /**
  * Inspired by use in Sounds mod
@@ -120,10 +120,10 @@ public class ImageButtonWidget extends AbstractWidget
 		}
 
 		/*? if <=1.21.1 {*/
-		int greyColor = FastColor.ABGR32.color((int) (alphaScale * 255), 0, 0, 0);
-		/*?} else {*/
-		/*int greyColor = ARGB.color((int) (alphaScale * 255), 0, 0, 0);
-		*//*?}*/
+		/*int greyColor = FastColor.ABGR32.color((int) (alphaScale * 255), 0, 0, 0);
+		*//*?} else {*/
+		int greyColor = ARGB.color((int) (alphaScale * 255), 0, 0, 0);
+		/*?}*/
 		context.fill(getX(), getY(), getX() + width, getY() + height, greyColor);
 
 		// Draw text.

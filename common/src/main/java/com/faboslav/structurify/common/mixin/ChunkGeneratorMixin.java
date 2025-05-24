@@ -16,9 +16,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import org.spongepowered.asm.mixin.Mixin;
 
 /*? if >=1.21.4 {*/
-/*import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-*//*?}*/
+/*?}*/
 
 @Mixin(ChunkGenerator.class)
 public final class ChunkGeneratorMixin
@@ -28,7 +28,7 @@ public final class ChunkGeneratorMixin
 	)
 	public boolean structurify$trySetStructureStart(
 		/*? if >=1.21.4 {*/
-		/*StructureSet.StructureSelectionEntry structureSelectionEntry,
+		StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
 		RandomState randomState,
@@ -39,8 +39,8 @@ public final class ChunkGeneratorMixin
 		SectionPos sectionPos,
 		ResourceKey<Level> resourceKey,
 		Operation<Boolean> original
-		*//*?} else {*/
-		StructureSet.StructureSelectionEntry structureSelectionEntry,
+		/*?} else {*/
+		/*StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
 		RandomState randomState,
@@ -50,7 +50,7 @@ public final class ChunkGeneratorMixin
 		ChunkPos chunkPos,
 		SectionPos sectionPos,
 		Operation<Boolean> original
-		/*?}*/
+		*//*?}*/
 	) {
 		if (Structurify.getConfig().disableAllStructures) {
 			return false;
@@ -74,9 +74,9 @@ public final class ChunkGeneratorMixin
 		}
 
 		/*? if >=1.21.4 {*/
-		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
-		*//*?} else {*/
-		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
-		/*?}*/
+		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
+		/*?} else {*/
+		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
+		*//*?}*/
 	}
 }
