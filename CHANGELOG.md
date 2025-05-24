@@ -5,6 +5,7 @@
 - Added compatibility with the Open Loader
 - Fixed mod crash related to latest YACL
 - Fixed main menu blur (on 1.21.4)
+- Fixed error related to initial config creation
 - Fixed mod crash related to missing/incorrect translations for biomes
 - Increased spacing/separation slider range from 128 to 256
 

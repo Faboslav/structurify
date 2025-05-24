@@ -149,14 +149,14 @@ public final class StructureSetsConfigScreen
 			currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName).build());
 			currentGroupBuilder.option(overrideGlobalSpacingAndSeparationModifierOption);
 			currentGroupBuilder.option(spacingAndSeparationOption);
-			currentGroupBuilder.collapsed(true);
+			//currentGroupBuilder.collapsed(true);
 
 			this.structureSetOptions.put(structureSetStringId, new AbstractMap.SimpleEntry<>(overrideGlobalSpacingAndSeparationModifierOption, spacingAndSeparationOption));
 		}
 
 		if (currentGroupBuilder != null) {
 			OptionGroup buildedGroup = currentGroupBuilder.build();
-			currentGroupBuilder.collapsed(true);
+			//currentGroupBuilder.collapsed(true);
 			this.optionGroups.put(buildedGroup.name().getString(), buildedGroup);
 			optionGroups.add(buildedGroup);
 		}
