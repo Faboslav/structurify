@@ -290,6 +290,7 @@ public final class StructurifyConfig
 			this.saveStructuresData(json);
 			this.saveStructureSetsData(json);
 
+			Files.createDirectories(configPath.getParent());
 			Files.createFile(configPath);
 			Files.writeString(configPath, gson.toJson(json));
 
