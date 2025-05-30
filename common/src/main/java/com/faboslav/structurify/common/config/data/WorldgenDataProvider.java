@@ -154,7 +154,12 @@ public final class WorldgenDataProvider
 			String structureSetStringId = structureSetId.toString();
 
 			if (structureSet.placement() instanceof StructurifyRandomSpreadStructurePlacement randomSpreadStructurePlacement) {
-				structureSets.put(structureSetStringId, new StructureSetData(randomSpreadStructurePlacement.structurify$getOriginalSpacing(), randomSpreadStructurePlacement.structurify$getOriginalSeparation()));
+				structureSets.put(structureSetStringId, new StructureSetData(
+					randomSpreadStructurePlacement.structurify$getOriginalSalt(),
+					randomSpreadStructurePlacement.structurify$getOriginalFrequency(),
+					randomSpreadStructurePlacement.structurify$getOriginalSpacing(),
+					randomSpreadStructurePlacement.structurify$getOriginalSeparation())
+				);
 			}
 		}
 

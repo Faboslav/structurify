@@ -10,10 +10,9 @@ import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
-import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
-import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.*;
 import dev.isxander.yacl3.gui.YACLScreen;
+import dev.isxander.yacl3.gui.controllers.string.number.IntegerFieldController;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -82,6 +81,32 @@ public final class StructureSetsConfigScreen
 
 			var translatedStructureSetName = LanguageUtil.translateId("structure", structureSetStringId);
 
+			var saltDescriptionBuilder = OptionDescription.createBuilder();
+			saltDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.salt.description"));
+
+			var saltOption = Option.<Integer>createBuilder()
+				.name(Component.translatable("gui.structurify.structure_sets.salt.title"))
+				.description(saltDescriptionBuilder.build())
+				.binding(
+					config.getStructureSetData().get(structureSetStringId).getDefaultSalt(),
+					() -> config.getStructureSetData().get(structureSetStringId).getSalt(),
+					salt -> config.getStructureSetData().get(structureSetStringId).setSalt(salt)
+				)
+				.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(StructureSetData.MIN_SALT, StructureSetData.MAX_SALT).formatValue((value) -> Component.literal(value.toString()))).build();
+
+			var frequencyDescriptionBuilder = OptionDescription.createBuilder();
+			saltDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.frequency.description"));
+
+			var frequencyOption = Option.<Float>createBuilder()
+				.name(Component.translatable("gui.structurify.structure_sets.frequency.title"))
+				.description(frequencyDescriptionBuilder.build())
+				.binding(
+					config.getStructureSetData().get(structureSetStringId).getDefaultFrequency(),
+					() -> config.getStructureSetData().get(structureSetStringId).getFrequency(),
+					frequency -> config.getStructureSetData().get(structureSetStringId).setFrequency(frequency)
+				)
+				.controller(opt -> FloatSliderControllerBuilder.create(opt).range(StructureSetData.MIN_FREQUENCY, StructureSetData.MAX_FREQUENCY).step(0.01F)).build();
+
 			var overrideGlobalSpacingAndSeparationModifierDescriptionBuilder = OptionDescription.createBuilder();
 			overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.description", translatedStructureSetName));
 
@@ -147,6 +172,8 @@ public final class StructureSetsConfigScreen
 				.available(!config.enableGlobalSpacingAndSeparationModifier || config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier()).build();
 
 			currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName).build());
+			currentGroupBuilder.option(saltOption);
+			currentGroupBuilder.option(frequencyOption);
 			currentGroupBuilder.option(overrideGlobalSpacingAndSeparationModifierOption);
 			currentGroupBuilder.option(spacingAndSeparationOption);
 			//currentGroupBuilder.collapsed(true);

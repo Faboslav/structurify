@@ -59,6 +59,8 @@ public final class StructurifyConfig
 	private static final String BLACKLISTED_BIOMES_PROPERTY = "blacklisted_biomes";
 
 	private static final String STRUCTURE_SETS_PROPERTY = "structure_sets";
+	private static final String SALT_PROPERTY = "salt";
+	private static final String FREQUENCY_PROPERTY = "frequency";
 	private static final String OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY = "override_global_spacing_and_separation_modifier";
 	private static final String SPACING_PROPERTY = "spacing";
 	private static final String SEPARATION_PROPERTY = "separation";
@@ -212,11 +214,7 @@ public final class StructurifyConfig
 				for (JsonElement structureSet : structureSets) {
 					var structureSpreadJson = structureSet.getAsJsonObject();
 
-					if (
-						!structureSpreadJson.has(NAME_PROPERTY)
-						|| !structureSpreadJson.has(SPACING_PROPERTY)
-						|| !structureSpreadJson.has(SEPARATION_PROPERTY)
-					) {
+					if (!structureSpreadJson.has(NAME_PROPERTY)) {
 						Structurify.getLogger().info("Found invalid structure set entry, skipping.");
 						continue;
 					}
@@ -229,8 +227,20 @@ public final class StructurifyConfig
 					var structureSetName = structureSpreadJson.get(NAME_PROPERTY).getAsString();
 					var structureSetData = this.structureSetData.get(structureSpreadJson.get(NAME_PROPERTY).getAsString());
 
-					var spacing = structureSpreadJson.get(SPACING_PROPERTY).getAsInt();
-					var separation = structureSpreadJson.get(SEPARATION_PROPERTY).getAsInt();
+					var salt = structureSpreadJson.has(SALT_PROPERTY) ? structureSpreadJson.get(SALT_PROPERTY).getAsInt() : structureSetData.getDefaultSalt();
+					var frequency = structureSpreadJson.has(FREQUENCY_PROPERTY) ? structureSpreadJson.get(FREQUENCY_PROPERTY).getAsInt() : structureSetData.getDefaultFrequency();
+					var spacing = structureSpreadJson.has(SPACING_PROPERTY) ? structureSpreadJson.get(SPACING_PROPERTY).getAsInt() : structureSetData.getDefaultSpacing();
+					var separation = structureSpreadJson.has(SEPARATION_PROPERTY) ? structureSpreadJson.get(SEPARATION_PROPERTY).getAsInt() : structureSetData.getDefaultSeparation();
+
+					if((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
+						Structurify.getLogger().info("Salt value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, salt, structureSetData.getDefaultSalt());
+						salt = structureSetData.getDefaultSalt();
+					}
+
+					if(frequency < StructureSetData.MIN_FREQUENCY || frequency > StructureSetData.MAX_FREQUENCY) {
+						Structurify.getLogger().info("Frequency value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, frequency, structureSetData.getDefaultFrequency());
+						frequency = structureSetData.getDefaultFrequency();
+					}
 
 					if (separation >= spacing) {
 						Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}.", structureSetName, separation, spacing, spacing - 1);
@@ -249,6 +259,8 @@ public final class StructurifyConfig
 
 					var overrideGlobalSpacingAndSeparationModifier = structureSpreadJson.get(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY).getAsBoolean();
 
+					structureSetData.setSalt(salt);
+					structureSetData.setFrequency(frequency);
 					structureSetData.setOverrideGlobalSpacingAndSeparationModifier(overrideGlobalSpacingAndSeparationModifier);
 					structureSetData.setSpacing(spacing);
 					structureSetData.setSeparation(separation);
@@ -367,11 +379,24 @@ public final class StructurifyConfig
 
 		this.structureSetData.entrySet().stream()
 			.filter(entry -> !entry.getValue().isUsingDefaultValues())
-			.forEach(entry -> {
-				var structureSetName = entry.getKey();
-				var overrideGlobalSpacingAndSeparationModifier = entry.getValue().overrideGlobalSpacingAndSeparationModifier();
-				var spacing = entry.getValue().getSpacing();
-				var separation = entry.getValue().getSeparation();
+			.forEach(structureSetDataEntry -> {
+				var structureSetData = structureSetDataEntry.getValue();
+				var structureSetName = structureSetDataEntry.getKey();
+				var overrideGlobalSpacingAndSeparationModifier = structureSetData.overrideGlobalSpacingAndSeparationModifier();
+				var salt = structureSetData.getSalt();
+				var frequency = structureSetData.getFrequency();
+				var spacing =structureSetData.getSpacing();
+				var separation = structureSetData.getSeparation();
+
+				if((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
+					Structurify.getLogger().info("Salt value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, salt, structureSetData.getDefaultSalt());
+					salt = structureSetData.getDefaultSalt();
+				}
+
+				if(frequency < StructureSetData.MIN_FREQUENCY || frequency > StructureSetData.MAX_FREQUENCY) {
+					Structurify.getLogger().info("Frequency value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, frequency, structureSetData.getDefaultFrequency());
+					frequency = structureSetData.getDefaultFrequency();
+				}
 
 				if (separation >= spacing) {
 					Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}. ", structureSetName, separation, spacing, spacing - 1);
@@ -389,7 +414,9 @@ public final class StructurifyConfig
 				}
 
 				JsonObject specificStructureSpread = new JsonObject();
-				specificStructureSpread.addProperty(NAME_PROPERTY, entry.getKey());
+				specificStructureSpread.addProperty(NAME_PROPERTY, structureSetName);
+				specificStructureSpread.addProperty(SALT_PROPERTY, salt);
+				specificStructureSpread.addProperty(FREQUENCY_PROPERTY, frequency);
 				specificStructureSpread.addProperty(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, overrideGlobalSpacingAndSeparationModifier);
 				specificStructureSpread.addProperty(SPACING_PROPERTY, spacing);
 				specificStructureSpread.addProperty(SEPARATION_PROPERTY, separation);

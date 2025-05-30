@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import java.util.Optional;
 
 @Mixin(RandomSpreadStructurePlacement.class)
-public abstract class RandomSpreadStructurePlacementMixin extends StructurePlacement implements StructurifyRandomSpreadStructurePlacement
+public abstract class RandomSpreadStructurePlacementMixin extends StructurePlacementMixin implements StructurifyRandomSpreadStructurePlacement
 {
 	@Shadow
 	@Final
@@ -30,28 +30,6 @@ public abstract class RandomSpreadStructurePlacementMixin extends StructurePlace
 
 	@Shadow
 	public abstract int spacing();
-
-	@Nullable
-	public ResourceLocation structureSetIdentifier = null;
-
-	protected RandomSpreadStructurePlacementMixin(
-		Vec3i locateOffset,
-		FrequencyReductionMethod frequencyReductionMethod,
-		float frequency,
-		int salt,
-		Optional<ExclusionZone> exclusionZone
-	) {
-		super(locateOffset, frequencyReductionMethod, frequency, salt, exclusionZone);
-	}
-
-	public void structurify$setStructureSetIdentifier(ResourceLocation structureSetIdentifier) {
-		this.structureSetIdentifier = structureSetIdentifier;
-	}
-
-	@Nullable
-	public ResourceLocation structurify$getStructureSetIdentifier() {
-		return this.structureSetIdentifier;
-	}
 
 	public int structurify$getOriginalSpacing() {
 		return this.spacing;
