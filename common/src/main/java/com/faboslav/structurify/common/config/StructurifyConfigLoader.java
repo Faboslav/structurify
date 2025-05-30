@@ -36,7 +36,7 @@ public final class StructurifyConfigLoader
 		}
 
 		if (!changedStructureSets.isEmpty()) {
-			Structurify.getLogger().info("Changed spacing and/or separation of {} structures sets: {}", changedStructureSets.size(), changedStructureSets);
+			Structurify.getLogger().info("Changed settings of {} structures sets: {}", changedStructureSets.size(), changedStructureSets);
 		}
 	}
 }

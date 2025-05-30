@@ -4,6 +4,7 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.util.RandomSpreadUtil;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceLocation;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -62,6 +64,18 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		at = @At("RETURN")
 	)
 	protected float structurify$getFrequency(float originalFrequency) {
+		return Structurify.getConfig().getStructureSetData().get(this.structurify$getStructureSetIdentifier().toString()).getFrequency();
+	}
+
+	@ModifyExpressionValue(
+		method = "applyAdditionalChunkRestrictions",
+		at = @At(
+			value = "FIELD",
+			target = "Lnet/minecraft/world/level/levelgen/structure/placement/StructurePlacement;frequency:F",
+			opcode = Opcodes.GETFIELD
+		)
+	)
+	protected float structurify$applyAdditionalChunkRestrictionsGetFrequency(float originalFrequency) {
 		return Structurify.getConfig().getStructureSetData().get(this.structurify$getStructureSetIdentifier().toString()).getFrequency();
 	}
 }
