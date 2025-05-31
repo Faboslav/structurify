@@ -30,29 +30,29 @@ public final class Structurify
 	}
 
 	public static ResourceLocation makeId(String path) {
-		/*? >=1.21 {*/
+		//? >=1.21 {
 		return ResourceLocation.tryBuild(
 			MOD_ID,
 			path
 		);
-		 /*?} else {*/
+		//?} else {
 		/*return new ResourceLocation(
 			MOD_ID,
 			path
 		);
-		*//*?}*/
+		*///?}
 	}
 
 	public static ResourceLocation makeNamespacedId(String id) {
-		/*? >=1.21 {*/
+		//? >=1.21 {
 		return ResourceLocation.parse(
 			id
 		);
-		/*?} else {*/
+		//?} else {
 		/*return new ResourceLocation(
 			id
 		);
-		*//*?}*/
+		*///?}
 	}
 
 	public static void init() {

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(GridStructurePlacement.class)
+@Mixin(value = GridStructurePlacement.class, remap = false)
 public abstract class StructureGelApiModifySpreadMixin implements StructurifyRandomSpreadStructurePlacement
 {
 	@Shadow

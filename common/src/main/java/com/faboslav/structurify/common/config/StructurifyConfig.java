@@ -218,13 +218,14 @@ public final class StructurifyConfig
 						continue;
 					}
 
-					if (!this.structureSetData.containsKey(structureSpreadJson.get(NAME_PROPERTY).getAsString())) {
-						Structurify.getLogger().info("Found invalid structure set identifier of \"{}\", skipping.", structureSpreadJson.get(NAME_PROPERTY).getAsString());
+					var structureSetName = structureSpreadJson.get(NAME_PROPERTY).getAsString();
+
+					if (!this.structureSetData.containsKey(structureSetName)) {
+						Structurify.getLogger().info("Found invalid structure set identifier of \"{}\", skipping.", structureSetName);
 						continue;
 					}
 
-					var structureSetName = structureSpreadJson.get(NAME_PROPERTY).getAsString();
-					var structureSetData = this.structureSetData.get(structureSpreadJson.get(NAME_PROPERTY).getAsString());
+					var structureSetData = this.structureSetData.get(structureSetName);
 
 					var salt = structureSpreadJson.has(SALT_PROPERTY) ? structureSpreadJson.get(SALT_PROPERTY).getAsInt() : structureSetData.getDefaultSalt();
 					var frequency = structureSpreadJson.has(FREQUENCY_PROPERTY) ? structureSpreadJson.get(FREQUENCY_PROPERTY).getAsInt() : structureSetData.getDefaultFrequency();

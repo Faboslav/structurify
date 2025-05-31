@@ -3,7 +3,6 @@ package com.faboslav.structurify.common.config.data;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.mixin.structure.jigsaw.MaxDistanceFromCenterAccessor;
-import com.faboslav.structurify.common.platform.PlatformHooks;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -12,10 +11,17 @@ import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import java.lang.reflect.Field;
 import java.util.*;
 
-/*? if <=1.21.1 {*/
-/*import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
-//import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
-*//*?}*/
+//? yungs_api || repurposed_structures {
+import com.faboslav.structurify.common.platform.PlatformHooks;
+//?}
+
+//? yungs_api {
+/*import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
+*///?}
+
+//? repurposed_structures {
+import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
+//?}
 
 public final class WorldgenDataProvider
 {
@@ -171,16 +177,17 @@ public final class WorldgenDataProvider
 			return ((MaxDistanceFromCenterAccessor) structure).structurify$getMaxDistanceFromCenter();
 		}
 
-		/*? if <=1.21.1 {*/
-		/*/^
-		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+		//? yungs_api {
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
 			return ((YungJigsawStructure) structure).maxDistanceFromCenter;
-		}^/
+		}
+		*///?}
 
+		//? repurposed_structures {
 		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
 		}
-		*//*?}*/
+		//?}
 
 		Class<?> clazz = structure.getClass();
 		Field[] fields = clazz.getDeclaredFields();

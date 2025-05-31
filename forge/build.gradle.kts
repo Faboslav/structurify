@@ -4,9 +4,8 @@ plugins {
 	id("dev.kikugie.j52j") version "2.0"
 }
 
-
 mixin {
-	//add(sourceSets.main.get(), "${mod.id}.refmap.json")
+	add(sourceSets.main.get(), "${mod.id}.refmap.json")
 
 	config("${mod.id}-common.mixins.json")
 	config("${mod.id}-forge.mixins.json")
@@ -20,6 +19,7 @@ legacyForge {
 
 dependencies {
 	compileOnly("org.jetbrains:annotations:24.1.0")
+	annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 	compileOnly("io.github.llamalad7:mixinextras-common:0.4.1")
 	annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1")
 
@@ -36,18 +36,26 @@ dependencies {
 
 	// Global Packs
 	commonMod.depOrNull("global_packs")?.let { globalPacksVersion ->
-		modImplementation(commonMod.modrinth("globalpacks", "${globalPacksVersion}_forge")) { isTransitive = false }
+		modImplementation(commonMod.modrinth("globalpacks", "1.16.2_forge")) { isTransitive = false }
 	}
 
 	// Open Loader
 	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
-		implementation(
+		modImplementation(
 			group = "net.darkhax.openloader",
 			name = "OpenLoader-Forge-${commonMod.mc}",
 			version = openLoaderVersion
 		) { isTransitive = false }
 	}
 
+	// Yungs Api
+	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
+		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->
+			modImplementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-Forge-$yungsApiVersion") { isTransitive = false }
+		}
+	}
+
+	// Repurposed Structures
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
 		modImplementation(
 			commonMod.modrinth(
@@ -100,5 +108,16 @@ sourceSets.main {
 tasks {
 	processResources {
 		exclude("${mod.id}.accesswidener")
+	}
+
+	jar {
+		finalizedBy("reobfJar")
+		manifest {
+			attributes(
+				mapOf(
+					"MixinConfigs" to "${mod.id}-common.mixins.json,${mod.id}-forge.mixins.json"
+				)
+			)
+		}
 	}
 }

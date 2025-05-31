@@ -1,31 +1,31 @@
 {
-  "required": true,
-  "package": "com.faboslav.structurify.common.mixin",
-  "refmap": "${modId}.refmap.json",
-  "compatibilityLevel": "JAVA_${javaVersion}",
-  "minVersion": "0.8",
-  "plugin": "com.faboslav.structurify.common.mixin.plugin.StructurifyMixinPlugin",
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "mixins": [
-    "ChunkGeneratorMixin",
-    "LocateCommandMixin",
-    "RandomSpreadStructurePlacementMixin",
-    "ResourcePackManagerAccessor",
-    "StructureMixin",
-    "StructurePlacementMixin",
-    "compat.RepurposedStructuresModifySpreadMixin",
-    "structure.StructureModifyBiomesMixin",
-    "structure.jigsaw.JigsawStructureBiomeRadiusCheckMixin",
-    "structure.jigsaw.MaxDistanceFromCenterAccessor"
-  ],
-  "client": [
-    "AbstractWidgetInvoker",
-    "WorldOpenFlowsMixin",
-    "yacl.AnimatedDynamicTextureImageAccessor",
-    "yacl.CategoryTabAccessor",
-    "yacl.SearchFieldWidgetInvoker",
-    "yacl.YACLScreenMixin"
+	"required": true,
+	"package": "com.faboslav.structurify.common.mixin",
+	"refmap": "${modId}.refmap.json",
+	"compatibilityLevel": "JAVA_${javaVersion}",
+	"minVersion": "0.8",
+	"plugin": "com.faboslav.structurify.common.mixin.plugin.StructurifyMixinPlugin",
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"mixins": [
+		"ChunkGeneratorMixin",
+		"LocateCommandMixin",
+		"RandomSpreadStructurePlacementMixin",
+		"ResourcePackManagerAccessor",
+		"StructureMixin",
+		"StructurePlacementMixin",
+		"compat.RepurposedStructuresModifySpreadMixin",
+		"structure.StructureModifyBiomesMixin",
+		"structure.jigsaw.JigsawStructureBiomeRadiusCheckMixin",
+		"structure.jigsaw.MaxDistanceFromCenterAccessor"
+	],
+	"client": [
+		"AbstractWidgetInvoker",
+		"WorldOpenFlowsMixin",
+		"yacl.AnimatedDynamicTextureImageAccessor",
+		"yacl.CategoryTabAccessor",
+		"yacl.SearchFieldWidgetInvoker",
+		"yacl.YACLScreenMixin"
 	]
 }

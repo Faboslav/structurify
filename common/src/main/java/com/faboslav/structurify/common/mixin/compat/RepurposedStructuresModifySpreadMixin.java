@@ -3,7 +3,7 @@ package com.faboslav.structurify.common.mixin.compat;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import org.spongepowered.asm.mixin.Mixin;
 
-/*? if <=1.21.1 {*/
+//? <=1.21.1 {
 
 /*import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.util.RandomSpreadUtil;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Optional;
 
-@Mixin(AdvancedRandomSpread.class)
+@Mixin(value = AdvancedRandomSpread.class, remap = false)
 public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpreadStructurePlacement implements StructurifyRandomSpreadStructurePlacement
 {
 	public RepurposedStructuresModifySpreadMixin(
@@ -79,10 +79,10 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalSeparation);
 	}
 }
-*//*?} else {*/
+*///?} else {
 // This is just a placeholder mixin
 @Mixin(RandomSpreadStructurePlacement.class)
 public abstract class RepurposedStructuresModifySpreadMixin
 {
 }
-/*?}*/
+//?}

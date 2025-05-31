@@ -37,13 +37,16 @@ dependencies {
 		}
 	}
 
+	// Yungs api
+	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
+		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->
+			implementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-NeoForge-$yungsApiVersion") { isTransitive = false }
+		}
+	}
+
+	// Repurposed Structures
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
-		implementation(
-			commonMod.modrinth(
-				"repurposed-structures-forge",
-				"${repurposedStructuresVersion}-neoforge"
-			)
-		) { isTransitive = false }
+		implementation("com.telepathicgrunt:RepurposedStructures:${repurposedStructuresVersion}-neoforge")
 	}
 }
 

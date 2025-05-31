@@ -61,27 +61,28 @@ dependencies {
 		modImplementation("com.dfsek.terra:fabric:${terraVersion}")
 	}
 
+	// Yungs api
+	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
+		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->
+			modImplementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-Fabric-$yungsApiVersion") { isTransitive = false }
+		}
+	}
+
+	// Repurposed structures
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
 		commonMod.depOrNull("midnight_lib")?.let { midnightLibVersion ->
-			modImplementation(
-				commonMod.modrinth(
-					"repurposed-structures-fabric",
-					"${repurposedStructuresVersion}-fabric"
-				)
-			) { isTransitive = false }
-			modImplementation(commonMod.modrinth("midnightlib", "${midnightLibVersion}-fabric")) {
-				isTransitive = false
+			modImplementation("com.telepathicgrunt:RepurposedStructures:${repurposedStructuresVersion}-fabric")
+			if (commonMod.mc == "1.21.4" || commonMod.mc == "1.21.5" ) {
+				modImplementation(commonMod.modrinth("midnightlib", "${midnightLibVersion}-fabric"))
+			} else {
+				modImplementation(commonMod.modrinth("midnightlib", "${midnightLibVersion}-fabric"))
 			}
-
-			modCompileOnly(modRuntimeOnly(group = "com.electronwill.night-config", name = "core", version = "3.6.5"))
-			modCompileOnly(modRuntimeOnly(group = "com.electronwill.night-config", name = "toml", version = "3.6.5"))
 		}
 	}
 }
 
 loom {
 	accessWidenerPath = common.project.file("../../src/main/resources/${mod.id}.accesswidener")
-	//accessWidenerPath = project(":common:${stonecutter.current.project}").loom.accessWidenerPath
 
 	runs {
 		getByName("client") {

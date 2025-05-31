@@ -7,7 +7,7 @@ import dev.isxander.yacl3.gui.tab.ListHolderWidget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(value = YACLScreen.CategoryTab.class)
+@Mixin(value = YACLScreen.CategoryTab.class, remap = false)
 public interface CategoryTabAccessor
 {
 	@Accessor

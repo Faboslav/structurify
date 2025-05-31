@@ -1,12 +1,16 @@
 package com.faboslav.structurify.common.config.client.gui.widget;
 
-import com.faboslav.structurify.common.mixin.AbstractWidgetInvoker;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.AbstractLayout;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+
+
+//? <1.21 {
+/*import com.faboslav.structurify.common.mixin.AbstractWidgetInvoker;
+*///?}
 
 /**
  * Inspired by use in Sounds mod
@@ -140,11 +144,11 @@ public class DynamicGridWidget extends AbstractLayout {
 			child.widget().setY(currentY);
 			child.widget().setWidth(thisCellWidth - padding * 2);
 
-			/*? >=1.21 {*/
+			//? >=1.21 {
 			child.widget().setHeight(thisCellHeight - padding * 2);
-			/*?} else {*/
+			//?} else {
 			/*((AbstractWidgetInvoker)child.widget()).setHeight((thisCellHeight - padding * 2));
-			*//*?}*/
+			*///?}
 
 			currentX += thisCellWidth;
 			if (currentX >= this.width) {

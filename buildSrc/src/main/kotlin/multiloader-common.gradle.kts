@@ -61,6 +61,8 @@ repositories {
 
 	maven("https://maven.blamejared.com")
 
+	maven("https://nexus.resourcefulbees.com/repository/telepathicgrunt/")
+
 	maven {
 		name = "CodeMC"
 		url = uri("https://repo.codemc.org/repository/maven-public/")

@@ -15,10 +15,10 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.spongepowered.asm.mixin.Mixin;
 
-/*? if >=1.21.4 {*/
+//? >=1.21.4 {
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-/*?}*/
+//?}
 
 @Mixin(ChunkGenerator.class)
 public final class ChunkGeneratorMixin
@@ -27,7 +27,7 @@ public final class ChunkGeneratorMixin
 		method = "tryGenerateStructure"
 	)
 	public boolean structurify$trySetStructureStart(
-		/*? if >=1.21.4 {*/
+		//? >=1.21.4 {
 		StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
@@ -39,7 +39,7 @@ public final class ChunkGeneratorMixin
 		SectionPos sectionPos,
 		ResourceKey<Level> resourceKey,
 		Operation<Boolean> original
-		/*?} else {*/
+		//?} else {
 		/*StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
@@ -50,7 +50,7 @@ public final class ChunkGeneratorMixin
 		ChunkPos chunkPos,
 		SectionPos sectionPos,
 		Operation<Boolean> original
-		*//*?}*/
+		*///?}
 	) {
 		if (Structurify.getConfig().disableAllStructures) {
 			return false;
@@ -73,10 +73,10 @@ public final class ChunkGeneratorMixin
 			return false;
 		}
 
-		/*? if >=1.21.4 {*/
+		//? >=1.21.4 {
 		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
-		/*?} else {*/
+		//?} else {
 		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
-		*//*?}*/
+		*///?}
 	}
 }
