@@ -20,15 +20,15 @@ legacyForge {
 dependencies {
 	compileOnly("org.jetbrains:annotations:24.1.0")
 	annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
-	compileOnly("io.github.llamalad7:mixinextras-common:0.4.1")
-	annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1")
 
-	implementation("io.github.llamalad7:mixinextras-forge:0.4.1") {
-		artifact {
-			name = "mixinextras-forge"
-			extension = "jar"
-			type = "jar"
-		}
+	"io.github.llamalad7:mixinextras-common:0.4.1".let {
+		compileOnly(it)
+		annotationProcessor(it)
+	}
+
+	"io.github.llamalad7:mixinextras-forge:0.4.1".let {
+		implementation(it)
+		jarJar(it)
 	}
 
 	// Required dependencies

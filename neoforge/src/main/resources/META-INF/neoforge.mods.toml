@@ -39,10 +39,10 @@ type = "required"
 versionRange = "[${yaclVersion},)"
 ordering = "NONE"
 side = "BOTH"
-[dependencies.${modId}.mc-publish]
-    ignore=false
-    modrinth="yacl"
-    curseforge="yacl"
+[dependencies.${ modId }.mc-publish]
+ignore = false
+modrinth = "yacl"
+curseforge = "yacl"
 
 [modproperties.${ modId }]
 catalogueImageIcon = "catalogue_icon.png"

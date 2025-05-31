@@ -40,7 +40,9 @@ dependencies {
 	// Yungs api
 	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
 		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->
-			implementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-NeoForge-$yungsApiVersion") { isTransitive = false }
+			implementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-NeoForge-$yungsApiVersion") {
+				isTransitive = false
+			}
 		}
 	}
 

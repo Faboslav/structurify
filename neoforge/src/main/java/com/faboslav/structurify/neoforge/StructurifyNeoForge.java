@@ -38,7 +38,7 @@ public final class StructurifyNeoForge
 		var registryAccess = event.getLookupProvider();
 		//?} else {
 		/*var registryAccess = event.getRegistryAccess();
-		*///?}
+		 *///?}
 
 		StructurifyRegistryManagerProvider.setRegistryManager(registryAccess);
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
