@@ -60,10 +60,9 @@ public abstract class StructureModifyBiomesMixin implements StructurifyStructure
 			var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
 			var biomeIds = structureData.getBiomes();
 
-			/*
 			for (ModCompat modCompat : ModChecker.BIOME_REPLACER_COMPATS) {
 				biomeIds = modCompat.getReplacedBiomes(biomeIds);
-			}*/
+			}
 
 			ArrayList<Holder<Biome>> biomeHolders = new ArrayList<>();
 

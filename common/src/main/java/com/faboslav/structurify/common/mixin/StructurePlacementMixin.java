@@ -1,15 +1,10 @@
 package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
-import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -68,7 +63,6 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 	}
 
 	//? >= 1.21.1 {
-	
 	@ModifyExpressionValue(
 		method = "applyAdditionalChunkRestrictions",
 		at = @At(

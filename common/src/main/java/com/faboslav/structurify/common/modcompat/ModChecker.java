@@ -32,6 +32,8 @@ public final class ModChecker
 			/*loadModCompat("openloader", () -> new OpenLoaderCompat());
 			*///?}
 
+			loadModCompat("terra", () -> new TerraCompat());
+
 			PlatformHooks.PLATFORM_COMPAT.setupPlatformModCompat();
 		} catch (Throwable e) {
 			Structurify.getLogger().error("Failed to setup mod compats");

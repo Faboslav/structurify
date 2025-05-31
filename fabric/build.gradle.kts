@@ -64,7 +64,7 @@ dependencies {
 	// Yungs api
 	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
 		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->
-			modImplementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-Fabric-$yungsApiVersion") { isTransitive = false }
+			modImplementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-Fabric-$yungsApiVersion")
 		}
 	}
 

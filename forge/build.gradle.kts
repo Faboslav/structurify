@@ -65,6 +65,7 @@ dependencies {
 		) { isTransitive = false }
 	}
 
+	// Structure Gel Api
 	commonMod.depOrNull("structure_gel_api")?.let { structureGelApiVersion ->
 		modImplementation(commonMod.modrinth("structure-gel-api", structureGelApiVersion)) { isTransitive = false }
 	}

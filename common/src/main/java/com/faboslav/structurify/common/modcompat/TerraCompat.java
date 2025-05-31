@@ -1,6 +1,5 @@
-package com.faboslav.structurify.fabric.modcompat;
+package com.faboslav.structurify.common.modcompat;
 
-import com.faboslav.structurify.common.modcompat.ModCompat;
 import net.minecraft.resources.ResourceLocation;
 
 import java.lang.reflect.Method;
@@ -49,7 +48,6 @@ public final class TerraCompat implements ModCompat
 			return (Map<ResourceLocation, List<ResourceLocation>>) result;
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 	}

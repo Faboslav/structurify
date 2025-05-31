@@ -1,8 +1,8 @@
 package com.faboslav.structurify.common.mixin.structure.jigsaw;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.StructureData;
+import com.faboslav.structurify.common.mixin.StructureMixin;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.core.BlockPos;
@@ -17,9 +17,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
-import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.Structure.GenerationContext;
+import net.minecraft.world.level.levelgen.structure.Structure.GenerationStub;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,24 +28,8 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.Optional;
 
 @Mixin(JigsawStructure.class)
-public abstract class JigsawStructureBiomeRadiusCheckMixin extends Structure implements StructurifyStructure
+public abstract class JigsawStructureBiomeRadiusCheckMixin extends StructureMixin
 {
-	@Nullable
-	public ResourceLocation structureIdentifier = null;
-
-	protected JigsawStructureBiomeRadiusCheckMixin(StructureSettings config) {
-		super(config);
-	}
-
-	public void structurify$setStructureIdentifier(ResourceLocation structureIdentifier) {
-		this.structureIdentifier = structureIdentifier;
-	}
-
-	@Nullable
-	public ResourceLocation structurify$getStructureIdentifier() {
-		return this.structureIdentifier;
-	}
-
 	@Shadow
 	@Final
 	private HeightProvider startHeight;

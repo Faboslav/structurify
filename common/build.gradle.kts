@@ -56,6 +56,11 @@ dependencies {
 		}
 	}
 
+	// Terra
+	commonMod.depOrNull("terra")?.let { terraVersion ->
+		modImplementation("com.dfsek.terra:fabric:${terraVersion}")
+	}
+
 	// Yungs api
 	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
 		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->
