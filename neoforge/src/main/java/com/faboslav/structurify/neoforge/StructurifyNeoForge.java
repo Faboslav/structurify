@@ -1,6 +1,7 @@
 package com.faboslav.structurify.neoforge;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.commands.DumpCommand;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
@@ -10,6 +11,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 
@@ -25,8 +27,13 @@ public final class StructurifyNeoForge
 			StructurifyNeoForgeClient.init(modEventBus, eventBus);
 		}
 
+		eventBus.addListener(StructurifyNeoForge::registerCommand);
 		eventBus.addListener(StructurifyNeoForge::onResourceManagerReload);
 		eventBus.addListener(StructurifyNeoForge::onServerAboutToStart);
+	}
+
+	private static void registerCommand(RegisterCommandsEvent event) {
+		DumpCommand.createCommand(event.getDispatcher());
 	}
 
 	private static void onResourceManagerReload(TagsUpdatedEvent event) {

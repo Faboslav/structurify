@@ -1,10 +1,12 @@
 package com.faboslav.structurify.fabric;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.commands.DumpCommand;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.RegistryAccess;
@@ -16,6 +18,7 @@ public final class StructurifyFabric implements ModInitializer
 	public void onInitialize() {
 		Structurify.init();
 
+		CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, dedicated) -> DumpCommand.createCommand(dispatcher));
 		CommonLifecycleEvents.TAGS_LOADED.register(this::onDatapackReload);
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStart);
 	}

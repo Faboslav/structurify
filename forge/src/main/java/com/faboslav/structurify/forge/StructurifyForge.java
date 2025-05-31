@@ -1,11 +1,13 @@
 package com.faboslav.structurify.forge;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.commands.DumpCommand;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -27,8 +29,13 @@ public final class StructurifyForge
 			StructurifyForgeClient.init(modEventBus, eventBus);
 		}
 
+		eventBus.addListener(StructurifyForge::registerCommand);
 		eventBus.addListener(StructurifyForge::onResourceManagerReload);
 		eventBus.addListener(StructurifyForge::onServerAboutToStart);
+	}
+
+	private static void registerCommand(RegisterCommandsEvent event) {
+		DumpCommand.createCommand(event.getDispatcher());
 	}
 
 	private static void onResourceManagerReload(TagsUpdatedEvent event) {

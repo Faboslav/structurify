@@ -24,6 +24,7 @@ public final class StructurifyConfig
 	public boolean isLoaded = false;
 	public boolean isLoading = false;
 	private final Path configPath = Path.of("config", Structurify.MOD_ID + ".json");
+	public final Path configDumpPath = Path.of("config", Structurify.MOD_ID + "_dump.json");
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 	public boolean disableAllStructures = false;
@@ -299,8 +300,8 @@ public final class StructurifyConfig
 			json.addProperty(CONFIG_VERSION_PROPERTY, PlatformHooks.PLATFORM_HELPER.getModVersion());
 			json.addProperty(CONFIG_DATETIME_PROPERTY, LocalDateTime.now().format(DATETIME_FORMATTER));
 			this.saveGeneralData(json);
-			this.saveStructuresData(json);
-			this.saveStructureSetsData(json);
+			this.saveStructuresData(json, true);
+			this.saveStructureSetsData(json, true);
 
 			Files.createDirectories(configPath.getParent());
 			Files.createFile(configPath);
@@ -329,6 +330,33 @@ public final class StructurifyConfig
 		}
 	}
 
+	public void dump() {
+		Structurify.getLogger().info("Dumping Structurify config...");
+
+		try {
+			if (Files.exists(configDumpPath)) {
+				Files.delete(configDumpPath);
+			}
+
+			JsonObject json = new JsonObject();
+
+			json.addProperty(CONFIG_VERSION_PROPERTY, PlatformHooks.PLATFORM_HELPER.getModVersion());
+			json.addProperty(CONFIG_DATETIME_PROPERTY, LocalDateTime.now().format(DATETIME_FORMATTER));
+			this.saveGeneralData(json);
+			this.saveStructuresData(json, false);
+			this.saveStructureSetsData(json, false);
+
+			Files.createDirectories(configDumpPath.getParent());
+			Files.createFile(configDumpPath);
+			Files.writeString(configDumpPath, gson.toJson(json));
+
+			Structurify.getLogger().info("Structurify config successfully dumped");
+		} catch (Exception e) {
+			Structurify.getLogger().error("Failed to dump Structurify config");
+			e.printStackTrace();
+		}
+	}
+
 	private void saveGeneralData(JsonObject json) {
 		JsonObject general = new JsonObject();
 		general.addProperty(MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY, this.minStructureDistanceFromWorldCenter);
@@ -339,11 +367,11 @@ public final class StructurifyConfig
 		json.add(GENERAL_PROPERTY, general);
 	}
 
-	private void saveStructuresData(JsonObject json) {
+	private void saveStructuresData(JsonObject json, boolean saveOnlyChanged) {
 		JsonArray structures = new JsonArray();
 
 		this.structureData.entrySet().stream()
-			.filter(structureDataEntry -> !structureDataEntry.getValue().isUsingDefaultValues())
+			.filter(entry -> !saveOnlyChanged || !entry.getValue().isUsingDefaultValues())
 			.forEach(structureDataEntry -> {
 				JsonObject structure = new JsonObject();
 				structure.addProperty(NAME_PROPERTY, structureDataEntry.getKey());
@@ -374,11 +402,11 @@ public final class StructurifyConfig
 		json.add(STRUCTURES_PROPERTY, structures);
 	}
 
-	private void saveStructureSetsData(JsonObject json) {
+	private void saveStructureSetsData(JsonObject json, boolean saveOnlyChanged) {
 		JsonArray structureSets = new JsonArray();
 
 		this.structureSetData.entrySet().stream()
-			.filter(entry -> !entry.getValue().isUsingDefaultValues())
+			.filter(entry -> !saveOnlyChanged || !entry.getValue().isUsingDefaultValues())
 			.forEach(structureSetDataEntry -> {
 				var structureSetData = structureSetDataEntry.getValue();
 				var structureSetName = structureSetDataEntry.getKey();
