@@ -48,9 +48,9 @@ dependencies {
 	// Open Loader
 	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
 		if (commonMod.mc == "1.21.1") {
-			implementation(group = "net.darkhax.openloader", name = "openloader-common-${commonMod.mc}", version = openLoaderVersion)
+			modImplementation(group = "net.darkhax.openloader", name = "openloader-common-${commonMod.mc}", version = openLoaderVersion)
 		} else {
-			implementation(group = "net.darkhax.openloader", name = "OpenLoader-Common-${commonMod.mc}", version = openLoaderVersion)
+			modImplementation(group = "net.darkhax.openloader", name = "OpenLoader-Common-${commonMod.mc}", version = openLoaderVersion)
 		}
 	}
 

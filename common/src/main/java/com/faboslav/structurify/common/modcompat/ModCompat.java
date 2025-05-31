@@ -4,6 +4,7 @@ import net.minecraft.server.packs.repository.RepositorySource;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  * Related code is based on The Bumblezone/Resourceful Lib mods with permissions from the authors
@@ -23,9 +24,14 @@ public interface ModCompat
 		return new ArrayList<>();
 	}
 
+	default List<String> getReplacedBiomes(List<String> biomes) {
+		return new ArrayList<>();
+	}
+
 	enum Type
 	{
 		CUSTOM_RESOURCE_PACK_PROVIDERS,
+		BIOME_REPLACER,
 		MOD
 	}
 }

@@ -4,7 +4,6 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
-import com.faboslav.structurify.common.platform.PlatformHelper;
 import com.faboslav.structurify.common.platform.PlatformHooks;
 import com.google.gson.*;
 

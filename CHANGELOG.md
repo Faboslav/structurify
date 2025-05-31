@@ -3,6 +3,9 @@
 - A lot of quality of life features like keeping search, scroll position and more
 - Added support for biome tags
 - Added compatibility with the Open Loader
+- Added compatibility with the Terra
+- Added "salt" as a configurable field for structure sets
+- Added "frequency" as a configurable field for structure sets
 - Fixed mod crash related to latest YACL
 - Fixed main menu blur (on 1.21.4)
 - Fixed error related to initial config creation

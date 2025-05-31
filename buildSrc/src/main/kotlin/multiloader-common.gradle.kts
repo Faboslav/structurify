@@ -60,6 +60,11 @@ repositories {
 	}
 
 	maven("https://maven.blamejared.com")
+
+	maven {
+		name = "CodeMC"
+		url = uri("https://repo.codemc.org/repository/maven-public/")
+	}
 }
 
 tasks {

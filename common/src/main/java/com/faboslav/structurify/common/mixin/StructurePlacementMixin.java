@@ -67,6 +67,8 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		return Structurify.getConfig().getStructureSetData().get(this.structurify$getStructureSetIdentifier().toString()).getFrequency();
 	}
 
+	//? >= 1.21.1 {
+	
 	@ModifyExpressionValue(
 		method = "applyAdditionalChunkRestrictions",
 		at = @At(
@@ -78,4 +80,17 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 	protected float structurify$applyAdditionalChunkRestrictionsGetFrequency(float originalFrequency) {
 		return Structurify.getConfig().getStructureSetData().get(this.structurify$getStructureSetIdentifier().toString()).getFrequency();
 	}
+	//?} else {
+	/*@ModifyExpressionValue(
+		method = "isStructureChunk",
+		at = @At(
+			value = "FIELD",
+			target = "Lnet/minecraft/world/level/levelgen/structure/placement/StructurePlacement;frequency:F",
+			opcode = Opcodes.GETFIELD
+		)
+	)
+	protected float structurify$isStructureChunkGetFrequency(float originalFrequency) {
+		return Structurify.getConfig().getStructureSetData().get(this.structurify$getStructureSetIdentifier().toString()).getFrequency();
+	}
+	*///?}
 }

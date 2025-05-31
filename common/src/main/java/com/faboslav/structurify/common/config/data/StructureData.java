@@ -1,5 +1,9 @@
 package com.faboslav.structurify.common.config.data;
 
+import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.modcompat.ModChecker;
+import com.faboslav.structurify.common.modcompat.ModCompat;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

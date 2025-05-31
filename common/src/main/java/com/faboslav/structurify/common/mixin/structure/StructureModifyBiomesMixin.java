@@ -2,6 +2,8 @@ package com.faboslav.structurify.common.mixin.structure;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
+import com.faboslav.structurify.common.modcompat.ModChecker;
+import com.faboslav.structurify.common.modcompat.ModCompat;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -57,6 +59,12 @@ public abstract class StructureModifyBiomesMixin implements StructurifyStructure
 
 			var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
 			var biomeIds = structureData.getBiomes();
+
+			/*
+			for (ModCompat modCompat : ModChecker.BIOME_REPLACER_COMPATS) {
+				biomeIds = modCompat.getReplacedBiomes(biomeIds);
+			}*/
+
 			ArrayList<Holder<Biome>> biomeHolders = new ArrayList<>();
 
 			for (var biomeId : biomeIds) {

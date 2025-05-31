@@ -4,6 +4,10 @@ plugins {
 	id("dev.kikugie.j52j") version "2.0"
 }
 
+stonecutter {
+	const("terra", rootProject.project(stonecutter.current.project).property("deps.terra").toString() != "")
+}
+
 dependencies {
 	minecraft("com.mojang:minecraft:${commonMod.mc}")
 	mappings(loom.layered {
@@ -38,18 +42,23 @@ dependencies {
 	// Open Loader
 	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
 		if (commonMod.mc == "1.21.1") {
-			implementation(
+			modImplementation(
 				group = "net.darkhax.openloader",
 				name = "openloader-fabric-${commonMod.mc}",
 				version = openLoaderVersion
 			)
 		} else {
-			implementation(
+			modImplementation(
 				group = "net.darkhax.openloader",
 				name = "OpenLoader-Fabric-${commonMod.mc}",
 				version = openLoaderVersion
 			)
 		}
+	}
+
+	// Terra
+	commonMod.depOrNull("terra")?.let { terraVersion ->
+		modImplementation("com.dfsek.terra:fabric:${terraVersion}")
 	}
 
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->

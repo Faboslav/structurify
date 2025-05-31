@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 public final class ModChecker
 {
 	public static final List<ModCompat> CUSTOM_RESOURCE_PACK_PROVIDER_COMPATS = new ArrayList<>();
+	public static final List<ModCompat> BIOME_REPLACER_COMPATS = new ArrayList<>();
 
 	public static void setupModCompat() {
 		String modId = "";
@@ -44,6 +45,9 @@ public final class ModChecker
 				ModCompat compat = loader.get();
 				if (compat.compatTypes().contains(ModCompat.Type.CUSTOM_RESOURCE_PACK_PROVIDERS)) {
 					CUSTOM_RESOURCE_PACK_PROVIDER_COMPATS.add(compat);
+				}
+				if (compat.compatTypes().contains(ModCompat.Type.BIOME_REPLACER)) {
+					BIOME_REPLACER_COMPATS.add(compat);
 				}
 			}
 		} catch (Throwable e) {
