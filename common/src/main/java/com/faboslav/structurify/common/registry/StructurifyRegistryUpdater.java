@@ -3,11 +3,13 @@ package com.faboslav.structurify.common.registry;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructure;
+import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 
 public final class StructurifyRegistryUpdater
 {
@@ -65,9 +67,7 @@ public final class StructurifyRegistryUpdater
 
 			ResourceLocation structureSetId = structureSetRegistryKey.location();
 
-			if (structureSet.placement() instanceof RandomSpreadStructurePlacement randomSpreadStructurePlacement) {
-				((StructurifyRandomSpreadStructurePlacement) randomSpreadStructurePlacement).structurify$setStructureSetIdentifier(structureSetId);
-			}
+			((StructurifyStructurePlacement) structureSet.placement()).structurify$setStructureSetIdentifier(structureSetId);
 		}
 
 		Structurify.getLogger().info("Structure Sets registries updated");
