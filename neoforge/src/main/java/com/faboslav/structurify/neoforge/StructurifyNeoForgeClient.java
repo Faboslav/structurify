@@ -9,7 +9,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 //? <1.20.6 {
 /*import net.neoforged.neoforge.client.ConfigScreenHandler;
 
-*///?} else {
+ *///?} else {
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 //?}
 

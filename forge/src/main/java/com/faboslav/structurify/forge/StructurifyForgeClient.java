@@ -21,9 +21,9 @@ public final class StructurifyForgeClient
 	private static void onClientSetup(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
 			ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
-					new ConfigScreenHandler.ConfigScreenFactory(
-						(mc, screen) -> StructurifyClient.getConfigScreen(screen)
-					)
+				new ConfigScreenHandler.ConfigScreenFactory(
+					(mc, screen) -> StructurifyClient.getConfigScreen(screen)
+				)
 			);
 		});
 	}
