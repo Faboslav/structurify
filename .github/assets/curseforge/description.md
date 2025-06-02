@@ -29,16 +29,25 @@ Structurify is a configuration mod that makes configuring everything related to 
 	<img src="https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/structurify_configuration.webp">
 </p>
 
-**Currently it is possible to:**
+**Core Features:**
 
 * **Globally disable all structures:** Easily disable all structures across your world with a single setting, simplifying your world generation process.
 * **Disable individual structures:** Disable specific structures individually, giving you precise control over which ones generate in your world.
 * **Manage biomes for specific structures:** Customize the list of biomes for individual structures, ensuring they only generate in selected biomes.
-* **Globally set structure spread for all structures:** Set global spacing and separation modifiers for all structures, enabling consistent structure spread throughout your world.
-* **Individually set structure spread:** Adjust spacing and separation values for specific structures, allowing for customized generation distances between them.
+* **Globally set structure spread for all structures:** Set global spacing and separation modifiers for all structure sets, enabling consistent structure spread throughout your world.
+* **Individually set structure spread:** Adjust spacing and separation values for specific structure sets, allowing for customized generation distances between them.
 
-**Possible future features that can be implemented:**
+**Other Features:**
+* **Set Salt and Frequency:** Adjust salt and frequency values for specific structure sets, allowing for even more customized generation.
+* **Flatness check:** TBD.
+* **Biome check:** TBD.
 
+**Available Commands:**
+* **/structurify dump:** Dumps complete config file with default settings to the file.
+
+**Future plans:**
+
+* Exclusion Zones
 * Disable individual structure pieces
 * Change weight of individual structure pieces
 * Utility commands related to the structures
@@ -53,7 +62,7 @@ Structurify is a configuration mod that makes configuring everything related to 
 ## Structure settings
 <hr>
 
-Structures are organized into categories based on the mods and datapacks in use, making them easier to manage.
+Structures are organized into categories based on the mods and datapacks in use (namespaces), making them easier to manage.
 It is possible to disable the generation of structures and manage a list of biomes where specific structures should generate.
 
 ![Structures settings](https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/structures_settings.webp)
@@ -69,13 +78,15 @@ Each structure has its own configuration, allowing specific biomes to be added a
 
 ![Search](https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/structures_structure_biome_blacklist.webp)
 
-## Structure Spread settings
+## Structure Sets (Structure Spread) settings
 <hr>
 
 Custom structure spread can be configured via global spacing and separation modifiers or through per-structure specific spacing and separation values.
 
 * Spacing is the average distance in chunks between structures within the same structure set (group of structures).
 * Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value.
+
+Additionally both salt and frequency can be configured for each specific structure set.
 
 ![Structure Spread settings](https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/structure_spread_settings.webp)
 
@@ -93,10 +104,15 @@ This file is particularly useful for managing configurations on the server side.
 
 Structurify is designed to be fully compatible with most of the world generation mods and datapacks, and it currently offers enhanced compatibility with the following mods:
 
+### Global datapack loaders:
 * [Paxi](https://www.curseforge.com/minecraft/mc-mods/paxi-fabric)
 * [Open Loader](https://www.curseforge.com/minecraft/mc-mods/open-loader)
 * [Global Packs](https://www.curseforge.com/minecraft/mc-mods/drp-global-datapack)
 * [Global Datapacks](https://www.curseforge.com/minecraft/mc-mods/global-datapacks)
+
+### Mods:
+
+Since structure generation is a complex , things can be broken, especially with mods 
 
 <br>
 <br>
