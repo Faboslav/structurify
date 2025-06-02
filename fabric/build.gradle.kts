@@ -72,7 +72,7 @@ dependencies {
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
 		commonMod.depOrNull("midnight_lib")?.let { midnightLibVersion ->
 			modImplementation("com.telepathicgrunt:RepurposedStructures:${repurposedStructuresVersion}-fabric")
-			if (commonMod.mc == "1.21.4" || commonMod.mc == "1.21.5" ) {
+			if (commonMod.mc == "1.21.4" || commonMod.mc == "1.21.5") {
 				modImplementation(commonMod.modrinth("midnightlib", "${midnightLibVersion}-fabric"))
 			} else {
 				modImplementation(commonMod.modrinth("midnightlib", "${midnightLibVersion}-fabric"))

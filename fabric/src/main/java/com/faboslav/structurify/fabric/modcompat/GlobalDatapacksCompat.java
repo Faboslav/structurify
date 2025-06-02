@@ -33,7 +33,7 @@ public final class GlobalDatapacksCompat implements ModCompat
 
 			//? =1.20.1 {
 			/*resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD));
-			*///?} else {
+			 *///?} else {
 			resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD, new DirectoryValidator(path -> true)));
 			//?}
 		} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
