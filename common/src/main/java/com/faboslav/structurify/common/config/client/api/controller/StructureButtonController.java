@@ -1,9 +1,7 @@
 package com.faboslav.structurify.common.config.client.api.controller;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.client.gui.StructureConfigScreen;
-import com.faboslav.structurify.common.mixin.yacl.CategoryTabAccessor;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;

@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.config.client.api.controller;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.client.api.controller.element.BiomeStringControllerElement;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.util.LanguageUtil;

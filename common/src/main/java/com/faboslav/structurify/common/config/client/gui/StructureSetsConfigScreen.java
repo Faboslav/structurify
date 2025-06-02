@@ -12,7 +12,6 @@ import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import dev.isxander.yacl3.gui.YACLScreen;
-import dev.isxander.yacl3.gui.controllers.string.number.IntegerFieldController;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;

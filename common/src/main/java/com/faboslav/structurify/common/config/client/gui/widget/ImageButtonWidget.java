@@ -9,8 +9,6 @@ import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
-
 import net.minecraft.util.Mth;
 
 import java.lang.reflect.Field;

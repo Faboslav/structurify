@@ -13,11 +13,11 @@
 		"LocateCommandMixin",
 		"ResourcePackManagerAccessor",
 		"compat.RepurposedStructuresModifySpreadMixin",
-		"structure.placement.StructurePlacementMixin",
-		"structure.placement.RandomSpreadStructurePlacementMixin",
 		"structure.StructureMixin",
 		"structure.jigsaw.JigsawStructureMixin",
-		"structure.jigsaw.MaxDistanceFromCenterAccessor"
+		"structure.jigsaw.MaxDistanceFromCenterAccessor",
+		"structure.placement.RandomSpreadStructurePlacementMixin",
+		"structure.placement.StructurePlacementMixin"
 	],
 	"client": [
 		"AbstractWidgetInvoker",

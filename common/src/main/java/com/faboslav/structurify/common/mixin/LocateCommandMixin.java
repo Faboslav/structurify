@@ -1,7 +1,6 @@
 package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.checks.StructureDistanceFromWorldCenterCheck;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
