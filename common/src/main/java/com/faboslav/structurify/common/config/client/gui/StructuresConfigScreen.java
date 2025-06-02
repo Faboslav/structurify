@@ -25,6 +25,7 @@ import java.util.Map;
 
 public final class StructuresConfigScreen
 {
+	private final static List<Option<Boolean>> structureOptions = new ArrayList<>();
 	public static YACLScreen createConfigGui(StructurifyConfig config, Screen parent) {
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 
@@ -38,12 +39,17 @@ public final class StructuresConfigScreen
 	}
 
 	public static void createStructuresTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
-		List<Option<Boolean>> structureOptions = new ArrayList<>();
-
 		var structureCategoryBuilder = ConfigCategory.createBuilder()
 			.name(Component.translatable("gui.structurify.structures_category.title"))
 			.tooltip(Component.translatable("gui.structurify.structures_category.description"));
 
+		addGeneralSettings(structureCategoryBuilder, config);
+		addStructures(structureCategoryBuilder, config);
+
+		yacl.category(structureCategoryBuilder.build());
+	}
+
+	private static void addGeneralSettings(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
 		var generalStructuresGroupBuilder = OptionGroup.createBuilder()
 			.name(Component.translatable("gui.structurify.structures.global.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.global.description")));
@@ -79,7 +85,9 @@ public final class StructuresConfigScreen
 		generalStructuresGroupBuilder.option(minStructureDistanceFromWorldOptionBuilder.build());
 
 		structureCategoryBuilder.group(generalStructuresGroupBuilder.build());
+	}
 
+	private static void addStructures(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
 		var structures = WorldgenDataProvider.getStructures();
 		List<OptionGroup> optionGroups = new ArrayList<>();
 		OptionGroup.Builder currentGroupBuilder = null;
@@ -159,7 +167,8 @@ public final class StructuresConfigScreen
 		for (OptionGroup structureOptionGroup : optionGroups) {
 			structureCategoryBuilder.group(structureOptionGroup);
 		}
+	}
 
-		yacl.category(structureCategoryBuilder.build());
+	private static void addSpecificStructure(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
 	}
 }

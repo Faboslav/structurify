@@ -14,6 +14,26 @@ public final class RandomSpreadUtil
 		return Structurify.getConfig().getStructureSetData().get(structureSetIdentifier.toString());
 	}
 
+	public static int getModifiedSalt(ResourceLocation structureSetIdentifier, int originalSalt) {
+		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
+
+		if(structureSetData == null) {
+			return originalSalt;
+		}
+
+		return structureSetData.getSalt();
+	}
+
+	public static float getModifiedFrequency(ResourceLocation structureSetIdentifier, float originalFrequency) {
+		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
+
+		if(structureSetData == null) {
+			return originalFrequency;
+		}
+
+		return structureSetData.getFrequency();
+	}
+
 	public static int getModifiedSpacing(ResourceLocation structureSetIdentifier, int originalSpacing) {
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 		return getModifiedSpacing(structureSetData, originalSpacing);

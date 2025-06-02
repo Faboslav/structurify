@@ -7,12 +7,12 @@ public final class StructureSetData
 	public static final int MAX_SALT = Integer.MAX_VALUE;
 	public static final float MIN_FREQUENCY = 0.0F;
 	public static final float MAX_FREQUENCY = 1.0F;
-	public static final int MAX_SPACING = 256;
-	public static final int MAX_SEPARATION = 256;
+	public static final int MAX_SPACING = 4096;
+	public static final int MAX_SEPARATION = 4096;
 
 	private boolean overrideGlobalSpacingAndSeparationModifier = OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
-	private int defaultSalt;
-	private float defaultFrequency;
+	private final int defaultSalt;
+	private final float defaultFrequency;
 	private final int defaultSpacing;
 	private final int defaultSeparation;
 	private int salt;
@@ -32,11 +32,11 @@ public final class StructureSetData
 	}
 
 	public boolean isUsingDefaultValues() {
-		return this.overrideGlobalSpacingAndSeparationModifier == OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE
-			   && this.salt == defaultSalt
-			   && this.frequency == defaultFrequency
-			   && this.spacing == defaultSpacing
-			   && this.separation == this.defaultSeparation;
+		return this.overrideGlobalSpacingAndSeparationModifier != OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE
+			   || this.salt != defaultSalt
+			   || this.frequency != defaultFrequency
+			   || this.spacing != defaultSpacing
+			   || this.separation != this.defaultSeparation;
 	}
 
 	public boolean overrideGlobalSpacingAndSeparationModifier() {

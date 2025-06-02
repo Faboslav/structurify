@@ -2,11 +2,13 @@ package com.faboslav.structurify.common.config.data;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
+import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.mixin.structure.jigsaw.MaxDistanceFromCenterAccessor;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -97,15 +99,6 @@ public final class WorldgenDataProvider
 			var biomeStorage = structure.biomes().unwrap();
 			var defaultBiomes = new ArrayList<String>();
 
-			/*
-			biomeStorage.mapLeft(biomeTagKey -> {
-				biomeRegistry.get(biomeTagKey).ifPresent(biomes -> {
-					defaultBiomes.add(biomeTagKey.location().toString());
-				});
-
-				return null;
-			});*/
-
 			biomeStorage.mapLeft(biomeTagKey -> {
 				biomeRegistry.get(biomeTagKey).ifPresent(biomes -> {
 					for (var biome : biomes) {
@@ -159,13 +152,29 @@ public final class WorldgenDataProvider
 			ResourceLocation structureSetId = structureSetReference.key().location();
 			String structureSetStringId = structureSetId.toString();
 
-			if (structureSet.placement() instanceof StructurifyRandomSpreadStructurePlacement randomSpreadStructurePlacement) {
+			var structureSetPlacement = structureSet.placement();
+			int salt = 0;
+			float frequency = 0.0f;
+			int spacing = 0;
+			int separation = 0;
+
+			if(structureSetPlacement instanceof StructurifyStructurePlacement structurePlacement) {
+				salt = structurePlacement.structurify$getOriginalSalt();
+				frequency = structurePlacement.structurify$getOriginalFrequency();
+			}
+
+			if (structureSetPlacement instanceof StructurifyRandomSpreadStructurePlacement randomSpreadStructurePlacement) {
+				spacing = randomSpreadStructurePlacement.structurify$getOriginalSpacing();
+				separation = randomSpreadStructurePlacement.structurify$getOriginalSeparation();
+			}
+
+			if(structureSet.placement() instanceof StructurePlacement) {
 				structureSets.put(structureSetStringId, new StructureSetData(
-					randomSpreadStructurePlacement.structurify$getOriginalSalt(),
-					randomSpreadStructurePlacement.structurify$getOriginalFrequency(),
-					randomSpreadStructurePlacement.structurify$getOriginalSpacing(),
-					randomSpreadStructurePlacement.structurify$getOriginalSeparation())
-				);
+					salt,
+					frequency,
+					spacing,
+					separation
+				));
 			}
 		}
 

@@ -406,7 +406,7 @@ public final class StructurifyConfig
 		JsonArray structureSets = new JsonArray();
 
 		this.structureSetData.entrySet().stream()
-			.filter(entry -> !saveOnlyChanged || !entry.getValue().isUsingDefaultValues())
+			.filter(entry -> !saveOnlyChanged || entry.getValue().isUsingDefaultValues())
 			.forEach(structureSetDataEntry -> {
 				var structureSetData = structureSetDataEntry.getValue();
 				var structureSetName = structureSetDataEntry.getKey();

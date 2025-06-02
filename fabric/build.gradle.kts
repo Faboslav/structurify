@@ -82,8 +82,6 @@ dependencies {
 }
 
 loom {
-	accessWidenerPath = common.project.file("../../src/main/resources/${mod.id}.accesswidener")
-
 	runs {
 		getByName("client") {
 			client()

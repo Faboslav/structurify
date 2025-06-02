@@ -75,8 +75,6 @@ dependencies {
 }
 
 legacyForge {
-	accessTransformers.from(project.file("../../src/main/resources/META-INF/accesstransformer.cfg").absolutePath)
-
 	runs {
 		register("client") {
 			client()
@@ -107,10 +105,6 @@ sourceSets.main {
 }
 
 tasks {
-	processResources {
-		exclude("${mod.id}.accesswidener")
-	}
-
 	jar {
 		finalizedBy("reobfJar")
 		manifest {

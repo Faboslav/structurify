@@ -1,21 +1,15 @@
-package com.faboslav.structurify.common.mixin;
+package com.faboslav.structurify.common.mixin.structure.placement;
 
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
-import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-
-import java.util.Optional;
 
 @Mixin(RandomSpreadStructurePlacement.class)
 public abstract class RandomSpreadStructurePlacementMixin extends StructurePlacementMixin implements StructurifyRandomSpreadStructurePlacement

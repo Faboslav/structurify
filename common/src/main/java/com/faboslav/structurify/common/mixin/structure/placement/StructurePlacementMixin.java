@@ -1,7 +1,8 @@
-package com.faboslav.structurify.common.mixin;
+package com.faboslav.structurify.common.mixin.structure.placement;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
+import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.resources.ResourceLocation;
@@ -51,7 +52,7 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		at = @At("RETURN")
 	)
 	protected int structurify$getSalt(int originalSalt) {
-		return Structurify.getConfig().getStructureSetData().get(this.structurify$getStructureSetIdentifier().toString()).getSalt();
+		return RandomSpreadUtil.getModifiedSalt(this.structurify$getStructureSetIdentifier(), originalSalt);
 	}
 
 	@ModifyReturnValue(
@@ -59,7 +60,7 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		at = @At("RETURN")
 	)
 	protected float structurify$getFrequency(float originalFrequency) {
-		return Structurify.getConfig().getStructureSetData().get(this.structurify$getStructureSetIdentifier().toString()).getFrequency();
+		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetIdentifier(), originalFrequency);
 	}
 
 	//? >= 1.21.1 {

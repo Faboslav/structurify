@@ -7,6 +7,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(AbstractWidget.class)
 public interface AbstractWidgetInvoker
 {
-	@Accessor("height")
+	//? <1.21 {
+	/*@Accessor("height")
 	void setHeight(int height);
+	*///?}
 }

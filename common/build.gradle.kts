@@ -12,8 +12,6 @@ stonecutter {
 }
 
 loom {
-	accessWidenerPath = common.project.file("../../src/main/resources/${mod.id}.accesswidener")
-
 	mixin {
 		useLegacyMixinAp = false
 	}

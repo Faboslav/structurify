@@ -107,78 +107,93 @@ public final class StructureSetsConfigScreen
 				)
 				.controller(opt -> FloatSliderControllerBuilder.create(opt).range(StructureSetData.MIN_FREQUENCY, StructureSetData.MAX_FREQUENCY).step(0.01F)).build();
 
-			var overrideGlobalSpacingAndSeparationModifierDescriptionBuilder = OptionDescription.createBuilder();
-			overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.description", translatedStructureSetName));
-
-			var overrideGlobalSpacingAndSeparationModifierOption = Option.<Boolean>createBuilder()
-				.name(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.title"))
-				.description(overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.build())
-				.binding(
-					StructureSetData.OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE,
-					() -> config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier(),
-					overrideGlobalSpacingAndSeparationModifier -> config.getStructureSetData().get(structureSetStringId).setOverrideGlobalSpacingAndSeparationModifier(overrideGlobalSpacingAndSeparationModifier)
-				)
-				.controller(opt -> BooleanControllerBuilder.create(opt)
-					.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
-					.coloured(true)
-				).available(config.enableGlobalSpacingAndSeparationModifier)
-				.build();
-
-			overrideGlobalSpacingAndSeparationModifierOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
-				var structureSetOption = this.structureSetOptions.get(structureSetStringId);
-				structureSetOption.getValue().setAvailable(!this.enableGlobalSpacingAndSeparationOption.pendingValue() || structureSetOption.getKey().pendingValue());
-			});
-
-			var spacingDescriptionBuilder = OptionDescription.createBuilder();
-			spacingDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.spacing.description"));
-
-			var spacingOption = Option.<Integer>createBuilder()
-				.name(Component.translatable("gui.structurify.structure_sets.spacing.title"))
-				.description(spacingDescriptionBuilder.build())
-				.binding(
-					config.getStructureSetData().get(structureSetStringId).getDefaultSpacing(),
-					() -> config.getStructureSetData().get(structureSetStringId).getSpacing(),
-					spacing -> config.getStructureSetData().get(structureSetStringId).setSpacing(spacing)
-				)
-				.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SPACING).step(1)).build();
-
-			var separationDescriptionBuilder = OptionDescription.createBuilder();
-			separationDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.separation.description"));
-			separationDescriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structure_sets.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
-
-			var separationOption = Option.<Integer>createBuilder()
-				.name(Component.translatable("gui.structurify.structure_sets.separation.title"))
-				.description(separationDescriptionBuilder.build())
-				.binding(
-					config.getStructureSetData().get(structureSetStringId).getDefaultSeparation(),
-					() -> config.getStructureSetData().get(structureSetStringId).getSeparation(),
-					separation -> config.getStructureSetData().get(structureSetStringId).setSeparation(separation)
-				)
-				.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SEPARATION).step(1)).build();
-
-			spacingOption.addListener((opt, spacing) -> {
-				if (spacing <= separationOption.pendingValue()) {
-					spacingOption.requestSet(separationOption.pendingValue() + 1);
-				}
-			});
-
-			separationOption.addListener((opt, separation) -> {
-				if (separation >= spacingOption.pendingValue()) {
-					separationOption.requestSet(spacingOption.pendingValue() - 1);
-				}
-			});
-			var spacingAndSeparationOption = HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
-				.controller(opt -> DualControllerBuilder.create(LabelOption.createBuilder().line(translatedStructureSetName).build(), spacingOption, separationOption))
-				.available(!config.enableGlobalSpacingAndSeparationModifier || config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier()).build();
-
 			currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName).build());
 			currentGroupBuilder.option(saltOption);
 			currentGroupBuilder.option(frequencyOption);
-			currentGroupBuilder.option(overrideGlobalSpacingAndSeparationModifierOption);
-			currentGroupBuilder.option(spacingAndSeparationOption);
-			//currentGroupBuilder.collapsed(true);
 
-			this.structureSetOptions.put(structureSetStringId, new AbstractMap.SimpleEntry<>(overrideGlobalSpacingAndSeparationModifierOption, spacingAndSeparationOption));
+			var defaultSpacing = config.getStructureSetData().get(structureSetStringId).getDefaultSpacing();
+			var defaultSeparation = config.getStructureSetData().get(structureSetStringId).getDefaultSeparation();
+
+			if(defaultSpacing != 0 && defaultSeparation != 0) {
+				var overrideGlobalSpacingAndSeparationModifierDescriptionBuilder = OptionDescription.createBuilder();
+				overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.description", translatedStructureSetName));
+
+				var overrideGlobalSpacingAndSeparationModifierOption = Option.<Boolean>createBuilder()
+					.name(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.title"))
+					.description(overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.build())
+					.binding(
+						StructureSetData.OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE,
+						() -> config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier(),
+						overrideGlobalSpacingAndSeparationModifier -> config.getStructureSetData().get(structureSetStringId).setOverrideGlobalSpacingAndSeparationModifier(overrideGlobalSpacingAndSeparationModifier)
+					)
+					.controller(opt -> BooleanControllerBuilder.create(opt)
+						.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+						.coloured(true)
+					).available(config.enableGlobalSpacingAndSeparationModifier)
+					.build();
+
+				overrideGlobalSpacingAndSeparationModifierOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
+					boolean available = false;
+
+					if (
+						this.enableGlobalSpacingAndSeparationOption.pendingValue()
+					) {
+						available = true;
+					}
+
+					var structureSetOption = this.structureSetOptions.get(structureSetStringId);
+					structureSetOption.getValue().setAvailable(available);
+				});
+
+				var spacingDescriptionBuilder = OptionDescription.createBuilder();
+				spacingDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.spacing.description"));
+
+				var spacingOption = Option.<Integer>createBuilder()
+					.name(Component.translatable("gui.structurify.structure_sets.spacing.title"))
+					.description(spacingDescriptionBuilder.build())
+					.binding(
+						config.getStructureSetData().get(structureSetStringId).getDefaultSpacing(),
+						() -> config.getStructureSetData().get(structureSetStringId).getSpacing(),
+						spacing -> config.getStructureSetData().get(structureSetStringId).setSpacing(spacing)
+					)
+					.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SPACING).step(1)).build();
+
+				var separationDescriptionBuilder = OptionDescription.createBuilder();
+				separationDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.separation.description"));
+				separationDescriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structure_sets.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
+
+				var separationOption = Option.<Integer>createBuilder()
+					.name(Component.translatable("gui.structurify.structure_sets.separation.title"))
+					.description(separationDescriptionBuilder.build())
+					.binding(
+						config.getStructureSetData().get(structureSetStringId).getDefaultSeparation(),
+						() -> config.getStructureSetData().get(structureSetStringId).getSeparation(),
+						separation -> config.getStructureSetData().get(structureSetStringId).setSeparation(separation)
+					)
+					.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SEPARATION).step(1)).build();
+
+				spacingOption.addListener((opt, spacing) -> {
+					if (spacing <= separationOption.pendingValue()) {
+						spacingOption.requestSet(separationOption.pendingValue() + 1);
+					}
+				});
+
+				separationOption.addListener((opt, separation) -> {
+					if (separation >= spacingOption.pendingValue()) {
+						separationOption.requestSet(spacingOption.pendingValue() - 1);
+					}
+				});
+				var spacingAndSeparationOption = HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
+					.controller(opt -> DualControllerBuilder.create(LabelOption.createBuilder().line(translatedStructureSetName).build(), spacingOption, separationOption))
+					.available(!config.enableGlobalSpacingAndSeparationModifier || config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier()).build();
+
+				currentGroupBuilder.option(overrideGlobalSpacingAndSeparationModifierOption);
+				currentGroupBuilder.option(spacingAndSeparationOption);
+
+				this.structureSetOptions.put(structureSetStringId, new AbstractMap.SimpleEntry<>(overrideGlobalSpacingAndSeparationModifierOption, spacingAndSeparationOption));
+			}
+
+			//currentGroupBuilder.collapsed(true);
 		}
 
 		if (currentGroupBuilder != null) {

@@ -11,19 +11,17 @@
 	"mixins": [
 		"ChunkGeneratorMixin",
 		"LocateCommandMixin",
-		"RandomSpreadStructurePlacementMixin",
 		"ResourcePackManagerAccessor",
-		"StructureMixin",
-		"StructurePlacementMixin",
 		"compat.RepurposedStructuresModifySpreadMixin",
-		"structure.StructureModifyBiomesMixin",
-		"structure.jigsaw.JigsawStructureBiomeRadiusCheckMixin",
+		"structure.placement.StructurePlacementMixin",
+		"structure.placement.RandomSpreadStructurePlacementMixin",
+      	"structure.StructureMixin",
+      	"structure.jigsaw.JigsawStructureMixin",
 		"structure.jigsaw.MaxDistanceFromCenterAccessor"
 	],
 	"client": [
 		"AbstractWidgetInvoker",
 		"WorldOpenFlowsMixin",
-		"yacl.AnimatedDynamicTextureImageAccessor",
 		"yacl.CategoryTabAccessor",
 		"yacl.SearchFieldWidgetInvoker",
 		"yacl.YACLScreenMixin"

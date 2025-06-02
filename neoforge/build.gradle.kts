@@ -53,8 +53,6 @@ dependencies {
 }
 
 neoForge {
-	accessTransformers.from(project.file("../../src/main/resources/META-INF/accesstransformer.cfg").absolutePath)
-
 	runs {
 		register("client") {
 			client()
@@ -82,10 +80,4 @@ neoForge {
 
 sourceSets.main {
 	resources.srcDir("src/generated/resources")
-}
-
-tasks {
-	processResources {
-		exclude("${mod.id}.accesswidener")
-	}
 }
