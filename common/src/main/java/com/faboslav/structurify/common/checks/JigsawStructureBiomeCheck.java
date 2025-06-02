@@ -13,10 +13,14 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 
 public final class JigsawStructureBiomeCheck
 {
-	public static boolean checkBiomes(StructureData structureData, HeightProvider startHeight, Structure.GenerationContext generationContext) {
+	public static boolean checkBiomes(
+		StructureData structureData,
+		HeightProvider startHeight,
+		Structure.GenerationContext generationContext
+	) {
 		var biomeCheckDistance = (int) Math.ceil(structureData.getBiomeCheckDistance() / 16.0);
 
-		if(biomeCheckDistance == 0 || generationContext.biomeSource() instanceof CheckerboardColumnBiomeSource) {
+		if (biomeCheckDistance == 0 || generationContext.biomeSource() instanceof CheckerboardColumnBiomeSource) {
 			return true;
 		}
 

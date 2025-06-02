@@ -22,11 +22,11 @@ public abstract class YACLScreenMixin extends Screen
 		at = @At("HEAD")
 	)
 	public void structurify$onCloseHead(CallbackInfo ci) {
-		if(this.minecraft != null) {
-			if(this.minecraft.screen instanceof YACLScreen yaclsScreen) {
+		if (this.minecraft != null) {
+			if (this.minecraft.screen instanceof YACLScreen yaclsScreen) {
 				var configScreen = StructurifyClient.getConfigScreen();
 
-				if(configScreen != null) {
+				if (configScreen != null) {
 					configScreen.saveScreenState(yaclsScreen);
 				}
 			}
@@ -38,11 +38,11 @@ public abstract class YACLScreenMixin extends Screen
 		at = @At("TAIL")
 	)
 	public void structurify$onCloseTail(CallbackInfo ci) {
-		if(this.minecraft != null) {
-			if(this.minecraft.screen instanceof YACLScreen yaclsScreen) {
+		if (this.minecraft != null) {
+			if (this.minecraft.screen instanceof YACLScreen yaclsScreen) {
 				var configScreen = StructurifyClient.getConfigScreen();
 
-				if(configScreen != null) {
+				if (configScreen != null) {
 					configScreen.loadScreenState(yaclsScreen);
 				}
 			}

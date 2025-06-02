@@ -42,12 +42,12 @@ public class StructureData
 		Collections.sort(defaultBiomes);
 
 		return this.isDisabled == IS_DISABLED_DEFAULT_VALUE
-			&& this.enableFlatnessCheck == ENABLE_FLATNESS_CHECK_DEFAULT_VALUE
-			&& this.flatnessCheckDistance == this.defaultCheckDistance
-			&& this.flatnessCheckThreshold == FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE
-			&& this.enableBiomeCheck == ENABLE_BIOME_CHECK_DEFAULT_VALUE
-			&& this.biomeCheckDistance == this.defaultCheckDistance
-			&& biomes.equals(defaultBiomes);
+			   && this.enableFlatnessCheck == ENABLE_FLATNESS_CHECK_DEFAULT_VALUE
+			   && this.flatnessCheckDistance == this.defaultCheckDistance
+			   && this.flatnessCheckThreshold == FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE
+			   && this.enableBiomeCheck == ENABLE_BIOME_CHECK_DEFAULT_VALUE
+			   && this.biomeCheckDistance == this.defaultCheckDistance
+			   && biomes.equals(defaultBiomes);
 	}
 
 	public boolean isDisabled() {

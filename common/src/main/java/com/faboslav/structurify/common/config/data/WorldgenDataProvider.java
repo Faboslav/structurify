@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -19,7 +20,7 @@ import com.faboslav.structurify.common.platform.PlatformHooks;
 
 //? yungs_api {
 /*import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
-*///?}
+ *///?}
 
 //? repurposed_structures {
 import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
@@ -65,7 +66,7 @@ public final class WorldgenDataProvider
 	public static List<String> loadBiomes() {
 		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
 
-		if(biomeRegistry == null) {
+		if (biomeRegistry == null) {
 			return Collections.emptyList();
 		}
 
@@ -158,7 +159,7 @@ public final class WorldgenDataProvider
 			int spacing = 0;
 			int separation = 0;
 
-			if(structureSetPlacement instanceof StructurifyStructurePlacement structurePlacement) {
+			if (structureSetPlacement instanceof StructurifyStructurePlacement structurePlacement) {
 				salt = structurePlacement.structurify$getOriginalSalt();
 				frequency = structurePlacement.structurify$getOriginalFrequency();
 			}
@@ -168,7 +169,7 @@ public final class WorldgenDataProvider
 				separation = randomSpreadStructurePlacement.structurify$getOriginalSeparation();
 			}
 
-			if(structureSet.placement() instanceof StructurePlacement) {
+			if (structureSet.placement() instanceof StructurePlacement) {
 				structureSets.put(structureSetStringId, new StructureSetData(
 					salt,
 					frequency,

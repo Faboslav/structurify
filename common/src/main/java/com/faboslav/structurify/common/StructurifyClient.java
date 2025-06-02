@@ -12,7 +12,7 @@ public final class StructurifyClient
 	}
 
 	public static StructurifyConfigScreen getConfigScreen(Screen screen) {
-		if(CONFIG_SCREEN == null) {
+		if (CONFIG_SCREEN == null) {
 			CONFIG_SCREEN = new StructurifyConfigScreen(screen);
 		}
 

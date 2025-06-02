@@ -114,7 +114,7 @@ public final class StructureSetsConfigScreen
 			var defaultSpacing = config.getStructureSetData().get(structureSetStringId).getDefaultSpacing();
 			var defaultSeparation = config.getStructureSetData().get(structureSetStringId).getDefaultSeparation();
 
-			if(defaultSpacing != 0 && defaultSeparation != 0) {
+			if (defaultSpacing != 0 && defaultSeparation != 0) {
 				var overrideGlobalSpacingAndSeparationModifierDescriptionBuilder = OptionDescription.createBuilder();
 				overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.description", translatedStructureSetName));
 
@@ -234,7 +234,7 @@ public final class StructureSetsConfigScreen
 		generalStructuresSetsGroupBuilder.option(enableGlobalSpacingAndSeparationOption);
 
 		enableGlobalSpacingAndSeparationOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
-			for(var structureSetOption : this.structureSetOptions.entrySet()) {
+			for (var structureSetOption : this.structureSetOptions.entrySet()) {
 				var structureSetData = config.getStructureSetData().get(structureSetOption.getKey());
 				var structureSetOptionOverride = structureSetOption.getValue().getKey();
 				var structureSetOptionPair = structureSetOption.getValue().getValue();

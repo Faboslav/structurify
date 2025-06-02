@@ -56,7 +56,7 @@ public abstract class StructureMixin implements StructurifyStructure
 	private HolderSet<Biome> structurify$biomes(
 		Operation<HolderSet<Biome>> original
 	) {
-		if(this.structurify$getStructureBiomes() == null) {
+		if (this.structurify$getStructureBiomes() == null) {
 			var biomeHolderSet = this.structurify$getBiomeHolderSet(original);
 			this.structurify$setStructureBiomes(biomeHolderSet);
 		}
@@ -79,7 +79,7 @@ public abstract class StructureMixin implements StructurifyStructure
 
 		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
 
-		if(biomeRegistry == null) {
+		if (biomeRegistry == null) {
 			return original.call();
 		}
 
@@ -93,11 +93,11 @@ public abstract class StructureMixin implements StructurifyStructure
 		ArrayList<Holder<Biome>> biomeHolders = new ArrayList<>();
 
 		for (var biomeId : biomeIds) {
-			if(biomeId.contains("#")) {
+			if (biomeId.contains("#")) {
 				var biomeTagKey = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId(biomeId.replace("#", "")));
 				var biomeTagHolder = biomeRegistry.get(biomeTagKey).orElse(null);
 
-				if(biomeTagHolder == null) {
+				if (biomeTagHolder == null) {
 					continue;
 				}
 

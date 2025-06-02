@@ -26,6 +26,7 @@ import java.util.Map;
 public final class StructuresConfigScreen
 {
 	private final static List<Option<Boolean>> structureOptions = new ArrayList<>();
+
 	public static YACLScreen createConfigGui(StructurifyConfig config, Screen parent) {
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 
@@ -65,7 +66,7 @@ public final class StructuresConfigScreen
 			.controller(opt -> BooleanControllerBuilder.create(opt).valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes").withStyle(style -> style.withColor(ChatFormatting.RED)):Component.translatable("gui.structurify.label.no").withStyle(style -> style.withColor(ChatFormatting.GREEN)))).build();
 
 		disableAllStructuresOption.addListener((opt, disableAllStructures) -> {
-			for(var structureOption : structureOptions) {
+			for (var structureOption : structureOptions) {
 				structureOption.setAvailable(!disableAllStructures);
 			}
 		});
@@ -132,15 +133,15 @@ public final class StructuresConfigScreen
 			descriptionBuilder.text(Component.translatable("gui.structurify.structures.biomes_description").append(Component.literal("\n")));
 
 			for (String biome : structureData.getBiomes()) {
-				if(biome.contains("#")) {
-					if(biomeRegistry == null) {
+				if (biome.contains("#")) {
+					if (biomeRegistry == null) {
 						continue;
 					}
 
 					var biomeTagKey = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId(biome.replace("#", "")));
 					var biomeTagHolder = biomeRegistry.get(biomeTagKey).orElse(null);
 
-					if(biomeTagHolder == null) {
+					if (biomeTagHolder == null) {
 						continue;
 					}
 
@@ -169,6 +170,9 @@ public final class StructuresConfigScreen
 		}
 	}
 
-	private static void addSpecificStructure(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
+	private static void addSpecificStructure(
+		ConfigCategory.Builder structureCategoryBuilder,
+		StructurifyConfig config
+	) {
 	}
 }

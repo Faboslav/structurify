@@ -28,10 +28,10 @@ public final class StructurifyResourcePackProvider
 		ArrayList<RepositorySource> vanillaResourcePackProviders = new ArrayList<>();
 
 		//? >=1.21 {
-		vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor)ServerPacksSource.createVanillaTrustedRepository()).getSources());
+		vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor) ServerPacksSource.createVanillaTrustedRepository()).getSources());
 		//?} else {
 		/*vanillaResourcePackProviders.add(new ServerPacksSource());
-		*///?}
+		 *///?}
 
 		return vanillaResourcePackProviders;
 	}

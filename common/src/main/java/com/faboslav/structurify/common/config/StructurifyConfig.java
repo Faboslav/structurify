@@ -228,17 +228,17 @@ public final class StructurifyConfig
 
 					var structureSetData = this.structureSetData.get(structureSetName);
 
-					var salt = structureSpreadJson.has(SALT_PROPERTY) ? structureSpreadJson.get(SALT_PROPERTY).getAsInt() : structureSetData.getDefaultSalt();
-					var frequency = structureSpreadJson.has(FREQUENCY_PROPERTY) ? structureSpreadJson.get(FREQUENCY_PROPERTY).getAsInt() : structureSetData.getDefaultFrequency();
-					var spacing = structureSpreadJson.has(SPACING_PROPERTY) ? structureSpreadJson.get(SPACING_PROPERTY).getAsInt() : structureSetData.getDefaultSpacing();
-					var separation = structureSpreadJson.has(SEPARATION_PROPERTY) ? structureSpreadJson.get(SEPARATION_PROPERTY).getAsInt() : structureSetData.getDefaultSeparation();
+					var salt = structureSpreadJson.has(SALT_PROPERTY) ? structureSpreadJson.get(SALT_PROPERTY).getAsInt():structureSetData.getDefaultSalt();
+					var frequency = structureSpreadJson.has(FREQUENCY_PROPERTY) ? structureSpreadJson.get(FREQUENCY_PROPERTY).getAsInt():structureSetData.getDefaultFrequency();
+					var spacing = structureSpreadJson.has(SPACING_PROPERTY) ? structureSpreadJson.get(SPACING_PROPERTY).getAsInt():structureSetData.getDefaultSpacing();
+					var separation = structureSpreadJson.has(SEPARATION_PROPERTY) ? structureSpreadJson.get(SEPARATION_PROPERTY).getAsInt():structureSetData.getDefaultSeparation();
 
-					if((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
+					if ((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
 						Structurify.getLogger().info("Salt value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, salt, structureSetData.getDefaultSalt());
 						salt = structureSetData.getDefaultSalt();
 					}
 
-					if(frequency < StructureSetData.MIN_FREQUENCY || frequency > StructureSetData.MAX_FREQUENCY) {
+					if (frequency < StructureSetData.MIN_FREQUENCY || frequency > StructureSetData.MAX_FREQUENCY) {
 						Structurify.getLogger().info("Frequency value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, frequency, structureSetData.getDefaultFrequency());
 						frequency = structureSetData.getDefaultFrequency();
 					}
@@ -286,11 +286,11 @@ public final class StructurifyConfig
 				// TODO delete all old backups here
 				Path backupConfigPath = this.getBackupConfigPath();
 
-				if(!Files.exists(BACKUP_CONFIG_DIR) || !Files.isDirectory(BACKUP_CONFIG_DIR)) {
+				if (!Files.exists(BACKUP_CONFIG_DIR) || !Files.isDirectory(BACKUP_CONFIG_DIR)) {
 					Files.createDirectories(BACKUP_CONFIG_DIR);
 				}
 
-				if(!Files.exists(backupConfigPath)) {
+				if (!Files.exists(backupConfigPath)) {
 					Files.move(configPath, backupConfigPath);
 				}
 			}
@@ -315,7 +315,7 @@ public final class StructurifyConfig
 			try {
 				Path possibleLatestBackupConfigPath = this.getLatestBackupConfigPath();
 
-				if(possibleLatestBackupConfigPath != null) {
+				if (possibleLatestBackupConfigPath != null) {
 					Structurify.getLogger().error("Restoring Structurify backup config...");
 					if (Files.exists(configPath)) {
 						Files.delete(configPath);
@@ -413,15 +413,15 @@ public final class StructurifyConfig
 				var overrideGlobalSpacingAndSeparationModifier = structureSetData.overrideGlobalSpacingAndSeparationModifier();
 				var salt = structureSetData.getSalt();
 				var frequency = structureSetData.getFrequency();
-				var spacing =structureSetData.getSpacing();
+				var spacing = structureSetData.getSpacing();
 				var separation = structureSetData.getSeparation();
 
-				if((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
+				if ((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
 					Structurify.getLogger().info("Salt value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, salt, structureSetData.getDefaultSalt());
 					salt = structureSetData.getDefaultSalt();
 				}
 
-				if(frequency < StructureSetData.MIN_FREQUENCY || frequency > StructureSetData.MAX_FREQUENCY) {
+				if (frequency < StructureSetData.MIN_FREQUENCY || frequency > StructureSetData.MAX_FREQUENCY) {
 					Structurify.getLogger().info("Frequency value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, frequency, structureSetData.getDefaultFrequency());
 					frequency = structureSetData.getDefaultFrequency();
 				}
@@ -456,7 +456,7 @@ public final class StructurifyConfig
 
 	private Path getBackupConfigPath() {
 		String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
-		return Path.of(BACKUP_CONFIG_DIR.toString(), Structurify.MOD_ID + "_backup_"+ dateTime +".json");
+		return Path.of(BACKUP_CONFIG_DIR.toString(), Structurify.MOD_ID + "_backup_" + dateTime + ".json");
 	}
 
 	private Path getLatestBackupConfigPath() {

@@ -108,7 +108,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 
 		var pendingValue = this.biomeStringController.option().pendingValue();
 
-		if(pendingValue.contains(":")) {
+		if (pendingValue.contains(":")) {
 			return LanguageUtil.translateId("biome", this.biomeStringController.option().pendingValue());
 		}
 
@@ -118,7 +118,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	private void renderBiomeImage(String biomeName, GuiGraphics graphics, int x, int y, float delta) {
 		ResourceLocation imageId;
 
-		if(biomeName.contains("#") || !biomeName.contains(":")) {
+		if (biomeName.contains("#") || !biomeName.contains(":")) {
 			imageId = Structurify.makeId("textures/gui/config/images/biomes/unknown.png");
 		} else {
 			biomeName = Structurify.makeNamespacedId(biomeName).getPath();

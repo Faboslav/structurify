@@ -17,7 +17,7 @@ public final class RandomSpreadUtil
 	public static int getModifiedSalt(ResourceLocation structureSetIdentifier, int originalSalt) {
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 
-		if(structureSetData == null) {
+		if (structureSetData == null) {
 			return originalSalt;
 		}
 
@@ -27,7 +27,7 @@ public final class RandomSpreadUtil
 	public static float getModifiedFrequency(ResourceLocation structureSetIdentifier, float originalFrequency) {
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 
-		if(structureSetData == null) {
+		if (structureSetData == null) {
 			return originalFrequency;
 		}
 

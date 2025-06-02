@@ -12,7 +12,11 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 
 public final class JigsawStructureFlatnessCheck
 {
-	public static boolean checkFlatness(StructureData structureData, HeightProvider startHeight, Structure.GenerationContext generationContext) {
+	public static boolean checkFlatness(
+		StructureData structureData,
+		HeightProvider startHeight,
+		Structure.GenerationContext generationContext
+	) {
 		var flatnessCheckDistance = structureData.getFlatnessCheckDistance();
 		var offsetStep = (int) Math.ceil(flatnessCheckDistance / 2.0F);
 		int stepAmount = (int) Math.pow((double) (2 * flatnessCheckDistance) / offsetStep + 1, 2);
@@ -22,7 +26,7 @@ public final class JigsawStructureFlatnessCheck
 		var areAirBlocksAllowed = structureData.areAirBlocksAllowedInFlatnessCheck();
 		var areLiquidBlocksAllowed = structureData.areLiquidBlocksAllowedInFlatnessCheck();
 
-		if(flatnessCheckDistance == 0 || flatnessCheckThreshold == 0) {
+		if (flatnessCheckDistance == 0 || flatnessCheckThreshold == 0) {
 			return true;
 		}
 
@@ -51,7 +55,7 @@ public final class JigsawStructureFlatnessCheck
 					return false;
 				}
 
-				if(!areAirBlocksAllowed || !areLiquidBlocksAllowed) {
+				if (!areAirBlocksAllowed || !areLiquidBlocksAllowed) {
 					NoiseColumn blockView = generationContext.chunkGenerator().getBaseColumn(
 						x,
 						z,
@@ -63,19 +67,19 @@ public final class JigsawStructureFlatnessCheck
 
 					// Structurify.getLogger().info("blockstate: " + blockState + " at: " + x + ", " + height + ", " + z);
 
-					if(!areAirBlocksAllowed && blockState.isAir()) {
+					if (!areAirBlocksAllowed && blockState.isAir()) {
 						airBlockSteps++;
 
-						if(airBlockSteps >= allowedAirBlockSteps) {
+						if (airBlockSteps >= allowedAirBlockSteps) {
 							// Structurify.getLogger().info("air");
 							return false;
 						}
 					}
 
-					if(!areLiquidBlocksAllowed && !blockState.getFluidState().isEmpty()) {
+					if (!areLiquidBlocksAllowed && !blockState.getFluidState().isEmpty()) {
 						fluidBlockSteps++;
 
-						if(fluidBlockSteps >= allowedLiquidBlockSteps) {
+						if (fluidBlockSteps >= allowedLiquidBlockSteps) {
 							// Structurify.getLogger().info("liquid");
 							return false;
 						}

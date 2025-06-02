@@ -58,10 +58,10 @@ public final class ChunkGeneratorMixin
 
 		var minStructureDistanceFromWorldCenter = Structurify.getConfig().minStructureDistanceFromWorldCenter;
 
-		if(minStructureDistanceFromWorldCenter > 0) {
+		if (minStructureDistanceFromWorldCenter > 0) {
 			var checkStructureDistanceFromWorldCenterResult = StructureDistanceFromWorldCenterCheck.checkStructureDistanceFromWorldCenter(chunkPos.getWorldPosition(), minStructureDistanceFromWorldCenter);
 
-			if(!checkStructureDistanceFromWorldCenterResult) {
+			if (!checkStructureDistanceFromWorldCenterResult) {
 				return false;
 			}
 		}
@@ -77,6 +77,6 @@ public final class ChunkGeneratorMixin
 		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
 		//?} else {
 		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
-		*///?}
+		 *///?}
 	}
 }

@@ -20,11 +20,11 @@ public final class TerraCompat implements ModCompat
 		var terraBiomes = new ArrayList<String>();
 		var terraBiomeMap = this.getTerraBiomes("com.dfsek.terra.mod.util.BiomeUtil", "getTerraBiomeMap");
 
-		if(terraBiomeMap == null) {
+		if (terraBiomeMap == null) {
 			terraBiomeMap = this.getTerraBiomes("com.dfsek.terra.mod.util.MinecraftUtil", "getTerraBiomeMap");
 		}
 
-		if(terraBiomeMap != null) {
+		if (terraBiomeMap != null) {
 			terraBiomeMap.forEach((originalBiome, replacementBiomes) -> {
 				var vanillaBiomeName = originalBiome.toString();
 

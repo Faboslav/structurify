@@ -5,10 +5,18 @@ plugins {
 }
 
 stonecutter {
-	const("global_packs", rootProject.project(stonecutter.current.project).property("deps.global_packs").toString() != "")
+	const(
+		"global_packs",
+		rootProject.project(stonecutter.current.project).property("deps.global_packs").toString() != ""
+	)
 	const("open_loader", rootProject.project(stonecutter.current.project).property("deps.open_loader").toString() != "")
 	const("yungs_api", rootProject.project(stonecutter.current.project).property("deps.yungs_api").toString() != "")
-	const("repurposed_structures", rootProject.project(stonecutter.current.project).property("deps.repurposed_structures").toString() != "" && rootProject.project(stonecutter.current.project).property("deps.midnight_lib").toString() != "")
+	const(
+		"repurposed_structures",
+		rootProject.project(stonecutter.current.project).property("deps.repurposed_structures")
+			.toString() != "" && rootProject.project(stonecutter.current.project).property("deps.midnight_lib")
+			.toString() != ""
+	)
 }
 
 loom {
@@ -48,9 +56,17 @@ dependencies {
 	// Open Loader
 	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
 		if (commonMod.mc == "1.21.1") {
-			modImplementation(group = "net.darkhax.openloader", name = "openloader-common-${commonMod.mc}", version = openLoaderVersion)
+			modImplementation(
+				group = "net.darkhax.openloader",
+				name = "openloader-common-${commonMod.mc}",
+				version = openLoaderVersion
+			)
 		} else {
-			modImplementation(group = "net.darkhax.openloader", name = "OpenLoader-Common-${commonMod.mc}", version = openLoaderVersion)
+			modImplementation(
+				group = "net.darkhax.openloader",
+				name = "OpenLoader-Common-${commonMod.mc}",
+				version = openLoaderVersion
+			)
 		}
 	}
 

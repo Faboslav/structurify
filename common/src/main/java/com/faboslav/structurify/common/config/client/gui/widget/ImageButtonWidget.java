@@ -17,11 +17,12 @@ import java.lang.reflect.Field;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+
 import static org.lwjgl.opengl.GL20.*;
 
 //? <=1.21.1 {
 /*import net.minecraft.util.FastColor;
-*///?} else {
+ *///?} else {
 import net.minecraft.util.ARGB;
 //?}
 
@@ -121,7 +122,7 @@ public class ImageButtonWidget extends AbstractWidget
 
 		//? <=1.21.1 {
 		/*int greyColor = FastColor.ABGR32.color((int) (alphaScale * 255), 0, 0, 0);
-		*///?} else {
+		 *///?} else {
 		int greyColor = ARGB.color((int) (alphaScale * 255), 0, 0, 0);
 		//?}
 		context.fill(getX(), getY(), getX() + width, getY() + height, greyColor);

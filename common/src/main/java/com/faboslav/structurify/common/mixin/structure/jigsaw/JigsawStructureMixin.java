@@ -45,7 +45,7 @@ public abstract class JigsawStructureMixin extends StructureMixin
 		if (structureData.isFlatnessCheckEnabled()) {
 			var flatnessCheckResult = JigsawStructureFlatnessCheck.checkFlatness(structureData, this.startHeight, generationContext);
 
-			if(!flatnessCheckResult) {
+			if (!flatnessCheckResult) {
 				return Optional.empty();
 			}
 		}
@@ -53,7 +53,7 @@ public abstract class JigsawStructureMixin extends StructureMixin
 		if (structureData.isBiomeCheckEnabled()) {
 			var biomeCheckResult = JigsawStructureBiomeCheck.checkBiomes(structureData, this.startHeight, generationContext);
 
-			if(!biomeCheckResult) {
+			if (!biomeCheckResult) {
 				return Optional.empty();
 			}
 		}

@@ -50,7 +50,7 @@ public class StructurifyConfigScreen extends Screen
 	public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
 		//? <1.20.2 {
 		/*super.renderBackground(context);
-		*///?} else {
+		 *///?} else {
 		super.renderBackground(context, mouseX, mouseY, delta);
 		//?}
 		super.render(context, mouseX, mouseY, delta);
@@ -108,7 +108,7 @@ public class StructurifyConfigScreen extends Screen
 	public void saveScreenState(YACLScreen yaclScreen) {
 		var currentTab = yaclScreen.tabNavigationBar.getTabManager().getCurrentTab();
 
-		if(currentTab instanceof YACLScreen.CategoryTab yaclCategoryTab) {
+		if (currentTab instanceof YACLScreen.CategoryTab yaclCategoryTab) {
 			var categoryTab = ((CategoryTabAccessor) yaclCategoryTab);
 			var optionListWidget = categoryTab.getOptionList().getList();
 
@@ -118,7 +118,7 @@ public class StructurifyConfigScreen extends Screen
 				optionListWidget.scrollAmount()
 				//?} else {
 				/*optionListWidget.getScrollAmount()
-				*///?}
+				 *///?}
 			));
 		}
 	}
@@ -126,10 +126,10 @@ public class StructurifyConfigScreen extends Screen
 	public void loadScreenState(YACLScreen yaclScreen) {
 		var currentTab = yaclScreen.tabNavigationBar.getTabManager().getCurrentTab();
 
-		if(currentTab instanceof YACLScreen.CategoryTab categoryTab) {
+		if (currentTab instanceof YACLScreen.CategoryTab categoryTab) {
 			var screenState = this.screenStates.get(yaclScreen.getTitle().getString());
 
-			if(screenState != null) {
+			if (screenState != null) {
 				var yaclScreenCategoryTab = ((CategoryTabAccessor) categoryTab);
 				yaclScreenCategoryTab.getSearchField().setValue(screenState.lastSearchText());
 				yaclScreenCategoryTab.getOptionList().getList().setScrollAmount(screenState.lastScrollAmount());

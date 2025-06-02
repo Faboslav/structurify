@@ -15,8 +15,8 @@
 		"compat.RepurposedStructuresModifySpreadMixin",
 		"structure.placement.StructurePlacementMixin",
 		"structure.placement.RandomSpreadStructurePlacementMixin",
-      	"structure.StructureMixin",
-      	"structure.jigsaw.JigsawStructureMixin",
+		"structure.StructureMixin",
+		"structure.jigsaw.JigsawStructureMixin",
 		"structure.jigsaw.MaxDistanceFromCenterAccessor"
 	],
 	"client": [

@@ -3,6 +3,7 @@ package com.faboslav.structurify.common.config.client.gui.widget;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.AbstractLayout;
 import net.minecraft.client.gui.layouts.LayoutElement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -10,7 +11,7 @@ import java.util.function.Consumer;
 
 //? <1.21 {
 /*import com.faboslav.structurify.common.mixin.AbstractWidgetInvoker;
-*///?}
+ *///?}
 
 /**
  * Inspired by use in Sounds mod
@@ -18,7 +19,8 @@ import java.util.function.Consumer;
  * @author IMB11
  * <a href="https://github.com/IMB11/Sounds/blob/main/src/main/java/dev/imb11/sounds/gui/DynamicGridWidget.java">https://github.com/IMB11/Sounds/blob/main/src/main/java/dev/imb11/sounds/gui/DynamicGridWidget.java</a>
  */
-public class DynamicGridWidget extends AbstractLayout {
+public class DynamicGridWidget extends AbstractLayout
+{
 	private final List<GridItem> children = new ArrayList<>();
 	private int padding = 0;
 
@@ -148,7 +150,7 @@ public class DynamicGridWidget extends AbstractLayout {
 			child.widget().setHeight(thisCellHeight - padding * 2);
 			//?} else {
 			/*((AbstractWidgetInvoker)child.widget()).setHeight((thisCellHeight - padding * 2));
-			*///?}
+			 *///?}
 
 			currentX += thisCellWidth;
 			if (currentX >= this.width) {
@@ -164,6 +166,7 @@ public class DynamicGridWidget extends AbstractLayout {
 		this.children.stream().map(GridItem::widget).forEach(consumer);
 	}
 
-	public record GridItem(int cellHeight, int cellWidth, AbstractWidget widget) {
+	public record GridItem(int cellHeight, int cellWidth, AbstractWidget widget)
+	{
 	}
 }

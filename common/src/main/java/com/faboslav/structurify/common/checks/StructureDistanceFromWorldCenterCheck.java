@@ -10,7 +10,10 @@ import net.minecraft.core.BlockPos;
  */
 public final class StructureDistanceFromWorldCenterCheck
 {
-	public static boolean checkStructureDistanceFromWorldCenter(BlockPos structureBlockPos, int minStructureDistanceFromWorldCenter) {
+	public static boolean checkStructureDistanceFromWorldCenter(
+		BlockPos structureBlockPos,
+		int minStructureDistanceFromWorldCenter
+	) {
 		return structureBlockPos.distManhattan(BlockPos.ZERO) >= minStructureDistanceFromWorldCenter;
 	}
 }

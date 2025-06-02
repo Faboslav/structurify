@@ -26,11 +26,11 @@ public final class ModChecker
 		try {
 			//? global_packs {
 			/*loadModCompat("globalpacks", () -> new GlobalPacksCompat());
-			*///?}
+			 *///?}
 
 			//? open_loader {
 			/*loadModCompat("openloader", () -> new OpenLoaderCompat());
-			*///?}
+			 *///?}
 
 			loadModCompat("terra", () -> new TerraCompat());
 

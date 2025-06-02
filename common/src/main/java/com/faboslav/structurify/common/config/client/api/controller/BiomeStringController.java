@@ -58,7 +58,7 @@ public final class BiomeStringController extends AbstractDropdownController<Stri
 
 	@Override
 	protected String getValidValue(String value, int offset) {
-		if(!value.isBlank()) {
+		if (!value.isBlank()) {
 			var slugifiedValue = value.toLowerCase().replace(" ", "_");
 			var validBiomes = this.allowedValues.stream().filter(biome -> {
 				var slugifiedBiome = biome.toLowerCase().replace(" ", "_");
