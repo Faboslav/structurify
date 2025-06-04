@@ -134,9 +134,7 @@ public final class StructureSetsConfigScreen
 				overrideGlobalSpacingAndSeparationModifierOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
 					boolean available = false;
 
-					if (
-						this.enableGlobalSpacingAndSeparationOption.pendingValue()
-					) {
+					if (enableGlobalSpacingAndSeparationModifier) {
 						available = true;
 					}
 
