@@ -28,6 +28,7 @@ public final class StructureSetsConfigScreen
 	public Map<String, AbstractMap.SimpleEntry<Option<Boolean>, Option<OptionPair<Option<Integer>, Option<Integer>>>>> structureSetOptions = new HashMap<>();
 	public Map<String, OptionGroup> optionGroups = new HashMap<>();
 	public Option<Boolean> enableGlobalSpacingAndSeparationOption = null;
+	public Option<Double> globalSpacingAndSeparationModifierOption = null;
 
 	public void createStructureSetsScreen(StructurifyConfig config, Screen parent) {
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
@@ -153,7 +154,21 @@ public final class StructureSetsConfigScreen
 						() -> config.getStructureSetData().get(structureSetStringId).getSpacing(),
 						spacing -> config.getStructureSetData().get(structureSetStringId).setSpacing(spacing)
 					)
-					.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SPACING).step(1)).build();
+					.controller(opt -> IntegerSliderControllerBuilder
+						.create(opt)
+						.valueFormatter(spacing -> {
+							var structureSetOption = this.structureSetOptions.get(structureSetStringId);
+							var overrideSpacingAndSeparationModifierDescription = structureSetOption.getKey().pendingValue();
+
+							if(this.enableGlobalSpacingAndSeparationOption.pendingValue() && !overrideSpacingAndSeparationModifierDescription) {
+								spacing = (int) (spacing * this.globalSpacingAndSeparationModifierOption.pendingValue());
+							}
+
+							return Component.literal(String.valueOf(spacing));
+						})
+						.range(0, StructureSetData.MAX_SPACING)
+						.step(1)
+					).build();
 
 				var separationDescriptionBuilder = OptionDescription.createBuilder();
 				separationDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.separation.description"));
@@ -167,7 +182,21 @@ public final class StructureSetsConfigScreen
 						() -> config.getStructureSetData().get(structureSetStringId).getSeparation(),
 						separation -> config.getStructureSetData().get(structureSetStringId).setSeparation(separation)
 					)
-					.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, StructureSetData.MAX_SEPARATION).step(1)).build();
+					.controller(opt -> IntegerSliderControllerBuilder
+						.create(opt)
+						.valueFormatter(separation -> {
+							var structureSetOption = this.structureSetOptions.get(structureSetStringId);
+							var overrideSpacingAndSeparationModifierDescription = structureSetOption.getKey().pendingValue();
+
+							if(this.enableGlobalSpacingAndSeparationOption.pendingValue() && !overrideSpacingAndSeparationModifierDescription) {
+								separation = (int) (separation * this.globalSpacingAndSeparationModifierOption.pendingValue());
+							}
+
+							return Component.literal(String.valueOf(separation));
+						})
+						.range(0, StructureSetData.MAX_SEPARATION)
+						.step(1)
+					).build();
 
 				spacingOption.addListener((opt, spacing) -> {
 					if (spacing <= separationOption.pendingValue()) {
@@ -228,24 +257,15 @@ public final class StructureSetsConfigScreen
 				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
 				.coloured(true)).build();
 
-		generalStructuresSetsGroupBuilder.option(enableGlobalSpacingAndSeparationOption);
+		generalStructuresSetsGroupBuilder.option(this.enableGlobalSpacingAndSeparationOption);
 
-		enableGlobalSpacingAndSeparationOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
+		this.enableGlobalSpacingAndSeparationOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
 			for (var structureSetOption : this.structureSetOptions.entrySet()) {
-				var structureSetData = config.getStructureSetData().get(structureSetOption.getKey());
 				var structureSetOptionOverride = structureSetOption.getValue().getKey();
 				var structureSetOptionPair = structureSetOption.getValue().getValue();
 
 				structureSetOptionOverride.setAvailable(enableGlobalSpacingAndSeparationModifier);
 				structureSetOptionPair.setAvailable(!enableGlobalSpacingAndSeparationModifier || structureSetOptionOverride.pendingValue());
-
-				/*
-				if(!structureSetOptionOverride.available()) {
-					var spacingOption = structureSetOptionPair.pendingValue().getFirstOption();
-					var separationOption = structureSetOptionPair.pendingValue().getSecondOption();
-					spacingOption.requestSet(RandomSpreadUtil.getModifiedSpacing(structureSetData, spacingOption.pendingValue()));
-					separationOption.requestSet(RandomSpreadUtil.getModifiedSeparation(structureSetData, spacingOption.pendingValue(), separationOption.pendingValue()));
-				}*/
 			}
 		});
 
@@ -253,7 +273,7 @@ public final class StructureSetsConfigScreen
 		globalSpacingAndSeparationModifierDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.description"));
 		globalSpacingAndSeparationModifierDescriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structure_sets.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
 
-		var globalSpacingAndSeparationModifierOption = Option.<Double>createBuilder()
+		this.globalSpacingAndSeparationModifierOption = Option.<Double>createBuilder()
 			.name(Component.translatable("gui.structurify.structure_sets.global_spacing_and_separation_modifier.title"))
 			.description(globalSpacingAndSeparationModifierDescriptionBuilder.build())
 			.binding(
@@ -263,7 +283,7 @@ public final class StructureSetsConfigScreen
 			)
 			.controller(opt -> DoubleSliderControllerBuilder.create(opt).range(0.1D, 100.0D).step(0.1D)).build();
 
-		generalStructuresSetsGroupBuilder.option(globalSpacingAndSeparationModifierOption);
+		generalStructuresSetsGroupBuilder.option(this.globalSpacingAndSeparationModifierOption);
 
 		categoryBuilder.group(generalStructuresSetsGroupBuilder.build());
 	}
