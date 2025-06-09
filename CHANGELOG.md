@@ -1,3 +1,7 @@
+## 1.0.13
+
+- Fixed crash related to Repurposed Structures compat
+
 ## 1.0.12
 
 - A lot of quality of life features like keeping search, scroll position and more
