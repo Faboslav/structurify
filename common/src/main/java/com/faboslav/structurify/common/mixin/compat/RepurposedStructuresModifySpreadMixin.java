@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Optional;
 
-@Mixin(value = AdvancedRandomSpread.class, remap = false)
+@Mixin(value = AdvancedRandomSpread.class)
 public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpreadStructurePlacement implements StructurifyRandomSpreadStructurePlacement
 {
 	public RepurposedStructuresModifySpreadMixin(
