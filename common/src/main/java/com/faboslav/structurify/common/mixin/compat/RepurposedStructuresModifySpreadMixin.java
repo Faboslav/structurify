@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Optional;
 
-@Mixin(value = AdvancedRandomSpread.class, remap = false)
+@Mixin(value = AdvancedRandomSpread.class)
 public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpreadStructurePlacement implements StructurifyRandomSpreadStructurePlacement
 {
 	public RepurposedStructuresModifySpreadMixin(
@@ -59,7 +59,8 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 		at = @At(
 			value = "FIELD",
 			target = "Lcom/telepathicgrunt/repurposedstructures/world/structures/placements/AdvancedRandomSpread;spacing:I",
-			opcode = Opcodes.GETFIELD
+			opcode = Opcodes.GETFIELD,
+			remap = false
 		)
 	)
 	protected int structurify$getStartChunkGetSpacing(int originalSpacing) {
@@ -71,7 +72,8 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 		at = @At(
 			value = "FIELD",
 			target = "Lcom/telepathicgrunt/repurposedstructures/world/structures/placements/AdvancedRandomSpread;separation:I",
-			opcode = Opcodes.GETFIELD
+			opcode = Opcodes.GETFIELD,
+			remap = false
 		)
 	)
 	protected int structurify$getStartChunkGetSeparation(int originalSeparation) {
