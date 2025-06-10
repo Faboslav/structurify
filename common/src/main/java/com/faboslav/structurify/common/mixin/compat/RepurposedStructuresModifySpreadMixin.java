@@ -40,8 +40,7 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 
 	@ModifyReturnValue(
 		method = "spacing",
-		at = @At("RETURN"),
-		require = 0
+		at = @At("RETURN")
 	)
 	protected int structurify$getSpacing(int originalSpacing) {
 		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetIdentifier(), originalSpacing);
@@ -49,8 +48,7 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 
 	@ModifyReturnValue(
 		method = "separation",
-		at = @At("RETURN"),
-		require = 0
+		at = @At("RETURN")
 	)
 	protected int structurify$getSeparation(int originalSeparation) {
 		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalSeparation);
@@ -62,8 +60,7 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 			value = "FIELD",
 			target = "Lcom/telepathicgrunt/repurposedstructures/world/structures/placements/AdvancedRandomSpread;spacing:I",
 			opcode = Opcodes.GETFIELD
-		),
-		require = 0
+		)
 	)
 	protected int structurify$getStartChunkGetSpacing(int originalSpacing) {
 		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetIdentifier(), originalSpacing);
@@ -75,8 +72,7 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 			value = "FIELD",
 			target = "Lcom/telepathicgrunt/repurposedstructures/world/structures/placements/AdvancedRandomSpread;separation:I",
 			opcode = Opcodes.GETFIELD
-		),
-		require = 0
+		)
 	)
 	protected int structurify$getStartChunkGetSeparation(int originalSeparation) {
 		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalSeparation);
