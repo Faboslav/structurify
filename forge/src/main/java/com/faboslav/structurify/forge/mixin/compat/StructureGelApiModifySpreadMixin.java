@@ -65,5 +65,4 @@ public abstract class StructureGelApiModifySpreadMixin implements StructurifyRan
 	protected int structurify$getOffset(int originalOffset) {
 		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalOffset);
 	}
-
 }
