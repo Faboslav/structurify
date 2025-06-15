@@ -1,3 +1,7 @@
+## 1.0.14
+
+- Decreased spacing/separation slider range max value to 512
+
 ## 1.0.13
 
 - Fixed crash related to Repurposed Structures compat
