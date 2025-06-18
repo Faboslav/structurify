@@ -46,13 +46,13 @@ public final class BiomeUtil
 			structureId == null
 			|| !Structurify.getConfig().getStructureData().containsKey(structureId.toString())
 		) {
-			return HolderSet.empty();
+			return HolderSet.direct(new ArrayList<>());
 		}
 
 		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
 
 		if (biomeRegistry == null) {
-			return HolderSet.empty();
+			return HolderSet.direct(new ArrayList<>());
 		}
 
 		var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
