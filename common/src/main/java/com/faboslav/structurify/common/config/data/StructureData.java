@@ -10,6 +10,8 @@ public class StructureData
 	public final static boolean ENABLE_FLATNESS_CHECK_DEFAULT_VALUE = false;
 	public final static int FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE = 10;
 	public final static boolean ENABLE_BIOME_CHECK_DEFAULT_VALUE = false;
+	public final static BiomeCheckMode BIOME_CHECK_MODE_DEFAULT_VALUE = BiomeCheckMode.BLACKLIST;
+	public final static List<String> BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE = List.of("#is_river");
 	public final static boolean ALLOW_AIR_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE = false;
 	public final static boolean ALLOW_LIQUID_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE = false;
 
@@ -23,7 +25,9 @@ public class StructureData
 	private boolean allowAirBlocksInFlatnessCheck = ALLOW_AIR_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE;
 	private boolean allowLiquidBlocksInFlatnessCheck = ALLOW_LIQUID_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE;
 	private boolean enableBiomeCheck = ENABLE_BIOME_CHECK_DEFAULT_VALUE;
+	private BiomeCheckMode biomeCheckMode = BIOME_CHECK_MODE_DEFAULT_VALUE;
 	private int biomeCheckDistance;
+	private List<String> biomeCheckBlacklistedBiomes = BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE;
 	private List<String> biomes;
 
 	public StructureData(List<String> biomes, int checkDistance) {
@@ -46,7 +50,9 @@ public class StructureData
 			   && this.flatnessCheckDistance == this.defaultCheckDistance
 			   && this.flatnessCheckThreshold == FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE
 			   && this.enableBiomeCheck == ENABLE_BIOME_CHECK_DEFAULT_VALUE
+			   && this.biomeCheckMode == BIOME_CHECK_MODE_DEFAULT_VALUE
 			   && this.biomeCheckDistance == this.defaultCheckDistance
+			   && this.biomeCheckBlacklistedBiomes.equals(BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE)
 			   && biomes.equals(defaultBiomes);
 	}
 
@@ -110,12 +116,28 @@ public class StructureData
 		this.enableBiomeCheck = enableBiomeCheck;
 	}
 
+	public BiomeCheckMode getBiomeCheckMode() {
+		return this.biomeCheckMode;
+	}
+
+	public void setBiomeCheckMode(BiomeCheckMode biomeCheckMode) {
+		this.biomeCheckMode = biomeCheckMode;
+	}
+
 	public int getBiomeCheckDistance() {
 		return this.biomeCheckDistance;
 	}
 
 	public void setBiomeCheckDistance(int biomeCheckDistance) {
 		this.biomeCheckDistance = biomeCheckDistance;
+	}
+
+	public List<String> getBiomeCheckBlacklistedBiomes() {
+		return this.biomeCheckBlacklistedBiomes;
+	}
+
+	public void setBiomeCheckBlacklistedBiomes(List<String> blacklistedBiomes) {
+		this.biomeCheckBlacklistedBiomes = blacklistedBiomes;
 	}
 
 	public List<String> getDefaultBiomes() {
@@ -128,5 +150,10 @@ public class StructureData
 
 	public void setBiomes(List<String> biomes) {
 		this.biomes = biomes;
+	}
+
+	public enum BiomeCheckMode {
+		STRICT,
+		BLACKLIST
 	}
 }

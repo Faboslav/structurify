@@ -1,3 +1,9 @@
+## 1.0.15
+
+- Fixed crash related to frequency
+- Fixed frequency slider
+- Updated biome check logic, so it actually checks the correct Y levels
+
 ## 1.0.14
 
 - Decreased spacing/separation slider range max value to 512

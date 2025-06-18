@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.client.api.controller;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.client.gui.StructureConfigScreen;
 import dev.isxander.yacl3.api.Option;
@@ -57,7 +58,7 @@ public class StructureButtonController extends BooleanController
 				YACLScreen structureScreen;
 
 				if (!configScreen.structureScreens.containsKey(structureId)) {
-					structureScreen = StructureConfigScreen.create(screen, structureId);
+					structureScreen = StructureConfigScreen.create(Structurify.getConfig(), structureId, screen);
 					configScreen.structureScreens.put(structureId, structureScreen);
 				} else {
 					structureScreen = configScreen.structureScreens.get(structureId);

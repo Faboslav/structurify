@@ -60,7 +60,6 @@ public final class StructureSetsConfigScreen
 		OptionGroup.Builder currentGroupBuilder = null;
 		String currentNamespace = null;
 
-
 		for (Map.Entry<String, StructureSetData> entry : structureSets.entrySet()) {
 			String structureSetStringId = entry.getKey();
 			ResourceLocation structureSetId = Structurify.makeNamespacedId(structureSetStringId);
@@ -105,7 +104,7 @@ public final class StructureSetsConfigScreen
 					() -> config.getStructureSetData().get(structureSetStringId).getFrequency(),
 					frequency -> config.getStructureSetData().get(structureSetStringId).setFrequency(frequency)
 				)
-				.controller(opt -> FloatSliderControllerBuilder.create(opt).range(StructureSetData.MIN_FREQUENCY, StructureSetData.MAX_FREQUENCY).step(0.01F)).build();
+				.controller(opt -> FloatSliderControllerBuilder.create(opt).range(StructureSetData.MIN_FREQUENCY, StructureSetData.MAX_FREQUENCY).step(0.01F).formatValue((value) -> Component.literal(String.format(Locale.ROOT, "%.2f", value)))).build();
 
 			currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName).build());
 			currentGroupBuilder.option(saltOption);

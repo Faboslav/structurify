@@ -1,22 +1,25 @@
 package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 public final class StructureConfigScreen
 {
-	public static YACLScreen create(Screen parent, String structureId) {
+	public static YACLScreen create(StructurifyConfig config, String structureId, Screen parent) {
 		var yacl = YetAnotherConfigLib.createBuilder()
 			.title(Component.literal(structureId))
-			.save(Structurify.getConfig()::save);
+			.save(config::save);
 
 		var translatedStructureName = LanguageUtil.translateId("structure", structureId);
 		var structureCategoryBuilder = ConfigCategory.createBuilder()
@@ -30,8 +33,8 @@ public final class StructureConfigScreen
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.enable_flatness_check.description")))
 			.binding(
 				StructureData.ENABLE_FLATNESS_CHECK_DEFAULT_VALUE,
-				() -> Structurify.getConfig().getStructureData().get(structureId).isFlatnessCheckEnabled(),
-				enableFlatnessCheck -> Structurify.getConfig().getStructureData().get(structureId).setEnableFlatnessCheck(enableFlatnessCheck)
+				() -> config.getStructureData().get(structureId).isFlatnessCheckEnabled(),
+				enableFlatnessCheck -> config.getStructureData().get(structureId).setEnableFlatnessCheck(enableFlatnessCheck)
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
 				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
@@ -43,9 +46,9 @@ public final class StructureConfigScreen
 			.name(Component.translatable("gui.structurify.structures.structure.flatness_check_distance.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.flatness_check_distance.description")))
 			.binding(
-				Structurify.getConfig().getStructureData().get(structureId).getDefaultCheckDistance(),
-				() -> Structurify.getConfig().getStructureData().get(structureId).getFlatnessCheckDistance(),
-				flatnessCheckDistance -> Structurify.getConfig().getStructureData().get(structureId).setFlatnessCheckDistance(flatnessCheckDistance)
+				config.getStructureData().get(structureId).getDefaultCheckDistance(),
+				() -> config.getStructureData().get(structureId).getFlatnessCheckDistance(),
+				flatnessCheckDistance -> config.getStructureData().get(structureId).setFlatnessCheckDistance(flatnessCheckDistance)
 			)
 			.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, 256).step(1)).build();
 
@@ -56,8 +59,8 @@ public final class StructureConfigScreen
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.flatness_check_threshold.description")))
 			.binding(
 				StructureData.FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE,
-				() -> Structurify.getConfig().getStructureData().get(structureId).getFlatnessCheckThreshold(),
-				flatnessCheckThreshold -> Structurify.getConfig().getStructureData().get(structureId).setFlatnessCheckThreshold(flatnessCheckThreshold)
+				() -> config.getStructureData().get(structureId).getFlatnessCheckThreshold(),
+				flatnessCheckThreshold -> config.getStructureData().get(structureId).setFlatnessCheckThreshold(flatnessCheckThreshold)
 			)
 			.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, 256).step(1)).build();
 
@@ -68,8 +71,8 @@ public final class StructureConfigScreen
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.allow_air_blocks_in_flatness_check.description")))
 			.binding(
 				StructureData.ALLOW_AIR_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE,
-				() -> Structurify.getConfig().getStructureData().get(structureId).areAirBlocksAllowedInFlatnessCheck(),
-				allowAirBlocksInFlatnessCheck -> Structurify.getConfig().getStructureData().get(structureId).setAllowAirBlocksInFlatnessCheck(allowAirBlocksInFlatnessCheck)
+				() -> config.getStructureData().get(structureId).areAirBlocksAllowedInFlatnessCheck(),
+				allowAirBlocksInFlatnessCheck -> config.getStructureData().get(structureId).setAllowAirBlocksInFlatnessCheck(allowAirBlocksInFlatnessCheck)
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
 				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
@@ -82,8 +85,8 @@ public final class StructureConfigScreen
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.allow_liquid_blocks_in_flatness_check.description")))
 			.binding(
 				StructureData.ALLOW_LIQUID_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE,
-				() -> Structurify.getConfig().getStructureData().get(structureId).areLiquidBlocksAllowedInFlatnessCheck(),
-				allowLiquidBlocksInFlatnessCheck -> Structurify.getConfig().getStructureData().get(structureId).setAllowLiquidBlocksInFlatnessCheck(allowLiquidBlocksInFlatnessCheck)
+				() -> config.getStructureData().get(structureId).areLiquidBlocksAllowedInFlatnessCheck(),
+				allowLiquidBlocksInFlatnessCheck -> config.getStructureData().get(structureId).setAllowLiquidBlocksInFlatnessCheck(allowLiquidBlocksInFlatnessCheck)
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
 				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
@@ -98,8 +101,8 @@ public final class StructureConfigScreen
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.enable_biome_check.description")))
 			.binding(
 				StructureData.ENABLE_BIOME_CHECK_DEFAULT_VALUE,
-				() -> Structurify.getConfig().getStructureData().get(structureId).isBiomeCheckEnabled(),
-				enableBiomeCheck -> Structurify.getConfig().getStructureData().get(structureId).setEnableBiomeCheck(enableBiomeCheck)
+				() -> config.getStructureData().get(structureId).isBiomeCheckEnabled(),
+				enableBiomeCheck -> config.getStructureData().get(structureId).setEnableBiomeCheck(enableBiomeCheck)
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
 				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
@@ -111,22 +114,55 @@ public final class StructureConfigScreen
 			.name(Component.translatable("gui.structurify.structures.structure.biome_check_distance.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biome_check_distance.description")))
 			.binding(
-				Structurify.getConfig().getStructureData().get(structureId).getDefaultCheckDistance(),
-				() -> Structurify.getConfig().getStructureData().get(structureId).getBiomeCheckDistance(),
-				biomeCheckDistance -> Structurify.getConfig().getStructureData().get(structureId).setBiomeCheckDistance(biomeCheckDistance)
+				config.getStructureData().get(structureId).getDefaultCheckDistance(),
+				() -> config.getStructureData().get(structureId).getBiomeCheckDistance(),
+				biomeCheckDistance -> config.getStructureData().get(structureId).setBiomeCheckDistance(biomeCheckDistance)
 			)
 			.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, 256).step(1)).build();
 
 		structureCategoryBuilder.option(biomeCheckDistanceOption);
+
+		var biomeCheckModeOption = Option.<StructureData.BiomeCheckMode>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.structure.biome_check_mode.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biome_check_mode.description")))
+			.binding(
+				StructureData.BIOME_CHECK_MODE_DEFAULT_VALUE,
+				() -> config.getStructureData().get(structureId).getBiomeCheckMode(),
+				biomeCheckMode -> config.getStructureData().get(structureId).setBiomeCheckMode(biomeCheckMode)
+			).controller(opt -> EnumControllerBuilder.create(opt)
+				.enumClass(StructureData.BiomeCheckMode.class)
+				.valueFormatter(biomeCheckMode -> Component.translatable("gui.structurify.structures.structure.biome_check_mode." + biomeCheckMode.name().toLowerCase()))).build();
+
+		structureCategoryBuilder.option(biomeCheckModeOption);
+
+		var biomeCheckBlacklistedBiomesOption = ListOption.<String>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.structure.biome_check_blacklisted_biomes.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biome_check_blacklisted_biomes.description")))
+			.insertEntriesAtEnd(false)
+			.binding(
+				StructureData.BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE,
+				() -> config.getStructureData().get(structureId).getBiomeCheckBlacklistedBiomes(),
+				blacklistedBiomes -> config.getStructureData().get(structureId).setBiomeCheckBlacklistedBiomes(blacklistedBiomes)
+			)
+			.controller(BiomeStringControllerBuilder::create)
+			.available(config.getStructureData().get(structureId).getBiomeCheckMode() == StructureData.BiomeCheckMode.BLACKLIST)
+			.initial("").build();
+
+		structureCategoryBuilder.group(biomeCheckBlacklistedBiomesOption);
+
+		biomeCheckModeOption.addListener((opt, biomeCheckMode) -> {
+			boolean isBlacklistAvailable = biomeCheckMode == StructureData.BiomeCheckMode.BLACKLIST;
+			biomeCheckBlacklistedBiomesOption.setAvailable(isBlacklistAvailable);
+		});
 
 		var biomesOption = ListOption.<String>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.biomes.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biomes.description", translatedStructureName)))
 			.insertEntriesAtEnd(false)
 			.binding(
-				Structurify.getConfig().getStructureData().get(structureId).getDefaultBiomes(),
-				() -> Structurify.getConfig().getStructureData().get(structureId).getBiomes(),
-				biomes -> Structurify.getConfig().getStructureData().get(structureId).setBiomes(biomes)
+				config.getStructureData().get(structureId).getDefaultBiomes(),
+				() -> config.getStructureData().get(structureId).getBiomes(),
+				biomes -> config.getStructureData().get(structureId).setBiomes(biomes)
 			)
 			.controller(BiomeStringControllerBuilder::create)
 			.initial("").build();

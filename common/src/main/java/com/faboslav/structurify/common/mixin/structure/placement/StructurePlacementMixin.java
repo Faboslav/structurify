@@ -73,7 +73,7 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		)
 	)
 	protected float structurify$applyAdditionalChunkRestrictionsGetFrequency(float originalFrequency) {
-		return Structurify.getConfig().getStructureSetData().get(this.structurify$getStructureSetIdentifier().toString()).getFrequency();
+		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetIdentifier(), originalFrequency);
 	}
 	//?} else {
 	/*@ModifyExpressionValue(
@@ -85,7 +85,7 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		)
 	)
 	protected float structurify$isStructureChunkGetFrequency(float originalFrequency) {
-		return Structurify.getConfig().getStructureSetData().get(this.structurify$getStructureSetIdentifier().toString()).getFrequency();
+		returnRandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetIdentifier(), originalFrequency);
 	}
 	*///?}
 }

@@ -51,7 +51,7 @@ public abstract class JigsawStructureMixin extends StructureMixin
 		}
 
 		if (structureData.isBiomeCheckEnabled()) {
-			var biomeCheckResult = JigsawStructureBiomeCheck.checkBiomes(structureData, this.startHeight, generationContext);
+			var biomeCheckResult = JigsawStructureBiomeCheck.checkBiomes(structureData, this.startHeight, generationContext, this.structurify$getStructureBlacklistedBiomes());
 
 			if (!biomeCheckResult) {
 				return Optional.empty();

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public final class StructurifyConfig
 {
@@ -54,6 +55,8 @@ public final class StructurifyConfig
 	private static final String FLATNESS_CHECK_THRESHOLD_PROPERTY = "flatness_check_threshold";
 	private static final String ENABLE_BIOME_CHECK_PROPERTY = "enable_biome_check";
 	private static final String BIOME_CHECK_DISTANCE_PROPERTY = "biome_check_distance";
+	private static final String BIOME_CHECK_MODE_PROPERTY = "biome_check_mode";
+	private static final String BIOME_CHECK_BLACKLISTED_BIOMES_PROPERTY = "biome_check_blacklisted_biomes";
 	private static final String BIOMES_PROPERTY = "biomes";
 	private static final String WHITELISTED_BIOMES_PROPERTY = "whitelisted_biomes";
 	private static final String BLACKLISTED_BIOMES_PROPERTY = "blacklisted_biomes";
@@ -172,6 +175,21 @@ public final class StructurifyConfig
 
 					var biomeCheckDistance = structureJson.get(BIOME_CHECK_DISTANCE_PROPERTY).getAsInt();
 					structureData.setBiomeCheckDistance(biomeCheckDistance);
+
+					if(isBiomeCheckEnabled && !structureJson.has(BIOME_CHECK_MODE_PROPERTY)) {
+						structureData.setBiomeCheckMode(StructureData.BiomeCheckMode.STRICT);
+						structureData.setBiomeCheckBlacklistedBiomes(StructureData.BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE);
+					} else {
+						var biomeCheckMode = structureJson.get(BIOME_CHECK_MODE_PROPERTY).getAsString();
+						structureData.setBiomeCheckMode(StructureData.BiomeCheckMode.valueOf(biomeCheckMode));
+						var biomeCheckBlacklistedBiomes = StreamSupport
+							.stream(structureJson.getAsJsonArray(BIOME_CHECK_BLACKLISTED_BIOMES_PROPERTY).spliterator(), false)
+							.map(JsonElement::getAsString)
+							.toList();
+
+						Structurify.getLogger().info(biomeCheckBlacklistedBiomes.toString());
+						structureData.setBiomeCheckBlacklistedBiomes(biomeCheckBlacklistedBiomes);
+					}
 
 					List<String> biomes = new ArrayList<>(structureData.getDefaultBiomes());
 
@@ -383,6 +401,12 @@ public final class StructurifyConfig
 
 				structure.addProperty(ENABLE_BIOME_CHECK_PROPERTY, structureDataEntry.getValue().isBiomeCheckEnabled());
 				structure.addProperty(BIOME_CHECK_DISTANCE_PROPERTY, structureDataEntry.getValue().getBiomeCheckDistance());
+				structure.addProperty(BIOME_CHECK_MODE_PROPERTY, structureDataEntry.getValue().getBiomeCheckMode().name());
+
+				var biomeCheckBlacklistedBiomes = new ArrayList<>(structureDataEntry.getValue().getBiomeCheckBlacklistedBiomes());
+				JsonArray biomeCheckBlacklistedBiomesJson = new JsonArray();
+				biomeCheckBlacklistedBiomes.stream().distinct().forEach(biomeCheckBlacklistedBiomesJson::add);
+				structure.add(BIOME_CHECK_BLACKLISTED_BIOMES_PROPERTY, biomeCheckBlacklistedBiomesJson);
 
 				var whitelistedBiomes = new ArrayList<>(structureDataEntry.getValue().getBiomes());
 				whitelistedBiomes.removeAll(structureDataEntry.getValue().getDefaultBiomes());
