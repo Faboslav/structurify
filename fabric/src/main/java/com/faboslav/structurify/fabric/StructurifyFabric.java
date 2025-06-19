@@ -18,7 +18,7 @@ public final class StructurifyFabric implements ModInitializer
 	public void onInitialize() {
 		Structurify.init();
 
-		CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, dedicated) -> DumpCommand.createCommand(dispatcher));
+		CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, dedicated) -> DumpCommand.createCommand(dispatcher, buildContext));
 		CommonLifecycleEvents.TAGS_LOADED.register(this::onDatapackReload);
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStart);
 	}
