@@ -103,3 +103,7 @@ tasks {
 		inputs.properties(expandProps)
 	}
 }
+
+tasks.named("processResources") {
+	dependsOn(":common:${commonMod.propOrNull("minecraft_version")}:stonecutterGenerate")
+}

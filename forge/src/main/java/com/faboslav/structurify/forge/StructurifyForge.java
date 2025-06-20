@@ -1,7 +1,7 @@
 package com.faboslav.structurify.forge;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.commands.DumpCommand;
+import com.faboslav.structurify.common.commands.StructurifyCommand;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
@@ -35,7 +35,7 @@ public final class StructurifyForge
 	}
 
 	private static void registerCommand(RegisterCommandsEvent event) {
-		DumpCommand.createCommand(event.getDispatcher());
+		StructurifyCommand.createCommand(event.getDispatcher(), event.getBuildContext());
 	}
 
 	private static void onResourceManagerReload(TagsUpdatedEvent event) {

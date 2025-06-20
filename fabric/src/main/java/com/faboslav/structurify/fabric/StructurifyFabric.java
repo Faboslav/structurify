@@ -1,7 +1,7 @@
 package com.faboslav.structurify.fabric;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.commands.DumpCommand;
+import com.faboslav.structurify.common.commands.StructurifyCommand;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
@@ -18,7 +18,7 @@ public final class StructurifyFabric implements ModInitializer
 	public void onInitialize() {
 		Structurify.init();
 
-		CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, dedicated) -> DumpCommand.createCommand(dispatcher, buildContext));
+		CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, dedicated) -> StructurifyCommand.createCommand(dispatcher, buildContext));
 		CommonLifecycleEvents.TAGS_LOADED.register(this::onDatapackReload);
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStart);
 	}
