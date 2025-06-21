@@ -247,7 +247,7 @@ public final class StructurifyConfig
 					var structureSetData = this.structureSetData.get(structureSetName);
 
 					var salt = structureSpreadJson.has(SALT_PROPERTY) ? structureSpreadJson.get(SALT_PROPERTY).getAsInt():structureSetData.getDefaultSalt();
-					var frequency = structureSpreadJson.has(FREQUENCY_PROPERTY) ? structureSpreadJson.get(FREQUENCY_PROPERTY).getAsInt():structureSetData.getDefaultFrequency();
+					var frequency = structureSpreadJson.has(FREQUENCY_PROPERTY) ? structureSpreadJson.get(FREQUENCY_PROPERTY).getAsFloat():structureSetData.getDefaultFrequency();
 					var spacing = structureSpreadJson.has(SPACING_PROPERTY) ? structureSpreadJson.get(SPACING_PROPERTY).getAsInt():structureSetData.getDefaultSpacing();
 					var separation = structureSpreadJson.has(SEPARATION_PROPERTY) ? structureSpreadJson.get(SEPARATION_PROPERTY).getAsInt():structureSetData.getDefaultSeparation();
 
