@@ -107,7 +107,7 @@ jobs:
                     wget -P run/mods "$MOD_URL"
 
             -   name: "Download Repurposed Structures"
-                if: ${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES != '' }}
+                if: ${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES != '' && matrix.version != '1.21.4' }}
                 run: |
                     MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "repurposed-structures-${{ matrix.mod_loader_modrinth }}" "${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES }}-${{ matrix.mod_loader }}" "${{ matrix.mod_loader }}")
                     wget -P run/mods "$MOD_URL"
@@ -172,7 +172,7 @@ jobs:
                     wget -P run/mods "$MOD_URL"
 
             -   name: "Download Repurposed Structures"
-                if: ${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES != '' }}
+                if: ${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES != '' && matrix.version != '1.21.4' }}
                 run: |
                     MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "repurposed-structures-${{ matrix.mod_loader_modrinth }}" "${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES }}-${{ matrix.mod_loader }}" "${{ matrix.mod_loader }}")
                     wget -P run/mods "$MOD_URL"
