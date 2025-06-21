@@ -16,13 +16,19 @@ import java.util.Optional;
 public interface LocateCommandInvoker
 {
 	@Accessor("MAX_STRUCTURE_SEARCH_RADIUS")
-	int structurify$getMaxStructureSearchRadius();
+	static int structurify$getMaxStructureSearchRadius() {
+		throw new AssertionError();
+	}
 
 	@Accessor("ERROR_STRUCTURE_NOT_FOUND")
-	DynamicCommandExceptionType structurify$getStructureNotFoundError();
+	static DynamicCommandExceptionType structurify$getStructureNotFoundError() {
+		throw new AssertionError();
+	}
 
 	@Accessor("ERROR_STRUCTURE_INVALID")
-	DynamicCommandExceptionType structurify$getStructureInvalidError();
+	static DynamicCommandExceptionType structurify$getStructureInvalidError() {
+		throw new AssertionError();
+	}
 
 	@Invoker("getHolders")
 	static Optional<? extends HolderSet.ListBacked<Structure>> structurify$invokeGetHolders(ResourceOrTagKeyArgument.Result<Structure> structure, Registry<Structure> structureRegistry) {

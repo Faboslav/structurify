@@ -1,3 +1,8 @@
+## 1.0.16
+
+- Fixed frequency loading from the config (float instead of int)
+- Added "/structurify locate" command, which works like async locator and will not freeze the world while locating the structure
+
 ## 1.0.15
 
 - Fixed crash related to frequency

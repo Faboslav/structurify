@@ -155,7 +155,7 @@ public class ImageButtonWidget extends AbstractWidget
 		context.pose().scale(fontScaling, fontScaling, 1.0f);
 		 //?}
 
-		renderScrollingString(context, client.font, getMessage(), textX, textY, endX, endY, 0xFFFFFF);
+		renderScrollingString(context, client.font, getMessage(), textX, textY, endX, endY, 0xFFFFFFFF);
 
 		//? >= 1.21.6 {
 		/*context.pose().popMatrix();

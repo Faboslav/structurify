@@ -43,7 +43,7 @@ public final class StructurifyCommand
 						.then(Commands.argument("structure", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.STRUCTURE))
 							.executes(
 								commandContext -> locateStructure(
-									commandContext.getSource(), ResourceOrTagKeyArgument.getResourceOrTagKey(commandContext, "structure", Registries.STRUCTURE, getStructureInvalidError())
+									commandContext.getSource(), ResourceOrTagKeyArgument.getResourceOrTagKey(commandContext, "structure", Registries.STRUCTURE, LocateCommandInvoker.structurify$getStructureInvalidError())
 								)
 							)
 						)
@@ -62,9 +62,9 @@ public final class StructurifyCommand
 		*///?}
 
 		HolderSet<Structure> holderSet = LocateCommandInvoker.structurify$invokeGetHolders(structure, registry)
-			.orElseThrow(() -> getStructureInvalidError().create(structure.asPrintable()));
+			.orElseThrow(() -> LocateCommandInvoker.structurify$getStructureInvalidError().create(structure.asPrintable()));
 
-		source.sendSuccess(() -> Component.literal("Locating " + structure.asPrintable() + " in the radius of " + getMaxStructureSearchRadius() + " chunks"), false);
+		source.sendSuccess(() -> Component.literal("Locating " + structure.asPrintable() + " in the radius of " + LocateCommandInvoker.structurify$getMaxStructureSearchRadius() + " chunks"), false);
 
 		Stopwatch stopwatch = Stopwatch.createStarted(Util.TICKER);
 
@@ -74,7 +74,7 @@ public final class StructurifyCommand
 						serverLevel,
 						holderSet,
 						blockPos,
-						getMaxStructureSearchRadius(),
+						LocateCommandInvoker.structurify$getMaxStructureSearchRadius(),
 						false
 					),
 				Util.backgroundExecutor()
@@ -83,7 +83,7 @@ public final class StructurifyCommand
 				stopwatch.stop();
 				source.getServer().execute(() -> {
 					if (pair == null) {
-						source.sendFailure(Component.translatable(getStructureNotFoundError().create(structure.asPrintable()).getLocalizedMessage()));
+						source.sendFailure(Component.translatable(LocateCommandInvoker.structurify$getStructureNotFoundError().create(structure.asPrintable()).getLocalizedMessage()));
 					} else {
 						LocateCommand.showLocateResult(source, structure, blockPos, pair, "commands.locate.structure.success", false, stopwatch.elapsed());
 					}
@@ -91,17 +91,5 @@ public final class StructurifyCommand
 			}, Util.backgroundExecutor());
 
 		return 0;
-	}
-
-	private static int getMaxStructureSearchRadius() {
-		return ((LocateCommandInvoker) (Object) LocateCommand.class).structurify$getMaxStructureSearchRadius();
-	}
-
-	private static DynamicCommandExceptionType getStructureInvalidError() {
-		return ((LocateCommandInvoker) (Object) LocateCommand.class).structurify$getStructureInvalidError();
-	}
-
-	private static DynamicCommandExceptionType getStructureNotFoundError() {
-		return ((LocateCommandInvoker) (Object) LocateCommand.class).structurify$getStructureNotFoundError();
 	}
 }
