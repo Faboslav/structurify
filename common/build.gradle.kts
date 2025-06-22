@@ -46,11 +46,7 @@ dependencies {
 
 	// Global Packs
 	commonMod.depOrNull("global_packs")?.let { globalPacksVersion ->
-		if (commonMod.mc == "1.20.1") {
-			modImplementation(commonMod.modrinth("globalpacks", "${globalPacksVersion}_fabric"))
-		} else {
 			modImplementation(commonMod.modrinth("globalpacks", globalPacksVersion))
-		}
 	}
 
 	// Open Loader

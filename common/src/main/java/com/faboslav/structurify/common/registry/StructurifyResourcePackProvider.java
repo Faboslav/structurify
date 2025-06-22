@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.registry;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import com.faboslav.structurify.common.modcompat.ModCompat;
 import com.faboslav.structurify.common.platform.PlatformHooks;
@@ -40,8 +41,13 @@ public final class StructurifyResourcePackProvider
 		ArrayList<RepositorySource> modResourcePackProviders = new ArrayList<>();
 
 		for (ModCompat compat : ModChecker.CUSTOM_RESOURCE_PACK_PROVIDER_COMPATS) {
-			var resourcePackProviders = compat.getResourcePackProviders();
-			modResourcePackProviders.addAll(resourcePackProviders);
+			try {
+				var resourcePackProviders = compat.getResourcePackProviders();
+				modResourcePackProviders.addAll(resourcePackProviders);
+			} catch (Throwable e) {
+				Structurify.getLogger().error("Failed to get resource pack providers from mod compat");
+				e.printStackTrace();
+			}
 		}
 
 		return modResourcePackProviders;

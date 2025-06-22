@@ -1,3 +1,8 @@
+## 1.0.17
+
+- Fixed global packs compat (new release contained the breaking change)
+- Improved on how the compats are loaded, which should prevent minecraft crash
+
 ## 1.0.16
 
 - Fixed frequency loading from the config (float instead of int)

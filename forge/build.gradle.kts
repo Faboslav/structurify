@@ -36,7 +36,7 @@ dependencies {
 
 	// Global Packs
 	commonMod.depOrNull("global_packs")?.let { globalPacksVersion ->
-		modImplementation(commonMod.modrinth("globalpacks", "1.16.2_forge")) { isTransitive = false }
+		modImplementation(commonMod.modrinth("globalpacks", globalPacksVersion)) { isTransitive = false }
 	}
 
 	// Open Loader

@@ -32,6 +32,5 @@ public interface ModCompat
 	{
 		CUSTOM_RESOURCE_PACK_PROVIDERS,
 		BIOME_REPLACER,
-		MOD
 	}
 }

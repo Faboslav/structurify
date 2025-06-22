@@ -66,7 +66,12 @@ public final class BiomeUtil
 		HolderLookup.RegistryLookup<Biome> biomeRegistry
 	) {
 		for (ModCompat modCompat : ModChecker.BIOME_REPLACER_COMPATS) {
-			biomeIds = modCompat.getReplacedBiomes(biomeIds);
+			try {
+				biomeIds = modCompat.getReplacedBiomes(biomeIds);
+			} catch (Throwable e) {
+			Structurify.getLogger().error("Failed to get replaced biomes from mod compat");
+			e.printStackTrace();
+		}
 		}
 
 		ArrayList<Holder<Biome>> biomeHolders = new ArrayList<>();

@@ -21,8 +21,6 @@ public final class ModChecker
 	public static final List<ModCompat> BIOME_REPLACER_COMPATS = new ArrayList<>();
 
 	public static void setupModCompat() {
-		String modId = "";
-
 		try {
 			//? global_packs {
 			/*loadModCompat("globalpacks", () -> new GlobalPacksCompat());

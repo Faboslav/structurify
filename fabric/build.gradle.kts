@@ -32,11 +32,7 @@ dependencies {
 
 	// Global Packs
 	commonMod.depOrNull("global_packs")?.let { globalPacksVersion ->
-		if (commonMod.mc == "1.20.1") {
-			modCompileOnly(commonMod.modrinth("globalpacks", "${globalPacksVersion}_fabric")) { isTransitive = false }
-		} else {
-			modCompileOnly(commonMod.modrinth("globalpacks", globalPacksVersion)) { isTransitive = false }
-		}
+		modCompileOnly(commonMod.modrinth("globalpacks", globalPacksVersion)) { isTransitive = false }
 	}
 
 	// Open Loader
