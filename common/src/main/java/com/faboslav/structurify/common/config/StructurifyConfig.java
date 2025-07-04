@@ -176,7 +176,7 @@ public final class StructurifyConfig
 					var biomeCheckDistance = structureJson.get(BIOME_CHECK_DISTANCE_PROPERTY).getAsInt();
 					structureData.setBiomeCheckDistance(biomeCheckDistance);
 
-					if(isBiomeCheckEnabled && !structureJson.has(BIOME_CHECK_MODE_PROPERTY)) {
+					if(!structureJson.has(BIOME_CHECK_MODE_PROPERTY)) {
 						structureData.setBiomeCheckMode(StructureData.BiomeCheckMode.STRICT);
 						structureData.setBiomeCheckBlacklistedBiomes(StructureData.BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE);
 					} else {

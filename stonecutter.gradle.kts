@@ -5,4 +5,4 @@ plugins {
     id("fabric-loom") version "1.10-SNAPSHOT" apply false
 }
 
-stonecutter active "1.21.5" /* [SC] DO NOT EDIT */
+stonecutter active "1.21.6" /* [SC] DO NOT EDIT */

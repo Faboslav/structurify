@@ -1,3 +1,7 @@
+## 1.0.18
+
+- Fixed config loading error related to "enable_biome_check"
+
 ## 1.0.17
 
 - Fixed global packs compat (new release contained the breaking change)
