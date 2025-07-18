@@ -1,6 +1,9 @@
 ## 1.0.19
 
 - Fixed crash related to invalid biomes not being parsed properly in the config
+- Improved biome check performance
+- Improved flatness check performance
+- Removed debug messages
 
 ## 1.0.18
 

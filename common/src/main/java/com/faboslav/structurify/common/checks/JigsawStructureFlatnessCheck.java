@@ -2,8 +2,6 @@ package com.faboslav.structurify.common.checks;
 
 import com.faboslav.structurify.common.config.data.StructureData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldGenerationContext;
@@ -17,71 +15,80 @@ public final class JigsawStructureFlatnessCheck
 		HeightProvider startHeight,
 		Structure.GenerationContext generationContext
 	) {
-		var flatnessCheckDistance = structureData.getFlatnessCheckDistance();
-		var offsetStep = (int) Math.ceil(flatnessCheckDistance / 2.0F);
-		int stepAmount = (int) Math.pow((double) (2 * flatnessCheckDistance) / offsetStep + 1, 2);
-		int allowedAirBlockSteps = stepAmount / 2;
-		int allowedLiquidBlockSteps = stepAmount / 2;
-		var flatnessCheckThreshold = structureData.getFlatnessCheckThreshold();
-		var areAirBlocksAllowed = structureData.areAirBlocksAllowedInFlatnessCheck();
-		var areLiquidBlocksAllowed = structureData.areLiquidBlocksAllowedInFlatnessCheck();
+		int flatnessCheckDistance = structureData.getFlatnessCheckDistance();
+		int flatnessCheckThreshold = structureData.getFlatnessCheckThreshold();
+		boolean areAirBlocksAllowed = structureData.areAirBlocksAllowedInFlatnessCheck();
+		boolean areLiquidBlocksAllowed = structureData.areLiquidBlocksAllowedInFlatnessCheck();
 
 		if (flatnessCheckDistance == 0 || flatnessCheckThreshold == 0) {
 			return true;
 		}
 
-		ChunkPos chunkPos = generationContext.chunkPos();
-		int y = startHeight.sample(generationContext.random(), new WorldGenerationContext(generationContext.chunkGenerator(), generationContext.heightAccessor()));
-		var blockPos = new BlockPos(chunkPos.getMinBlockX(), y, chunkPos.getMinBlockZ());
+		int offsetStep = (int) Math.ceil(flatnessCheckDistance / 2.0F);
+		int stepsPerAxis = (2 * flatnessCheckDistance) / offsetStep + 1;
+		int stepAmount = stepsPerAxis * stepsPerAxis;
+		int allowedAirBlockSteps = stepAmount / 2;
+		int allowedLiquidBlockSteps = stepAmount / 2;
 
-		int baseX = blockPos.getX();
-		int baseZ = blockPos.getZ();
+		var chunkGenerator = generationContext.chunkGenerator();
+		var heightAccessor = generationContext.heightAccessor();
+		var randomState = generationContext.randomState();
+		var chunkPos = generationContext.chunkPos();
+
+		int y = startHeight.sample(generationContext.random(), new WorldGenerationContext(chunkGenerator, heightAccessor));
+		var basePos = new BlockPos(chunkPos.getMinBlockX(), y, chunkPos.getMinBlockZ());
+		int baseX = basePos.getX();
+		int baseZ = basePos.getZ();
+
 		int minHeight = Integer.MAX_VALUE;
 		int maxHeight = Integer.MIN_VALUE;
-
 		int airBlockSteps = 0;
 		int fluidBlockSteps = 0;
 
 		for (int xOffset = -flatnessCheckDistance; xOffset <= flatnessCheckDistance; xOffset += offsetStep) {
 			for (int zOffset = -flatnessCheckDistance; zOffset <= flatnessCheckDistance; zOffset += offsetStep) {
-				int x = xOffset + baseX;
-				int z = zOffset + baseZ;
-				int height = generationContext.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, generationContext.heightAccessor(), generationContext.randomState());
+				int x = baseX + xOffset;
+				int z = baseZ + zOffset;
 
-				minHeight = Math.min(minHeight, height);
-				maxHeight = Math.max(maxHeight, height);
+				int height = chunkGenerator.getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, heightAccessor, randomState);
 
-				if (maxHeight - minHeight > flatnessCheckThreshold) {
-					return false;
+				if (height > maxHeight) {
+					maxHeight = height;
+					if (maxHeight - minHeight > flatnessCheckThreshold) {
+						return false;
+					}
+				}
+				if (height < minHeight) {
+					minHeight = height;
+					if (maxHeight - minHeight > flatnessCheckThreshold) {
+						return false;
+					}
 				}
 
 				if (!areAirBlocksAllowed || !areLiquidBlocksAllowed) {
-					NoiseColumn blockView = generationContext.chunkGenerator().getBaseColumn(
-						x,
-						z,
-						generationContext.heightAccessor(),
-						generationContext.randomState()
-					);
+					BlockState blockState = null;
 
-					BlockState blockState = blockView.getBlock(height);
-
-					// Structurify.getLogger().info("blockstate: " + blockState + " at: " + x + ", " + height + ", " + z);
-
-					if (!areAirBlocksAllowed && blockState.isAir()) {
-						airBlockSteps++;
-
-						if (airBlockSteps >= allowedAirBlockSteps) {
-							// Structurify.getLogger().info("air");
-							return false;
+					if (!areAirBlocksAllowed) {
+						if (blockState == null) {
+							blockState = chunkGenerator.getBaseColumn(x, z, heightAccessor, randomState).getBlock(height);
+						}
+						if (blockState.isAir()) {
+							airBlockSteps++;
+							if (airBlockSteps >= allowedAirBlockSteps) {
+								return false;
+							}
 						}
 					}
 
-					if (!areLiquidBlocksAllowed && !blockState.getFluidState().isEmpty()) {
-						fluidBlockSteps++;
-
-						if (fluidBlockSteps >= allowedLiquidBlockSteps) {
-							// Structurify.getLogger().info("liquid");
-							return false;
+					if (!areLiquidBlocksAllowed) {
+						if (blockState == null) {
+							blockState = chunkGenerator.getBaseColumn(x, z, heightAccessor, randomState).getBlock(height);
+						}
+						if (!blockState.getFluidState().isEmpty()) {
+							fluidBlockSteps++;
+							if (fluidBlockSteps >= allowedLiquidBlockSteps) {
+								return false;
+							}
 						}
 					}
 				}

@@ -187,7 +187,6 @@ public final class StructurifyConfig
 							.map(JsonElement::getAsString)
 							.toList();
 
-						Structurify.getLogger().info(biomeCheckBlacklistedBiomes.toString());
 						structureData.setBiomeCheckBlacklistedBiomes(biomeCheckBlacklistedBiomes);
 					}
 
