@@ -11,7 +11,7 @@ public class StructureData
 	public final static int FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE = 10;
 	public final static boolean ENABLE_BIOME_CHECK_DEFAULT_VALUE = false;
 	public final static BiomeCheckMode BIOME_CHECK_MODE_DEFAULT_VALUE = BiomeCheckMode.BLACKLIST;
-	public final static List<String> BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE = List.of("#is_river");
+	public final static List<String> BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE = List.of("#is_river", "#is_ocean");
 	public final static boolean ALLOW_AIR_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE = false;
 	public final static boolean ALLOW_LIQUID_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE = false;
 
