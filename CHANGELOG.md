@@ -1,3 +1,7 @@
+## 1.0.19
+
+- Fixed crash related to invalid biomes not being parsed properly in the config
+
 ## 1.0.18
 
 - Fixed config loading error related to "enable_biome_check"

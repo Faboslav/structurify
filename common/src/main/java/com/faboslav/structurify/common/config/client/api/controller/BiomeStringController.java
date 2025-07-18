@@ -31,25 +31,6 @@ public final class BiomeStringController extends AbstractDropdownController<Stri
 		option.requestSet(value);
 	}
 
-	/*
-	@Override
-	public boolean isValueValid(String value) {
-		if (!value.isBlank()) {
-			var slugifiedValue = value.toLowerCase().replace(" ", "_");
-
-			for(var allowedValue : this.allowedValues) {
-				var slugifiedBiome = allowedValue.toLowerCase().replace(" ", "_");
-				var slugifiedTranslatedBiome = LanguageUtil.translateId("biome", allowedValue).getString().toLowerCase().replace(" ", "_");
-
-				if( slugifiedBiome.contains(slugifiedValue) || slugifiedTranslatedBiome.contains(slugifiedValue)) {
-					return true;
-				}
-			}
-		}
-
-		return super.isValueValid(value);
-	}*/
-
 	@Override
 	protected String getValidValue(String value) {
 		return this.getValidValue(value, 0);
@@ -57,7 +38,7 @@ public final class BiomeStringController extends AbstractDropdownController<Stri
 
 	@Override
 	protected String getValidValue(String value, int offset) {
-		if (!value.isBlank()) {
+		if (value != null && !value.isBlank()) {
 			var slugifiedValue = value.toLowerCase().replace(" ", "_");
 			var validBiomes = this.allowedValues.stream().filter(biome -> {
 				var slugifiedBiome = biome.toLowerCase().replace(" ", "_");
@@ -72,10 +53,12 @@ public final class BiomeStringController extends AbstractDropdownController<Stri
 				}
 			});
 
-			var validBiome = validBiomes.skip(offset).findFirst().orElse(null);
+			if (offset >= 0) {
+				var validBiome = validBiomes.skip(offset).findFirst().orElse(null);
 
-			if (validBiome != null) {
-				return validBiome;
+				if (validBiome != null) {
+					return validBiome;
+				}
 			}
 		}
 
