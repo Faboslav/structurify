@@ -25,6 +25,7 @@
 		"WorldOpenFlowsMixin",
 		"yacl.CategoryTabAccessor",
 		"yacl.GroupSeparatorEntryAccessor",
+		"yacl.OptionListWidgetMixin",
 		"yacl.SearchFieldWidgetInvoker",
 		"yacl.YACLScreenMixin"
 	]

@@ -8,16 +8,13 @@
 
 <center>
 	<a style="text-decoration: none;" href="https://ko-fi.com/faboslav">
-		<img src="https://img.shields.io/static/v1?label=&message=Buy Me a Coffee&color=4B4341&labelColor=4B4341&logoColor=ffffff&style=for-the-badge&logo=ko-fi" alt="Buy Me a Coffee">
+		<img src="https://img.shields.io/static/v1?label=&message=Buy Me a Coffee&color=5b9c51&labelColor=5b9c51&logoColor=ffffff&style=for-the-badge&logo=ko-fi" alt="Buy Me a Coffee">
 	</a>
 	<a style="text-decoration: none;" href="https://www.patreon.com/Faboslav">
-		<img src="https://img.shields.io/static/v1?label=&message=Become a Patron&color=4B4341&labelColor=4B4341&logoColor=ffffff&style=for-the-badge&logo=patreon" alt="Patreon">
+		<img src="https://img.shields.io/static/v1?label=&message=Become a Patron&color=5b9c51&labelColor=5b9c51&logoColor=ffffff&style=for-the-badge&logo=patreon" alt="Become a Patreon">
 	</a>
-	<a style="text-decoration: none;" href="https://discord.gg/QGwFvvMQCn">
-		<img src="https://img.shields.io/discord/924964658169913404?style=for-the-badge&logo=discord&logoColor=ffffff&label=Join Our Discord&labelColor=4B4341&color=4B4341" alt="Join Our Discord">
-	</a>
-	<a style="text-decoration: none;" href="https://modrinth.com/mod/yacl">
-		<img src="https://img.shields.io/static/v1?label=&amp;message=Requires YACL&amp;color=4B4341&amp;labelColor=4B4341&amp;logoColor=white&amp;style=for-the-badge&amp;logo=modrinth" height="28" />
+	<a style="text-decoration: none;" href="https://discord.gg/faboland">
+		<img src="https://img.shields.io/discord/924964658169913404?style=for-the-badge&logo=discord&logoColor=ffffff&label=Join Our Discord&labelColor=5b9c51&color=5b9c51" alt="Join Our Discord">
 	</a>
 </center>
 
@@ -146,7 +143,7 @@ Since structure generation is a complex system, things can occasionally break, e
 
 # 💬 Community
 
-Feel free to <a href="https://discord.gg/QGwFvvMQCn">join our community at the discord server</a> to chat, share your
+Feel free to <a href="https://discord.gg/faboland">join our community at the discord server</a> to chat, share your
 creations, ask any question or to simply be updated about the latest development of the mod and notified when the new
 release is out. Also don't hesitate to <a href="https://github.com/Faboslav/structurify/issues">report any crash or bug
 via GitHub issues</a>.

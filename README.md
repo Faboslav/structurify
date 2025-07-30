@@ -13,7 +13,7 @@
 	<a style="text-decoration: none;" href="https://www.patreon.com/Faboslav">
 		<img src="https://img.shields.io/endpoint.svg?color=4B4341&label=Support me&labelColor=4B4341&logoColor=ffffff&url=https://shieldsio-patreon.vercel.app/api?username=Faboslav&type=patrons&style=for-the-badge" alt="Patreon">
 	</a>
-	<a style="text-decoration: none;" href="https://discord.gg/QGwFvvMQCn">
+	<a style="text-decoration: none;" href="https://discord.gg/faboland">
 		<img src="https://img.shields.io/discord/924964658169913404?style=for-the-badge&logo=discord&logoColor=ffffff&label=Join Discord&labelColor=4B4341&color=4B4341" alt="Join Discord">
 	</a>
 	<a style="text-decoration: none;" href="https://modrinth.com/mod/yacl">
@@ -242,7 +242,7 @@ Structurify is designed to be fully compatible with most of the world generation
 
 # 💬 Community
 
-Feel free to <a href="https://discord.gg/QGwFvvMQCn">join our community at the discord server</a> to chat, share your creations, ask any question or to simply be updated about the latest development of the mod and notified when the new release is out. Also don't hesitate to <a href="https://github.com/Faboslav/structurify/issues">report any crash or bug via GitHub issues</a>.
+Feel free to <a href="https://discord.gg/faboland">join our community at the discord server</a> to chat, share your creations, ask any question or to simply be updated about the latest development of the mod and notified when the new release is out. Also don't hesitate to <a href="https://github.com/Faboslav/structurify/issues">report any crash or bug via GitHub issues</a>.
 
 <br>
 

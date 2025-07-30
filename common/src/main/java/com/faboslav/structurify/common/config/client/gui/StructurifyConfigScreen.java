@@ -101,7 +101,7 @@ public class StructurifyConfigScreen extends Screen
 		int doneButtonWidth = this.width - discordAndKoFiButtonsWidth;
 		var buttonWidget = Button.builder(CommonComponents.GUI_DONE, (btn) -> this.minecraft.setScreen(this.parent)).bounds(this.width / 2 - doneButtonWidth / 2, this.height - 30, doneButtonWidth, 20).build();
 		var donateButton = Button.builder(Component.literal("Buy Me a Coffee").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD), (btn) -> Util.getPlatform().openUri("https://ko-fi.com/faboslav")).bounds(10, this.height - 30, kofiButtonWidth, 20).build();
-		var discordButton = Button.builder(Component.literal("Join Our Discord").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.BOLD), (btn) -> Util.getPlatform().openUri("https://discord.gg/QGwFvvMQCn")).bounds(this.width - discordButtonWidth - 10, this.height - 30, discordButtonWidth, 20).build();
+		var discordButton = Button.builder(Component.literal("Join Our Discord").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.BOLD), (btn) -> Util.getPlatform().openUri("https://discord.gg/faboland")).bounds(this.width - discordButtonWidth - 10, this.height - 30, discordButtonWidth, 20).build();
 
 		this.addRenderableWidget(buttonWidget);
 		this.addRenderableWidget(donateButton);

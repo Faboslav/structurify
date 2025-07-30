@@ -11,7 +11,7 @@
 		"homepage": "https://github.com/Faboslav/structurify",
 		"sources": "https://github.com/Faboslav/structurify",
 		"issues": "https://github.com/Faboslav/structurify/issues",
-		"discord": "https://discord.com/invite/QGwFvvMQCn"
+		"discord": "https://discord.gg/faboland"
 	},
 	"license": "${modLicense}",
 	"icon": "icon.png",
@@ -41,7 +41,7 @@
 	"custom": {
 		"modmenu": {
 			"links": {
-				"Discord": "https://discord.com/invite/QGwFvvMQCn",
+				"Discord": "https://discord.gg/faboland",
 				"CurseForge": "https://www.curseforge.com/minecraft/mc-mods/structurify",
 				"Modrinth": "https://modrinth.com/mod/structurify"
 			}
