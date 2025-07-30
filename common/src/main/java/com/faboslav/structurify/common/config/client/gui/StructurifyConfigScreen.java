@@ -4,6 +4,8 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.client.gui.widget.DynamicGridWidget;
 import com.faboslav.structurify.common.config.client.gui.widget.ImageButtonWidget;
 import com.faboslav.structurify.common.mixin.yacl.CategoryTabAccessor;
+import com.faboslav.structurify.common.mixin.yacl.GroupSeparatorEntryAccessor;
+import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -113,13 +115,27 @@ public class StructurifyConfigScreen extends Screen
 			var categoryTab = ((CategoryTabAccessor) yaclCategoryTab);
 			var optionListWidget = categoryTab.getOptionList().getList();
 
+			var collapsedGroups = new HashMap<String, Boolean>();
+
+			for (OptionListWidget.Entry entry : optionListWidget.children()) {
+				if(entry instanceof OptionListWidget.GroupSeparatorEntry groupSeparatorEntry) {
+					GroupSeparatorEntryAccessor yaclGroupSeparatorEntry = (GroupSeparatorEntryAccessor) entry;
+					var groupName = yaclGroupSeparatorEntry.getGroup().name().getString();
+
+					if(!collapsedGroups.containsKey(groupName)) {
+						collapsedGroups.put(groupName, groupSeparatorEntry.isExpanded());
+					}
+				}
+			}
+
 			this.screenStates.put(yaclScreen.getTitle().getString(), new StructurifyConfigScreenState(
 				categoryTab.getSearchField().getValue(),
 				//? >= 1.21.4 {
-				optionListWidget.scrollAmount()
+				optionListWidget.scrollAmount(),
 				//?} else {
-				/*optionListWidget.getScrollAmount()
+				/*optionListWidget.getScrollAmount(),
 				 *///?}
+				collapsedGroups
 			));
 		}
 	}
@@ -132,8 +148,19 @@ public class StructurifyConfigScreen extends Screen
 
 			if (screenState != null) {
 				var yaclScreenCategoryTab = ((CategoryTabAccessor) categoryTab);
+				var optionListWidget = yaclScreenCategoryTab.getOptionList().getList();
 				yaclScreenCategoryTab.getSearchField().setValue(screenState.lastSearchText());
 				yaclScreenCategoryTab.getOptionList().getList().setScrollAmount(screenState.lastScrollAmount());
+
+				for (OptionListWidget.Entry entry : optionListWidget.children()) {
+					if(entry instanceof OptionListWidget.GroupSeparatorEntry groupSeparatorEntry) {
+						GroupSeparatorEntryAccessor yaclGroupSeparatorEntry = (GroupSeparatorEntryAccessor) entry;
+						var groupName = yaclGroupSeparatorEntry.getGroup().name().getString();
+
+						Boolean isGroupCollapsed = screenState.collapsedGroups().getOrDefault(groupName, false);
+						groupSeparatorEntry.setExpanded(isGroupCollapsed);
+					}
+				}
 			}
 		}
 	}

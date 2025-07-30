@@ -4,20 +4,29 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.checks.StructureDistanceFromWorldCenterCheck;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.SectionPos;
+import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import net.minecraft.core.*;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.spongepowered.asm.mixin.Mixin;
 
 //? >=1.21.4 {
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
+
+import java.util.Map;
+import java.util.Set;
 //?}
 
 @Mixin(ChunkGenerator.class)
@@ -66,11 +75,15 @@ public final class ChunkGeneratorMixin
 			}
 		}
 
-		String structureName = structureSelectionEntry.structure().unwrapKey().get().location().toString();
-		var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName, null);
+		var structureKey = structureSelectionEntry.structure().unwrapKey();
 
-		if (structureData != null && structureData.isDisabled()) {
-			return false;
+		if(structureKey.isPresent()) {
+			String structureName = structureKey.get().location().toString();
+			var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName, null);
+
+			if (structureData != null && structureData.isDisabled()) {
+				return false;
+			}
 		}
 
 		//? >=1.21.4 {
@@ -78,5 +91,44 @@ public final class ChunkGeneratorMixin
 		//?} else {
 		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
 		 *///?}
+	}
+
+	@WrapMethod(
+		method = "findNearestMapStructure"
+	)
+	public Pair<BlockPos, Holder<Structure>> structurify$findNearestMapStructure(
+		ServerLevel serverLevel,
+		HolderSet<Structure> holderSet,
+		BlockPos blockPos,
+		int i,
+		boolean bl,
+		Operation<Pair<BlockPos, Holder<Structure>>> original
+	) {
+		if (Structurify.getConfig().disableAllStructures) {
+			return null;
+		}
+
+		boolean areAllStructureDisabled = true;
+
+		for (Holder<Structure> holder : holderSet) {
+			var structureKey = holder.unwrapKey();
+
+			if(structureKey.isEmpty()) {
+				continue;
+			}
+
+			String structureName = structureKey.get().location().toString();
+			var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName, null);
+
+			if (structureData == null || !structureData.isDisabled()) {
+				areAllStructureDisabled = false;
+			}
+		}
+
+		if(areAllStructureDisabled) {
+			return null;
+		}
+
+		return original.call(serverLevel, holderSet, blockPos, i, bl);
 	}
 }

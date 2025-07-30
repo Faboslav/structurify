@@ -1,3 +1,8 @@
+## 1.0.20
+
+- GUI now correctly keeps the groups/categories collapsed
+- Fixed crash related to disabled structures and explorer maps
+
 ## 1.0.19
 
 - Fixed crash related to invalid biomes not being parsed properly in the config
