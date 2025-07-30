@@ -132,7 +132,7 @@ jobs:
                     mc: ${{ matrix.version }}
                     modloader: ${{ matrix.mod_loader }}
                     regex: .*${{ matrix.mod_loader }}.*
-                    mc-runtime-test: ${{ matrix.mod_loader }}
+                    mc-runtime-test: ${{ matrix.mod_loader_alias }}
                     java: ${{ steps.gradle-properties.outputs.JAVA_VERSION }}
                     fabric-api: ${{ steps.gradle-properties.outputs.DEPS_FABRIC_API }}
                     xvfb: false
