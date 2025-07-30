@@ -191,12 +191,6 @@ jobs:
                     MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "repurposed-structures-${{ matrix.mod_loader_modrinth }}" "${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES }}-${{ matrix.mod_loader }}" "${{ matrix.mod_loader }}")
                     wget -P run/mods "$MOD_URL"
 
-            -   name: "Download MidnightLib"
-                if: ${{ steps.gradle-properties.outputs.DEPS_MIDNIGHT_LIB != '' }}
-                run: |
-                    MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "midnightlib" "${{ steps.gradle-properties.outputs.DEPS_MIDNIGHT_LIB }}-${{ matrix.mod_loader }}" "${{ matrix.mod_loader }}")
-                    wget -P run/mods "$MOD_URL"
-
             -   name: Run ${{ matrix.version }} ${{ matrix.mod_loader }} server
                 uses: headlesshq/mc-server-test@1.0.0
                 with:
