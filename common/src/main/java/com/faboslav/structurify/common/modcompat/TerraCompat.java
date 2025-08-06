@@ -8,6 +8,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings({"unchecked"})
 public final class TerraCompat implements ModCompat
 {
 	@Override

@@ -263,8 +263,8 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 		@Override
 		public Builder<OptionPair<K, V>> binding(
 			@NotNull OptionPair<K, V> def,
-			@NotNull Supplier<@NotNull OptionPair<K, V>> getter,
-			@NotNull Consumer<@NotNull OptionPair<K, V>> setter
+			@NotNull Supplier<OptionPair<K, V>> getter,
+			@NotNull Consumer<OptionPair<K, V>> setter
 		) {
 			return null;
 		}

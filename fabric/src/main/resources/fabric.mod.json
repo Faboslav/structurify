@@ -8,10 +8,10 @@
 		"${modAuthor}"
 	],
 	"contact": {
-		"homepage": "https://github.com/Faboslav/structurify",
-		"sources": "https://github.com/Faboslav/structurify",
-		"issues": "https://github.com/Faboslav/structurify/issues",
-		"discord": "https://discord.gg/faboland"
+		"homepage": "${modGitHub}",
+		"sources": "${modGitHub}",
+		"issues": "${modGitHub}/issues",
+		"discord": "${modDiscord}"
 	},
 	"license": "${modLicense}",
 	"icon": "icon.png",
@@ -32,7 +32,7 @@
 		"structurify-fabric.mixins.json"
 	],
 	"depends": {
-		"minecraft": ">=${minMinecraftVersion}-",
+		"minecraft": ">=${minMinecraftVersion}",
 		"fabricloader": "*",
 		"fabric": "*",
 		"yet_another_config_lib_v3": ">=${yaclVersion}",
@@ -41,7 +41,7 @@
 	"custom": {
 		"modmenu": {
 			"links": {
-				"Discord": "https://discord.gg/faboland",
+				"Discord": "${modDiscord}",
 				"CurseForge": "https://www.curseforge.com/minecraft/mc-mods/structurify",
 				"Modrinth": "https://modrinth.com/mod/structurify"
 			}

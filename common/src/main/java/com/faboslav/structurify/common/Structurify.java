@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("all")
+@SuppressWarnings({"all", "removal"})
 public final class Structurify
 {
 	public static final String MOD_ID = "structurify";

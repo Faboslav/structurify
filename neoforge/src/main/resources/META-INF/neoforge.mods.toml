@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "*"
-license = "CC-BY-NC-ND-4.0"
-issueTrackerURL = "https://github.com/Faboslav/structurify/issues"
+license = "${modLicense}"
+issueTrackerURL = "${modGitHub}/issues"
 
 [[mods]]
 modId = "${modId}"
