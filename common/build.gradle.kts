@@ -1,7 +1,9 @@
 plugins {
 	id("multiloader-common")
 	id("fabric-loom")
-	id("dev.kikugie.j52j") version "2.0"
+	kotlin("jvm") version "2.2.0"
+	id("com.google.devtools.ksp") version "2.2.0-2.0.2"
+	id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.14"
 }
 
 stonecutter {
@@ -17,6 +19,12 @@ stonecutter {
 			.toString() != "" && rootProject.project(stonecutter.current.project).property("deps.midnight_lib")
 			.toString() != ""
 	)
+}
+
+fletchingTable {
+	j52j.register("main") {
+		extension("json", "**/*.json5")
+	}
 }
 
 loom {

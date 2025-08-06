@@ -1,7 +1,9 @@
 plugins {
 	`multiloader-loader`
 	id("net.neoforged.moddev")
-	id("dev.kikugie.j52j") version "2.0"
+	kotlin("jvm") version "2.2.0"
+	id("com.google.devtools.ksp") version "2.2.0-2.0.2"
+	id("dev.kikugie.fletching-table.neoforge") version "0.1.0-alpha.13"
 }
 
 neoForge {
@@ -21,7 +23,6 @@ dependencies {
 
 	// Open Loader
 	commonMod.depOrNull("open_loader")?.let { openLoaderVersion ->
-		println("including")
 		if (commonMod.mc == "1.21.1") {
 			implementation(
 				group = "net.darkhax.openloader",

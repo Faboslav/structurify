@@ -118,19 +118,11 @@ jobs:
                     version: ${{ matrix.mod_loader }}-mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}
                     loaders: ${{ join(matrix.supported_mod_loaders, ' ') }}
                     game-versions: |
-                        ${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
+                        >=${{ steps.gradle-properties.outputs.MIN_MINECRAFT_VERSION }} <=${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
+                    game-version-filter: releases
                     changelog-file: RELEASE_CHANGELOG.md
                     files: |
                         ${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/!(*-@(dev|dev-shadow|sources|javadoc)).jar
 
-    clear-cache:
-        needs: publish
-        runs-on: ubuntu-latest
-        name: "Clear cache"
-        timeout-minutes: 60
-        steps:
-            -   uses: MyAlbum/purge-cache@v2
-                with:
-                    accessed: true
-                    created: true
-                    max-age: 21600
+                    retry-attempts: 6
+                    retry-delay: 30000

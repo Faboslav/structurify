@@ -3,7 +3,7 @@ package com.faboslav.structurify.common.config.data;
 public final class StructureSetData
 {
 	public static final boolean OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = false;
-	public static final int MIN_SALT = 1;
+	public static final int MIN_SALT = 0;
 	public static final int MAX_SALT = Integer.MAX_VALUE;
 	public static final float MIN_FREQUENCY = 0.0F;
 	public static final float MAX_FREQUENCY = 1.0F;

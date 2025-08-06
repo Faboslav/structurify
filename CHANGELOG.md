@@ -1,3 +1,7 @@
+## 1.0.21
+
+- Fixed default salt value to the correct value of 0 instead of 1
+
 ## 1.0.20
 
 - GUI now correctly keeps the groups/categories collapsed
