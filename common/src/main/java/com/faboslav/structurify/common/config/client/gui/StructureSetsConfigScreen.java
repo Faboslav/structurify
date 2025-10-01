@@ -277,7 +277,7 @@ public final class StructureSetsConfigScreen
 				() -> config.globalSpacingAndSeparationModifier,
 				modifier -> config.globalSpacingAndSeparationModifier = modifier
 			)
-			.controller(opt -> DoubleSliderControllerBuilder.create(opt).range(0.1D, 100.0D).step(0.1D)).build();
+			.controller(opt -> DoubleSliderControllerBuilder.create(opt).range(0.1D, 32.0D).step(0.1D)).build();
 
 		generalStructuresSetsGroupBuilder.option(this.globalSpacingAndSeparationModifierOption);
 

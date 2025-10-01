@@ -3,7 +3,7 @@ plugins {
 	id("net.neoforged.moddev.legacyforge")
 	kotlin("jvm") version "2.2.0"
 	id("com.google.devtools.ksp") version "2.2.0-2.0.2"
-	id("dev.kikugie.fletching-table") version "0.1.0-alpha.13"
+	id("dev.kikugie.fletching-table.neoforge") version "0.1.0-alpha.20"
 }
 
 mixin {
@@ -73,6 +73,17 @@ dependencies {
 	commonMod.depOrNull("structure_gel_api")?.let { structureGelApiVersion ->
 		modImplementation(commonMod.modrinth("structure-gel-api", structureGelApiVersion)) { isTransitive = false }
 	}
+
+	modImplementation(fletchingTable.modrinth("fungal-infectionspore", commonMod.mc, "forge"))
+	modImplementation(fletchingTable.modrinth("dungeons-enhanced", commonMod.mc, "forge"))
+	modImplementation(fletchingTable.modrinth("legendary-monsters", commonMod.mc, "forge"))
+	modImplementation(fletchingTable.modrinth("wits", commonMod.mc, "forge"))
+	val endersCataclysmWithDeps: List<Dependency> = fletchingTable.modrinthBundle("l_enders-cataclysm", commonMod.mc, "forge") {
+		recursive = true
+		include("required", "optional", "embedded")
+	}
+	for (mod in endersCataclysmWithDeps) modImplementation(mod)
+
 
 	// For debugging
 	// modImplementation(modrinth("blue-skies", "1.3.31")) { transitive = false }

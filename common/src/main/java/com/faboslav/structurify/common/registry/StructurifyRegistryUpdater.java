@@ -12,6 +12,7 @@ public final class StructurifyRegistryUpdater
 {
 	public static void updateRegistries(final UpdateRegistriesEvent event) {
 		if (!Structurify.getConfig().isLoaded) {
+			Structurify.getLogger().info("Registries not updated, config not loaded");
 			return;
 		}
 
@@ -20,6 +21,7 @@ public final class StructurifyRegistryUpdater
 			var registryManager = event.registryManager();
 
 			if (registryManager == null) {
+				Structurify.getLogger().info("Registries not updated, registry manager not loaded");
 				return;
 			}
 
@@ -45,7 +47,6 @@ public final class StructurifyRegistryUpdater
 			ResourceLocation structureId = structureRegistryKey.location();
 			var structurifyStructure = ((StructurifyStructure) structure);
 			structurifyStructure.structurify$setStructureIdentifier(structureId);
-			structurifyStructure.structurify$setStructureBiomes(null);
 		}
 
 		Structurify.getLogger().info("Structure registries updated");

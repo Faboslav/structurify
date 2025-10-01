@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class StructurifyConfigScreen extends Screen
 {
-	private final Screen parent;
+	private Screen parent;
 
 	private final StructureSetsConfigScreen structureSetsConfigScreen = new StructureSetsConfigScreen();
 
@@ -46,6 +46,10 @@ public class StructurifyConfigScreen extends Screen
 	public void onClose() {
 		assert this.minecraft != null;
 		this.minecraft.setScreen(this.parent);
+	}
+
+	public void setParent(@Nullable Screen parent) {
+		this.parent = parent;
 	}
 
 	@Override
@@ -101,7 +105,7 @@ public class StructurifyConfigScreen extends Screen
 		int doneButtonWidth = this.width - discordAndKoFiButtonsWidth;
 		var buttonWidget = Button.builder(CommonComponents.GUI_DONE, (btn) -> this.minecraft.setScreen(this.parent)).bounds(this.width / 2 - doneButtonWidth / 2, this.height - 30, doneButtonWidth, 20).build();
 		var donateButton = Button.builder(Component.literal("Buy Me a Coffee").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD), (btn) -> Util.getPlatform().openUri("https://ko-fi.com/faboslav")).bounds(10, this.height - 30, kofiButtonWidth, 20).build();
-		var discordButton = Button.builder(Component.literal("Join Our Discord").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.BOLD), (btn) -> Util.getPlatform().openUri("https://discord.gg/faboland")).bounds(this.width - discordButtonWidth - 10, this.height - 30, discordButtonWidth, 20).build();
+		var discordButton = Button.builder(Component.literal("Join Our Discord").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.BOLD), (btn) -> Util.getPlatform().openUri("https://discord.com/invite/QGwFvvMQCn")).bounds(this.width - discordButtonWidth - 10, this.height - 30, discordButtonWidth, 20).build();
 
 		this.addRenderableWidget(buttonWidget);
 		this.addRenderableWidget(donateButton);
@@ -113,7 +117,11 @@ public class StructurifyConfigScreen extends Screen
 
 		if (currentTab instanceof YACLScreen.CategoryTab yaclCategoryTab) {
 			var categoryTab = ((CategoryTabAccessor) yaclCategoryTab);
-			var optionListWidget = categoryTab.getOptionList().getList();
+			//? >=1.21.9 {
+			var optionListWidget = categoryTab.getOptionList().getType();
+			//?} else {
+			/*var optionListWidget = categoryTab.getOptionList().getList();
+			*///?}
 
 			var collapsedGroups = new HashMap<String, Boolean>();
 
@@ -143,14 +151,18 @@ public class StructurifyConfigScreen extends Screen
 	public void loadScreenState(YACLScreen yaclScreen) {
 		var currentTab = yaclScreen.tabNavigationBar.getTabManager().getCurrentTab();
 
-		if (currentTab instanceof YACLScreen.CategoryTab categoryTab) {
+		if (currentTab instanceof YACLScreen.CategoryTab yaclScreenCategoryTab) {
 			var screenState = this.screenStates.get(yaclScreen.getTitle().getString());
 
 			if (screenState != null) {
-				var yaclScreenCategoryTab = ((CategoryTabAccessor) categoryTab);
-				var optionListWidget = yaclScreenCategoryTab.getOptionList().getList();
-				yaclScreenCategoryTab.getSearchField().setValue(screenState.lastSearchText());
-				yaclScreenCategoryTab.getOptionList().getList().setScrollAmount(screenState.lastScrollAmount());
+				var categoryTab = ((CategoryTabAccessor) yaclScreenCategoryTab);
+				//? >=1.21.9 {
+				var optionListWidget = categoryTab.getOptionList().getType();
+				//?} else {
+				/*var optionListWidget = categoryTab.getOptionList().getList();
+				 *///?}
+				categoryTab.getSearchField().setValue(screenState.lastSearchText());
+				optionListWidget.setScrollAmount(screenState.lastScrollAmount());
 
 				for (OptionListWidget.Entry entry : optionListWidget.children()) {
 					if(entry instanceof OptionListWidget.GroupSeparatorEntry groupSeparatorEntry) {

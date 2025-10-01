@@ -1,18 +1,25 @@
 package com.faboslav.structurify.common.config.client.gui;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
+import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
+import com.faboslav.structurify.common.config.client.gui.structure.BiomeCheckOptions;
+import com.faboslav.structurify.common.config.client.gui.structure.FlatnessCheckOptions;
+import com.faboslav.structurify.common.config.client.gui.structure.JigsawOptions;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
-import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.gui.YACLScreen;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public final class StructureConfigScreen
 {
@@ -21,139 +28,66 @@ public final class StructureConfigScreen
 			.title(Component.literal(structureId))
 			.save(config::save);
 
+		var structureData = config.getStructureData().get(structureId);
 		var translatedStructureName = LanguageUtil.translateId("structure", structureId);
 		var structureCategoryBuilder = ConfigCategory.createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.title", translatedStructureName))
-			.tooltip(Component.translatable("gui.structurify.structures.structure.description"));
+			.tooltip(Component.translatable("gui.structurify.structures.structure.description", translatedStructureName));
 
-		structureCategoryBuilder.option(LabelOption.create(Component.translatable("gui.structurify.structures.flatness_check_group.title")));
+		var structureSettingsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("test"));
 
-		var enableFlatnessCheckOption = Option.<Boolean>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.enable_flatness_check.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.enable_flatness_check.description")))
+		structureSettingsGroup.option(LabelOption.create(Component.translatable("gui.structurify.structures.structures.structure.title").withStyle(style -> style.withBold(true))));
+
+		var isDisabledOption = Option.<Boolean>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.structure.is_disabled.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.is_disabled.description")))
 			.binding(
-				StructureData.ENABLE_FLATNESS_CHECK_DEFAULT_VALUE,
-				() -> config.getStructureData().get(structureId).isFlatnessCheckEnabled(),
-				enableFlatnessCheck -> config.getStructureData().get(structureId).setEnableFlatnessCheck(enableFlatnessCheck)
+				StructureData.IS_DISABLED_DEFAULT_VALUE,
+				() -> config.getStructureData().get(structureId).isDisabled(),
+				isDisabled -> config.getStructureData().get(structureId).setDisabled(isDisabled)
 			)
-			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
-				.coloured(true)).build();
+			.controller(opt -> BooleanControllerBuilder.create(opt).valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes").withStyle(style -> style.withColor(ChatFormatting.RED)):Component.translatable("gui.structurify.label.no").withStyle(style -> style.withColor(ChatFormatting.GREEN)))).build();
 
-		structureCategoryBuilder.option(enableFlatnessCheckOption);
+		structureSettingsGroup.option(isDisabledOption);
 
-		var flatnessCheckDistanceOption = Option.<Integer>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.flatness_check_distance.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.flatness_check_distance.description")))
+		var stepOption = Option.<GenerationStep.Decoration>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.structure.step.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.step.description")))
 			.binding(
-				config.getStructureData().get(structureId).getDefaultCheckDistance(),
-				() -> config.getStructureData().get(structureId).getFlatnessCheckDistance(),
-				flatnessCheckDistance -> config.getStructureData().get(structureId).setFlatnessCheckDistance(flatnessCheckDistance)
-			)
-			.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, 256).step(1)).build();
-
-		structureCategoryBuilder.option(flatnessCheckDistanceOption);
-
-		var flatnessCheckThresholdOption = Option.<Integer>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.flatness_check_threshold.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.flatness_check_threshold.description")))
-			.binding(
-				StructureData.FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE,
-				() -> config.getStructureData().get(structureId).getFlatnessCheckThreshold(),
-				flatnessCheckThreshold -> config.getStructureData().get(structureId).setFlatnessCheckThreshold(flatnessCheckThreshold)
-			)
-			.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, 256).step(1)).build();
-
-		structureCategoryBuilder.option(flatnessCheckThresholdOption);
-
-		var allowAirBlocksInFlatnessCheckOption = Option.<Boolean>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.allow_air_blocks_in_flatness_check.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.allow_air_blocks_in_flatness_check.description")))
-			.binding(
-				StructureData.ALLOW_AIR_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE,
-				() -> config.getStructureData().get(structureId).areAirBlocksAllowedInFlatnessCheck(),
-				allowAirBlocksInFlatnessCheck -> config.getStructureData().get(structureId).setAllowAirBlocksInFlatnessCheck(allowAirBlocksInFlatnessCheck)
-			)
-			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
-				.coloured(true)).build();
-
-		structureCategoryBuilder.option(allowAirBlocksInFlatnessCheckOption);
-
-		var allowLiquidBlocksInFlatnessCheckOption = Option.<Boolean>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.allow_liquid_blocks_in_flatness_check.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.allow_liquid_blocks_in_flatness_check.description")))
-			.binding(
-				StructureData.ALLOW_LIQUID_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE,
-				() -> config.getStructureData().get(structureId).areLiquidBlocksAllowedInFlatnessCheck(),
-				allowLiquidBlocksInFlatnessCheck -> config.getStructureData().get(structureId).setAllowLiquidBlocksInFlatnessCheck(allowLiquidBlocksInFlatnessCheck)
-			)
-			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
-				.coloured(true)).build();
-
-		structureCategoryBuilder.option(allowLiquidBlocksInFlatnessCheckOption);
-
-		structureCategoryBuilder.option(LabelOption.create(Component.translatable("gui.structurify.structures.biome_check_group.title")));
-
-		var enableBiomeCheckOption = Option.<Boolean>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.enable_biome_check.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.enable_biome_check.description")))
-			.binding(
-				StructureData.ENABLE_BIOME_CHECK_DEFAULT_VALUE,
-				() -> config.getStructureData().get(structureId).isBiomeCheckEnabled(),
-				enableBiomeCheck -> config.getStructureData().get(structureId).setEnableBiomeCheck(enableBiomeCheck)
-			)
-			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
-				.coloured(true)).build();
-
-		structureCategoryBuilder.option(enableBiomeCheckOption);
-
-		var biomeCheckDistanceOption = Option.<Integer>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.biome_check_distance.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biome_check_distance.description")))
-			.binding(
-				config.getStructureData().get(structureId).getDefaultCheckDistance(),
-				() -> config.getStructureData().get(structureId).getBiomeCheckDistance(),
-				biomeCheckDistance -> config.getStructureData().get(structureId).setBiomeCheckDistance(biomeCheckDistance)
-			)
-			.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(0, 256).step(1)).build();
-
-		structureCategoryBuilder.option(biomeCheckDistanceOption);
-
-		var biomeCheckModeOption = Option.<StructureData.BiomeCheckMode>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.biome_check_mode.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biome_check_mode.description")))
-			.binding(
-				StructureData.BIOME_CHECK_MODE_DEFAULT_VALUE,
-				() -> config.getStructureData().get(structureId).getBiomeCheckMode(),
-				biomeCheckMode -> config.getStructureData().get(structureId).setBiomeCheckMode(biomeCheckMode)
+				config.getStructureData().get(structureId).getDefaultStep(),
+				() -> config.getStructureData().get(structureId).getStep(),
+				step -> config.getStructureData().get(structureId).setStep(step)
 			).controller(opt -> EnumControllerBuilder.create(opt)
-				.enumClass(StructureData.BiomeCheckMode.class)
-				.valueFormatter(biomeCheckMode -> Component.translatable("gui.structurify.structures.structure.biome_check_mode." + biomeCheckMode.name().toLowerCase()))).build();
+				.enumClass(GenerationStep.Decoration.class)
+				.valueFormatter(step -> Component.translatable(getHumanReadableName(step.name().toLowerCase())))).build();
 
-		structureCategoryBuilder.option(biomeCheckModeOption);
+		structureSettingsGroup.option(stepOption);
 
-		var biomeCheckBlacklistedBiomesOption = ListOption.<String>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.biome_check_blacklisted_biomes.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biome_check_blacklisted_biomes.description")))
-			.insertEntriesAtEnd(false)
+		var terrainAdaptationOption = Option.<TerrainAdjustment>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.structure.terrain_adaptation.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.terrain_adaptation.description")))
 			.binding(
-				StructureData.BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE,
-				() -> config.getStructureData().get(structureId).getBiomeCheckBlacklistedBiomes(),
-				blacklistedBiomes -> config.getStructureData().get(structureId).setBiomeCheckBlacklistedBiomes(blacklistedBiomes)
-			)
-			.controller(BiomeStringControllerBuilder::create)
-			.available(config.getStructureData().get(structureId).getBiomeCheckMode() == StructureData.BiomeCheckMode.BLACKLIST)
-			.initial("").build();
+				config.getStructureData().get(structureId).getDefaultTerrainAdaptation(),
+				() -> config.getStructureData().get(structureId).getTerrainAdaptation(),
+				terrainAdaptation -> config.getStructureData().get(structureId).setTerrainAdaptation(terrainAdaptation)
+			).controller(opt -> EnumControllerBuilder.create(opt)
+				.enumClass(TerrainAdjustment.class)
+				.valueFormatter(terrainAdaptation -> Component.translatable(getHumanReadableName(terrainAdaptation.name().toLowerCase())))).build();
 
-		structureCategoryBuilder.group(biomeCheckBlacklistedBiomesOption);
+		structureSettingsGroup.option(terrainAdaptationOption);
 
-		biomeCheckModeOption.addListener((opt, biomeCheckMode) -> {
-			boolean isBlacklistAvailable = biomeCheckMode == StructureData.BiomeCheckMode.BLACKLIST;
-			biomeCheckBlacklistedBiomesOption.setAvailable(isBlacklistAvailable);
-		});
+		if(config.getStructureData().get(structureId).isJigsawStructure()) {
+			var jigsawOptions = JigsawOptions.getJigsawCheckOptions(structureData);
+			structureSettingsGroup.options(jigsawOptions);
+
+			isDisabledOption.addListener((opt, currentIsDisabled) -> {
+				for(var jigsawOption : jigsawOptions) {
+					jigsawOption.setAvailable(!currentIsDisabled);
+				}
+			});
+		}
+
+		structureCategoryBuilder.group(structureSettingsGroup.build());
 
 		var biomesOption = ListOption.<String>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.biomes.title"))
@@ -169,8 +103,31 @@ public final class StructureConfigScreen
 
 		structureCategoryBuilder.group(biomesOption);
 
+		var flatnessOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("flatness"));
+		FlatnessCheckOptions.addFlatnessCheckOptions(flatnessOptionsGroup, config, structureId);
+		structureCategoryBuilder.group(flatnessOptionsGroup.build());
+
+		var biomesOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("biomes"));
+		var biomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(structureCategoryBuilder, biomesOptionsGroup, config, structureId);
+		structureCategoryBuilder.group(biomesOptionsGroup.build());
+		var blacklistedBiomesOption = biomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME);
+		structureCategoryBuilder.group((OptionGroup) blacklistedBiomesOption);
+
+		/*
+		isDisabledOption.addListener((opt, currentIsDisabled) -> {
+			for(var biomeCheckOption : biomeCheckOptions) {
+				biomeCheckOption.setAvailable(!currentIsDisabled);
+			}
+		});*/
+
 		yacl.category(structureCategoryBuilder.build());
 
 		return (YACLScreen) yacl.build().generateScreen(parent);
+	}
+
+	private static String getHumanReadableName(String serializedName) {
+		return Arrays.stream(serializedName.split("_"))
+			.map(s -> Character.toUpperCase(s.charAt(0)) + s.substring(1))
+			.collect(Collectors.joining(" "));
 	}
 }

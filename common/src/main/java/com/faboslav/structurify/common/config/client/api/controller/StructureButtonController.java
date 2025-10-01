@@ -14,6 +14,10 @@ import net.minecraft.network.chat.Component;
 
 import java.util.function.Function;
 
+//? if >= 1.21.9 {
+import net.minecraft.client.input.MouseButtonEvent;
+//?}
+
 public class StructureButtonController extends BooleanController
 {
 	private final String structureId;
@@ -68,13 +72,13 @@ public class StructureButtonController extends BooleanController
 				this.client.setScreen(structureScreen);
 				configScreen.loadScreenState(structureScreen);
 			});
-			this.configurationButton.active = true;
 		}
 
 		@Override
 		public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
 			this.configurationButton.setY(getDimension().y());
 			this.configurationButton.render(graphics, mouseX, mouseY, delta);
+			this.configurationButton.active = this.isAvailable();
 			super.render(graphics, mouseX, mouseY, delta);
 		}
 
@@ -84,8 +88,28 @@ public class StructureButtonController extends BooleanController
 			this.configurationButton.mouseMoved(mouseX, mouseY);
 		}
 
+		//? if >= 1.21.9 {
 		@Override
+		public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
+			super.mouseClicked(mouseButtonEvent, doubleClick);
+			return super.mouseClicked(mouseButtonEvent, doubleClick) || this.configurationButton.mouseClicked(mouseButtonEvent, doubleClick);
+		}
+
+		@Override
+		public boolean mouseReleased(MouseButtonEvent mouseButtonEvent) {
+			super.mouseReleased(mouseButtonEvent);
+			return super.mouseReleased(mouseButtonEvent) || this.configurationButton.mouseReleased(mouseButtonEvent);
+		}
+
+		@Override
+		public boolean mouseDragged(MouseButtonEvent mouseButtonEvent, double dx, double dy) {
+			super.mouseDragged(mouseButtonEvent, dx, dy);
+			return super.mouseDragged(mouseButtonEvent, dx, dy) || this.configurationButton.mouseDragged(mouseButtonEvent, dx, dy);
+		}
+		//?} else {
+		/*@Override
 		public boolean mouseClicked(double mouseX, double mouseY, int button) {
+			super.mouseClicked(mouseX, mouseY, button);
 			return super.mouseClicked(mouseX, mouseY, button) || this.configurationButton.mouseClicked(mouseX, mouseY, button);
 		}
 
@@ -98,6 +122,7 @@ public class StructureButtonController extends BooleanController
 		public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
 			return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || this.configurationButton.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
 		}
+		*///?}
 
 		/*? >=1.20.4 {*/
 		@Override

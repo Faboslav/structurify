@@ -1,63 +1,60 @@
 package com.faboslav.structurify.common.mixin.structure.jigsaw;
 
-import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.checks.JigsawStructureBiomeCheck;
-import com.faboslav.structurify.common.checks.JigsawStructureFlatnessCheck;
 import com.faboslav.structurify.common.mixin.structure.StructureMixin;
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
-import net.minecraft.world.level.levelgen.structure.Structure.GenerationContext;
-import net.minecraft.world.level.levelgen.structure.Structure.GenerationStub;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
-import org.spongepowered.asm.mixin.Final;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-
-import java.util.Optional;
+import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(JigsawStructure.class)
 public abstract class JigsawStructureMixin extends StructureMixin
 {
-	@Shadow
-	@Final
-	private HeightProvider startHeight;
-
-	@WrapMethod(
-		method = "findGenerationPoint"
+	@ModifyExpressionValue(
+		method = "findGenerationPoint",
+		at = @At(
+			value = "FIELD",
+			target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDepth:I",
+			opcode = Opcodes.GETFIELD
+		)
 	)
-	private Optional<GenerationStub> structurify$getStructurePosition(
-		GenerationContext generationContext,
-		Operation<Optional<GenerationStub>> original
-	) {
-		ResourceLocation structureId = structurify$getStructureIdentifier();
-
-		if (
-			structureId == null
-			|| !Structurify.getConfig().getStructureData().containsKey(structureId.toString())
-		) {
-			return original.call(generationContext);
+	protected int structurify$findGenerationPointGetMaxDepth(int originalMaxDepth) {
+		if(this.structurify$getStructureData() == null) {
+			return originalMaxDepth;
 		}
 
-		var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
+		return this.structurify$getStructureData().getJigsawData().getSize();
+	}
 
-		if (structureData.isFlatnessCheckEnabled()) {
-			var flatnessCheckResult = JigsawStructureFlatnessCheck.checkFlatness(structureData, this.startHeight, generationContext);
-
-			if (!flatnessCheckResult) {
-				return Optional.empty();
-			}
+	@ModifyExpressionValue(
+		method = "findGenerationPoint",
+		at = @At(
+			value = "FIELD",
+			//? >= 1.21.9 {
+			target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure$MaxDistance;",
+			//?} else {
+			/*target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:I",
+			*///?}
+			opcode = Opcodes.GETFIELD
+		)
+	)
+	//? >= 1.21.9 {
+	protected JigsawStructure.MaxDistance structurify$findGenerationPointGetMaxDistanceFromCenter(JigsawStructure.MaxDistance originalMaxDistanceFromCenter)
+	//?} else {
+	/*protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
+	*///?}
+	{
+		if(this.structurify$getStructureData() == null) {
+			return originalMaxDistanceFromCenter;
 		}
 
-		if (structureData.isBiomeCheckEnabled()) {
-			var biomeCheckResult = JigsawStructureBiomeCheck.checkBiomes(structureData, this.startHeight, generationContext, this.structurify$getStructureBlacklistedBiomes());
-
-			if (!biomeCheckResult) {
-				return Optional.empty();
-			}
-		}
-
-		return original.call(generationContext);
+		//? >= 1.21.9 {
+		return new JigsawStructure.MaxDistance(
+			this.structurify$getStructureData().getJigsawData().getHorizontalMaxDistanceFromCenter(),
+			this.structurify$getStructureData().getJigsawData().getVerticalMaxDistanceFromCenter()
+		);
+		//?} else {
+		/*return this.structurify$getStructureData().getJigsawData().getHorizontalMaxDistanceFromCenter();
+		*///?}
 	}
 }

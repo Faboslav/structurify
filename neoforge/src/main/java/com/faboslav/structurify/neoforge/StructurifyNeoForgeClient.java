@@ -1,6 +1,8 @@
 package com.faboslav.structurify.neoforge;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
+import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
@@ -10,6 +12,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 /*import net.neoforged.neoforge.client.ConfigScreenHandler;
 
  *///?} else {
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 //?}
 
@@ -20,6 +23,8 @@ public final class StructurifyNeoForgeClient
 		StructurifyClient.init();
 
 		modEventBus.addListener(StructurifyNeoForgeClient::onClientSetup);
+
+		eventBus.addListener(StructurifyNeoForgeClient::onRenderLevelStage);
 	}
 
 	private static void onClientSetup(final FMLClientSetupEvent event) {
@@ -36,5 +41,20 @@ public final class StructurifyNeoForgeClient
 			});
 			//?}
 		});
+	}
+
+	//? >= 1.21.8 {
+	/*public static void onRenderLevelStage(RenderLevelStageEvent.AfterParticles event)
+	*///?} else {
+	public static void onRenderLevelStage(RenderLevelStageEvent event)
+	 //?}
+	{
+		//? < 1.21.8 {
+		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+			return;
+		}
+		//?}
+
+		Structurify.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), null);
 	}
 }

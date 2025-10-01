@@ -6,7 +6,7 @@ import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import java.util.List;
 import java.util.Map;
 
-public final class StructurifyConfigLoader
+public final class StructurifyConfigSerializer
 {
 	public static void loadConfig(final LoadConfigEvent event) {
 		if (Structurify.getConfig().isLoaded) {
@@ -38,5 +38,9 @@ public final class StructurifyConfigLoader
 		if (!changedStructureSets.isEmpty()) {
 			Structurify.getLogger().info("Changed settings of {} structures sets: {}", changedStructureSets.size(), changedStructureSets);
 		}
+	}
+
+	public static void saveConfg() {
+
 	}
 }

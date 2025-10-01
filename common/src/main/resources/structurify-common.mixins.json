@@ -10,23 +10,27 @@
 	},
 	"mixins": [
 		"ChunkGeneratorMixin",
+		"LevelChunkMixin",
 		"LocateCommandInvoker",
 		"LocateCommandMixin",
 		"ResourcePackManagerAccessor",
 		"compat.RepurposedStructuresModifySpreadMixin",
+		"compat.YungJigsawStructureMixin",
 		"structure.StructureMixin",
+		"structure.jigsaw.JigsawStructureAccessor",
 		"structure.jigsaw.JigsawStructureMixin",
-		"structure.jigsaw.MaxDistanceFromCenterAccessor",
 		"structure.placement.RandomSpreadStructurePlacementMixin",
-		"structure.placement.StructurePlacementMixin"
+		"structure.placement.StructurePlacementMixin",
+		"structure.pools.SinglePoolElementAccessor"
 	],
 	"client": [
 		"AbstractWidgetInvoker",
 		"WorldOpenFlowsMixin",
 		"yacl.CategoryTabAccessor",
 		"yacl.GroupSeparatorEntryAccessor",
+		"yacl.LabelControllerElementMixin",
+		"yacl.OptionImplMixin",
 		"yacl.OptionListWidgetMixin",
-		"yacl.SearchFieldWidgetInvoker",
 		"yacl.YACLScreenMixin"
 	]
 }

@@ -5,8 +5,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(JigsawStructure.class)
-public interface MaxDistanceFromCenterAccessor
+public interface JigsawStructureAccessor
 {
 	@Accessor("maxDistanceFromCenter")
-	int structurify$getMaxDistanceFromCenter();
+	//? >= 1.21.9 {
+	JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter();
+	//?} else {
+	/*int structurify$getMaxDistanceFromCenter();
+	*///?}
+
+	@Accessor("maxDepth")
+	int structurify$getMaxDepth();
 }

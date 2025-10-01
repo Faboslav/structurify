@@ -1,4 +1,4 @@
-package com.faboslav.structurify.common.checks;
+package com.faboslav.structurify.world.level.structure.checks;
 
 import net.minecraft.core.BlockPos;
 

@@ -18,7 +18,11 @@ import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL20.*;
 
-//? <=1.21.1 {
+//? >= 1.21.9 {
+import net.minecraft.client.input.MouseButtonEvent;
+//?}
+
+//? <= 1.21.1 {
 /*import net.minecraft.util.FastColor;
  *///?} else {
 import net.minecraft.util.ARGB;
@@ -51,7 +55,12 @@ public class ImageButtonWidget extends AbstractWidget
 	}
 
 	@Override
-	public void onClick(double mouseX, double mouseY) {
+	//? >= 1.21.9 {
+	public void onClick(MouseButtonEvent mouseButtonEvent, boolean bl)
+	//?} else {
+	/*public void onClick(double mouseX, double mouseY)
+	*///?}
+	{
 		if (this.onPress != null) {
 			this.onPress.accept(this);
 		}
@@ -164,7 +173,11 @@ public class ImageButtonWidget extends AbstractWidget
 		 *///?}
 
 		// Draw border.
-		context.renderOutline(getX(), getY(), width, height, 0x0FFFFFFF);
+		//? >= 1.21.9 {
+		context.submitOutline(getX(), getY(), width, height, 0x1FFFFFFF);
+		//?} else {
+		/*context.renderOutline(getX(), getY(), width, height, 0x0FFFFFFF);
+		*///?}
 		context.disableScissor();
 	}
 

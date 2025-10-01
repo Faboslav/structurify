@@ -3,7 +3,7 @@ plugins {
 	id("fabric-loom")
 	kotlin("jvm") version "2.2.0"
 	id("com.google.devtools.ksp") version "2.2.0-2.0.2"
-	id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.14"
+	id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.20"
 }
 
 stonecutter {
@@ -75,9 +75,10 @@ dependencies {
 	}
 
 	// Terra
+	/*
 	commonMod.depOrNull("terra")?.let { terraVersion ->
 		modImplementation("com.dfsek.terra:fabric:${terraVersion}")
-	}
+	}*/
 
 	// Yungs api
 	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->

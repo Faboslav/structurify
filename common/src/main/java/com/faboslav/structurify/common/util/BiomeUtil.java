@@ -10,14 +10,50 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public final class BiomeUtil
 {
+	public static TagKey<Biome> C_IS_OCEAN = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:is_ocean"));
+
+	public static Set<ResourceKey<Biome>> getOceanBiomes() {
+		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
+
+		if (biomeRegistry == null) {
+			return new HashSet<>();
+		}
+
+		Set<ResourceKey<Biome>> oceanBiomes = new HashSet<>();
+
+		biomeRegistry.get(BiomeTags.IS_OCEAN).ifPresent(named ->
+			oceanBiomes.addAll(named.stream()
+				.map(h -> h.unwrapKey().orElse(null))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet()))
+		);
+
+		biomeRegistry.get(BiomeTags.IS_RIVER).ifPresent(named ->
+			oceanBiomes.addAll(named.stream()
+				.map(h -> h.unwrapKey().orElse(null))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet()))
+		);
+
+		biomeRegistry.get(C_IS_OCEAN).ifPresent(named ->
+			oceanBiomes.addAll(named.stream()
+				.map(h -> h.unwrapKey().orElse(null))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet()))
+		);
+
+		return oceanBiomes;
+	}
+
 	public static HolderSet<Biome> getBiomes(
 		ResourceLocation structureId,
 		HolderSet<Biome> originalBiomes
@@ -56,7 +92,7 @@ public final class BiomeUtil
 		}
 
 		var structureData = Structurify.getConfig().getStructureData().get(structureId.toString());
-		var blacklistedBiomeIds = structureData.getBiomeCheckBlacklistedBiomes();
+		var blacklistedBiomeIds = structureData.getBiomeCheckData().getBlacklistedBiomes();
 
 		return getBiomeHolders(blacklistedBiomeIds, biomeRegistry);
 	}
@@ -67,7 +103,8 @@ public final class BiomeUtil
 	) {
 		for (ModCompat modCompat : ModChecker.BIOME_REPLACER_COMPATS) {
 			try {
-				biomeIds = modCompat.getReplacedBiomes(biomeIds);
+				var replacedBiomeIds = modCompat.getReplacedBiomes(biomeIds);
+				biomeIds.addAll(replacedBiomeIds);
 			} catch (Throwable e) {
 			Structurify.getLogger().error("Failed to get replaced biomes from mod compat");
 			e.printStackTrace();
@@ -102,4 +139,6 @@ public final class BiomeUtil
 
 		return HolderSet.direct(biomeHolders);
 	}
+
+
 }

@@ -67,9 +67,14 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 		return slugifiedBiome.contains(slugifiedValue) || slugifiedTranslatedBiome.contains(slugifiedValue) || super.matchingValue(value);
 	}
 
+	public Component getTranslatedBiome(String biome) {
+		return LanguageUtil.translateId("biome", biome).append((" ("+biome+") "));
+	}
+
 	@Override
 	public String getString(String biome) {
-		return LanguageUtil.translateId("biome", biome).getString();
+		// Dropdown value
+		return this.getTranslatedBiome(biome).getString();
 	}
 
 	@Override
@@ -109,7 +114,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 		var pendingValue = this.biomeStringController.option().pendingValue();
 
 		if (pendingValue.contains(":")) {
-			return LanguageUtil.translateId("biome", this.biomeStringController.option().pendingValue());
+			return this.getTranslatedBiome(this.biomeStringController.option().pendingValue());
 		}
 
 		return Component.literal(pendingValue);

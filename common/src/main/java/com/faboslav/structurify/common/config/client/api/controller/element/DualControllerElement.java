@@ -7,6 +7,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import org.jetbrains.annotations.Nullable;
 
+//? if >=1.21.9 {
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+//?}
+
 public final class DualControllerElement extends AbstractWidget
 {
 	private final AbstractWidget labelElement;
@@ -38,7 +44,46 @@ public final class DualControllerElement extends AbstractWidget
 		resetButton.mouseMoved(mouseX, mouseY);
 	}
 
+	//? if >=1.21.9 {
 	@Override
+	public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
+		boolean firstElementMouseClicked = firstElement.mouseClicked(mouseButtonEvent, doubleClick);
+		boolean secondElementMouseClicked = secondElement.mouseClicked(mouseButtonEvent, doubleClick);
+		boolean resetButtonMouseClicked = resetButton.mouseClicked(mouseButtonEvent, doubleClick);
+
+		return firstElementMouseClicked || secondElementMouseClicked || resetButtonMouseClicked;
+	}
+
+	@Override
+	public boolean mouseReleased(MouseButtonEvent mouseButtonEvent) {
+		boolean firstElementMouseReleased = firstElement.mouseReleased(mouseButtonEvent);
+		boolean secondElementMouseReleased = secondElement.mouseReleased(mouseButtonEvent);
+		boolean resetButtonMouseReleased = resetButton.mouseReleased(mouseButtonEvent);
+
+		return firstElementMouseReleased || secondElementMouseReleased || resetButtonMouseReleased;
+	}
+
+	@Override
+	public boolean mouseDragged(MouseButtonEvent mouseButtonEvent, double dx, double dy) {
+		return firstElement.mouseDragged(mouseButtonEvent, dx, dy) || secondElement.mouseDragged(mouseButtonEvent, dx, dy) || resetButton.mouseDragged(mouseButtonEvent, dx, dy);
+	}
+
+	@Override
+	public boolean keyPressed(KeyEvent keyEvent) {
+		return firstElement.keyPressed(keyEvent) || secondElement.keyPressed(keyEvent) || resetButton.keyPressed(keyEvent);
+	}
+
+	@Override
+	public boolean keyReleased(KeyEvent keyEvent) {
+		return firstElement.keyReleased(keyEvent) || secondElement.keyReleased(keyEvent) || resetButton.keyReleased(keyEvent);
+	}
+
+	@Override
+	public boolean charTyped(CharacterEvent characterEvent) {
+		return firstElement.charTyped(characterEvent) || secondElement.charTyped(characterEvent) || secondElement.charTyped(characterEvent);
+	}
+	//?} else {
+    /*@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		boolean firstElementMouseClicked = firstElement.mouseClicked(mouseX, mouseY, button);
 		boolean secondElementMouseClicked = secondElement.mouseClicked(mouseX, mouseY, button);
@@ -61,13 +106,6 @@ public final class DualControllerElement extends AbstractWidget
 		return firstElement.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || secondElement.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
 	}
 
-	/*? >=1.20.4 {*/
-	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-		return this.firstElement.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || this.secondElement.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
-	}
-	/*?}*/
-
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		return firstElement.keyPressed(keyCode, scanCode, modifiers) || secondElement.keyPressed(keyCode, scanCode, modifiers);
@@ -82,6 +120,14 @@ public final class DualControllerElement extends AbstractWidget
 	public boolean charTyped(char chr, int modifiers) {
 		return firstElement.charTyped(chr, modifiers) || secondElement.charTyped(chr, modifiers);
 	}
+    *///?}
+
+	/*? >=1.20.4 {*/
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+		return this.firstElement.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || this.secondElement.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+	}
+	/*?}*/
 
 	@Override
 	public void setFocused(boolean focused) {

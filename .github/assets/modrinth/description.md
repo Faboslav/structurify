@@ -13,7 +13,7 @@
 	<a style="text-decoration: none;" href="https://www.patreon.com/Faboslav">
 		<img src="https://img.shields.io/static/v1?label=&message=Become a Patron&color=5b9c51&labelColor=5b9c51&logoColor=ffffff&style=for-the-badge&logo=patreon" alt="Become a Patreon">
 	</a>
-	<a style="text-decoration: none;" href="https://discord.gg/faboland">
+	<a style="text-decoration: none;" href="https://discord.com/invite/QGwFvvMQCn">
 		<img src="https://img.shields.io/discord/924964658169913404?style=for-the-badge&logo=discord&logoColor=ffffff&label=Join Our Discord&labelColor=5b9c51&color=5b9c51" alt="Join Our Discord">
 	</a>
 </center>
@@ -143,7 +143,7 @@ Since structure generation is a complex system, things can occasionally break, e
 
 # 💬 Community
 
-Feel free to <a href="https://discord.gg/faboland">join our community at the discord server</a> to chat, share your
+Feel free to <a href="https://discord.com/invite/QGwFvvMQCn">join our community at the discord server</a> to chat, share your
 creations, ask any question or to simply be updated about the latest development of the mod and notified when the new
 release is out. Also don't hesitate to <a href="https://github.com/Faboslav/structurify/issues">report any crash or bug
 via GitHub issues</a>.

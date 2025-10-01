@@ -1,41 +1,43 @@
 package com.faboslav.structurify.common.config.data;
 
+import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
+import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
+import com.faboslav.structurify.common.config.data.structure.JigsawData;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class StructureData
+public class StructureData implements StructureLikeData
 {
-	public final static boolean IS_DISABLED_DEFAULT_VALUE = false;
-	public final static boolean ENABLE_FLATNESS_CHECK_DEFAULT_VALUE = false;
-	public final static int FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE = 10;
-	public final static boolean ENABLE_BIOME_CHECK_DEFAULT_VALUE = false;
-	public final static BiomeCheckMode BIOME_CHECK_MODE_DEFAULT_VALUE = BiomeCheckMode.BLACKLIST;
-	public final static List<String> BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE = List.of("#is_river", "#is_ocean", "#is_beach");
-	public final static boolean ALLOW_AIR_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE = false;
-	public final static boolean ALLOW_LIQUID_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE = false;
-
 	private final List<String> defaultBiomes;
-	private final int defaultCheckDistance;
+	private final GenerationStep.Decoration defaultStep;
+	private final TerrainAdjustment defaultTerrainAdaptation;
 
 	private boolean isDisabled = IS_DISABLED_DEFAULT_VALUE;
-	private boolean enableFlatnessCheck = ENABLE_FLATNESS_CHECK_DEFAULT_VALUE;
-	private int flatnessCheckDistance;
-	private int flatnessCheckThreshold = FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE;
-	private boolean allowAirBlocksInFlatnessCheck = ALLOW_AIR_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE;
-	private boolean allowLiquidBlocksInFlatnessCheck = ALLOW_LIQUID_BLOCKS_IN_FLATNESS_CHECK_DEFAULT_VALUE;
-	private boolean enableBiomeCheck = ENABLE_BIOME_CHECK_DEFAULT_VALUE;
-	private BiomeCheckMode biomeCheckMode = BIOME_CHECK_MODE_DEFAULT_VALUE;
-	private int biomeCheckDistance;
-	private List<String> biomeCheckBlacklistedBiomes = BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE;
 	private List<String> biomes;
+	private	GenerationStep.Decoration step;
+	private TerrainAdjustment terrainAdaptation;
+	private JigsawData jigsawData;
+	private FlatnessCheckData flatnessCheckData;
+	private BiomeCheckData biomeCheckData;
 
-	public StructureData(List<String> biomes, int checkDistance) {
+	public StructureData(
+		List<String> biomes,
+		GenerationStep.Decoration step,
+		TerrainAdjustment terrainAdaptation
+	) {
 		this.defaultBiomes = biomes;
-		this.biomes = biomes.stream().toList();
-		this.defaultCheckDistance = checkDistance;
-		this.flatnessCheckDistance = checkDistance;
-		this.biomeCheckDistance = checkDistance;
+		this.biomes = biomes;
+		this.defaultStep = step;
+		this.step = step;
+		this.defaultTerrainAdaptation = terrainAdaptation;
+		this.terrainAdaptation = terrainAdaptation;
+		this.jigsawData = new JigsawData(0, 0, 0);
+		this.flatnessCheckData = new FlatnessCheckData();
+		this.biomeCheckData = new BiomeCheckData();
 	}
 
 	public boolean isUsingDefaultValues() {
@@ -46,98 +48,22 @@ public class StructureData
 		Collections.sort(defaultBiomes);
 
 		return this.isDisabled == IS_DISABLED_DEFAULT_VALUE
-			   && this.enableFlatnessCheck == ENABLE_FLATNESS_CHECK_DEFAULT_VALUE
-			   && this.flatnessCheckDistance == this.defaultCheckDistance
-			   && this.flatnessCheckThreshold == FLATNESS_CHECK_THRESHOLD_DEFAULT_VALUE
-			   && this.enableBiomeCheck == ENABLE_BIOME_CHECK_DEFAULT_VALUE
-			   && this.biomeCheckMode == BIOME_CHECK_MODE_DEFAULT_VALUE
-			   && this.biomeCheckDistance == this.defaultCheckDistance
-			   && this.biomeCheckBlacklistedBiomes.equals(BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE)
-			   && biomes.equals(defaultBiomes);
+			   && this.step == this.defaultStep
+			   && this.terrainAdaptation == this.defaultTerrainAdaptation
+			   && biomes.equals(defaultBiomes)
+			   && this.getFlatnessCheckData().isUsingDefaultValues()
+			   && this.getBiomeCheckData().isUsingDefaultValues();
 	}
 
+	/**
+	 * Used in {@link com.faboslav.structurify.common.mixin.ChunkGeneratorMixin} to prevent specific structure generation
+	 */
 	public boolean isDisabled() {
 		return this.isDisabled;
 	}
 
 	public void setDisabled(boolean isDisabled) {
 		this.isDisabled = isDisabled;
-	}
-
-	public int getDefaultCheckDistance() {
-		return this.defaultCheckDistance;
-	}
-
-	public boolean isFlatnessCheckEnabled() {
-		return this.enableFlatnessCheck;
-	}
-
-	public void setEnableFlatnessCheck(boolean enableFlatnessCheck) {
-		this.enableFlatnessCheck = enableFlatnessCheck;
-	}
-
-	public boolean areAirBlocksAllowedInFlatnessCheck() {
-		return this.allowAirBlocksInFlatnessCheck;
-	}
-
-	public void setAllowAirBlocksInFlatnessCheck(boolean allowAirBlocksInFlatnessCheck) {
-		this.allowAirBlocksInFlatnessCheck = allowAirBlocksInFlatnessCheck;
-	}
-
-	public boolean areLiquidBlocksAllowedInFlatnessCheck() {
-		return this.allowLiquidBlocksInFlatnessCheck;
-	}
-
-	public void setAllowLiquidBlocksInFlatnessCheck(boolean allowLiquidBlocksInFlatnessCheck) {
-		this.allowLiquidBlocksInFlatnessCheck = allowLiquidBlocksInFlatnessCheck;
-	}
-
-	public int getFlatnessCheckDistance() {
-		return this.flatnessCheckDistance;
-	}
-
-	public void setFlatnessCheckDistance(int flatnessCheckDistance) {
-		this.flatnessCheckDistance = flatnessCheckDistance;
-	}
-
-	public int getFlatnessCheckThreshold() {
-		return this.flatnessCheckThreshold;
-	}
-
-	public void setFlatnessCheckThreshold(int flatnessCheckThreshold) {
-		this.flatnessCheckThreshold = flatnessCheckThreshold;
-	}
-
-	public boolean isBiomeCheckEnabled() {
-		return this.enableBiomeCheck;
-	}
-
-	public void setEnableBiomeCheck(boolean enableBiomeCheck) {
-		this.enableBiomeCheck = enableBiomeCheck;
-	}
-
-	public BiomeCheckMode getBiomeCheckMode() {
-		return this.biomeCheckMode;
-	}
-
-	public void setBiomeCheckMode(BiomeCheckMode biomeCheckMode) {
-		this.biomeCheckMode = biomeCheckMode;
-	}
-
-	public int getBiomeCheckDistance() {
-		return this.biomeCheckDistance;
-	}
-
-	public void setBiomeCheckDistance(int biomeCheckDistance) {
-		this.biomeCheckDistance = biomeCheckDistance;
-	}
-
-	public List<String> getBiomeCheckBlacklistedBiomes() {
-		return this.biomeCheckBlacklistedBiomes;
-	}
-
-	public void setBiomeCheckBlacklistedBiomes(List<String> blacklistedBiomes) {
-		this.biomeCheckBlacklistedBiomes = blacklistedBiomes;
 	}
 
 	public List<String> getDefaultBiomes() {
@@ -152,8 +78,55 @@ public class StructureData
 		this.biomes = biomes;
 	}
 
-	public enum BiomeCheckMode {
-		STRICT,
-		BLACKLIST
+	public GenerationStep.Decoration getDefaultStep() {
+		return this.defaultStep;
+	}
+
+	public GenerationStep.Decoration getStep() {
+		return this.step;
+	}
+
+	public void setStep(GenerationStep.Decoration step) {
+		this.step = step;
+	}
+
+	public TerrainAdjustment getDefaultTerrainAdaptation() {
+		return defaultTerrainAdaptation;
+	}
+
+	public TerrainAdjustment getTerrainAdaptation() {
+		return terrainAdaptation;
+	}
+
+	public void setTerrainAdaptation(TerrainAdjustment terrainAdaptation) {
+		this.terrainAdaptation = terrainAdaptation;
+	}
+
+	public boolean isJigsawStructure() {
+		return this.jigsawData.getSize() != 0 && this.jigsawData.getHorizontalMaxDistanceFromCenter() != 0 && this.jigsawData.getVerticalMaxDistanceFromCenter() != 0;
+	}
+
+	public JigsawData getJigsawData() {
+		return this.jigsawData;
+	}
+
+	public void setJigsawData(JigsawData jigsawData) {
+		this.jigsawData = jigsawData;
+	}
+
+	public FlatnessCheckData getFlatnessCheckData() {
+		return this.flatnessCheckData;
+	}
+
+	public void setFlatnessCheckData(FlatnessCheckData flatnessCheckData) {
+		this.flatnessCheckData = flatnessCheckData;
+	}
+
+	public BiomeCheckData getBiomeCheckData() {
+		return this.biomeCheckData;
+	}
+
+	public void setBiomeCheckData(BiomeCheckData biomeCheckData) {
+		this.biomeCheckData = biomeCheckData;
 	}
 }

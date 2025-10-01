@@ -1,10 +1,11 @@
 package com.faboslav.structurify.common.config;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.config.data.StructureData;
-import com.faboslav.structurify.common.config.data.StructureSetData;
-import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
+import com.faboslav.structurify.common.config.data.*;
+import com.faboslav.structurify.common.config.serialization.*;
+import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.platform.PlatformHooks;
+import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import com.google.gson.*;
 
 import java.io.IOException;
@@ -13,8 +14,6 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public final class StructurifyConfig
 {
@@ -24,15 +23,19 @@ public final class StructurifyConfig
 
 	public boolean isLoaded = false;
 	public boolean isLoading = false;
+
 	private final Path configPath = Path.of("config", Structurify.MOD_ID + ".json");
 	public final Path configDumpPath = Path.of("config", Structurify.MOD_ID + "_dump.json");
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 	public boolean disableAllStructures = false;
+	public boolean preventStructureOverlap = false;
 	public int minStructureDistanceFromWorldCenter = 0;
 	public boolean enableGlobalSpacingAndSeparationModifier = ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	public double globalSpacingAndSeparationModifier = GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 
+	private DebugData debugData = new DebugData();
+	private Map<String, StructureNamespaceData> structureNamespaceData = new TreeMap<>();
 	private Map<String, StructureData> structureData = new TreeMap<>();
 	private Map<String, StructureSetData> structureSetData = new TreeMap<>();
 
@@ -44,29 +47,18 @@ public final class StructurifyConfig
 	private static final String GENERAL_PROPERTY = "general";
 	private static final String MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY = "min_structure_distance_from_world_center";
 	private static final String DISABLE_ALL_STRUCTURES_PROPERTY = "disable_all_structures";
+	private static final String PREVENT_STRUCTURE_OVERLAP_PROPERTY = "prevent_structure_overlap";
 	private static final String ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY = "enable_global_spacing_and_separation_modifier";
 	private static final String GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY = "global_spacing_and_separation_modifier";
 
 	private static final String STRUCTURES_PROPERTY = "structures";
-	private static final String NAME_PROPERTY = "name";
-	private static final String IS_DISABLED_PROPERTY = "is_disabled";
-	private static final String ENABLE_FLATNESS_CHECK_PROPERTY = "enable_flatness_check";
-	private static final String FLATNESS_CHECK_DISTANCE_PROPERTY = "flatness_check_distance";
-	private static final String FLATNESS_CHECK_THRESHOLD_PROPERTY = "flatness_check_threshold";
-	private static final String ENABLE_BIOME_CHECK_PROPERTY = "enable_biome_check";
-	private static final String BIOME_CHECK_DISTANCE_PROPERTY = "biome_check_distance";
-	private static final String BIOME_CHECK_MODE_PROPERTY = "biome_check_mode";
-	private static final String BIOME_CHECK_BLACKLISTED_BIOMES_PROPERTY = "biome_check_blacklisted_biomes";
-	private static final String BIOMES_PROPERTY = "biomes";
-	private static final String WHITELISTED_BIOMES_PROPERTY = "whitelisted_biomes";
-	private static final String BLACKLISTED_BIOMES_PROPERTY = "blacklisted_biomes";
-
+	private static final String STRUCTURE_NAMESPACES_PROPERTY = "structure_namespaces";
 	private static final String STRUCTURE_SETS_PROPERTY = "structure_sets";
-	private static final String SALT_PROPERTY = "salt";
-	private static final String FREQUENCY_PROPERTY = "frequency";
-	private static final String OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY = "override_global_spacing_and_separation_modifier";
-	private static final String SPACING_PROPERTY = "spacing";
-	private static final String SEPARATION_PROPERTY = "separation";
+
+
+	public Map<String, StructureNamespaceData> getStructureNamespaceData() {
+		return this.structureNamespaceData;
+	}
 
 	public Map<String, StructureData> getStructureData() {
 		return this.structureData;
@@ -74,6 +66,10 @@ public final class StructurifyConfig
 
 	public Map<String, StructureSetData> getStructureSetData() {
 		return this.structureSetData;
+	}
+
+	public DebugData getDebugData() {
+		return this.debugData;
 	}
 
 	public void create() {
@@ -94,6 +90,7 @@ public final class StructurifyConfig
 			this.isLoading = true;
 
 			WorldgenDataProvider.loadWorldgenData();
+			this.structureNamespaceData = WorldgenDataProvider.getStructureNamespaces();
 			this.structureData = WorldgenDataProvider.getStructures();
 			this.structureSetData = WorldgenDataProvider.getStructureSets();
 
@@ -104,186 +101,10 @@ public final class StructurifyConfig
 			String jsonString = Files.readString(configPath);
 			JsonObject json = gson.fromJson(jsonString, JsonObject.class);
 
-			if (json.has(GENERAL_PROPERTY)) {
-				var general = json.getAsJsonObject(GENERAL_PROPERTY);
-
-				if (general.has(DISABLE_ALL_STRUCTURES_PROPERTY)) {
-					this.disableAllStructures = general.get(DISABLE_ALL_STRUCTURES_PROPERTY).getAsBoolean();
-				}
-
-				if (general.has(MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY)) {
-					this.minStructureDistanceFromWorldCenter = general.get(MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY).getAsInt();
-				}
-
-				if (general.has(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY)) {
-					this.enableGlobalSpacingAndSeparationModifier = general.get(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY).getAsBoolean();
-				}
-
-				if (general.has(GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY)) {
-					this.globalSpacingAndSeparationModifier = Math.round(general.get(GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY).getAsDouble() * 10.0) / 10.0;
-				}
-			}
-
-			if (json.has(STRUCTURES_PROPERTY)) {
-				var structures = json.getAsJsonArray(STRUCTURES_PROPERTY);
-
-				for (JsonElement structure : structures) {
-					var structureJson = structure.getAsJsonObject();
-
-					if (
-						!structureJson.has(NAME_PROPERTY)
-						|| !structureJson.has(IS_DISABLED_PROPERTY)
-						|| !structureJson.has(ENABLE_BIOME_CHECK_PROPERTY)
-						|| !structureJson.has(BIOME_CHECK_DISTANCE_PROPERTY)
-						|| (
-							!structureJson.has(BIOMES_PROPERTY)
-							&& (
-								!structureJson.has(WHITELISTED_BIOMES_PROPERTY)
-								|| !structureJson.has(BLACKLISTED_BIOMES_PROPERTY)
-							)
-						)
-					) {
-						Structurify.getLogger().info("Found invalid structure entry, skipping.");
-						continue;
-					}
-
-					if (!this.structureData.containsKey(structureJson.get(NAME_PROPERTY).getAsString())) {
-						Structurify.getLogger().info("Found invalid structure identifier of \"{}\", skipping.", structureJson.get(NAME_PROPERTY).getAsString());
-						continue;
-					}
-
-					var structureData = this.structureData.get(structureJson.get(NAME_PROPERTY).getAsString());
-					structureData.setDisabled(structureJson.get(IS_DISABLED_PROPERTY).getAsBoolean());
-
-					if (structureJson.has(ENABLE_FLATNESS_CHECK_PROPERTY)) {
-						var isFlatnessCheckEnabled = structureJson.get(ENABLE_FLATNESS_CHECK_PROPERTY).getAsBoolean();
-						structureData.setEnableFlatnessCheck(isFlatnessCheckEnabled);
-					}
-
-					if (structureJson.has(FLATNESS_CHECK_DISTANCE_PROPERTY)) {
-						var flatnessCheckDistance = structureJson.get(FLATNESS_CHECK_DISTANCE_PROPERTY).getAsInt();
-						structureData.setFlatnessCheckDistance(flatnessCheckDistance);
-					}
-
-					if (structureJson.has(FLATNESS_CHECK_THRESHOLD_PROPERTY)) {
-						var flatnessCheckThreshold = structureJson.get(FLATNESS_CHECK_THRESHOLD_PROPERTY).getAsInt();
-						structureData.setFlatnessCheckThreshold(flatnessCheckThreshold);
-					}
-
-					var isBiomeCheckEnabled = structureJson.get(ENABLE_BIOME_CHECK_PROPERTY).getAsBoolean();
-					structureData.setEnableBiomeCheck(isBiomeCheckEnabled);
-
-					var biomeCheckDistance = structureJson.get(BIOME_CHECK_DISTANCE_PROPERTY).getAsInt();
-					structureData.setBiomeCheckDistance(biomeCheckDistance);
-
-					if(!structureJson.has(BIOME_CHECK_MODE_PROPERTY)) {
-						structureData.setBiomeCheckMode(StructureData.BiomeCheckMode.STRICT);
-						structureData.setBiomeCheckBlacklistedBiomes(StructureData.BIOME_CHECK_BLACKLISTED_BIOMES_DEFAULT_VALUE);
-					} else {
-						var biomeCheckMode = structureJson.get(BIOME_CHECK_MODE_PROPERTY).getAsString();
-						structureData.setBiomeCheckMode(StructureData.BiomeCheckMode.valueOf(biomeCheckMode));
-						var biomeCheckBlacklistedBiomes = StreamSupport
-							.stream(structureJson.getAsJsonArray(BIOME_CHECK_BLACKLISTED_BIOMES_PROPERTY).spliterator(), false)
-							.map(JsonElement::getAsString)
-							.toList();
-
-						structureData.setBiomeCheckBlacklistedBiomes(biomeCheckBlacklistedBiomes);
-					}
-
-					List<String> biomes = new ArrayList<>(structureData.getDefaultBiomes());
-
-					if (structureJson.has(BIOMES_PROPERTY)) {
-						var whitelistedBiomes = structureJson.getAsJsonArray(BIOMES_PROPERTY).asList().stream().map(JsonElement::getAsString).collect(Collectors.toCollection(ArrayList::new));
-						whitelistedBiomes.removeAll(structureData.getDefaultBiomes());
-						whitelistedBiomes.stream().distinct().forEach(biomes::add);
-
-						var blacklistedBiomes = new ArrayList<>(structureData.getDefaultBiomes());
-						blacklistedBiomes.removeAll(structureJson.getAsJsonArray(BIOMES_PROPERTY).asList().stream().map(JsonElement::getAsString).collect(Collectors.toCollection(ArrayList::new)));
-						blacklistedBiomes.stream().distinct().forEach(biomes::remove);
-					} else {
-						var whitelistedBiomes = structureJson.getAsJsonArray(WHITELISTED_BIOMES_PROPERTY);
-						for (JsonElement whitelistedBiome : whitelistedBiomes) {
-							if (biomes.contains(whitelistedBiome.getAsString())) {
-								continue;
-							}
-
-							biomes.add(whitelistedBiome.getAsString());
-						}
-
-						var blacklistedBiomes = structureJson.getAsJsonArray(BLACKLISTED_BIOMES_PROPERTY);
-
-						for (JsonElement blacklistedBiome : blacklistedBiomes) {
-							if (!biomes.contains(blacklistedBiome.getAsString())) {
-								continue;
-							}
-
-							biomes.remove(blacklistedBiome.getAsString());
-						}
-					}
-
-					structureData.setBiomes(biomes);
-				}
-			}
-
-			if (json.has(STRUCTURE_SETS_PROPERTY)) {
-				var structureSets = json.getAsJsonArray(STRUCTURE_SETS_PROPERTY);
-
-				for (JsonElement structureSet : structureSets) {
-					var structureSpreadJson = structureSet.getAsJsonObject();
-
-					if (!structureSpreadJson.has(NAME_PROPERTY)) {
-						Structurify.getLogger().info("Found invalid structure set entry, skipping.");
-						continue;
-					}
-
-					var structureSetName = structureSpreadJson.get(NAME_PROPERTY).getAsString();
-
-					if (!this.structureSetData.containsKey(structureSetName)) {
-						Structurify.getLogger().info("Found invalid structure set identifier of \"{}\", skipping.", structureSetName);
-						continue;
-					}
-
-					var structureSetData = this.structureSetData.get(structureSetName);
-
-					var salt = structureSpreadJson.has(SALT_PROPERTY) ? structureSpreadJson.get(SALT_PROPERTY).getAsInt():structureSetData.getDefaultSalt();
-					var frequency = structureSpreadJson.has(FREQUENCY_PROPERTY) ? structureSpreadJson.get(FREQUENCY_PROPERTY).getAsFloat():structureSetData.getDefaultFrequency();
-					var spacing = structureSpreadJson.has(SPACING_PROPERTY) ? structureSpreadJson.get(SPACING_PROPERTY).getAsInt():structureSetData.getDefaultSpacing();
-					var separation = structureSpreadJson.has(SEPARATION_PROPERTY) ? structureSpreadJson.get(SEPARATION_PROPERTY).getAsInt():structureSetData.getDefaultSeparation();
-
-					if ((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
-						Structurify.getLogger().info("Salt value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, salt, structureSetData.getDefaultSalt());
-						salt = structureSetData.getDefaultSalt();
-					}
-
-					if (frequency < StructureSetData.MIN_FREQUENCY || frequency > StructureSetData.MAX_FREQUENCY) {
-						Structurify.getLogger().info("Frequency value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, frequency, structureSetData.getDefaultFrequency());
-						frequency = structureSetData.getDefaultFrequency();
-					}
-
-					if (separation >= spacing) {
-						Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}.", structureSetName, separation, spacing, spacing - 1);
-						separation = spacing - 1;
-					}
-
-					if (separation < 0) {
-						Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, separation);
-						separation = 0;
-					}
-
-					if (spacing < 1) {
-						Structurify.getLogger().info("Spacing value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, spacing);
-						separation = 0;
-					}
-
-					var overrideGlobalSpacingAndSeparationModifier = structureSpreadJson.get(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY).getAsBoolean();
-
-					structureSetData.setSalt(salt);
-					structureSetData.setFrequency(frequency);
-					structureSetData.setOverrideGlobalSpacingAndSeparationModifier(overrideGlobalSpacingAndSeparationModifier);
-					structureSetData.setSpacing(spacing);
-					structureSetData.setSeparation(separation);
-				}
-			}
+			this.loadGeneral(json);
+			this.loadStructureNamespaces(json);
+			this.loadStructures(json);
+			this.loadStructureSets(json);
 
 			Structurify.getLogger().info("Structurify config loaded");
 			this.isLoaded = true;
@@ -292,6 +113,121 @@ public final class StructurifyConfig
 			e.printStackTrace();
 		} finally {
 			this.isLoading = false;
+		}
+	}
+
+	private void loadGeneral(JsonObject json) {
+		if (!json.has(GENERAL_PROPERTY)) {
+			return;
+		}
+
+		var general = json.getAsJsonObject(GENERAL_PROPERTY);
+
+		if (general.has(DISABLE_ALL_STRUCTURES_PROPERTY)) {
+			this.disableAllStructures = general.get(DISABLE_ALL_STRUCTURES_PROPERTY).getAsBoolean();
+		}
+
+		if (general.has(PREVENT_STRUCTURE_OVERLAP_PROPERTY)) {
+			this.preventStructureOverlap = general.get(PREVENT_STRUCTURE_OVERLAP_PROPERTY).getAsBoolean();
+		}
+
+		if (general.has(MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY)) {
+			this.minStructureDistanceFromWorldCenter = general.get(MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY).getAsInt();
+		}
+
+		if (general.has(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY)) {
+			this.enableGlobalSpacingAndSeparationModifier = general.get(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY).getAsBoolean();
+		}
+
+		if (general.has(GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY)) {
+			this.globalSpacingAndSeparationModifier = Math.round(general.get(GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY).getAsDouble() * 10.0) / 10.0;
+		}
+	}
+
+	private void loadStructureNamespaces(JsonObject json) {
+		if (!json.has(STRUCTURE_NAMESPACES_PROPERTY)) {
+			return;
+		}
+
+		var structureNamespaces = json.getAsJsonArray(STRUCTURE_NAMESPACES_PROPERTY);
+
+		for (JsonElement structureNamespace : structureNamespaces) {
+			var structureNamespaceJson = structureNamespace.getAsJsonObject();
+
+			if (!structureNamespaceJson.has(StructureNamespaceDataSerializer.NAME_PROPERTY)) {
+				Structurify.getLogger().info("Found invalid structure namespace entry, skipping.");
+				continue;
+			}
+
+			if (!this.structureNamespaceData.containsKey(structureNamespaceJson.get(StructureNamespaceDataSerializer.NAME_PROPERTY).getAsString())) {
+				Structurify.getLogger().info("Found invalid structure namespace identifier of \"{}\", skipping.", structureNamespaceJson.get(StructureNamespaceDataSerializer.NAME_PROPERTY).getAsString());
+				continue;
+			}
+
+			StructureNamespaceData structureNamespaceData = this.structureNamespaceData.get(structureNamespaceJson.get(StructureNamespaceDataSerializer.NAME_PROPERTY).getAsString());
+
+			if(structureNamespaceData == null) {
+				continue;
+			}
+
+			StructureNamespaceDataSerializer.load(structureNamespaceJson, structureNamespaceData);
+		}
+	}
+
+	private void loadStructures(JsonObject json) {
+		if (!json.has(STRUCTURES_PROPERTY)) {
+			return;
+		}
+
+		var structures = json.getAsJsonArray(STRUCTURES_PROPERTY);
+
+		for (JsonElement structure : structures) {
+			var structureJson = structure.getAsJsonObject();
+
+			if (!structureJson.has(StructureDataSerializer.NAME_PROPERTY)) {
+				Structurify.getLogger().info("Found invalid structure entry, skipping.");
+				continue;
+			}
+
+			if (!this.structureData.containsKey(structureJson.get(StructureDataSerializer.NAME_PROPERTY).getAsString())) {
+				Structurify.getLogger().info("Found invalid structure identifier of \"{}\", skipping.", structureJson.get(StructureDataSerializer.NAME_PROPERTY).getAsString());
+				continue;
+			}
+
+			StructureData structureData = this.structureData.get(structureJson.get(StructureDataSerializer.NAME_PROPERTY).getAsString());
+
+			if(structureData == null) {
+				continue;
+			}
+
+			StructureDataSerializer.load(structureJson, structureData);
+		}
+	}
+
+	private void loadStructureSets(JsonObject json) {
+		if (!json.has(STRUCTURE_SETS_PROPERTY)) {
+			return;
+		}
+
+		var structureSets = json.getAsJsonArray(STRUCTURE_SETS_PROPERTY);
+
+		for (JsonElement structureSet : structureSets) {
+			var structureSetJson = structureSet.getAsJsonObject();
+
+			if (!structureSetJson.has(StructureSetDataSerializer.NAME_PROPERTY)) {
+				Structurify.getLogger().info("Found invalid structure set entry, skipping.");
+				continue;
+			}
+
+			var structureSetName = structureSetJson.get(StructureSetDataSerializer.NAME_PROPERTY).getAsString();
+
+			if (!this.structureSetData.containsKey(structureSetName)) {
+				Structurify.getLogger().info("Found invalid structure set identifier of \"{}\", skipping.", structureSetName);
+				continue;
+			}
+
+			var structureSetData = this.structureSetData.get(structureSetName);
+			StructureSetDataSerializer.load(structureSetJson, structureSetData);
 		}
 	}
 
@@ -317,6 +253,7 @@ public final class StructurifyConfig
 			json.addProperty(CONFIG_VERSION_PROPERTY, PlatformHooks.PLATFORM_HELPER.getModVersion());
 			json.addProperty(CONFIG_DATETIME_PROPERTY, LocalDateTime.now().format(DATETIME_FORMATTER));
 			this.saveGeneralData(json);
+			this.saveStructureNamespacesData(json, true);
 			this.saveStructuresData(json, true);
 			this.saveStructureSetsData(json, true);
 
@@ -325,6 +262,10 @@ public final class StructurifyConfig
 			Files.writeString(configPath, gson.toJson(json));
 
 			Structurify.getLogger().info("Structurify config saved");
+
+			Structurify.getLogger().info("Syncing changes to registries...");
+			UpdateRegistriesEvent.EVENT.invoke(new UpdateRegistriesEvent(StructurifyRegistryManagerProvider.getRegistryManager()));
+			Structurify.getLogger().info("Registries synced");
 		} catch (Exception e) {
 			Structurify.getLogger().error("Failed to save Structurify config");
 			e.printStackTrace();
@@ -360,6 +301,7 @@ public final class StructurifyConfig
 			json.addProperty(CONFIG_VERSION_PROPERTY, PlatformHooks.PLATFORM_HELPER.getModVersion());
 			json.addProperty(CONFIG_DATETIME_PROPERTY, LocalDateTime.now().format(DATETIME_FORMATTER));
 			this.saveGeneralData(json);
+			this.saveStructureNamespacesData(json, false);
 			this.saveStructuresData(json, false);
 			this.saveStructureSetsData(json, false);
 
@@ -378,10 +320,23 @@ public final class StructurifyConfig
 		JsonObject general = new JsonObject();
 		general.addProperty(MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY, this.minStructureDistanceFromWorldCenter);
 		general.addProperty(DISABLE_ALL_STRUCTURES_PROPERTY, this.disableAllStructures);
+		general.addProperty(PREVENT_STRUCTURE_OVERLAP_PROPERTY, this.preventStructureOverlap);
 		general.addProperty(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, this.enableGlobalSpacingAndSeparationModifier);
 		general.addProperty(GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, Math.round(this.globalSpacingAndSeparationModifier * 10.0) / 10.0);
 
 		json.add(GENERAL_PROPERTY, general);
+	}
+
+	private void saveStructureNamespacesData(JsonObject json, boolean saveOnlyChanged) {
+		JsonArray structureNamespaces = new JsonArray();
+
+		this.structureNamespaceData.entrySet().stream()
+			.filter(entry -> !saveOnlyChanged || !entry.getValue().isUsingDefaultValues())
+			.forEach(structureNamespaceDataEntry -> {
+				StructureNamespaceDataSerializer.save(structureNamespaces, structureNamespaceDataEntry.getKey(), structureNamespaceDataEntry.getValue());
+			});
+
+		json.add(STRUCTURE_NAMESPACES_PROPERTY, structureNamespaces);
 	}
 
 	private void saveStructuresData(JsonObject json, boolean saveOnlyChanged) {
@@ -390,36 +345,7 @@ public final class StructurifyConfig
 		this.structureData.entrySet().stream()
 			.filter(entry -> !saveOnlyChanged || !entry.getValue().isUsingDefaultValues())
 			.forEach(structureDataEntry -> {
-				JsonObject structure = new JsonObject();
-				structure.addProperty(NAME_PROPERTY, structureDataEntry.getKey());
-				structure.addProperty(IS_DISABLED_PROPERTY, structureDataEntry.getValue().isDisabled());
-
-				structure.addProperty(ENABLE_FLATNESS_CHECK_PROPERTY, structureDataEntry.getValue().isFlatnessCheckEnabled());
-				structure.addProperty(FLATNESS_CHECK_DISTANCE_PROPERTY, structureDataEntry.getValue().getFlatnessCheckDistance());
-				structure.addProperty(FLATNESS_CHECK_THRESHOLD_PROPERTY, structureDataEntry.getValue().getFlatnessCheckThreshold());
-
-				structure.addProperty(ENABLE_BIOME_CHECK_PROPERTY, structureDataEntry.getValue().isBiomeCheckEnabled());
-				structure.addProperty(BIOME_CHECK_DISTANCE_PROPERTY, structureDataEntry.getValue().getBiomeCheckDistance());
-				structure.addProperty(BIOME_CHECK_MODE_PROPERTY, structureDataEntry.getValue().getBiomeCheckMode().name());
-
-				var biomeCheckBlacklistedBiomes = new ArrayList<>(structureDataEntry.getValue().getBiomeCheckBlacklistedBiomes());
-				JsonArray biomeCheckBlacklistedBiomesJson = new JsonArray();
-				biomeCheckBlacklistedBiomes.stream().distinct().forEach(biomeCheckBlacklistedBiomesJson::add);
-				structure.add(BIOME_CHECK_BLACKLISTED_BIOMES_PROPERTY, biomeCheckBlacklistedBiomesJson);
-
-				var whitelistedBiomes = new ArrayList<>(structureDataEntry.getValue().getBiomes());
-				whitelistedBiomes.removeAll(structureDataEntry.getValue().getDefaultBiomes());
-				JsonArray whitelistedBiomesJson = new JsonArray();
-				whitelistedBiomes.stream().distinct().forEach(whitelistedBiomesJson::add);
-				structure.add(WHITELISTED_BIOMES_PROPERTY, whitelistedBiomesJson);
-
-				var blacklistedBiomes = new ArrayList<>(structureDataEntry.getValue().getDefaultBiomes());
-				blacklistedBiomes.removeAll(structureDataEntry.getValue().getBiomes());
-				JsonArray blacklistedBiomesJson = new JsonArray();
-				blacklistedBiomes.stream().distinct().forEach(blacklistedBiomesJson::add);
-				structure.add(BLACKLISTED_BIOMES_PROPERTY, blacklistedBiomesJson);
-
-				structures.add(structure);
+				StructureDataSerializer.save(structures, structureDataEntry.getKey(), structureDataEntry.getValue());
 			});
 
 		json.add(STRUCTURES_PROPERTY, structures);
@@ -427,51 +353,22 @@ public final class StructurifyConfig
 
 	private void saveStructureSetsData(JsonObject json, boolean saveOnlyChanged) {
 		JsonArray structureSets = new JsonArray();
+		var structureSetSalts = new HashMap<Integer, String>();
 
 		this.structureSetData.entrySet().stream()
 			.filter(entry -> !saveOnlyChanged || entry.getValue().isUsingDefaultValues())
 			.forEach(structureSetDataEntry -> {
-				var structureSetData = structureSetDataEntry.getValue();
 				var structureSetName = structureSetDataEntry.getKey();
-				var overrideGlobalSpacingAndSeparationModifier = structureSetData.overrideGlobalSpacingAndSeparationModifier();
+				var structureSetData = structureSetDataEntry.getValue();
 				var salt = structureSetData.getSalt();
-				var frequency = structureSetData.getFrequency();
-				var spacing = structureSetData.getSpacing();
-				var separation = structureSetData.getSeparation();
 
-				if ((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
-					Structurify.getLogger().info("Salt value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, salt, structureSetData.getDefaultSalt());
-					salt = structureSetData.getDefaultSalt();
+				if(structureSetSalts.containsKey(salt)) {
+					Structurify.getLogger().warn("Salt value for structure set {} is currently {}, which is already being used by {} structure set.", structureSetName, salt, structureSetSalts.get(salt));
+				} else {
+					structureSetSalts.put(structureSetData.getSalt(), structureSetName);
 				}
 
-				if (frequency < StructureSetData.MIN_FREQUENCY || frequency > StructureSetData.MAX_FREQUENCY) {
-					Structurify.getLogger().info("Frequency value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, frequency, structureSetData.getDefaultFrequency());
-					frequency = structureSetData.getDefaultFrequency();
-				}
-
-				if (separation >= spacing) {
-					Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}. ", structureSetName, separation, spacing, spacing - 1);
-					separation = spacing - 1;
-				}
-
-				if (separation < 0) {
-					Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, separation);
-					separation = 0;
-				}
-
-				if (spacing < 1) {
-					Structurify.getLogger().info("Spacing value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, spacing);
-					separation = 0;
-				}
-
-				JsonObject specificStructureSpread = new JsonObject();
-				specificStructureSpread.addProperty(NAME_PROPERTY, structureSetName);
-				specificStructureSpread.addProperty(SALT_PROPERTY, salt);
-				specificStructureSpread.addProperty(FREQUENCY_PROPERTY, frequency);
-				specificStructureSpread.addProperty(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, overrideGlobalSpacingAndSeparationModifier);
-				specificStructureSpread.addProperty(SPACING_PROPERTY, spacing);
-				specificStructureSpread.addProperty(SEPARATION_PROPERTY, separation);
-				structureSets.add(specificStructureSpread);
+				StructureSetDataSerializer.save(structureSets, structureSetName, structureSetData);
 			});
 
 		json.add(STRUCTURE_SETS_PROPERTY, structureSets);

@@ -16,6 +16,8 @@ public final class StructurifyClient
 			CONFIG_SCREEN = new StructurifyConfigScreen(screen);
 		}
 
+		CONFIG_SCREEN.setParent(screen);
+
 		return CONFIG_SCREEN;
 	}
 

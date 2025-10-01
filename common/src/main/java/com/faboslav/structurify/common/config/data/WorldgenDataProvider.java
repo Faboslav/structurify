@@ -1,17 +1,14 @@
 package com.faboslav.structurify.common.config.data;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
-import com.faboslav.structurify.common.mixin.structure.jigsaw.MaxDistanceFromCenterAccessor;
+import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+import com.faboslav.structurify.common.util.JigsawStructureUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 //? yungs_api || repurposed_structures {
@@ -29,6 +26,7 @@ import java.util.*;
 public final class WorldgenDataProvider
 {
 	private static List<String> biomes = new ArrayList<>();
+	private static Map<String, StructureNamespaceData> structureNamespaceData = new TreeMap<>();
 	private static Map<String, StructureData> structureData = new TreeMap<>();
 	private static Map<String, StructureSetData> structureSetData = new TreeMap<>();
 
@@ -49,6 +47,10 @@ public final class WorldgenDataProvider
 		return biomes;
 	}
 
+	public static Map<String, StructureNamespaceData> getStructureNamespaces() {
+		return structureNamespaceData;
+	}
+
 	public static Map<String, StructureData> getStructures() {
 		return structureData;
 	}
@@ -59,6 +61,7 @@ public final class WorldgenDataProvider
 
 	public static void loadWorldgenData() {
 		biomes = loadBiomes();
+		structureNamespaceData = loadStructureNamespaces();
 		structureData = loadStructures();
 		structureSetData = loadStructureSets();
 	}
@@ -81,6 +84,29 @@ public final class WorldgenDataProvider
 		}
 
 		return biomes;
+	}
+
+	public static Map<String, StructureNamespaceData> loadStructureNamespaces() {
+		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+
+		if (registryManager == null) {
+			return Collections.emptyMap();
+		}
+
+		var structureRegistry = registryManager.lookupOrThrow(Registries.STRUCTURE);
+		Map<String, StructureNamespaceData> structuresNamespaces = new TreeMap<>(alphabeticallComparator);
+
+		for (var structureReference : structureRegistry.listElements().toList()) {
+			String structureNamespace = structureReference.key().location().getNamespace();
+
+			if(!structuresNamespaces.containsKey(structureNamespace)) {
+				structuresNamespaces.put(structureNamespace, new StructureNamespaceData());
+			}
+		}
+
+		structuresNamespaces.put(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER, new StructureNamespaceData());
+
+		return structuresNamespaces;
 	}
 
 	public static Map<String, StructureData> loadStructures() {
@@ -130,9 +156,25 @@ public final class WorldgenDataProvider
 				return null;
 			});
 
-			int checkRadius = getCheckRadiusForStructure(structure);
+			StructureData structureData = new StructureData(defaultBiomes, structure.step(), structure.terrainAdaptation());
 
-			structures.put(structureId, new StructureData(defaultBiomes, checkRadius));
+			if(JigsawStructureUtil.isJigsawLikeStructure(structure)) {
+				int horizontalMaxDistanceFromCenter;
+				int verticalMaxDistanceFromCenter;
+
+				//? >= 1.21.9 {
+				var maxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
+				horizontalMaxDistanceFromCenter = maxDistanceFromCenter.horizontal();
+				verticalMaxDistanceFromCenter = maxDistanceFromCenter.vertical();
+				//?} else {
+				/*horizontalMaxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
+				verticalMaxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
+				*///?}
+				int maxSize = JigsawStructureUtil.getSizeForStructure(structure);
+				structureData.setJigsawData(new JigsawData(maxSize, horizontalMaxDistanceFromCenter, verticalMaxDistanceFromCenter));
+			}
+
+			structures.put(structureId, structureData);
 		}
 
 		return structures;
@@ -180,47 +222,5 @@ public final class WorldgenDataProvider
 		}
 
 		return structureSets;
-	}
-
-	private static int getCheckRadiusForStructure(Structure structure) {
-		if (structure instanceof JigsawStructure) {
-			return ((MaxDistanceFromCenterAccessor) structure).structurify$getMaxDistanceFromCenter();
-		}
-
-		//? yungs_api {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
-			return ((YungJigsawStructure) structure).maxDistanceFromCenter;
-		}
-		*///?}
-
-		//? repurposed_structures {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
-			return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
-		}
-		*///?}
-
-		Class<?> clazz = structure.getClass();
-		Field[] fields = clazz.getDeclaredFields();
-
-		for (Field field : fields) {
-			if (field.getName().equals("maxDistanceFromCenter")) {
-				field.setAccessible(true);
-
-				try {
-					if (Optional.class.isAssignableFrom(field.getType())) {
-						Optional<?> optionalValue = (Optional<?>) field.get(structure);
-						return optionalValue.map(val -> (Integer) val).orElse(0);
-					} else {
-						return field.getInt(structure);
-					}
-				} catch (IllegalAccessException | IllegalArgumentException e) {
-					Structurify.getLogger().error(e.getMessage());
-				}
-
-				break;
-			}
-		}
-
-		return 0;
 	}
 }

@@ -1,8 +1,12 @@
 package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.api.StructurifyOption;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
+import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
+import com.faboslav.structurify.common.config.client.gui.structure.BiomeCheckOptions;
+import com.faboslav.structurify.common.config.client.gui.structure.FlatnessCheckOptions;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
@@ -23,9 +27,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings({"unchecked"})
 public final class StructuresConfigScreen
 {
 	private final static List<Option<Boolean>> structureOptions = new ArrayList<>();
+	private static Option<Boolean> enableGlobalFlatnessCheckOption = null;
+	private static Option<Boolean> enableGlobalBiomeCheckOption = null;
+	private final static List<Option<Boolean>> overrideFlatnessCheckOptions = new ArrayList<>();
+	private final static List<Option<Boolean>> overrideBiomeCheckOptions = new ArrayList<>();
+	private final static List<Option<Boolean>> enableFlatnessCheckOptions = new ArrayList<>();
+	private final static List<Option<Boolean>> enableBiomeCheckOptions = new ArrayList<>();
 
 	public static YACLScreen createConfigGui(StructurifyConfig config, Screen parent) {
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
@@ -44,16 +55,44 @@ public final class StructuresConfigScreen
 			.name(Component.translatable("gui.structurify.structures_category.title"))
 			.tooltip(Component.translatable("gui.structurify.structures_category.description"));
 
-		addGeneralSettings(structureCategoryBuilder, config);
+		addGlobalSettings(structureCategoryBuilder, config);
 		addStructures(structureCategoryBuilder, config);
+
+		enableGlobalFlatnessCheckOption.addListener((opt, enableGlobalFlatnessCheck) -> {
+			for(int i = 0; i < overrideFlatnessCheckOptions.size(); i++) {
+				var overrideFlatnessCheckOption = overrideFlatnessCheckOptions.get(i);
+				overrideFlatnessCheckOption.setAvailable(enableGlobalFlatnessCheck);
+				overrideFlatnessCheckOption.requestSetDefault();
+
+				var enableFlatnessCheckOption = enableFlatnessCheckOptions.get(i);
+				enableFlatnessCheckOption.setAvailable(!overrideFlatnessCheckOption.available());
+				enableFlatnessCheckOption.requestSetDefault();
+			}
+		});
+
+		enableGlobalBiomeCheckOption.addListener((opt, enableGlobalBiomeCheck) -> {
+			for(int i = 0; i < overrideFlatnessCheckOptions.size(); i++) {
+				var overrideBiomeCheckOption = overrideBiomeCheckOptions.get(i);
+				overrideBiomeCheckOption.setAvailable(enableGlobalBiomeCheck);
+				overrideBiomeCheckOption.requestSetDefault();
+
+				var enableFlatnessCheckOption = enableFlatnessCheckOptions.get(i);
+				enableFlatnessCheckOption.setAvailable(!overrideBiomeCheckOption.available());
+				enableFlatnessCheckOption.requestSetDefault();
+			}
+		});
 
 		yacl.category(structureCategoryBuilder.build());
 	}
 
-	private static void addGeneralSettings(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
+	private static void addGlobalSettings(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
 		var generalStructuresGroupBuilder = OptionGroup.createBuilder()
-			.name(Component.translatable("gui.structurify.structures.global.title"))
+			.name(Component.translatable("gui.structurify.structures.global.title").withStyle(style -> style.withUnderlined(true)))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.global.description")));
+
+		var emptyLineOption = LabelOption.create(Component.literal("\n"));
+		((StructurifyOption) emptyLineOption).structurify$setName(Component.empty());
+		generalStructuresGroupBuilder.option(emptyLineOption);
 
 		var disableAllStructuresOption = Option.<Boolean>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.disable_all_structures.title"))
@@ -67,11 +106,23 @@ public final class StructuresConfigScreen
 
 		disableAllStructuresOption.addListener((opt, disableAllStructures) -> {
 			for (var structureOption : structureOptions) {
-				structureOption.setAvailable(!disableAllStructures);
+				structureOption.requestSet(!disableAllStructures);
 			}
 		});
 
 		generalStructuresGroupBuilder.option(disableAllStructuresOption);
+
+		var preventStructureOverlapOption = Option.<Boolean>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.prevent_structure_overlap.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.prevent_structure_overlap.description")))
+			.binding(
+				false,
+				() -> config.preventStructureOverlap,
+				preventStructureOverlap -> config.preventStructureOverlap = preventStructureOverlap
+			)
+			.controller(opt -> BooleanControllerBuilder.create(opt).valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes").withStyle(style -> style.withColor(ChatFormatting.GREEN)):Component.translatable("gui.structurify.label.no").withStyle(style -> style.withColor(ChatFormatting.RED)))).build();
+
+		generalStructuresGroupBuilder.option(preventStructureOverlapOption);
 
 		var minStructureDistanceFromWorldOptionBuilder = Option.<Integer>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.min_structure_distance_from_world_center.title"))
@@ -85,13 +136,23 @@ public final class StructuresConfigScreen
 
 		generalStructuresGroupBuilder.option(minStructureDistanceFromWorldOptionBuilder.build());
 
+		var globalFlatnessCheckOptions = FlatnessCheckOptions.addFlatnessCheckOptions(generalStructuresGroupBuilder, config, "global");
+		enableGlobalFlatnessCheckOption = (Option<Boolean>) globalFlatnessCheckOptions.get(FlatnessCheckOptions.FLATNESS_CHECK_IS_ENABLED_OPTION_NAME);
+
+		//var biomesOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("biomes"));
+		var globalBiomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(structureCategoryBuilder, generalStructuresGroupBuilder, config, "global");
+		enableGlobalBiomeCheckOption = (Option<Boolean>) globalBiomeCheckOptions.get(FlatnessCheckOptions.FLATNESS_CHECK_IS_ENABLED_OPTION_NAME);
+
+		((StructurifyOption) emptyLineOption).structurify$setName(Component.empty());
+		generalStructuresGroupBuilder.option(emptyLineOption);
+
 		structureCategoryBuilder.group(generalStructuresGroupBuilder.build());
 	}
 
 	private static void addStructures(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
 		var structures = WorldgenDataProvider.getStructures();
 		List<OptionGroup> optionGroups = new ArrayList<>();
-		OptionGroup.Builder currentGroupBuilder = null;
+		OptionGroup.Builder namespaceGroupBuilder = null;
 		String currentNamespace = null;
 
 		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
@@ -105,14 +166,25 @@ public final class StructuresConfigScreen
 
 			// Create new group for each namespace
 			if (!namespace.equals(currentNamespace)) {
-				if (currentGroupBuilder != null) {
-					optionGroups.add(currentGroupBuilder.build());
+				if (namespaceGroupBuilder != null) {
+					optionGroups.add(namespaceGroupBuilder.build());
 				}
 
 				// Create new group
-				currentGroupBuilder = OptionGroup.createBuilder()
-					.name(Component.translatable("gui.structurify.structures.structures_group.title", LanguageUtil.translateId(null, namespace).getString()))
+				namespaceGroupBuilder = OptionGroup.createBuilder()
+					.name(Component.translatable("gui.structurify.structures.structures_group.title", LanguageUtil.translateId(null, namespace).getString()).withStyle(style -> style.withUnderlined(true)))
 					.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structures_group.description", namespace)));
+
+				var namespaceFlatnessCheckOptions = FlatnessCheckOptions.addFlatnessCheckOptions(namespaceGroupBuilder, config, namespace);
+				overrideFlatnessCheckOptions.add((Option<Boolean>) namespaceFlatnessCheckOptions.get(FlatnessCheckOptions.OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME));
+				enableFlatnessCheckOptions.add((Option<Boolean>) namespaceFlatnessCheckOptions.get(FlatnessCheckOptions.FLATNESS_CHECK_IS_ENABLED_OPTION_NAME));
+
+				//var biomesOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("biomes"));
+				var namespaceBiomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(structureCategoryBuilder, namespaceGroupBuilder, config, namespace);
+				overrideBiomeCheckOptions.add((Option<Boolean>) namespaceBiomeCheckOptions.get(BiomeCheckOptions.OVERRIDE_GLOBAL_BIOME_CHECK_OPTION_NAME));
+				enableBiomeCheckOptions.add((Option<Boolean>) namespaceBiomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_IS_ENABLED_OPTION_NAME));
+
+				namespaceGroupBuilder.option(LabelOption.create(Component.translatable("gui.structurify.structures.structures.structure.title").withStyle(style -> style.withBold(true))));
 
 				currentNamespace = namespace;
 			}
@@ -123,46 +195,48 @@ public final class StructuresConfigScreen
 					true,
 					() -> !config.getStructureData().get(structureStringId).isDisabled(),
 					isEnabled -> config.getStructureData().get(structureStringId).setDisabled(!isEnabled)
-				).available(!config.disableAllStructures)
+				)
 				.controller(opt -> StructureButtonControllerBuilder.create(opt, structureStringId)
 					.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.enabled"):Component.translatable("gui.structurify.label.disabled"))
 					.coloured(true));
 
-			var descriptionBuilder = OptionDescription.createBuilder();
+			structureOptionBuilder.description(v -> {
+				var descriptionBuilder = OptionDescription.createBuilder();
 
-			descriptionBuilder.text(Component.translatable("gui.structurify.structures.biomes_description").append(Component.literal("\n")));
+				descriptionBuilder.text(Component.translatable("gui.structurify.structures.biomes_description").append(Component.literal("\n")));
 
-			for (String biome : structureData.getBiomes()) {
-				if (biome.contains("#")) {
-					if (biomeRegistry == null) {
-						continue;
+				for (String biome : structureData.getBiomes()) {
+					if (biome.contains("#")) {
+						if (biomeRegistry == null) {
+							continue;
+						}
+
+						var biomeTagKey = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId(biome.replace("#", "")));
+						var biomeTagHolder = biomeRegistry.get(biomeTagKey).orElse(null);
+
+						if (biomeTagHolder == null) {
+							continue;
+						}
+
+						for (var biomeHolder : biomeTagHolder.stream().toList()) {
+							descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biomeHolder.unwrap().left().get().location().toLanguageKey())));
+						}
+					} else {
+						descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biome)));
 					}
-
-					var biomeTagKey = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId(biome.replace("#", "")));
-					var biomeTagHolder = biomeRegistry.get(biomeTagKey).orElse(null);
-
-					if (biomeTagHolder == null) {
-						continue;
-					}
-
-					for (var biomeHolder : biomeTagHolder.stream().toList()) {
-						descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biomeHolder.unwrap().left().get().location().toLanguageKey())));
-					}
-				} else {
-					descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biome)));
 				}
-			}
 
-			descriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structures.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
+				descriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structures.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
 
-			structureOptionBuilder.description(descriptionBuilder.build());
+				return descriptionBuilder.build();
+			});
 			var structureOption = structureOptionBuilder.build();
 			structureOptions.add(structureOption);
-			currentGroupBuilder.option(structureOption);
+			namespaceGroupBuilder.option(structureOption);
 		}
 
-		if (currentGroupBuilder != null) {
-			optionGroups.add(currentGroupBuilder.build());
+		if (namespaceGroupBuilder != null) {
+			optionGroups.add(namespaceGroupBuilder.build());
 		}
 
 		for (OptionGroup structureOptionGroup : optionGroups) {

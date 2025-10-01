@@ -1,7 +1,8 @@
 package com.faboslav.structurify.common;
 
 import com.faboslav.structurify.common.config.StructurifyConfig;
-import com.faboslav.structurify.common.config.StructurifyConfigLoader;
+import com.faboslav.structurify.common.config.StructurifyConfigSerializer;
+import com.faboslav.structurify.common.debug.StructurifyDebugRenderer;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.modcompat.ModChecker;
@@ -16,17 +17,18 @@ public final class Structurify
 	public static final String MOD_ID = "structurify";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Structurify.MOD_ID);
 	private static final StructurifyConfig CONFIG = new StructurifyConfig();
+	private static final StructurifyDebugRenderer DEBUG_RENDERER = new StructurifyDebugRenderer();
 
-	public static String makeStringID(String name) {
-		return MOD_ID + ":" + name;
+	public static StructurifyConfig getConfig() {
+		return CONFIG;
 	}
 
 	public static Logger getLogger() {
 		return LOGGER;
 	}
 
-	public static StructurifyConfig getConfig() {
-		return CONFIG;
+	public static StructurifyDebugRenderer getDebugRenderer() {
+		return DEBUG_RENDERER;
 	}
 
 	public static ResourceLocation makeId(String path) {
@@ -55,11 +57,15 @@ public final class Structurify
 		*///?}
 	}
 
+	public static String makeStringID(String name) {
+		return MOD_ID + ":" + name;
+	}
+
 	public static void init() {
 		Structurify.getConfig().create();
 		ModChecker.setupModCompat();
 
-		LoadConfigEvent.EVENT.addListener(StructurifyConfigLoader::loadConfig);
+		LoadConfigEvent.EVENT.addListener(StructurifyConfigSerializer::loadConfig);
 		UpdateRegistriesEvent.EVENT.addListener(StructurifyRegistryUpdater::updateRegistries);
 	}
 }

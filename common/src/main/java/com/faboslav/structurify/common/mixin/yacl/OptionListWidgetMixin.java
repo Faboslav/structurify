@@ -26,9 +26,14 @@ public class OptionListWidgetMixin
 	public void structurify$updateSearchQuery(CallbackInfo ci) {
 		var currentTab = yaclScreen.tabNavigationBar.getTabManager().getCurrentTab();
 
-		if (currentTab instanceof YACLScreen.CategoryTab categoryTab) {
-			var yaclScreenCategoryTab = ((CategoryTabAccessor) categoryTab);
-			yaclScreenCategoryTab.getOptionList().getList().setScrollAmount(0);
+		if (currentTab instanceof YACLScreen.CategoryTab yaclScreenCategoryTab) {
+			var categoryTab = ((CategoryTabAccessor) yaclScreenCategoryTab);
+			//? >=1.21.9 {
+			var optionListWidget = categoryTab.getOptionList().getType();
+			//?} else {
+			/*var optionListWidget = categoryTab.getOptionList().getList();
+			 *///?}
+			optionListWidget.setScrollAmount(0);
 		}
 	}
 }
