@@ -174,7 +174,7 @@ public class ImageButtonWidget extends AbstractWidget
 
 		// Draw border.
 		//? >= 1.21.9 {
-		context.submitOutline(getX(), getY(), width, height, 0x1FFFFFFF);
+		context.submitOutline(getX(), getY(), width, height, 0x0FFFFFFF);
 		//?} else {
 		/*context.renderOutline(getX(), getY(), width, height, 0x0FFFFFFF);
 		*///?}

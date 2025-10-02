@@ -5,6 +5,7 @@ import com.faboslav.structurify.common.config.client.gui.widget.DynamicGridWidge
 import com.faboslav.structurify.common.config.client.gui.widget.ImageButtonWidget;
 import com.faboslav.structurify.common.mixin.yacl.CategoryTabAccessor;
 import com.faboslav.structurify.common.mixin.yacl.GroupSeparatorEntryAccessor;
+import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
@@ -115,14 +116,9 @@ public class StructurifyConfigScreen extends Screen
 	public void saveScreenState(YACLScreen yaclScreen) {
 		var currentTab = yaclScreen.tabNavigationBar.getTabManager().getCurrentTab();
 
-		if (currentTab instanceof YACLScreen.CategoryTab yaclCategoryTab) {
-			var categoryTab = ((CategoryTabAccessor) yaclCategoryTab);
-			//? >=1.21.9 {
-			var optionListWidget = categoryTab.getOptionList().getType();
-			//?} else {
-			/*var optionListWidget = categoryTab.getOptionList().getList();
-			*///?}
-
+		if (currentTab instanceof YACLScreen.CategoryTab yaclScreenCategoryTab) {
+			var categoryTab = ((CategoryTabAccessor) yaclScreenCategoryTab);
+			var optionListWidget = YACLUtil.getOptionListWidget(yaclScreenCategoryTab);
 			var collapsedGroups = new HashMap<String, Boolean>();
 
 			for (OptionListWidget.Entry entry : optionListWidget.children()) {
@@ -156,11 +152,7 @@ public class StructurifyConfigScreen extends Screen
 
 			if (screenState != null) {
 				var categoryTab = ((CategoryTabAccessor) yaclScreenCategoryTab);
-				//? >=1.21.9 {
-				var optionListWidget = categoryTab.getOptionList().getType();
-				//?} else {
-				/*var optionListWidget = categoryTab.getOptionList().getList();
-				 *///?}
+				var optionListWidget = YACLUtil.getOptionListWidget(yaclScreenCategoryTab);
 				categoryTab.getSearchField().setValue(screenState.lastSearchText());
 				optionListWidget.setScrollAmount(screenState.lastScrollAmount());
 

@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.mixin.yacl;
 
+import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import org.spongepowered.asm.mixin.Final;
@@ -27,12 +28,7 @@ public class OptionListWidgetMixin
 		var currentTab = yaclScreen.tabNavigationBar.getTabManager().getCurrentTab();
 
 		if (currentTab instanceof YACLScreen.CategoryTab yaclScreenCategoryTab) {
-			var categoryTab = ((CategoryTabAccessor) yaclScreenCategoryTab);
-			//? >=1.21.9 {
-			var optionListWidget = categoryTab.getOptionList().getType();
-			//?} else {
-			/*var optionListWidget = categoryTab.getOptionList().getList();
-			 *///?}
+			var optionListWidget = YACLUtil.getOptionListWidget(yaclScreenCategoryTab);
 			optionListWidget.setScrollAmount(0);
 		}
 	}
