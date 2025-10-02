@@ -23,7 +23,12 @@ public final class StructurifyNeoForge
 
 		Structurify.init();
 
-		if (FMLEnvironment.dist == Dist.CLIENT) {
+		//? >= 1.21.9 {
+		if (FMLEnvironment.getDist() == Dist.CLIENT)
+		//?} else {
+		/*if (FMLEnvironment.dist == Dist.CLIENT)
+		*///?}
+		{
 			StructurifyNeoForgeClient.init(modEventBus, eventBus);
 		}
 
