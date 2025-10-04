@@ -7,7 +7,7 @@ plugins {
 }
 
 stonecutter {
-	const("terra", rootProject.project(stonecutter.current.project).property("deps.terra").toString() != "")
+	constants["terra"] = rootProject.project(stonecutter.current.project).property("deps.terra").toString() != ""
 }
 
 dependencies {

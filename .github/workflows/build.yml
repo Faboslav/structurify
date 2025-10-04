@@ -53,15 +53,12 @@ jobs:
                     gradle-version: wrapper
                     add-job-summary: 'on-failure'
 
-            -   name: "Change active version"
-                run: ./gradlew :stonecutterSwitchTo${{ matrix.version }}
-
             -   name: "Parse gradle properties"
                 id: gradle-properties
                 run: ./.github/scripts/parse-gradle-properties.sh ${{ matrix.version }}
 
             -   name: "Run build"
-                run: ./gradlew buildActive
+                run: ./gradlew :${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
             -   name: "Prepare artifacts"
                 run: |

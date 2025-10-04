@@ -7,18 +7,12 @@ plugins {
 }
 
 stonecutter {
-	const(
-		"global_packs",
-		rootProject.project(stonecutter.current.project).property("deps.global_packs").toString() != ""
-	)
-	const("open_loader", rootProject.project(stonecutter.current.project).property("deps.open_loader").toString() != "")
-	const("yungs_api", rootProject.project(stonecutter.current.project).property("deps.yungs_api").toString() != "")
-	const(
-		"repurposed_structures",
-		rootProject.project(stonecutter.current.project).property("deps.repurposed_structures")
-			.toString() != "" && rootProject.project(stonecutter.current.project).property("deps.midnight_lib")
-			.toString() != ""
-	)
+	constants["global_packs"] = rootProject.project(stonecutter.current.project).property("deps.global_packs").toString() != ""
+	constants["open_loader"] = rootProject.project(stonecutter.current.project).property("deps.open_loader").toString() != ""
+	constants["yungs_api"] = rootProject.project(stonecutter.current.project).property("deps.yungs_api").toString() != ""
+	constants["repurposed_structures"] = rootProject.project(stonecutter.current.project).property("deps.repurposed_structures")
+		.toString() != "" && rootProject.project(stonecutter.current.project).property("deps.midnight_lib")
+		.toString() != ""
 }
 
 fletchingTable {
