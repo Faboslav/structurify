@@ -28,6 +28,10 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 			return this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread");
 		}
 
+		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.compat.YungJigsawStructureMixin")) {
+			return this.isClassAvailable("com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure");
+		}
+
 		if (mixinClassName.equals("com.faboslav.structurify.forge.mixin.compat.StructureGelApiModifySpreadMixin")) {
 			return this.isClassAvailable("com.legacy.structure_gel.api.structure.GridStructurePlacement");
 		}
