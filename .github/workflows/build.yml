@@ -60,17 +60,12 @@ jobs:
             -   name: "Run build"
                 run: ./gradlew :${{ matrix.mod_loader }}:${{ matrix.version }}:build
 
-            -   name: "Prepare artifacts"
-                run: |
-                    mkdir -p artifacts
-                    find . -path "./*/versions/*/build/libs/*.jar" ! -name "*-common*.jar" -exec cp {} artifacts/ \;
-
             -   name: "Upload artifacts"
                 uses: actions/upload-artifact@v4
                 with:
                     name: ${{ steps.gradle-properties.outputs.MOD_ID }}-artifacts-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ matrix.version }}
                     if-no-files-found: error
-                    path: artifacts/${{ matrix.version }}/*.jar
+                    path: ./${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/*.jar
 
     run-client:
         runs-on: ubuntu-latest
