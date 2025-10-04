@@ -131,3 +131,7 @@ tasks {
 		}
 	}
 }
+
+if (stonecutter.current.isActive) tasks.register("buildActive") {
+	dependsOn("build")
+}

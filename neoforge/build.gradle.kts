@@ -82,3 +82,7 @@ neoForge {
 sourceSets.main {
 	resources.srcDir("src/generated/resources")
 }
+
+if (stonecutter.current.isActive) tasks.register("buildActive") {
+	dependsOn("build")
+}

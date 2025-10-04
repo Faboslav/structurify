@@ -98,3 +98,7 @@ loom {
 		defaultRefmapName = "${mod.id}.refmap.json"
 	}
 }
+
+if (stonecutter.current.isActive) tasks.register("buildActive") {
+	dependsOn("build")
+}
