@@ -27,8 +27,12 @@ jobs:
 
     build:
         runs-on: ubuntu-latest
-        name: Run build
+        needs: generate-build-matrix
         timeout-minutes: 30
+        name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }} build
+        strategy:
+            fail-fast: false
+            matrix: ${{ fromJson(needs.generate-build-matrix.outputs.matrix) }}
 
         steps:
             -   name: "Checkout repository"
