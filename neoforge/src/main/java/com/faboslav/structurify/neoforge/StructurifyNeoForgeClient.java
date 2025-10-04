@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-//? <1.20.6 {
+//? if <1.20.6 {
 /*import net.neoforged.neoforge.client.ConfigScreenHandler;
 
  *///?} else {
@@ -26,7 +26,7 @@ public final class StructurifyNeoForgeClient
 
 	private static void onClientSetup(final FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			//? <1.20.6 {
+			//? if <1.20.6 {
 			/*ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
 				new ConfigScreenHandler.ConfigScreenFactory(
 					(mc, screen) -> StructurifyClient.getConfigScreen(screen)
@@ -40,13 +40,13 @@ public final class StructurifyNeoForgeClient
 		});
 	}
 
-	//? >= 1.21.8 {
+	//? if >= 1.21.8 {
 	public static void onRenderLevelStage(RenderLevelStageEvent.AfterParticles event)
 	//?} else {
 	/*public static void onRenderLevelStage(RenderLevelStageEvent event)
 	 *///?}
 	{
-		//? < 1.21.8 {
+		//? if < 1.21.8 {
 		/*if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
 			return;
 		}

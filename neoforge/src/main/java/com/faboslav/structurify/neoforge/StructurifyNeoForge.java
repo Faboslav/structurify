@@ -23,7 +23,7 @@ public final class StructurifyNeoForge
 
 		Structurify.init();
 
-		//? >= 1.21.9 {
+		//? if >= 1.21.9 {
 		if (FMLEnvironment.getDist() == Dist.CLIENT)
 		//?} else {
 		/*if (FMLEnvironment.dist == Dist.CLIENT)
@@ -46,7 +46,7 @@ public final class StructurifyNeoForge
 			return;
 		}
 
-		//? >=1.21.3 {
+		//? if >=1.21.3 {
 		var registryAccess = event.getLookupProvider();
 		//?} else {
 		/*var registryAccess = event.getRegistryAccess();

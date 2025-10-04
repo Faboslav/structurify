@@ -11,15 +11,15 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 
 import java.util.*;
 
-//? yungs_api || repurposed_structures {
+//? if yungs_api || repurposed_structures {
 /*import com.faboslav.structurify.common.platform.PlatformHooks;
 *///?}
 
-//? yungs_api {
+//? if yungs_api {
 /*import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
  *///?}
 
-//? repurposed_structures {
+//? if repurposed_structures {
 /*import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
 *///?}
 
@@ -162,7 +162,7 @@ public final class WorldgenDataProvider
 				int horizontalMaxDistanceFromCenter;
 				int verticalMaxDistanceFromCenter;
 
-				//? >= 1.21.9 {
+				//? if >= 1.21.9 {
 				var maxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
 				horizontalMaxDistanceFromCenter = maxDistanceFromCenter.horizontal();
 				verticalMaxDistanceFromCenter = maxDistanceFromCenter.vertical();

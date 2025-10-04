@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(value = LabelController.LabelControllerElement.class, remap = false)
+@Mixin(value = LabelController.LabelControllerElement.class)
 public abstract class LabelControllerElementMixin
 {
 	@Shadow
@@ -16,8 +16,9 @@ public abstract class LabelControllerElementMixin
 	protected abstract Style getStyle(int mouseX, int mouseY);
 
 	@WrapMethod(
-		//? >= 1.21.9 {
-		method = "onMouseClicked"
+		//? if >= 1.21.9 {
+		method = "onMouseClicked",
+		remap = false
 		//?} else {
 		/*method = "mouseClicked"
 		*///?}

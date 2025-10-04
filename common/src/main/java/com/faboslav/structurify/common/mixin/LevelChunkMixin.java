@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-//? <= 1.21.8 {
+//? if <= 1.21.8 {
 /*import net.minecraft.core.Registry;
 import net.minecraft.world.level.biome.Biome;
 *///?}
@@ -26,7 +26,7 @@ import net.minecraft.world.level.biome.Biome;
 @Mixin(LevelChunk.class)
 public abstract class LevelChunkMixin extends ChunkAccess
 {
-	//? >= 1.21.9 {
+	//? if >= 1.21.9 {
 	public LevelChunkMixin(
 		ChunkPos chunkPos,
 		UpgradeData upgradeData,

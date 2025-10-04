@@ -252,7 +252,7 @@ public final class StructurifyCommand
 	private static int locateStructure(CommandSourceStack source, Result<Structure> structure) throws CommandSyntaxException {
 		ServerLevel serverLevel = source.getLevel();
 		BlockPos blockPos = BlockPos.containing(source.getPosition());
-		//? > 1.21.1 {
+		//? if > 1.21.1 {
 		var registry = serverLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
 		//?} else {
 		/*var registry = source.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);

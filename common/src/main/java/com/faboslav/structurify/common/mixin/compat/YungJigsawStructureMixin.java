@@ -1,10 +1,8 @@
 package com.faboslav.structurify.common.mixin.compat;
 
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import org.spongepowered.asm.mixin.Mixin;
 
-//? yungs_api {
-
+//? if yungs_api {
 /*import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
@@ -12,7 +10,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(value = YungJigsawStructure.class, remap = false)
+@Mixin(value = YungJigsawStructure.class)
 public abstract class YungJigsawStructureMixin extends Structure implements StructurifyStructure
 {
 	protected YungJigsawStructureMixin(StructureSettings settings) {
@@ -48,11 +46,12 @@ public abstract class YungJigsawStructureMixin extends Structure implements Stru
 			return originalMaxDistanceFromCenter;
 		}
 
-		// TODO handle chance in 1.21.9
 		return this.structurify$getStructureData().getJigsawData().getHorizontalMaxDistanceFromCenter();
 	}
 }
 *///?} else {
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+
 @Mixin(value = JigsawStructure.class)
 public abstract class YungJigsawStructureMixin
 {

@@ -1,7 +1,7 @@
 package com.faboslav.structurify.common.modcompat;
 
 
-//? open_loader {
+//? if open_loader {
 /*import net.minecraft.server.packs.repository.RepositorySource;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.EnumSet;
 import java.nio.file.Paths;
 import java.nio.file.InvalidPathException;
 
-//? <=1.20.1 {
+//? if <=1.20.1 {
 /^import net.darkhax.openloader.config.ConfigSchema;
 import net.darkhax.openloader.packs.OpenLoaderRepositorySource;
 import net.darkhax.openloader.packs.RepoType;
@@ -34,7 +34,7 @@ public final class OpenLoaderCompat implements ModCompat
 	public ArrayList<RepositorySource> getResourcePackProviders() {
 		var resourcePackProviders = new ArrayList<RepositorySource>();
 
-		//? <=1.20.1 {
+		//? if <=1.20.1 {
 		/^var configDir = PlatformHooks.PLATFORM_HELPER.getConfigDirectory().resolve("openloader");
 		^///?} else {
 		//?}

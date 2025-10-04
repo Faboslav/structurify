@@ -63,7 +63,7 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetIdentifier(), originalFrequency);
 	}
 
-	//? >= 1.21.1 {
+	//? if >= 1.21.1 {
 	@ModifyExpressionValue(
 		method = "applyAdditionalChunkRestrictions",
 		at = @At(

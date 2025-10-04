@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface JigsawStructureAccessor
 {
 	@Accessor("maxDistanceFromCenter")
-	//? >= 1.21.9 {
+	//? if >= 1.21.9 {
 	JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter();
 	//?} else {
 	/*int structurify$getMaxDistanceFromCenter();

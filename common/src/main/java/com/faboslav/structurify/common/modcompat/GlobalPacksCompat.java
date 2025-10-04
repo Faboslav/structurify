@@ -1,6 +1,6 @@
 package com.faboslav.structurify.common.modcompat;
 
-//? global_packs {
+//? if global_packs {
 
 /*import com.faboslav.structurify.common.Structurify;
 import net.minecraft.server.packs.PackType;

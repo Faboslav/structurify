@@ -22,11 +22,11 @@ public final class ModChecker
 
 	public static void setupModCompat() {
 		try {
-			//? global_packs {
+			//? if global_packs {
 			/*loadModCompat("globalpacks", () -> new GlobalPacksCompat());
 			 *///?}
 
-			//? open_loader {
+			//? if open_loader {
 			/*loadModCompat("openloader", () -> new OpenLoaderCompat());
 			 *///?}
 

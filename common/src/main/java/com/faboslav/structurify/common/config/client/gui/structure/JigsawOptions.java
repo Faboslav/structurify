@@ -27,7 +27,7 @@ public final class JigsawOptions
 
 		jigsawOptions.add(sizeOption);
 
-		//? >=1.21.9 {
+		//? if >=1.21.9 {
 		var horizontalMaxDistanceFromCenterOption = Option.<Integer>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.jigsaw.horizontal_max_distance_from_center.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.jigsaw.horizontal_max_distance_from_center.description")))

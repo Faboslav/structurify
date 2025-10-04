@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 import java.util.function.Predicate;
 
-//? >= 1.21.4 {
+//? if >= 1.21.4 {
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 //?}
@@ -175,7 +175,7 @@ public abstract class StructureMixin implements StructurifyStructure
 		method = "generate"
 	)
 	private StructureStart structurify$generate(
-		//? >= 1.21.4 {
+		//? if >= 1.21.4 {
 		Holder<Structure> structure,
 		ResourceKey<Level> level,
 		//?}
@@ -191,7 +191,7 @@ public abstract class StructureMixin implements StructurifyStructure
 		Predicate<Holder<Biome>> validBiome,
 		Operation<StructureStart> original
 	) {
-		//? >= 1.21.4 {
+		//? if >= 1.21.4 {
 		var structureStart = original.call(structure, level, registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
 		//?} else {
 		/*var structureStart = original.call(registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);

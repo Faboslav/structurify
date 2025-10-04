@@ -5,15 +5,15 @@ import com.faboslav.structurify.common.mixin.structure.jigsaw.JigsawStructureAcc
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
-//? yungs_api {
+//? if yungs_api {
 /*import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
 *///?}
 
-//? repurposed_structures {
+//? if repurposed_structures {
 /*import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
 *///?}
 
-//? yungs_api || repurposed_structures {
+//? if yungs_api || repurposed_structures {
 /*import com.faboslav.structurify.common.platform.PlatformHooks;
 *///?}
 
@@ -29,13 +29,13 @@ public final class JigsawStructureUtil
 			return true;
 		}
 
-		//? yungs_api {
+		//? if yungs_api {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
 			return true;
 		}
 		*///?}
 
-		//? repurposed_structures {
+		//? if repurposed_structures {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return true;
 		}
@@ -53,7 +53,7 @@ public final class JigsawStructureUtil
 		return false;
 	}
 
-	//? >= 1.21.9 {
+	//? if >= 1.21.9 {
 	public static JigsawStructure.MaxDistance getMaxDistanceFromCenterForStructure(Structure structure)
 	//?} else {
 	/*public static int getMaxDistanceFromCenterForStructure(Structure structure)
@@ -63,13 +63,13 @@ public final class JigsawStructureUtil
 			return ((JigsawStructureAccessor) structure).structurify$getMaxDistanceFromCenter();
 		}
 
-		//? yungs_api {
+		//? if yungs_api {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
 			return ((YungJigsawStructure) structure).maxDistanceFromCenter;
 		}
 		*///?}
 
-		//? repurposed_structures {
+		//? if repurposed_structures {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
 		}
@@ -82,7 +82,7 @@ public final class JigsawStructureUtil
 			if (field.getName().equals("maxDistanceFromCenter")) {
 				field.setAccessible(true);
 
-				//? >= 1.21.9 {
+				//? if >= 1.21.9 {
 				try {
 					Field target = null;
 
@@ -162,7 +162,7 @@ public final class JigsawStructureUtil
 			}
 		}
 
-		//? >= 1.21.9 {
+		//? if >= 1.21.9 {
 		return new JigsawStructure.MaxDistance(0, 0);
 		//?} else {
 		/*return 0;
@@ -174,13 +174,13 @@ public final class JigsawStructureUtil
 			return ((JigsawStructureAccessor) structure).structurify$getMaxDepth();
 		}
 
-		//? yungs_api {
+		//? if yungs_api {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
 			return ((YungJigsawStructure) structure).maxDepth;
 		}
 		*///?}
 
-		//? repurposed_structures {
+		//? if repurposed_structures {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).size;
 		}

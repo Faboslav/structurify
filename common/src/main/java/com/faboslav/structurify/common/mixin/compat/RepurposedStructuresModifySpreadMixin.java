@@ -3,7 +3,7 @@ package com.faboslav.structurify.common.mixin.compat;
 import org.spongepowered.asm.mixin.Mixin;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 
-//? repurposed_structures {
+//? if repurposed_structures {
 
 /*import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.util.RandomSpreadUtil;

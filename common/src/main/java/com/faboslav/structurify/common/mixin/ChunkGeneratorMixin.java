@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-//? >=1.21.4 {
+//? if >=1.21.4 {
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
@@ -49,7 +49,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 		method = "tryGenerateStructure"
 	)
 	public boolean structurify$trySetStructureStart(
-		//? >=1.21.4 {
+		//? if >=1.21.4 {
 		StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
@@ -99,7 +99,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 			}
 		}
 
-		//? >=1.21.4 {
+		//? if >=1.21.4 {
 		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
 		//?} else {
 		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);

@@ -75,7 +75,7 @@ public final class StructurifyRegistryManagerProvider
 				WorldLoader.load(serverConfig, loadContextSupplierContext -> {
 					var registry = new MappedRegistry<>(Registries.LEVEL_STEM, Lifecycle.stable()).freeze();
 
-					//? >=1.21.3 {
+					//? if >=1.21.3 {
 					var dimensionsConfig = loadContextSupplierContext
 						.datapackWorldgen()
 						.lookupOrThrow(Registries.WORLD_PRESET)

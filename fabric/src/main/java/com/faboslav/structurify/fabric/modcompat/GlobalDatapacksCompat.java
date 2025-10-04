@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-//? >1.20.1 {
+//? if >1.20.1 {
 import net.minecraft.world.level.validation.DirectoryValidator;
 //?}
 
@@ -31,7 +31,7 @@ public final class GlobalDatapacksCompat implements ModCompat
 			Field globalPackFolderField = globalDatapackClass.getField("globalPackFolder");
 			Path globalPackFolder = (Path) globalPackFolderField.get(null);
 
-			//? =1.20.1 {
+			//? if =1.20.1 {
 			/*resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD));
 			 *///?} else {
 			resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD, new DirectoryValidator(path -> true)));

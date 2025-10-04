@@ -9,7 +9,7 @@ import net.minecraft.server.packs.repository.ServerPacksSource;
 
 import java.util.ArrayList;
 
-//? >=1.21 {
+//? if >=1.21 {
 import com.faboslav.structurify.common.mixin.ResourcePackManagerAccessor;
 //?}
 
@@ -28,7 +28,7 @@ public final class StructurifyResourcePackProvider
 	public static ArrayList<RepositorySource> getVanillaResourcePackProviders() {
 		ArrayList<RepositorySource> vanillaResourcePackProviders = new ArrayList<>();
 
-		//? >=1.21 {
+		//? if >=1.21 {
 		vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor) ServerPacksSource.createVanillaTrustedRepository()).getSources());
 		//?} else {
 		/*vanillaResourcePackProviders.add(new ServerPacksSource());

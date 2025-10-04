@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 
-//? <1.21 {
+//? if <1.21 {
 /*import com.faboslav.structurify.common.mixin.AbstractWidgetInvoker;
  *///?}
 
@@ -146,7 +146,7 @@ public class DynamicGridWidget extends AbstractLayout
 			child.widget().setY(currentY);
 			child.widget().setWidth(thisCellWidth - padding * 2);
 
-			//? >=1.21 {
+			//? if >=1.21 {
 			child.widget().setHeight(thisCellHeight - padding * 2);
 			//?} else {
 			/*((AbstractWidgetInvoker)child.widget()).setHeight((thisCellHeight - padding * 2));

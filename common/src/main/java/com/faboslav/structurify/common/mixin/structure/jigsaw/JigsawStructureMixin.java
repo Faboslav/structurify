@@ -30,7 +30,7 @@ public abstract class JigsawStructureMixin extends StructureMixin
 		method = "findGenerationPoint",
 		at = @At(
 			value = "FIELD",
-			//? >= 1.21.9 {
+			//? if >= 1.21.9 {
 			target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure$MaxDistance;",
 			//?} else {
 			/*target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:I",
@@ -38,7 +38,7 @@ public abstract class JigsawStructureMixin extends StructureMixin
 			opcode = Opcodes.GETFIELD
 		)
 	)
-	//? >= 1.21.9 {
+	//? if >= 1.21.9 {
 	protected JigsawStructure.MaxDistance structurify$findGenerationPointGetMaxDistanceFromCenter(JigsawStructure.MaxDistance originalMaxDistanceFromCenter)
 	//?} else {
 	/*protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
@@ -48,7 +48,7 @@ public abstract class JigsawStructureMixin extends StructureMixin
 			return originalMaxDistanceFromCenter;
 		}
 
-		//? >= 1.21.9 {
+		//? if >= 1.21.9 {
 		return new JigsawStructure.MaxDistance(
 			this.structurify$getStructureData().getJigsawData().getHorizontalMaxDistanceFromCenter(),
 			this.structurify$getStructureData().getJigsawData().getVerticalMaxDistanceFromCenter()
