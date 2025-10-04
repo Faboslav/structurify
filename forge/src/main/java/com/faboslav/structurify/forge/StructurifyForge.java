@@ -5,15 +5,10 @@ import com.faboslav.structurify.common.commands.StructurifyCommand;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TagsUpdatedEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -40,7 +35,6 @@ public final class StructurifyForge
 		eventBus.addListener(StructurifyForge::registerCommand);
 		eventBus.addListener(StructurifyForge::onResourceManagerReload);
 		eventBus.addListener(StructurifyForge::onServerAboutToStart);
-		eventBus.addListener(StructurifyForge::onRenderLevelStage);
 	}
 
 	private static void registerCommand(RegisterCommandsEvent event) {
@@ -59,11 +53,5 @@ public final class StructurifyForge
 	private static void onServerAboutToStart(ServerAboutToStartEvent event) {
 		StructurifyRegistryManagerProvider.setRegistryManager(event.getServer().registryAccess());
 		UpdateRegistriesEvent.EVENT.invoke(new UpdateRegistriesEvent(event.getServer().registryAccess()));
-	}
-
-	public static void onRenderLevelStage(RenderLevelStageEvent event) {
-		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) return;
-
-		Structurify.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), null);
 	}
 }
