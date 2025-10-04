@@ -99,10 +99,10 @@ jobs:
                 uses: actions/download-artifact@v4
                 with:
                     name: ${{ steps.gradle-properties.outputs.MOD_ID }}-${{ matrix.mod_loader }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ matrix.version }}
-                    path: /${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs
+                    path: ./${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs
 
             -   name: "Copy mod jar to run/mods"
-                run: mkdir -p run/mods && cp /${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/*.jar run/mods
+                run: mkdir -p run/mods && cp ./${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/*.jar run/mods
 
             -   name: "Download YACL"
                 run: |
@@ -171,10 +171,10 @@ jobs:
                 uses: actions/download-artifact@v4
                 with:
                     name: ${{ steps.gradle-properties.outputs.MOD_ID }}-${{ matrix.mod_loader }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ matrix.version }}
-                    path: /${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs
+                    path: ./${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs
 
             -   name: "Copy mod jar to run/mods"
-                run: mkdir -p run/mods && cp /${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/*.jar run/mods
+                run: mkdir -p run/mods && cp ./${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/*.jar run/mods
 
             -   name: "Download YACL"
                 run: |
