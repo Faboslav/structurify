@@ -63,7 +63,7 @@ jobs:
             -   name: "Upload artifacts"
                 uses: actions/upload-artifact@v4
                 with:
-                    name: ${{ steps.gradle-properties.outputs.MOD_ID }}-artifacts-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ matrix.version }}
+                    name: ${{ steps.gradle-properties.outputs.MOD_ID }}-${{ matrix.mod_loader }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ matrix.version }}
                     if-no-files-found: error
                     path: ./${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/*.jar
 
@@ -96,7 +96,7 @@ jobs:
             -   name: "Download artifacts"
                 uses: actions/download-artifact@v4
                 with:
-                    name: ${{ steps.gradle-properties.outputs.MOD_ID }}-artifacts-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ matrix.version }}
+                    name: ${{ steps.gradle-properties.outputs.MOD_ID }}-${{ matrix.mod_loader }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ matrix.version }}
                     path: artifacts/${{ matrix.version }}
 
             -   name: "Copy mod jar to run/mods"
@@ -167,7 +167,7 @@ jobs:
             -   name: "Download artifacts"
                 uses: actions/download-artifact@v4
                 with:
-                    name: ${{ steps.gradle-properties.outputs.MOD_ID }}-artifacts-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ matrix.version }}
+                    name: ${{ steps.gradle-properties.outputs.MOD_ID }}-${{ matrix.mod_loader }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ matrix.version }}
                     path: artifacts/${{ matrix.version }}
 
             -   name: "Copy mod jar to run/mods"
