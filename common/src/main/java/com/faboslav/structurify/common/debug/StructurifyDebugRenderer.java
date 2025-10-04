@@ -36,12 +36,6 @@ import net.minecraft.client.renderer.ShapeRenderer;
 
 public final class StructurifyDebugRenderer
 {
-	public final Map<Long, StructureFlatnessCheckOverview> structureFlatnessCheckOverviews = new ConcurrentHashMap<>();
-	public final Map<Long, Set<StructureFlatnessCheckSample>> structureFlatnessCheckSamples = new ConcurrentHashMap<>();
-
-	public final Map<Long, StructureBiomeCheckOverview> structureBiomeCheckOverviews= new ConcurrentHashMap<>();
-	public final Map<Long, Set<StructureBiomeCheckSample>> structureBiomeCheckSamples = new ConcurrentHashMap<>();
-
 	public void render(
 		Minecraft minecraft,
 		PoseStack poseStack,
@@ -70,25 +64,29 @@ public final class StructurifyDebugRenderer
 		final double camZ = cameraPosition.z;
 
 		if(debugMode == DebugData.DebugMode.FLATNESS) {
-			synchronized (this.structureFlatnessCheckOverviews) {
-				for (StructureFlatnessCheckOverview structureFlatnessCheckOverview : this.structureFlatnessCheckOverviews.values().stream().filter(o -> isWithinChunkRadius(cameraBlockPosition, o.structureBoundingBox().getCenter(), chunkRadius)).toList()) {
+			var structureFlatnessCheckOverviews = Structurify.getConfig().getDebugData().getStructureFlatnessCheckOverviews();
+			synchronized (structureFlatnessCheckOverviews) {
+				for (StructureFlatnessCheckOverview structureFlatnessCheckOverview : structureFlatnessCheckOverviews.values().stream().filter(o -> isWithinChunkRadius(cameraBlockPosition, o.structureBoundingBox().getCenter(), chunkRadius)).toList()) {
 					this.renderStructureFlatnessCheckOverview(structureFlatnessCheckOverview, minecraft, poseStack, bufferSource, camX, camY, camZ);
 				}
 			}
 
-			synchronized (this.structureFlatnessCheckSamples) {
-				for (StructureFlatnessCheckSample structureFlatnessCheckSample : this.structureFlatnessCheckSamples.values().stream().flatMap(Collection::stream).filter(o -> isWithinChunkRadius(cameraBlockPosition, o.x(), o.freeY(), o.z(), chunkRadius)).toList()) {
+			var structureFlatnessCheckSamples = Structurify.getConfig().getDebugData().getStructureFlatnessCheckSamples();
+			synchronized (structureFlatnessCheckSamples) {
+				for (StructureFlatnessCheckSample structureFlatnessCheckSample : structureFlatnessCheckSamples.values().stream().flatMap(Collection::stream).filter(o -> isWithinChunkRadius(cameraBlockPosition, o.x(), o.freeY(), o.z(), chunkRadius)).toList()) {
 					this.renderStructureFlatnessCheckSample(structureFlatnessCheckSample, poseStack, bufferSource, camX, camY, camZ);
 				}
 			}
 		} else if(debugMode == DebugData.DebugMode.BIOME) {
-			synchronized (this.structureBiomeCheckOverviews) {
-				for (StructureBiomeCheckOverview structureBiomeCheckOverview : this.structureBiomeCheckOverviews.values().stream().filter(o -> isWithinChunkRadius(cameraBlockPosition, o.structureBoundingBox().getCenter(), chunkRadius)).toList()) {
+			var structureBiomeCheckOverviews = Structurify.getConfig().getDebugData().getStructureBiomeCheckOverviews();
+			synchronized (structureBiomeCheckOverviews) {
+				for (StructureBiomeCheckOverview structureBiomeCheckOverview : structureBiomeCheckOverviews.values().stream().filter(o -> isWithinChunkRadius(cameraBlockPosition, o.structureBoundingBox().getCenter(), chunkRadius)).toList()) {
 					this.renderStructureBiomeCheckOverview(structureBiomeCheckOverview, minecraft, poseStack, bufferSource, camX, camY, camZ);
 				}
 			}
 
-			synchronized (this.structureBiomeCheckSamples) {
+			var structureBiomeCheckSamples = Structurify.getConfig().getDebugData().getStructureBiomeCheckSamples();
+			synchronized (structureBiomeCheckSamples) {
 				for (StructureBiomeCheckSample structureBiomeCheckSample : structureBiomeCheckSamples.values().stream().flatMap(Collection::stream).filter(o -> isWithinChunkRadius(cameraBlockPosition, o.x(), o.y(), o.z(), chunkRadius)).toList()) {
 					this.renderStructureBiomeCheckSample(structureBiomeCheckSample, poseStack, bufferSource, camX, camY, camZ);
 				}
@@ -216,127 +214,6 @@ public final class StructurifyDebugRenderer
 
 		AABB col = new AABB(x, y, z, x + 1, y + 1, z + 1).move(-camX, -camY, -camZ);
 	}
-
-	public void addStructureFlatnessCheckSample(Long structureKey, StructureFlatnessCheckSample structureFlatnessCheckSample) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		synchronized (this.structureFlatnessCheckSamples) {
-			if(!this.structureFlatnessCheckSamples.containsKey(structureKey)) {
-				this.structureFlatnessCheckSamples.put(structureKey, ConcurrentHashMap.newKeySet());
-			}
-
-			this.structureFlatnessCheckSamples.get(structureKey).add(structureFlatnessCheckSample);
-		}
-	}
-
-	public void removeStructureFlatnessCheckSamples(Long structureKey) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		this.structureFlatnessCheckSamples.remove(structureKey);
-	}
-
-	public void clearStructureFlatnessCheckSamples() {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		synchronized (this.structureFlatnessCheckSamples) {
-			this.structureFlatnessCheckSamples.clear();
-		}
-	}
-
-	public void clearStructureFlatnessCheckOverviews() {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		synchronized (this.structureFlatnessCheckOverviews) {
-			this.structureFlatnessCheckOverviews.clear();
-		}
-	}
-
-	public void addStructureFlatnessCheckInfo(Long structureKey, StructureFlatnessCheckOverview structureFlatnessCheckInfo) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		synchronized (this.structureFlatnessCheckOverviews) {
-			this.structureFlatnessCheckOverviews.putIfAbsent(structureKey, structureFlatnessCheckInfo);
-		}
-	}
-
-	public void removeStructureFlatnessCheckInfo(Long structureKey) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		this.structureFlatnessCheckOverviews.remove(structureKey);
-	}
-
-	public void addStructureBiomeCheckOverview(Long structureKey, StructureBiomeCheckOverview structureBiomeCheckOverview) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		synchronized (this.structureBiomeCheckOverviews) {
-			this.structureBiomeCheckOverviews.putIfAbsent(structureKey, structureBiomeCheckOverview);
-		}
-	}
-
-	public void removeStructureBiomeCheckOverview(Long structureKey) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		this.structureBiomeCheckOverviews.remove(structureKey);
-	}
-
-	public void clearStructureBiomeCheckOverviews() {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		synchronized (this.structureBiomeCheckOverviews) {
-			this.structureBiomeCheckOverviews.clear();
-		}
-	}
-
-	public void addStructureBiomeCheckSample(Long structureKey, StructureBiomeCheckSample structureBiomeCheckSample) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		synchronized (this.structureBiomeCheckSamples) {
-			if(!this.structureBiomeCheckSamples.containsKey(structureKey)) {
-				this.structureBiomeCheckSamples.put(structureKey, ConcurrentHashMap.newKeySet());
-			}
-
-			this.structureBiomeCheckSamples.get(structureKey).add(structureBiomeCheckSample);
-		}
-	}
-
-	public void removeStructureBiomeCheckSamples(Long structureKey) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		this.structureBiomeCheckSamples.remove(structureKey);
-	}
-
-	public void clearStructureBiomeCheckSamples() {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		synchronized (this.structureBiomeCheckSamples) {
-			this.structureBiomeCheckSamples.clear();
-		}
-	}
-
 
 	private static void renderBoundingBox(
 		BoundingBox boundingBox,

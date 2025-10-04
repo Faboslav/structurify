@@ -1,6 +1,5 @@
 package com.faboslav.structurify.fabric;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -20,7 +19,7 @@ public final class StructurifyFabricClient implements ClientModInitializer
 	}
 
 	private static void onRenderLevelStage(WorldRenderContext context) {
-		Structurify.getDebugRenderer().render(Minecraft.getInstance(), context.matrixStack(), context.consumers());
+		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), context.matrixStack(), context.consumers());
 	}
 }
 

@@ -91,7 +91,7 @@ public final class StructureBiomeCheck
 		StructureCheckData structureCheckData,
 		boolean result
 	) {
-		Structurify.getDebugRenderer().addStructureBiomeCheckOverview(
+		Structurify.getConfig().getDebugData().addStructureBiomeCheckOverview(
 			ChunkPos.asLong(structureCheckData.getStructureCenter()),
 			new StructureBiomeCheckOverview(
 				structureCheckData.getStructureId(),
@@ -112,7 +112,7 @@ public final class StructureBiomeCheck
 		Holder<Biome> biome,
 		boolean result
 	) {
-		Structurify.getDebugRenderer().addStructureBiomeCheckSample(
+		Structurify.getConfig().getDebugData().addStructureBiomeCheckSample(
 			ChunkPos.asLong(structureCheckData.getStructureCenter()),
 			new StructureBiomeCheckSample(
 				structureCheckData.getStructureId(),

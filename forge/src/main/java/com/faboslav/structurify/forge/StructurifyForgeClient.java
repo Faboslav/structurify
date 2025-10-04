@@ -1,6 +1,5 @@
 package com.faboslav.structurify.forge;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.ConfigScreenHandler;
@@ -33,6 +32,6 @@ public final class StructurifyForgeClient
 	private static void onRenderLevelStage(RenderLevelStageEvent event) {
 		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) return;
 
-		Structurify.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), null);
+		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), null);
 	}
 }

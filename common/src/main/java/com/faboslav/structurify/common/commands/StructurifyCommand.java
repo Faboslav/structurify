@@ -149,10 +149,10 @@ public final class StructurifyCommand
 
 								Structurify.getConfig().getDebugData().setSamplingMode(samplingMode);
 
-								Structurify.getDebugRenderer().clearStructureFlatnessCheckOverviews();
-								Structurify.getDebugRenderer().clearStructureFlatnessCheckSamples();
-								Structurify.getDebugRenderer().clearStructureBiomeCheckOverviews();
-								Structurify.getDebugRenderer().clearStructureBiomeCheckSamples();
+								Structurify.getConfig().getDebugData().clearStructureFlatnessCheckOverviews();
+								Structurify.getConfig().getDebugData().clearStructureFlatnessCheckSamples();
+								Structurify.getConfig().getDebugData().clearStructureBiomeCheckOverviews();
+								Structurify.getConfig().getDebugData().clearStructureBiomeCheckSamples();
 
 								reloadStructureChecks(ctx);
 

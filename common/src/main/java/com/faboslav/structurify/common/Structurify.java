@@ -2,7 +2,6 @@ package com.faboslav.structurify.common;
 
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.StructurifyConfigSerializer;
-import com.faboslav.structurify.common.debug.StructurifyDebugRenderer;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.modcompat.ModChecker;
@@ -17,7 +16,6 @@ public final class Structurify
 	public static final String MOD_ID = "structurify";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Structurify.MOD_ID);
 	private static final StructurifyConfig CONFIG = new StructurifyConfig();
-	private static final StructurifyDebugRenderer DEBUG_RENDERER = new StructurifyDebugRenderer();
 
 	public static StructurifyConfig getConfig() {
 		return CONFIG;
@@ -25,10 +23,6 @@ public final class Structurify
 
 	public static Logger getLogger() {
 		return LOGGER;
-	}
-
-	public static StructurifyDebugRenderer getDebugRenderer() {
-		return DEBUG_RENDERER;
 	}
 
 	public static ResourceLocation makeId(String path) {

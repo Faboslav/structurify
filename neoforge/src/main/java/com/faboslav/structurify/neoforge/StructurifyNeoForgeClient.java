@@ -1,6 +1,5 @@
 package com.faboslav.structurify.neoforge;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
 import net.minecraft.client.Minecraft;
 import net.neoforged.bus.api.IEventBus;
@@ -52,6 +51,6 @@ public final class StructurifyNeoForgeClient
 		}
 		*///?}
 
-		Structurify.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), null);
+		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), null);
 	}
 }
