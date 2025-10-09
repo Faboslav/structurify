@@ -77,7 +77,7 @@ public final class StructurePieceSampler
 
 	private static int[][] getStructurePieceCorners(List<StructurePiece> pieces) {
 		int pieceCount = pieces.size();
-		int[][] structureCorners = new int[pieceCount * 4][2];
+		int[][] structureCorners = new int[pieceCount * 5][2];
 		int structureCornerIndex = 0;
 
 		for (StructurePiece piece : pieces) {
@@ -92,6 +92,10 @@ public final class StructurePieceSampler
 			structureCorners[structureCornerIndex++] = new int[]{minX, maxZ};
 			structureCorners[structureCornerIndex++] = new int[]{maxX, minZ};
 			structureCorners[structureCornerIndex++] = new int[]{maxX, maxZ};
+
+			int centerX = (minX + maxX) / 2;
+			int centerZ = (minZ + maxZ) / 2;
+			structureCorners[structureCornerIndex++] = new int[]{centerX, centerZ};
 		}
 
 		return structureCorners;

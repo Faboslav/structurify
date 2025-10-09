@@ -30,7 +30,7 @@ jobs:
         needs: generate-build-matrix
         continue-on-error: true
         timeout-minutes: 30
-        name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }} build
+        name: Build ${{ matrix.mod_loader }} ${{ matrix.version }}
         strategy:
             fail-fast: false
             matrix: ${{ fromJson(needs.generate-build-matrix.outputs.matrix) }}
@@ -76,7 +76,7 @@ jobs:
             fail-fast: false
             matrix: ${{ fromJson(needs.generate-build-matrix.outputs.matrix) }}
 
-        name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }} client
+        name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} client
         timeout-minutes: 10
 
         steps:
@@ -148,7 +148,7 @@ jobs:
             fail-fast: false
             matrix: ${{ fromJson(needs.generate-build-matrix.outputs.matrix) }}
 
-        name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} ${{ matrix.script }} server
+        name: Run ${{ matrix.mod_loader }} ${{ matrix.version }} server
         timeout-minutes: 10
 
         steps:

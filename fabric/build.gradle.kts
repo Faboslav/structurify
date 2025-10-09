@@ -3,7 +3,7 @@ plugins {
 	`multiloader-loader`
 	kotlin("jvm") version "2.2.0"
 	id("com.google.devtools.ksp") version "2.2.0-2.0.2"
-	id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.20"
+	id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.22"
 }
 
 stonecutter {
@@ -95,10 +95,16 @@ loom {
 	}
 
 	mixin {
+		useLegacyMixinAp = true
 		defaultRefmapName = "${mod.id}.refmap.json"
 	}
 }
 
-if (stonecutter.current.isActive) tasks.register("buildActive") {
-	dependsOn("build")
+for (meta in stonecutter.versions) tasks.register("runActive${meta.version}") {
+	dependsOn(":${meta.project}:runClient")
+}
+
+if (stonecutter.current.isActive) tasks.register("runActiveFabricClient") {
+	dependsOn("runClient")
+	description = "Fabric Client for ${stonecutter.current.version}"
 }

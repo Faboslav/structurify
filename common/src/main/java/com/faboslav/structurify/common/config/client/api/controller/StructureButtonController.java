@@ -22,7 +22,6 @@ public class StructureButtonController extends BooleanController
 {
 	private final String structureId;
 
-
 	public StructureButtonController(
 		Option<Boolean> option,
 		String structureId,
@@ -79,56 +78,59 @@ public class StructureButtonController extends BooleanController
 			this.configurationButton.setY(getDimension().y());
 			this.configurationButton.render(graphics, mouseX, mouseY, delta);
 			this.configurationButton.active = this.isAvailable();
+
 			super.render(graphics, mouseX, mouseY, delta);
 		}
 
 		@Override
 		public void mouseMoved(double mouseX, double mouseY) {
-			super.mouseMoved(mouseX, mouseY);
 			this.configurationButton.mouseMoved(mouseX, mouseY);
+			super.mouseMoved(mouseX, mouseY);
+		}
+
+		@Override
+		public boolean isMouseOver(double mouseX, double mouseY) {
+			return this.configurationButton.isMouseOver(mouseX, mouseY) || super.isMouseOver(mouseX, mouseY);
 		}
 
 		//? if >= 1.21.9 {
 		@Override
 		public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
-			super.mouseClicked(mouseButtonEvent, doubleClick);
-			return super.mouseClicked(mouseButtonEvent, doubleClick) || this.configurationButton.mouseClicked(mouseButtonEvent, doubleClick);
+			return this.configurationButton.mouseClicked(mouseButtonEvent, doubleClick) || super.mouseClicked(mouseButtonEvent, doubleClick);
 		}
 
 		@Override
 		public boolean mouseReleased(MouseButtonEvent mouseButtonEvent) {
-			super.mouseReleased(mouseButtonEvent);
-			return super.mouseReleased(mouseButtonEvent) || this.configurationButton.mouseReleased(mouseButtonEvent);
+			return this.configurationButton.mouseReleased(mouseButtonEvent) || super.mouseReleased(mouseButtonEvent);
 		}
 
 		@Override
 		public boolean mouseDragged(MouseButtonEvent mouseButtonEvent, double dx, double dy) {
-			super.mouseDragged(mouseButtonEvent, dx, dy);
-			return super.mouseDragged(mouseButtonEvent, dx, dy) || this.configurationButton.mouseDragged(mouseButtonEvent, dx, dy);
+			return this.configurationButton.mouseDragged(mouseButtonEvent, dx, dy) || super.mouseDragged(mouseButtonEvent, dx, dy);
 		}
 		//?} else {
 		/*@Override
 		public boolean mouseClicked(double mouseX, double mouseY, int button) {
-			super.mouseClicked(mouseX, mouseY, button);
-			return super.mouseClicked(mouseX, mouseY, button) || this.configurationButton.mouseClicked(mouseX, mouseY, button);
+			return this.configurationButton.mouseClicked(mouseX, mouseY, button) || super.mouseClicked(mouseX, mouseY, button);
 		}
 
 		@Override
 		public boolean mouseReleased(double mouseX, double mouseY, int button) {
-			return super.mouseReleased(mouseX, mouseY, button) || this.configurationButton.mouseReleased(mouseX, mouseY, button);
+			return this.configurationButton.mouseReleased(mouseX, mouseY, button) || super.mouseReleased(mouseX, mouseY, button);
 		}
 
 		@Override
 		public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-			return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || this.configurationButton.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+			return this.configurationButton.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
 		}
 		*///?}
 
-		/*? >=1.20.4 {*/
+		//? if >=1.20.4 {
 		@Override
 		public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-			return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || this.configurationButton.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+			return this.configurationButton.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
 		}
-		/*?}*/
+		//?}
+
 	}
 }

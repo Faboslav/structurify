@@ -71,14 +71,14 @@ public final class StructuresConfigScreen
 		});
 
 		enableGlobalBiomeCheckOption.addListener((opt, enableGlobalBiomeCheck) -> {
-			for(int i = 0; i < overrideFlatnessCheckOptions.size(); i++) {
+			for(int i = 0; i < overrideBiomeCheckOptions.size(); i++) {
 				var overrideBiomeCheckOption = overrideBiomeCheckOptions.get(i);
 				overrideBiomeCheckOption.setAvailable(enableGlobalBiomeCheck);
 				overrideBiomeCheckOption.requestSetDefault();
 
-				var enableFlatnessCheckOption = enableFlatnessCheckOptions.get(i);
-				enableFlatnessCheckOption.setAvailable(!overrideBiomeCheckOption.available());
-				enableFlatnessCheckOption.requestSetDefault();
+				var enableBiomeCheckOption = enableBiomeCheckOptions.get(i);
+				enableBiomeCheckOption.setAvailable(!overrideBiomeCheckOption.available());
+				enableBiomeCheckOption.requestSetDefault();
 			}
 		});
 
@@ -141,7 +141,7 @@ public final class StructuresConfigScreen
 
 		//var biomesOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("biomes"));
 		var globalBiomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(structureCategoryBuilder, generalStructuresGroupBuilder, config, "global");
-		enableGlobalBiomeCheckOption = (Option<Boolean>) globalBiomeCheckOptions.get(FlatnessCheckOptions.FLATNESS_CHECK_IS_ENABLED_OPTION_NAME);
+		enableGlobalBiomeCheckOption = (Option<Boolean>) globalBiomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_IS_ENABLED_OPTION_NAME);
 
 		((StructurifyOption) emptyLineOption).structurify$setName(Component.empty());
 		generalStructuresGroupBuilder.option(emptyLineOption);

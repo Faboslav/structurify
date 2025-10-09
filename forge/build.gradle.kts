@@ -3,7 +3,7 @@ plugins {
 	id("net.neoforged.moddev.legacyforge")
 	kotlin("jvm") version "2.2.0"
 	id("com.google.devtools.ksp") version "2.2.0-2.0.2"
-	id("dev.kikugie.fletching-table.neoforge") version "0.1.0-alpha.20"
+	id("dev.kikugie.fletching-table.neoforge") version "0.1.0-alpha.22"
 }
 
 mixin {
@@ -74,6 +74,11 @@ dependencies {
 		modImplementation(commonMod.modrinth("structure-gel-api", structureGelApiVersion)) { isTransitive = false }
 	}
 
+	val fossilsAndArcheologyRevivalWithDeps: List<Dependency> = fletchingTable.modrinthBundle("fossils-and-archeology-revival", commonMod.mc, "forge") {
+		recursive = true
+		include("required", "optional", "embedded")
+	}
+	for (mod in fossilsAndArcheologyRevivalWithDeps) modImplementation(mod)
 	modImplementation(fletchingTable.modrinth("fungal-infectionspore", commonMod.mc, "forge"))
 	modImplementation(fletchingTable.modrinth("dungeons-enhanced", commonMod.mc, "forge"))
 	modImplementation(fletchingTable.modrinth("legendary-monsters", commonMod.mc, "forge"))
@@ -83,7 +88,6 @@ dependencies {
 		include("required", "optional", "embedded")
 	}
 	for (mod in endersCataclysmWithDeps) modImplementation(mod)
-
 
 	// For debugging
 	// modImplementation(modrinth("blue-skies", "1.3.31")) { transitive = false }

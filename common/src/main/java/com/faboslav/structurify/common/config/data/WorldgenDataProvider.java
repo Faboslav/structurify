@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.data;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;

@@ -76,7 +76,7 @@ public class StructurifyConfigScreen extends Screen
 
 		grid.setPadding(3);
 
-		grid.addChild(new ImageButtonWidget(0, 0, 0, 0, Component.translatable("gui.structurify.structures_category.title"), Structurify.makeId("textures/gui/config/images/buttons/structures.webp"), btn -> {
+		grid.addChild(new ImageButtonWidget(0, 0, 0, 0, Component.translatable("gui.structurify.structures_category.title"), Structurify.makeId("textures/gui/config/images/buttons/structures.png"), btn -> {
 			if (this.structuresScreen == null) {
 				this.structuresScreen = StructuresConfigScreen.createConfigGui(Structurify.getConfig(), this);
 			}
@@ -85,7 +85,7 @@ public class StructurifyConfigScreen extends Screen
 			this.loadScreenState(this.structuresScreen);
 		}), 2, 1);
 
-		grid.addChild(new ImageButtonWidget(0, 0, 0, 0, Component.translatable("gui.structurify.structure_sets_category.title"), Structurify.makeId("textures/gui/config/images/buttons/structure_sets.webp"), btn -> {
+		grid.addChild(new ImageButtonWidget(0, 0, 0, 0, Component.translatable("gui.structurify.structure_sets_category.title"), Structurify.makeId("textures/gui/config/images/buttons/structure_sets.png"), btn -> {
 			YACLScreen structureSetsScreen = this.structureSetsConfigScreen.getStructureSetsScreen();
 
 			if (structureSetsScreen == null) {

@@ -7,53 +7,41 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public final class YACLUtil
-{
+public final class YACLUtil {
+	private YACLUtil() {}
+
 	@Nullable
-	public static OptionListWidget getOptionListWidget(YACLScreen.CategoryTab tab) {
-		Object optionListHolder = getDeclaredField(tab, "optionList");
-		if (optionListHolder == null) {
-			return null;
-		}
+	public static OptionListWidget getOptionListWidget(Object tab) {
+		Object holder = readField(tab, "optionList");
+		if (holder == null) return null;
 
+		// Defensive: sometimes it's still null because the tab wasn't opened yet.
 		try {
-			Class<?> widgetAndType = Class.forName("dev.isxander.yacl3.gui.WidgetAndType");
-			if (widgetAndType.isInstance(optionListHolder)) {
-				Method m = optionListHolder.getClass().getMethod("getType");
-				Object out = m.invoke(optionListHolder);
-				return (OptionListWidget) out;
+			// Try common accessor names
+			for (String methodName : new String[]{"widget", "getWidget", "getType", "getList"}) {
+				try {
+					Method m = holder.getClass().getMethod(methodName);
+					m.setAccessible(true);
+					Object result = m.invoke(holder);
+					if (result instanceof OptionListWidget olw) return olw;
+				} catch (NoSuchMethodException ignored) {}
 			}
-		} catch (ClassNotFoundException ignored) {
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException("Failed invoking WidgetAndType#getType()", e);
-		}
-
-		try {
-			Class<?> listHolder = Class.forName("dev.isxander.yacl3.gui.tab.ListHolderWidget");
-			if (listHolder.isInstance(optionListHolder)) {
-				Method m = optionListHolder.getClass().getMethod("getList");
-				Object out = m.invoke(optionListHolder);
-				return (OptionListWidget) out;
-			}
-		} catch (ClassNotFoundException ignored) {
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException("Failed invoking ListHolderWidget#getList()", e);
-		}
+		} catch (Throwable ignored) {}
 
 		return null;
 	}
 
-	private static Object getDeclaredField(Object owner, String name) {
-		Class<?> c = owner.getClass();
+	private static @Nullable Object readField(Object instance, String name) {
+		Class<?> c = instance.getClass();
 		while (c != null) {
 			try {
 				Field f = c.getDeclaredField(name);
 				f.setAccessible(true);
-				return f.get(owner);
+				return f.get(instance);
 			} catch (NoSuchFieldException e) {
 				c = c.getSuperclass();
-			} catch (ReflectiveOperationException e) {
-				throw new RuntimeException("Failed to read field " + name, e);
+			} catch (Throwable t) {
+				return null;
 			}
 		}
 		return null;

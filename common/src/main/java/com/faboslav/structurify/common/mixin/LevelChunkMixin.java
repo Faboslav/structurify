@@ -59,6 +59,8 @@ public abstract class LevelChunkMixin extends ChunkAccess
 		method = "runPostLoad"
 	)
 	private void structurify$runPostLoad(Operation<Void> original) {
+		original.call();
+
 		if(!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}

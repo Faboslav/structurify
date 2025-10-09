@@ -122,12 +122,12 @@ public final class DualControllerElement extends AbstractWidget
 	}
     *///?}
 
-	/*? >=1.20.4 {*/
+	//? if >=1.20.4 {
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
 		return this.firstElement.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || this.secondElement.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
 	}
-	/*?}*/
+	//?}
 
 	@Override
 	public void setFocused(boolean focused) {

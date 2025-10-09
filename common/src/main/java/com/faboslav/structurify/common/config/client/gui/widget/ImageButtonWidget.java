@@ -1,7 +1,7 @@
 package com.faboslav.structurify.common.config.client.gui.widget;
 
 import dev.isxander.yacl3.gui.image.ImageRendererManager;
-import dev.isxander.yacl3.gui.image.impl.AnimatedDynamicTextureImage;
+import dev.isxander.yacl3.gui.image.impl.ResourceTextureImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -15,8 +15,6 @@ import java.lang.reflect.Field;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
-
-import static org.lwjgl.opengl.GL20.*;
 
 //? if >= 1.21.9 {
 import net.minecraft.client.input.MouseButtonEvent;
@@ -37,7 +35,7 @@ import net.minecraft.util.ARGB;
 public class ImageButtonWidget extends AbstractWidget
 {
 	float durationHovered = 1f;
-	private final CompletableFuture<AnimatedDynamicTextureImage> image;
+	private final CompletableFuture<ResourceTextureImage> image;
 	private final Consumer<AbstractWidget> onPress;
 
 	public ImageButtonWidget(
@@ -50,7 +48,7 @@ public class ImageButtonWidget extends AbstractWidget
 		Consumer<AbstractWidget> clickEvent
 	) {
 		super(x, y, width, height, message);
-		this.image = ImageRendererManager.registerOrGetImage(image, () -> AnimatedDynamicTextureImage.createWEBPFromTexture(image));
+		this.image = ImageRendererManager.registerOrGetImage(image, () -> ResourceTextureImage.createFactory(image, 0.0F, 0.0F, 1920, 1080, 1920, 1080));
 		this.onPress = clickEvent;
 	}
 
@@ -81,59 +79,52 @@ public class ImageButtonWidget extends AbstractWidget
 			}
 		}
 
-		// Ease in out lerp.
-		float alphaScale = Mth.clampedLerp(0.7f, 0.2f, Mth.clamp(durationHovered - 1f, 0.0f, 1.0f));
+		this.renderImage(image, context, delta);
+		this.renderLabel(context);
 
-		if (image.isDone()) {
-			int minFilterScalingTypePrev = glGetTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER);
-			int magFilterScalingTypePrev = glGetTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER);
+		context.disableScissor();
+	}
 
-			try {
-				var contentImage = image.get();
-				if (contentImage != null) {
-					// Using reflection, get value of contentImage.frameWidth and frameHeight
-					try {
-						Field frameWidthField = contentImage.getClass().getDeclaredField("frameWidth");
-						frameWidthField.setAccessible(true);
-						int frameWidth = frameWidthField.getInt(contentImage);
+	private void renderImage(CompletableFuture<ResourceTextureImage> image, GuiGraphics context, float delta) {
+		if (!image.isDone()) {
+			return;
+		}
 
-						Field frameHeightField = contentImage.getClass().getDeclaredField("frameHeight");
-						frameHeightField.setAccessible(true);
-						int frameHeight = frameHeightField.getInt(contentImage);
+		try {
+			var contentImage = image.get();
+			if (contentImage != null) {
+				try {
+					Field widthField = contentImage.getClass().getDeclaredField("width");
+					widthField.setAccessible(true);
+					int width = widthField.getInt(contentImage);
 
-						// Use frameWidth and frameHeight as needed
-						// Scale the image so that the image height is the same as the button height.
-						float neededWidth = frameWidth * ((float) this.height / frameHeight);
+					Field heightField = contentImage.getClass().getDeclaredField("height");
+					heightField.setAccessible(true);
+					int height = heightField.getInt(contentImage);
+					float neededWidth = width * ((float) this.height / height);
 
-						// Scale the image to fit within the width and height of the button.
-						//? if >= 1.21.6 {
-						context.pose().pushMatrix();
-						//?} else {
-						/*context.pose().pushPose();
-						*///?}
-						// gl bilinear scaling.
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-						contentImage.render(context, getX(), getY(), (int) Math.max(neededWidth, this.width), delta);
-						//? if >= 1.21.6 {
-						context.pose().popMatrix();
-						//?} else {
-						/*context.pose().popPose();
-						 *///?}
+					//? if >= 1.21.6 {
+					context.pose().pushMatrix();
+					//?} else {
+					/*context.pose().pushPose();
+					*///?}
 
-						// reset gl scaling
-
+					contentImage.render(context, getX(), getY(), (int) Math.max(neededWidth, this.width), delta);
+					//? if >= 1.21.6 {
+					context.pose().popMatrix();
+					//?} else {
+					/*context.pose().popPose();
+					*///?}
 					} catch (NoSuchFieldException | IllegalAccessException e) {
 						e.printStackTrace();
 					}
 				}
 			} catch (InterruptedException | ExecutionException ignored) {
-			} finally {
-				// reset gl scaling
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilterScalingTypePrev);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilterScalingTypePrev);
 			}
-		}
+	}
+
+	private void renderLabel(GuiGraphics context) {
+		float alphaScale = Mth.clampedLerp(0.7f, 0.2f, Mth.clamp(durationHovered - 1f, 0.0f, 1.0f));
 
 		//? if <=1.21.1 {
 		/*int greyColor = FastColor.ABGR32.color((int) (alphaScale * 255), 0, 0, 0);
@@ -142,9 +133,8 @@ public class ImageButtonWidget extends AbstractWidget
 		//?}
 		context.fill(getX(), getY(), getX() + width, getY() + height, greyColor);
 
-		// Draw text.
-		var client = Minecraft.getInstance();
 
+		var client = Minecraft.getInstance();
 		float fontScaling = 1.24f;
 
 		int unscaledTextX = this.getX() + 5;
@@ -177,8 +167,7 @@ public class ImageButtonWidget extends AbstractWidget
 		context.submitOutline(getX(), getY(), width, height, 0x0FFFFFFF);
 		//?} else {
 		/*context.renderOutline(getX(), getY(), width, height, 0x0FFFFFFF);
-		*///?}
-		context.disableScissor();
+		 *///?}
 	}
 
 	@Override
