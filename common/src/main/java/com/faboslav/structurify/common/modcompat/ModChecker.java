@@ -23,12 +23,12 @@ public final class ModChecker
 	public static void setupModCompat() {
 		try {
 			//? if global_packs {
-			loadModCompat("globalpacks", () -> new GlobalPacksCompat());
-			//?}
+			/*loadModCompat("globalpacks", () -> new GlobalPacksCompat());
+			*///?}
 
 			//? if open_loader {
-			loadModCompat("openloader", () -> new OpenLoaderCompat());
-			//?}
+			/*loadModCompat("openloader", () -> new OpenLoaderCompat());
+			*///?}
 
 			loadModCompat("terra", () -> new TerraCompat());
 

@@ -15,8 +15,8 @@ import net.minecraft.network.chat.Component;
 import java.util.function.Function;
 
 //? if >= 1.21.9 {
-/*import net.minecraft.client.input.MouseButtonEvent;
- *///?}
+import net.minecraft.client.input.MouseButtonEvent;
+ //?}
 
 public class StructureButtonController extends BooleanController
 {
@@ -94,7 +94,7 @@ public class StructureButtonController extends BooleanController
 		}
 
 		//? if >= 1.21.9 {
-		/*@Override
+		@Override
 		public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
 			return this.configurationButton.mouseClicked(mouseButtonEvent, doubleClick) || super.mouseClicked(mouseButtonEvent, doubleClick);
 		}
@@ -108,8 +108,8 @@ public class StructureButtonController extends BooleanController
 		public boolean mouseDragged(MouseButtonEvent mouseButtonEvent, double dx, double dy) {
 			return this.configurationButton.mouseDragged(mouseButtonEvent, dx, dy) || super.mouseDragged(mouseButtonEvent, dx, dy);
 		}
-		*///?} else {
-		@Override
+		//?} else {
+		/*@Override
 		public boolean mouseClicked(double mouseX, double mouseY, int button) {
 			return this.configurationButton.mouseClicked(mouseX, mouseY, button) || super.mouseClicked(mouseX, mouseY, button);
 		}
@@ -123,14 +123,14 @@ public class StructureButtonController extends BooleanController
 		public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
 			return this.configurationButton.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
 		}
-		//?}
+		*///?}
 
 		//? if >=1.20.4 {
-		/*@Override
+		@Override
 		public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
 			return this.configurationButton.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
 		}
-		*///?}
+		//?}
 
 	}
 }

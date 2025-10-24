@@ -17,11 +17,11 @@ public abstract class LabelControllerElementMixin
 
 	@WrapMethod(
 		//? if >= 1.21.9 {
-		/*method = "onMouseClicked",
+		method = "onMouseClicked",
 		remap = false
-		*///?} else {
-		method = "mouseClicked"
-		//?}
+		//?} else {
+		/*method = "mouseClicked"
+		*///?}
 	)
 	private boolean structurify$getClickEvent(
 		double mouseX,

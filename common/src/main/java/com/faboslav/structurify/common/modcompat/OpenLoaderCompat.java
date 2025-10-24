@@ -1,20 +1,20 @@
 package com.faboslav.structurify.common.modcompat;
 
 //? if open_loader {
-import com.faboslav.structurify.common.platform.PlatformHooks;
+/*import com.faboslav.structurify.common.platform.PlatformHooks;
 import net.minecraft.server.packs.repository.RepositorySource;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 
 //? if <=1.20.1 {
-import net.darkhax.openloader.config.ConfigSchema;
+/^import net.darkhax.openloader.config.ConfigSchema;
 import net.darkhax.openloader.packs.OpenLoaderRepositorySource;
 import net.darkhax.openloader.packs.RepoType;
-//?} else {
-/*import net.darkhax.openloader.common.impl.packs.OpenLoaderRepositorySource;
+^///?} else {
+import net.darkhax.openloader.common.impl.packs.OpenLoaderRepositorySource;
 import net.minecraft.server.packs.PackType;
-*///?}
+//?}
 
 public final class OpenLoaderCompat implements ModCompat
 {
@@ -28,15 +28,15 @@ public final class OpenLoaderCompat implements ModCompat
 		var resourcePackProviders = new ArrayList<RepositorySource>();
 
 		//? if <=1.20.1 {
-		var configDir = PlatformHooks.PLATFORM_HELPER.getConfigDirectory().resolve("openloader");
+		/^var configDir = PlatformHooks.PLATFORM_HELPER.getConfigDirectory().resolve("openloader");
 		var config = ConfigSchema.load(configDir);
 
 		resourcePackProviders.add(new OpenLoaderRepositorySource(RepoType.DATA, config, config.dataPacks, configDir));
-		//?} else {
-		/*resourcePackProviders.add(new OpenLoaderRepositorySource(PackType.SERVER_DATA));
-		 *///?}
+		^///?} else {
+		resourcePackProviders.add(new OpenLoaderRepositorySource(PackType.SERVER_DATA));
+		 //?}
 
 		return resourcePackProviders;
 	}
 }
-//?}
+*///?}

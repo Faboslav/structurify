@@ -25,12 +25,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 //? if >=1.21.4 {
-/*import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
 import java.util.Map;
 import java.util.Set;
-*///?}
+//?}
 
 @Mixin(ChunkGenerator.class)
 public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
@@ -48,7 +48,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 	)
 	public boolean structurify$trySetStructureStart(
 		//? if >=1.21.4 {
-		/*StructureSet.StructureSelectionEntry structureSelectionEntry,
+		StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
 		RandomState randomState,
@@ -59,8 +59,8 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 		SectionPos sectionPos,
 		ResourceKey<Level> resourceKey,
 		Operation<Boolean> original
-		*///?} else {
-		StructureSet.StructureSelectionEntry structureSelectionEntry,
+		//?} else {
+		/*StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
 		RandomState randomState,
@@ -70,7 +70,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 		ChunkPos chunkPos,
 		SectionPos sectionPos,
 		Operation<Boolean> original
-		//?}
+		*///?}
 	) {
 		if (Structurify.getConfig().disableAllStructures) {
 			return false;
@@ -97,10 +97,10 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 		}
 
 		//? if >=1.21.4 {
-		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
-		 *///?} else {
-		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
-		//?}
+		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
+		 //?} else {
+		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
+		*///?}
 	}
 
 	@WrapMethod(
