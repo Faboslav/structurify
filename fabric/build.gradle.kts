@@ -1,10 +1,9 @@
 plugins {
 	id("fabric-loom")
 	`multiloader-loader`
-	kotlin("jvm") version "2.2.0"
-	id("com.google.devtools.ksp") version "2.2.0-2.0.2"
 	id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.22"
 }
+
 
 stonecutter {
 	constants["terra"] = rootProject.project(stonecutter.current.project).property("deps.terra").toString() != ""

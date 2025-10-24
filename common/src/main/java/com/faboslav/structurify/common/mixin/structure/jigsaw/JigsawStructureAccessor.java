@@ -9,10 +9,10 @@ public interface JigsawStructureAccessor
 {
 	@Accessor("maxDistanceFromCenter")
 	//? if >= 1.21.9 {
-	JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter();
-	//?} else {
-	/*int structurify$getMaxDistanceFromCenter();
-	*///?}
+	/*JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter();
+	*///?} else {
+	int structurify$getMaxDistanceFromCenter();
+	//?}
 
 	@Accessor("maxDepth")
 	int structurify$getMaxDepth();

@@ -10,8 +10,8 @@ import net.minecraft.server.packs.repository.ServerPacksSource;
 import java.util.ArrayList;
 
 //? if >=1.21 {
-import com.faboslav.structurify.common.mixin.ResourcePackManagerAccessor;
-//?}
+/*import com.faboslav.structurify.common.mixin.ResourcePackManagerAccessor;
+*///?}
 
 public final class StructurifyResourcePackProvider
 {
@@ -29,10 +29,10 @@ public final class StructurifyResourcePackProvider
 		ArrayList<RepositorySource> vanillaResourcePackProviders = new ArrayList<>();
 
 		//? if >=1.21 {
-		vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor) ServerPacksSource.createVanillaTrustedRepository()).getSources());
-		//?} else {
-		/*vanillaResourcePackProviders.add(new ServerPacksSource());
-		 *///?}
+		/*vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor) ServerPacksSource.createVanillaTrustedRepository()).getSources());
+		*///?} else {
+		vanillaResourcePackProviders.add(new ServerPacksSource());
+		 //?}
 
 		return vanillaResourcePackProviders;
 	}

@@ -26,11 +26,11 @@ public final class StructureFlatnessCheck
 
 		FlatnessCheckData flatnessCheckDataToCheck = globalFlatnessCheckData;
 
-		if(namespaceFlatnessCheckData.isOverridingGlobalFlatnessCheck()) {
+		if(namespaceFlatnessCheckData.isOverridingGlobalFlatnessCheck() || namespaceFlatnessCheckData.isEnabled()) {
 			flatnessCheckDataToCheck = namespaceFlatnessCheckData;
 		}
 
-		if(structureFlatnessCheckData.isOverridingGlobalFlatnessCheck()) {
+		if(structureFlatnessCheckData.isOverridingGlobalFlatnessCheck() || structureFlatnessCheckData.isEnabled()) {
 			flatnessCheckDataToCheck = structureFlatnessCheckData;
 		}
 

@@ -29,10 +29,10 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 //? if >= 1.21.3 {
-import net.minecraft.client.renderer.ShapeRenderer;
-//?} else {
-/*import net.minecraft.client.renderer.LevelRenderer;
-*///?}
+/*import net.minecraft.client.renderer.ShapeRenderer;
+*///?} else {
+import net.minecraft.client.renderer.LevelRenderer;
+//?}
 
 public final class StructurifyDebugRenderer
 {
@@ -239,12 +239,12 @@ public final class StructurifyDebugRenderer
 
 	public static void renderLineBox(PoseStack poseStack, VertexConsumer buffer, AABB box, float red, float green, float blue, float alpha) {
 		//? if >= 1.21.9 {
-		ShapeRenderer.renderLineBox(poseStack.last(), buffer, box, red, green, blue, alpha);
-		//?} else if >= 1.21.3 {
+		/*ShapeRenderer.renderLineBox(poseStack.last(), buffer, box, red, green, blue, alpha);
+		*///?} else if >= 1.21.3 {
 		/*ShapeRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
 		*///?} else {
-		/*LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
-		*///?}
+		LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
+		//?}
 	}
 
 	private void renderLabel(

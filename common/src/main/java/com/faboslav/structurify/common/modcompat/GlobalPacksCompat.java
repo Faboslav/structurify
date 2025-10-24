@@ -2,7 +2,7 @@ package com.faboslav.structurify.common.modcompat;
 
 //? if global_packs {
 
-/*import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.Structurify;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.RepositorySource;
 
@@ -43,4 +43,4 @@ public final class GlobalPacksCompat implements ModCompat
 		return resourcePackProviders;
 	}
 }
-*///?}
+//?}

@@ -30,7 +30,6 @@ public final class StructurifyConfig
 
 	public boolean disableAllStructures = false;
 	public boolean preventStructureOverlap = false;
-	public int minStructureDistanceFromWorldCenter = 0;
 	public boolean enableGlobalSpacingAndSeparationModifier = ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	public double globalSpacingAndSeparationModifier = GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 
@@ -45,7 +44,6 @@ public final class StructurifyConfig
 	private static final String CONFIG_VERSION_PROPERTY = "config_version";
 	private static final String CONFIG_DATETIME_PROPERTY = "config_datetime";
 	private static final String GENERAL_PROPERTY = "general";
-	private static final String MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY = "min_structure_distance_from_world_center";
 	private static final String DISABLE_ALL_STRUCTURES_PROPERTY = "disable_all_structures";
 	private static final String PREVENT_STRUCTURE_OVERLAP_PROPERTY = "prevent_structure_overlap";
 	private static final String ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY = "enable_global_spacing_and_separation_modifier";
@@ -129,10 +127,6 @@ public final class StructurifyConfig
 
 		if (general.has(PREVENT_STRUCTURE_OVERLAP_PROPERTY)) {
 			this.preventStructureOverlap = general.get(PREVENT_STRUCTURE_OVERLAP_PROPERTY).getAsBoolean();
-		}
-
-		if (general.has(MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY)) {
-			this.minStructureDistanceFromWorldCenter = general.get(MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY).getAsInt();
 		}
 
 		if (general.has(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY)) {
@@ -318,7 +312,6 @@ public final class StructurifyConfig
 
 	private void saveGeneralData(JsonObject json) {
 		JsonObject general = new JsonObject();
-		general.addProperty(MIN_STRUCTURE_DISTANCE_FROM_WORLD_CENTER_PROPERTY, this.minStructureDistanceFromWorldCenter);
 		general.addProperty(DISABLE_ALL_STRUCTURES_PROPERTY, this.disableAllStructures);
 		general.addProperty(PREVENT_STRUCTURE_OVERLAP_PROPERTY, this.preventStructureOverlap);
 		general.addProperty(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, this.enableGlobalSpacingAndSeparationModifier);

@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.client.gui.structure;
 
+import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
 import com.faboslav.structurify.common.config.data.StructureLikeData;
@@ -27,11 +28,11 @@ public final class BiomeCheckOptions
 	public static Map<String, Option<?>> addBiomeCheckOptions(ConfigCategory.Builder categoryBuilder, OptionGroup.Builder groupBuilder, StructurifyConfig config, String id) {
 		boolean isEnabledGlobally = config.getStructureNamespaceData().get(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER).getBiomeCheckData().isEnabled();
 		boolean isGlobal = id.equals(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER);
-		boolean isNamespace = !id.contains(":");
-		String namespace;
 		boolean isEnabledForNamespace = config.getStructureNamespaceData().get(id.split(":")[0]).getBiomeCheckData().isEnabled();
+		boolean isNamespace = !id.contains(":");
+
+		String namespace;
 		Map<String, ? extends StructureLikeData> structureLikeData;
-		var biomeCheckOptions = new HashMap<String, Option<?>>();
 
 		if(isNamespace) {
 			namespace = id;
@@ -41,6 +42,7 @@ public final class BiomeCheckOptions
 			structureLikeData = config.getStructureData();
 		}
 
+		var biomeCheckOptions = new HashMap<String, Option<?>>();
 		var biomeCheckData = structureLikeData.get(id).getBiomeCheckData();
 		boolean isEnabled = structureLikeData.get(id).getBiomeCheckData().isEnabled();
 		var title = Component.translatable("gui.structurify.structures.biome_check_group.title");
@@ -53,7 +55,7 @@ public final class BiomeCheckOptions
 
 		groupBuilder.option(LabelOption.create(title.withStyle(style -> style.withBold(true))));
 
-		@Nullable Option<Boolean> isOverridingGlobalBiomeCheckOption = null;
+		@Nullable Option<Boolean> isOverridingGlobalBiomeCheckOption;
 
 		if(!isGlobal) {
 			isOverridingGlobalBiomeCheckOption = Option.<Boolean>createBuilder()
@@ -72,11 +74,14 @@ public final class BiomeCheckOptions
 
 			biomeCheckOptions.put(OVERRIDE_GLOBAL_BIOME_CHECK_OPTION_NAME, isOverridingGlobalBiomeCheckOption);
 			groupBuilder.option(isOverridingGlobalBiomeCheckOption);
+		} else {
+			isOverridingGlobalBiomeCheckOption = null;
 		}
 
 		var isEnabledOption = Option.<Boolean>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.enable_biome_check.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.enable_biome_check.description")))
+			.available(biomeCheckData.isOverridingGlobalBiomeCheck())
 			.binding(
 				BiomeCheckData.IS_ENABLED_DEFAULT_VALUE,
 				biomeCheckData::isEnabled,
@@ -108,6 +113,7 @@ public final class BiomeCheckOptions
 			.name(Component.translatable("gui.structurify.structures.structure.biome_check_blacklisted_biomes.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biome_check_blacklisted_biomes.description")))
 			.available(biomeCheckData.isEnabled())
+			.collapsed(false)
 			.insertEntriesAtEnd(false)
 			.binding(
 				BiomeCheckData.BLACKLISTED_BIOMES_DEFAULT_VALUE,
@@ -122,8 +128,23 @@ public final class BiomeCheckOptions
 		blacklistedBiomesOption.setAvailable(biomeCheckData.isEnabled());
 
 		biomeCheckOptions.put(BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME, blacklistedBiomesOption);
-		//categoryBuilder.group(groupBuilder.build());
-		//categoryBuilder.group(blacklistedBiomesOption);
+
+		if(isOverridingGlobalBiomeCheckOption != null) {
+			isOverridingGlobalBiomeCheckOption.addListener((opt, currentOverrideGlobalBiomeCheck) -> {
+				isEnabledOption.setAvailable(currentOverrideGlobalBiomeCheck);
+
+				if(!currentOverrideGlobalBiomeCheck) {
+					isEnabledOption.requestSetDefault();
+				}
+
+				var configScreen = StructurifyClient.getConfigScreen();
+				if (configScreen == null || configScreen.structureScreens == null) {
+					return;
+				}
+
+				configScreen.structureScreens.clear();
+			});
+		}
 
 		isEnabledOption.addListener((opt, currentIsEnabled) -> {
 			boolean isBlacklistAvailable = biomeCheckData.getMode() == BiomeCheckData.BiomeCheckMode.BLACKLIST;

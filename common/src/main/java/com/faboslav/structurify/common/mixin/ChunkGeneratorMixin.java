@@ -2,9 +2,9 @@ package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
+import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
-import com.faboslav.structurify.world.level.structure.checks.StructureDistanceFromWorldCenterCheck;
-import com.faboslav.structurify.world.level.structure.checks.StructureOverlapCheck;
+import com.faboslav.structurify.world.level.structure.checks.DistanceFromWorldCenterCheck;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.datafixers.util.Pair;
@@ -19,7 +19,6 @@ import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -27,12 +26,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 //? if >=1.21.4 {
-import net.minecraft.resources.ResourceKey;
+/*import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
 import java.util.Map;
 import java.util.Set;
-//?}
+*///?}
 
 @Mixin(ChunkGenerator.class)
 public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
@@ -50,7 +49,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 	)
 	public boolean structurify$trySetStructureStart(
 		//? if >=1.21.4 {
-		StructureSet.StructureSelectionEntry structureSelectionEntry,
+		/*StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
 		RandomState randomState,
@@ -61,8 +60,8 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 		SectionPos sectionPos,
 		ResourceKey<Level> resourceKey,
 		Operation<Boolean> original
-		//?} else {
-		/*StructureSet.StructureSelectionEntry structureSelectionEntry,
+		*///?} else {
+		StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
 		RandomState randomState,
@@ -72,38 +71,37 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 		ChunkPos chunkPos,
 		SectionPos sectionPos,
 		Operation<Boolean> original
-		*///?}
+		//?}
 	) {
 		if (Structurify.getConfig().disableAllStructures) {
 			return false;
 		}
 
-		var minStructureDistanceFromWorldCenter = Structurify.getConfig().minStructureDistanceFromWorldCenter;
-
-		if (minStructureDistanceFromWorldCenter > 0) {
-			var checkStructureDistanceFromWorldCenterResult = StructureDistanceFromWorldCenterCheck.checkStructureDistanceFromWorldCenter(chunkPos.getWorldPosition(), minStructureDistanceFromWorldCenter);
-
-			if (!checkStructureDistanceFromWorldCenterResult) {
-				return false;
-			}
-		}
-
 		var structureKey = structureSelectionEntry.structure().unwrapKey();
 
 		if(structureKey.isPresent()) {
-			String structureName = structureKey.get().location().toString();
-			var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName, null);
+			ResourceLocation structureName = structureKey.get().location();
+			var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName.toString(), null);
 
-			if (structureData != null && structureData.isDisabled()) {
-				return false;
+			if (structureData != null) {
+				if(structureData.isDisabled()) {
+					return false;
+				}
+
+				var distanceFromWorldCenterCheckData = DistanceFromWorldCenterCheck.getDistanceFromWorldCenterData(structureName, structureData);
+				var distanceFromWorldCenterCheckResult = DistanceFromWorldCenterCheck.checkDistanceFromWorldCenter(distanceFromWorldCenterCheckData, chunkPos);
+
+				if (!distanceFromWorldCenterCheckResult) {
+					return false;
+				}
 			}
 		}
 
 		//? if >=1.21.4 {
-		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
-		//?} else {
-		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
-		 *///?}
+		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
+		*///?} else {
+		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
+		 //?}
 	}
 
 	@WrapMethod(

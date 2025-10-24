@@ -30,9 +30,9 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.function.Predicate;
 
 //? if >= 1.21.4 {
-import net.minecraft.resources.ResourceKey;
+/*import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-//?}
+*///?}
 
 @Mixin(Structure.class)
 public abstract class StructureMixin implements StructurifyStructure
@@ -176,9 +176,9 @@ public abstract class StructureMixin implements StructurifyStructure
 	)
 	private StructureStart structurify$generate(
 		//? if >= 1.21.4 {
-		Holder<Structure> structure,
+		/*Holder<Structure> structure,
 		ResourceKey<Level> level,
-		//?}
+		*///?}
 		RegistryAccess registryAccess,
 		ChunkGenerator chunkGenerator,
 		BiomeSource biomeSource,
@@ -192,10 +192,10 @@ public abstract class StructureMixin implements StructurifyStructure
 		Operation<StructureStart> original
 	) {
 		//? if >= 1.21.4 {
-		var structureStart = original.call(structure, level, registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
-		//?} else {
-		/*var structureStart = original.call(registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
-		*///?}
+		/*var structureStart = original.call(structure, level, registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
+		*///?} else {
+		var structureStart = original.call(registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
+		//?}
 
 		if (structureStart == StructureStart.INVALID_START) {
 			return structureStart;

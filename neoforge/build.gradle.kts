@@ -1,8 +1,6 @@
 plugins {
 	`multiloader-loader`
 	id("net.neoforged.moddev")
-	kotlin("jvm") version "2.2.0"
-	id("com.google.devtools.ksp") version "2.2.0-2.0.2"
 	id("dev.kikugie.fletching-table.neoforge") version "0.1.0-alpha.22"
 }
 

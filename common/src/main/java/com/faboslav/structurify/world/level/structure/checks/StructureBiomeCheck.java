@@ -25,11 +25,11 @@ public final class StructureBiomeCheck
 
 		BiomeCheckData biomeCheckDataToCheck = globalBiomeCheckData;
 
-		if(namespaceBiomeCheckData.isOverridingGlobalBiomeCheck()) {
+		if(namespaceBiomeCheckData.isOverridingGlobalBiomeCheck() || namespaceBiomeCheckData.isEnabled()) {
 			biomeCheckDataToCheck = namespaceBiomeCheckData;
 		}
 
-		if(structureBiomeCheckData.isOverridingGlobalBiomeCheck()) {
+		if(structureBiomeCheckData.isOverridingGlobalBiomeCheck() || structureBiomeCheckData.isEnabled()) {
 			biomeCheckDataToCheck = structureBiomeCheckData;
 		}
 

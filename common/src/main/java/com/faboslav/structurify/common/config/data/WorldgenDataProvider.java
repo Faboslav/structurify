@@ -13,16 +13,16 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import java.util.*;
 
 //? if yungs_api || repurposed_structures {
-/*import com.faboslav.structurify.common.platform.PlatformHooks;
-*///?}
+import com.faboslav.structurify.common.platform.PlatformHooks;
+//?}
 
 //? if yungs_api {
-/*import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
- *///?}
+import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
+ //?}
 
 //? if repurposed_structures {
-/*import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
-*///?}
+import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
+//?}
 
 public final class WorldgenDataProvider
 {
@@ -164,13 +164,13 @@ public final class WorldgenDataProvider
 				int verticalMaxDistanceFromCenter;
 
 				//? if >= 1.21.9 {
-				var maxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
+				/*var maxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
 				horizontalMaxDistanceFromCenter = maxDistanceFromCenter.horizontal();
 				verticalMaxDistanceFromCenter = maxDistanceFromCenter.vertical();
-				//?} else {
-				/*horizontalMaxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
+				*///?} else {
+				horizontalMaxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
 				verticalMaxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
-				*///?}
+				//?}
 				int maxSize = JigsawStructureUtil.getSizeForStructure(structure);
 				structureData.setJigsawData(new JigsawData(maxSize, horizontalMaxDistanceFromCenter, verticalMaxDistanceFromCenter));
 			}

@@ -27,28 +27,28 @@ public final class Structurify
 
 	public static ResourceLocation makeId(String path) {
 		//? if >=1.21 {
-		return ResourceLocation.tryBuild(
+		/*return ResourceLocation.tryBuild(
 			MOD_ID,
 			path
 		);
-		//?} else {
-		/*return new ResourceLocation(
+		*///?} else {
+		return new ResourceLocation(
 			MOD_ID,
 			path
 		);
-		*///?}
+		//?}
 	}
 
 	public static ResourceLocation makeNamespacedId(String id) {
 		//? if >=1.21 {
-		return ResourceLocation.parse(
+		/*return ResourceLocation.parse(
 			id
 		);
-		//?} else {
-		/*return new ResourceLocation(
+		*///?} else {
+		return new ResourceLocation(
 			id
 		);
-		*///?}
+		//?}
 	}
 
 	public static String makeStringID(String name) {

@@ -17,14 +17,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 //? if >= 1.21.9 {
-import net.minecraft.client.input.MouseButtonEvent;
-//?}
+/*import net.minecraft.client.input.MouseButtonEvent;
+*///?}
 
 //? if <= 1.21.1 {
-/*import net.minecraft.util.FastColor;
- *///?} else {
-import net.minecraft.util.ARGB;
-//?}
+import net.minecraft.util.FastColor;
+ //?} else {
+/*import net.minecraft.util.ARGB;
+*///?}
 
 /**
  * Inspired by use in Sounds mod
@@ -54,10 +54,10 @@ public class ImageButtonWidget extends AbstractWidget
 
 	@Override
 	//? if >= 1.21.9 {
-	public void onClick(MouseButtonEvent mouseButtonEvent, boolean bl)
-	//?} else {
-	/*public void onClick(double mouseX, double mouseY)
-	*///?}
+	/*public void onClick(MouseButtonEvent mouseButtonEvent, boolean bl)
+	*///?} else {
+	public void onClick(double mouseX, double mouseY)
+	//?}
 	{
 		if (this.onPress != null) {
 			this.onPress.accept(this);
@@ -104,17 +104,17 @@ public class ImageButtonWidget extends AbstractWidget
 					float neededWidth = width * ((float) this.height / height);
 
 					//? if >= 1.21.6 {
-					context.pose().pushMatrix();
-					//?} else {
-					/*context.pose().pushPose();
-					*///?}
+					/*context.pose().pushMatrix();
+					*///?} else {
+					context.pose().pushPose();
+					//?}
 
 					contentImage.render(context, getX(), getY(), (int) Math.max(neededWidth, this.width), delta);
 					//? if >= 1.21.6 {
-					context.pose().popMatrix();
-					//?} else {
-					/*context.pose().popPose();
-					*///?}
+					/*context.pose().popMatrix();
+					*///?} else {
+					context.pose().popPose();
+					//?}
 					} catch (NoSuchFieldException | IllegalAccessException e) {
 						e.printStackTrace();
 					}
@@ -127,10 +127,10 @@ public class ImageButtonWidget extends AbstractWidget
 		float alphaScale = Mth.clampedLerp(0.7f, 0.2f, Mth.clamp(durationHovered - 1f, 0.0f, 1.0f));
 
 		//? if <=1.21.1 {
-		/*int greyColor = FastColor.ABGR32.color((int) (alphaScale * 255), 0, 0, 0);
-		 *///?} else {
-		int greyColor = ARGB.color((int) (alphaScale * 255), 0, 0, 0);
-		//?}
+		int greyColor = FastColor.ABGR32.color((int) (alphaScale * 255), 0, 0, 0);
+		 //?} else {
+		/*int greyColor = ARGB.color((int) (alphaScale * 255), 0, 0, 0);
+		*///?}
 		context.fill(getX(), getY(), getX() + width, getY() + height, greyColor);
 
 
@@ -147,27 +147,27 @@ public class ImageButtonWidget extends AbstractWidget
 		context.fill(unscaledTextX - 5, unscaledTextY - 5, unscaledTextX + this.width - 5, unscaledTextY + client.font.lineHeight + 5, 0xAF000000);
 
 		//? if >= 1.21.6 {
-		context.pose().pushMatrix();
+		/*context.pose().pushMatrix();
 		context.pose().scale(fontScaling, fontScaling);
-		//?} else {
-		/*context.pose().pushPose();
+		*///?} else {
+		context.pose().pushPose();
 		context.pose().scale(fontScaling, fontScaling, 1.0f);
-		 *///?}
+		 //?}
 
 		renderScrollingString(context, client.font, getMessage(), textX, textY, endX, endY, 0xFFFFFFFF);
 
 		//? if >= 1.21.6 {
-		context.pose().popMatrix();
-		//?} else {
-		/*context.pose().popPose();
-		 *///?}
+		/*context.pose().popMatrix();
+		*///?} else {
+		context.pose().popPose();
+		 //?}
 
 		// Draw border.
 		//? if >= 1.21.9 {
-		context.submitOutline(getX(), getY(), width, height, 0x0FFFFFFF);
-		//?} else {
-		/*context.renderOutline(getX(), getY(), width, height, 0x0FFFFFFF);
-		 *///?}
+		/*context.submitOutline(getX(), getY(), width, height, 0x0FFFFFFF);
+		*///?} else {
+		context.renderOutline(getX(), getY(), width, height, 0x0FFFFFFF);
+		 //?}
 	}
 
 	@Override

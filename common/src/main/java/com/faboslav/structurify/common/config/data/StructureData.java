@@ -1,6 +1,7 @@
 package com.faboslav.structurify.common.config.data;
 
 import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
+import com.faboslav.structurify.common.config.data.structure.DistanceFromWorldCenterCheckData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -21,6 +22,7 @@ public class StructureData implements StructureLikeData
 	private	GenerationStep.Decoration step;
 	private TerrainAdjustment terrainAdaptation;
 	private JigsawData jigsawData;
+	private DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckData;
 	private FlatnessCheckData flatnessCheckData;
 	private BiomeCheckData biomeCheckData;
 
@@ -36,6 +38,7 @@ public class StructureData implements StructureLikeData
 		this.defaultTerrainAdaptation = terrainAdaptation;
 		this.terrainAdaptation = terrainAdaptation;
 		this.jigsawData = new JigsawData(0, 0, 0);
+		this.distanceFromWorldCenterCheckData = new DistanceFromWorldCenterCheckData();
 		this.flatnessCheckData = new FlatnessCheckData();
 		this.biomeCheckData = new BiomeCheckData();
 	}
@@ -51,6 +54,8 @@ public class StructureData implements StructureLikeData
 			   && this.step == this.defaultStep
 			   && this.terrainAdaptation == this.defaultTerrainAdaptation
 			   && biomes.equals(defaultBiomes)
+			   && (!isJigsawStructure() || (isJigsawStructure() && this.getJigsawData().isUsingDefaultValues()))
+			   && this.getDistanceFromWorldCenterCheckData().isUsingDefaultValues()
 			   && this.getFlatnessCheckData().isUsingDefaultValues()
 			   && this.getBiomeCheckData().isUsingDefaultValues();
 	}
@@ -112,6 +117,14 @@ public class StructureData implements StructureLikeData
 
 	public void setJigsawData(JigsawData jigsawData) {
 		this.jigsawData = jigsawData;
+	}
+
+	public DistanceFromWorldCenterCheckData getDistanceFromWorldCenterCheckData() {
+		return distanceFromWorldCenterCheckData;
+	}
+
+	public void setDistanceFromWorldCenterCheckData(DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckData) {
+		this.distanceFromWorldCenterCheckData = distanceFromWorldCenterCheckData;
 	}
 
 	public FlatnessCheckData getFlatnessCheckData() {

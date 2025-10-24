@@ -44,8 +44,6 @@ public class DualController<K extends Option<?>, V extends Option<?>> implements
 		AbstractWidget secondOptionWidget = this.optionPair.getSecondOption().controller().provideWidget(screen, secondWidgetDimension);
 		TextScaledButtonWidget resetButtonWidget;
 
-		widgetDimension = widgetDimension.expanded(0, firstOptionWidget.getDimension().height());
-
 		if (this.optionPair.getFirstOption().controller().option().canResetToDefault() && firstOptionWidget.canReset() && this.optionPair.getSecondOption().controller().option().canResetToDefault() && secondOptionWidget.canReset()) {
 			firstOptionWidget.setDimension(firstOptionWidget.getDimension().expanded(-10, 0));
 			secondOptionWidget.setDimension(secondOptionWidget.getDimension().expanded(-10, 0));

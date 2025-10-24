@@ -10,8 +10,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import net.minecraft.Util;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -23,16 +23,10 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.commands.LocateCommand;
-import net.minecraft.server.level.*;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.Util;
 
-import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 public final class StructurifyCommand
@@ -43,12 +37,6 @@ public final class StructurifyCommand
 
 	private static final SuggestionProvider<CommandSourceStack> SAMPLING_MODE_SUGGESTIONS =
 		(ctx, builder) -> SharedSuggestionProvider.suggest(DebugData.SamplingMode.getNames(), builder);
-
-
-	private static final SuggestionProvider<CommandSourceStack> HEIGHTMAP_SUGGESTIONS =
-		(ctx, builder) -> SharedSuggestionProvider.suggest(
-			Arrays.stream(Heightmap.Types.values()).map(Heightmap.Types::getSerializedName), builder
-		);
 
 	public static void createCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
 		dispatcher.register(
@@ -169,18 +157,7 @@ public final class StructurifyCommand
 						.requires(src -> src.hasPermission(2))
 						.executes(ctx -> getStructures(ctx.getSource()))
 					)
-					.then(Commands.literal("height")
-						.then(Commands.argument("heightmap", StringArgumentType.word())
-						.suggests(HEIGHTMAP_SUGGESTIONS)
-						.requires(src -> src.hasPermission(2))
-						.executes(ctx -> {
-							var source = ctx.getSource();
-							var type = parseHeightmap(StringArgumentType.getString(ctx, "heightmap"));
-							return getHeightLevels(source, type);
-						})
-					)
 				)
-			)
 		);
 	}
 
@@ -212,36 +189,6 @@ public final class StructurifyCommand
 		}
 	}
 
-	private static Heightmap.Types parseHeightmap(String s) throws CommandSyntaxException {
-		for (var t : Heightmap.Types.values()) {
-			if (t.getSerializedName().equalsIgnoreCase(s) || t.name().equalsIgnoreCase(s)) {
-				return t;
-			}
-		}
-		throw new SimpleCommandExceptionType(Component.literal("Unknown heightmap: " + s)).create();
-	}
-
-	private static int getHeightLevels(CommandSourceStack source, Heightmap.Types type) {
-		BlockPos pos = BlockPos.containing(source.getPosition());
-		ServerLevel level = source.getLevel();
-		ChunkGenerator generator = level.getChunkSource().getGenerator();
-		RandomState randomState = level.getChunkSource().randomState();
-		LevelHeightAccessor heightView = level;
-
-		int x = pos.getX();
-		int z = pos.getZ();
-
-		int occupiedY = generator.getFirstOccupiedHeight(x, z, type, heightView, randomState);
-		int freeY = generator.getFirstFreeHeight(x, z, type, heightView, randomState);
-
-		source.sendSuccess(
-			() -> Component.literal("Height for " + type.getSerializedName() + "(x: " + x + ", z: " + z + "):" + " - occupied Y: " + occupiedY +  "\n - free Y: " + freeY),
-			false
-		);
-
-		return 1;
-	}
-
 	private static int getStructures(CommandSourceStack source) {
 		ServerLevel level = source.getLevel();
 		BlockPos pos = BlockPos.containing(source.getPosition());
@@ -249,14 +196,17 @@ public final class StructurifyCommand
 		return 0;
 	}
 
-	private static int locateStructure(CommandSourceStack source, Result<Structure> structure) throws CommandSyntaxException {
+	private static int locateStructure(
+		CommandSourceStack source,
+		Result<Structure> structure
+	) throws CommandSyntaxException {
 		ServerLevel serverLevel = source.getLevel();
 		BlockPos blockPos = BlockPos.containing(source.getPosition());
 		//? if > 1.21.1 {
-		var registry = serverLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-		//?} else {
-		/*var registry = source.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
-		*///?}
+		/*var registry = serverLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+		*///?} else {
+		var registry = source.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
+		 //?}
 
 		HolderSet<Structure> holderSet = LocateCommandInvoker.structurify$invokeGetHolders(structure, registry)
 			.orElseThrow(() -> LocateCommandInvoker.structurify$getStructureInvalidError().create(structure.asPrintable()));

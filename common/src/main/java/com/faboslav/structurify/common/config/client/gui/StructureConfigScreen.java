@@ -4,6 +4,7 @@ import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
 import com.faboslav.structurify.common.config.client.gui.structure.BiomeCheckOptions;
+import com.faboslav.structurify.common.config.client.gui.structure.DistanceFromWorldCenterOptions;
 import com.faboslav.structurify.common.config.client.gui.structure.FlatnessCheckOptions;
 import com.faboslav.structurify.common.config.client.gui.structure.JigsawOptions;
 import com.faboslav.structurify.common.config.data.StructureData;
@@ -102,6 +103,10 @@ public final class StructureConfigScreen
 			.initial("").build();
 
 		structureCategoryBuilder.group(biomesOption);
+
+		var distanceFromWorldCenterOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("distance"));
+		DistanceFromWorldCenterOptions.addDistanceFromWorldCenterOptions(distanceFromWorldCenterOptionsGroup, config, structureId);
+		structureCategoryBuilder.group(distanceFromWorldCenterOptionsGroup.build());
 
 		var flatnessOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("flatness"));
 		FlatnessCheckOptions.addFlatnessCheckOptions(flatnessOptionsGroup, config, structureId);

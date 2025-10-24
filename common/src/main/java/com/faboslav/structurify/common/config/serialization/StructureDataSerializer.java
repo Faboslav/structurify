@@ -122,11 +122,27 @@ public final class StructureDataSerializer
 		structure.addProperty(TERRAIN_ADAPTATION_PROPERTY, structureData.getTerrainAdaptation().getSerializedName());
 
 		if(structureData.isJigsawStructure()) {
-			JigsawDataSerializer.save(structure, structureData.getJigsawData());
+			var jigsawData = structureData.getJigsawData();
+
+			if(!jigsawData.isUsingDefaultValues()) {
+				JigsawDataSerializer.save(structure, jigsawData);
+			}
 		}
 
-		FlatnessCheckDataSerializer.save(structure, structureData.getFlatnessCheckData());
-		BiomeCheckDataSerializer.save(structure,structureData.getBiomeCheckData());
+		var distanceFromWorldCenterData = structureData.getDistanceFromWorldCenterCheckData();
+		if(!distanceFromWorldCenterData.isUsingDefaultValues()) {
+			DistanceFromWorldCenterDataSerializer.save(structure, distanceFromWorldCenterData);
+		}
+
+		var flatnessCheckData = structureData.getFlatnessCheckData();
+		if (!flatnessCheckData.isUsingDefaultValues()) {
+			FlatnessCheckDataSerializer.save(structure, flatnessCheckData);
+		}
+
+		var biomeCheckData = structureData.getBiomeCheckData();
+		if(!biomeCheckData.isUsingDefaultValues()) {
+			BiomeCheckDataSerializer.save(structure, biomeCheckData);
+		}
 
 		structuresJson.add(structure);
 	}

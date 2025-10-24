@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.client.gui.structure;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.data.StructureLikeData;
@@ -49,7 +50,7 @@ public final class FlatnessCheckOptions
 
 		builder.option(LabelOption.create(title.withStyle(style -> style.withBold(true))));
 
-		@Nullable Option<Boolean> isOverridingGlobalFlatnessCheckOption = null;
+		@Nullable Option<Boolean> isOverridingGlobalFlatnessCheckOption;
 
 		if(!isGlobal) {
 			isOverridingGlobalFlatnessCheckOption = Option.<Boolean>createBuilder()
@@ -68,6 +69,8 @@ public final class FlatnessCheckOptions
 
 			flatnessCheckOptions.put(OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME, isOverridingGlobalFlatnessCheckOption);
 			builder.option(isOverridingGlobalFlatnessCheckOption);
+		} else {
+			isOverridingGlobalFlatnessCheckOption = null;
 		}
 
 		var isEnabledOption = Option.<Boolean>createBuilder()
@@ -93,6 +96,13 @@ public final class FlatnessCheckOptions
 						return Component.translatable("gui.structurify.label.yes");
 					}
 
+					/*
+					if(
+						(isOverridingGlobalFlatnessCheckOption != null && !isOverridingGlobalFlatnessCheckOption.pendingValue())
+						&& isEnabledGlobally || isEnabledForNamespace) {
+						return Component.translatable("gui.structurify.label.yes");
+					}*/
+
 					return Component.translatable("gui.structurify.label.no");
 				})
 				.coloured(true)
@@ -112,7 +122,13 @@ public final class FlatnessCheckOptions
 				allowNonSolidBlocks -> structureLikeData.get(id).getFlatnessCheckData().allowNonSolidBlocks(allowNonSolidBlocks)
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+				.valueFormatter(allowNonSolidBlocks -> {
+					if(allowNonSolidBlocks) {
+						return Component.translatable("gui.structurify.label.yes");
+					}
+
+					return Component.translatable("gui.structurify.label.no");
+				})
 				.coloured(true)).build();
 
 		flatnessCheckOptions.put(FLATNESS_CHECK_ALLOW_NON_SOLID_BLOCKS_OPTION_NAME, allowNonSolidBlocksOption);
@@ -128,15 +144,25 @@ public final class FlatnessCheckOptions
 				} else {
 					isEnabledOption.setAvailable(true);
 				}
+
+				var configScreen = StructurifyClient.getConfigScreen();
+				if (configScreen == null || configScreen.structureScreens == null) {
+					return;
+				}
+
+				configScreen.structureScreens.clear();
 			});
 		}
 
 		isEnabledOption.addListener((opt, currentIsEnabled) -> {
+			if(!currentIsEnabled) {
+				allowNonSolidBlocksOption.requestSetDefault();
+			}
+
 			allowNonSolidBlocksOption.setAvailable(currentIsEnabled);
 
 			var configScreen = StructurifyClient.getConfigScreen();
-
-			if (configScreen == null) {
+			if (configScreen == null || configScreen.structureScreens == null) {
 				return;
 			}
 

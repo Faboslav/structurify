@@ -30,6 +30,5 @@ public final class FlatnessCheckDataSerializer
 		structureJson.addProperty(OVERRIDE_GLOBAL_FLATNESS_CHECK_PROPERTY, flatnessCheckData.isOverridingGlobalFlatnessCheck());
 		structureJson.addProperty(ENABLE_FLATNESS_CHECK_PROPERTY, flatnessCheckData.isEnabled());
 		structureJson.addProperty(FLATNESS_CHECK_ALLOW_NON_SOLID_PROPERTY, flatnessCheckData.areNonSolidBlocksAllowed());
-
 	}
 }

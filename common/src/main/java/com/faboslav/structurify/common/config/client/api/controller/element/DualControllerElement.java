@@ -8,10 +8,10 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import org.jetbrains.annotations.Nullable;
 
 //? if >=1.21.9 {
-import net.minecraft.client.input.CharacterEvent;
+/*import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
-//?}
+*///?}
 
 public final class DualControllerElement extends AbstractWidget
 {
@@ -45,7 +45,7 @@ public final class DualControllerElement extends AbstractWidget
 	}
 
 	//? if >=1.21.9 {
-	@Override
+	/*@Override
 	public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
 		boolean firstElementMouseClicked = firstElement.mouseClicked(mouseButtonEvent, doubleClick);
 		boolean secondElementMouseClicked = secondElement.mouseClicked(mouseButtonEvent, doubleClick);
@@ -82,8 +82,8 @@ public final class DualControllerElement extends AbstractWidget
 	public boolean charTyped(CharacterEvent characterEvent) {
 		return firstElement.charTyped(characterEvent) || secondElement.charTyped(characterEvent) || secondElement.charTyped(characterEvent);
 	}
-	//?} else {
-    /*@Override
+	*///?} else {
+    @Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		boolean firstElementMouseClicked = firstElement.mouseClicked(mouseX, mouseY, button);
 		boolean secondElementMouseClicked = secondElement.mouseClicked(mouseX, mouseY, button);
@@ -120,14 +120,14 @@ public final class DualControllerElement extends AbstractWidget
 	public boolean charTyped(char chr, int modifiers) {
 		return firstElement.charTyped(chr, modifiers) || secondElement.charTyped(chr, modifiers);
 	}
-    *///?}
+    //?}
 
 	//? if >=1.20.4 {
-	@Override
+	/*@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
 		return this.firstElement.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || this.secondElement.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
 	}
-	//?}
+	*///?}
 
 	@Override
 	public void setFocused(boolean focused) {
@@ -151,8 +151,6 @@ public final class DualControllerElement extends AbstractWidget
 		if (resetButton != null) {
 			resetButton.setY(getDimension().y());
 		}
-
-		resetButton.setY(getDimension().y());
 
 		super.setDimension(dim);
 	}

@@ -1,6 +1,7 @@
 package com.faboslav.structurify.common.config.data;
 
 import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
+import com.faboslav.structurify.common.config.data.structure.DistanceFromWorldCenterCheckData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
 
 public interface StructureLikeData
@@ -10,6 +11,10 @@ public interface StructureLikeData
 	boolean isDisabled();
 
 	void setDisabled(boolean isDisabled);
+
+	DistanceFromWorldCenterCheckData getDistanceFromWorldCenterCheckData();
+
+	void setDistanceFromWorldCenterCheckData(DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckData);
 
 	FlatnessCheckData getFlatnessCheckData();
 

@@ -7,8 +7,8 @@ public final class StructureSetData
 	public static final int MAX_SALT = Integer.MAX_VALUE;
 	public static final float MIN_FREQUENCY = 0.0F;
 	public static final float MAX_FREQUENCY = 1.0F;
-	public static final int MAX_SPACING = 256;
-	public static final int MAX_SEPARATION = 256;
+	public static final int MAX_SPACING = 1024;
+	public static final int MAX_SEPARATION = 1024;
 
 	private boolean overrideGlobalSpacingAndSeparationModifier = OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	private final int defaultSalt;

@@ -31,30 +31,30 @@ public abstract class JigsawStructureMixin extends StructureMixin
 		at = @At(
 			value = "FIELD",
 			//? if >= 1.21.9 {
-			target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure$MaxDistance;",
-			//?} else {
-			/*target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:I",
-			*///?}
+			/*target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure$MaxDistance;",
+			*///?} else {
+			target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:I",
+			//?}
 			opcode = Opcodes.GETFIELD
 		)
 	)
 	//? if >= 1.21.9 {
-	protected JigsawStructure.MaxDistance structurify$findGenerationPointGetMaxDistanceFromCenter(JigsawStructure.MaxDistance originalMaxDistanceFromCenter)
-	//?} else {
-	/*protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
-	*///?}
+	/*protected JigsawStructure.MaxDistance structurify$findGenerationPointGetMaxDistanceFromCenter(JigsawStructure.MaxDistance originalMaxDistanceFromCenter)
+	*///?} else {
+	protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
+	//?}
 	{
 		if(this.structurify$getStructureData() == null) {
 			return originalMaxDistanceFromCenter;
 		}
 
 		//? if >= 1.21.9 {
-		return new JigsawStructure.MaxDistance(
+		/*return new JigsawStructure.MaxDistance(
 			this.structurify$getStructureData().getJigsawData().getHorizontalMaxDistanceFromCenter(),
 			this.structurify$getStructureData().getJigsawData().getVerticalMaxDistanceFromCenter()
 		);
-		//?} else {
-		/*return this.structurify$getStructureData().getJigsawData().getHorizontalMaxDistanceFromCenter();
-		*///?}
+		*///?} else {
+		return this.structurify$getStructureData().getJigsawData().getHorizontalMaxDistanceFromCenter();
+		//?}
 	}
 }

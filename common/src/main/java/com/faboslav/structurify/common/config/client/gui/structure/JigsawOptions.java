@@ -28,7 +28,7 @@ public final class JigsawOptions
 		jigsawOptions.add(sizeOption);
 
 		//? if >=1.21.9 {
-		var horizontalMaxDistanceFromCenterOption = Option.<Integer>createBuilder()
+		/*var horizontalMaxDistanceFromCenterOption = Option.<Integer>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.jigsaw.horizontal_max_distance_from_center.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.jigsaw.horizontal_max_distance_from_center.description")))
 			.available(!structureData.isDisabled())
@@ -53,8 +53,8 @@ public final class JigsawOptions
 			.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(JigsawData.MIN_VERTICAL_MAX_DISTANCE_FROM_CENTER, JigsawData.MAX_VERTICAL_MAX_DISTANCE_FROM_CENTER).step(1)).build();
 
 		jigsawOptions.add(verticalMaxDistanceFromCenterOption);
-		//?} else {
-		/*var maxDistanceFromCenterOption = Option.<Integer>createBuilder()
+		*///?} else {
+		var maxDistanceFromCenterOption = Option.<Integer>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.jigsaw.max_distance_from_center.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.jigsaw.max_distance_from_center.description")))
 			.available(!structureData.isDisabled())
@@ -69,7 +69,7 @@ public final class JigsawOptions
 			.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(JigsawData.MIN_HORIZONTAL_MAX_DISTANCE_FROM_CENTER, JigsawData.MAX_HORIZONTAL_MAX_DISTANCE_FROM_CENTER).step(1)).build();
 
 		jigsawOptions.add(maxDistanceFromCenterOption);
-		*///?}
+		//?}
 
 		return jigsawOptions;
 	}

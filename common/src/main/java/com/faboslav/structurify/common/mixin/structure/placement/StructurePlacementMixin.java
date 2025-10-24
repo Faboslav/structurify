@@ -64,7 +64,7 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 	}
 
 	//? if >= 1.21.1 {
-	@ModifyExpressionValue(
+	/*@ModifyExpressionValue(
 		method = "applyAdditionalChunkRestrictions",
 		at = @At(
 			value = "FIELD",
@@ -75,8 +75,8 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 	protected float structurify$applyAdditionalChunkRestrictionsGetFrequency(float originalFrequency) {
 		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetIdentifier(), originalFrequency);
 	}
-	//?} else {
-	/*@ModifyExpressionValue(
+	*///?} else {
+	@ModifyExpressionValue(
 		method = "isStructureChunk",
 		at = @At(
 			value = "FIELD",
@@ -87,5 +87,5 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 	protected float structurify$isStructureChunkGetFrequency(float originalFrequency) {
 		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetIdentifier(), originalFrequency);
 	}
-	*///?}
+	//?}
 }

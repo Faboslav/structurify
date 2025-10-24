@@ -1,8 +1,6 @@
 plugins {
 	`multiloader-loader`
 	id("net.neoforged.moddev.legacyforge")
-	kotlin("jvm") version "2.2.0"
-	id("com.google.devtools.ksp") version "2.2.0-2.0.2"
 	id("dev.kikugie.fletching-table.neoforge") version "0.1.0-alpha.22"
 }
 
@@ -81,7 +79,7 @@ dependencies {
 	for (mod in fossilsAndArcheologyRevivalWithDeps) modImplementation(mod)
 	modImplementation(fletchingTable.modrinth("fungal-infectionspore", commonMod.mc, "forge"))
 	modImplementation(fletchingTable.modrinth("dungeons-enhanced", commonMod.mc, "forge"))
-	modImplementation(fletchingTable.modrinth("legendary-monsters", commonMod.mc, "forge"))
+	//modImplementation(fletchingTable.modrinth("legendary-monsters", commonMod.mc, "forge"))
 	modImplementation(fletchingTable.modrinth("wits", commonMod.mc, "forge"))
 	val endersCataclysmWithDeps: List<Dependency> = fletchingTable.modrinthBundle("l_enders-cataclysm", commonMod.mc, "forge") {
 		recursive = true

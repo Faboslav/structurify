@@ -6,16 +6,16 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
 //? if yungs_api {
-/*import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
-*///?}
+import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
+//?}
 
 //? if repurposed_structures {
-/*import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
-*///?}
+import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
+//?}
 
 //? if yungs_api || repurposed_structures {
-/*import com.faboslav.structurify.common.platform.PlatformHooks;
-*///?}
+import com.faboslav.structurify.common.platform.PlatformHooks;
+//?}
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -30,16 +30,16 @@ public final class JigsawStructureUtil
 		}
 
 		//? if yungs_api {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
 			return true;
 		}
-		*///?}
+		//?}
 
 		//? if repurposed_structures {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return true;
 		}
-		*///?}
+		//?}
 
 		Class<?> clazz = structure.getClass();
 		Field[] fields = clazz.getDeclaredFields();
@@ -54,26 +54,26 @@ public final class JigsawStructureUtil
 	}
 
 	//? if >= 1.21.9 {
-	public static JigsawStructure.MaxDistance getMaxDistanceFromCenterForStructure(Structure structure)
-	//?} else {
-	/*public static int getMaxDistanceFromCenterForStructure(Structure structure)
-	*///?}
+	/*public static JigsawStructure.MaxDistance getMaxDistanceFromCenterForStructure(Structure structure)
+	*///?} else {
+	public static int getMaxDistanceFromCenterForStructure(Structure structure)
+	//?}
 	{
 		if (structure instanceof JigsawStructure) {
 			return ((JigsawStructureAccessor) structure).structurify$getMaxDistanceFromCenter();
 		}
 
 		//? if yungs_api {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
 			return ((YungJigsawStructure) structure).maxDistanceFromCenter;
 		}
-		*///?}
+		//?}
 
 		//? if repurposed_structures {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
 		}
-		*///?}
+		//?}
 
 		Class<?> clazz = structure.getClass();
 		Field[] fields = clazz.getDeclaredFields();
@@ -83,7 +83,7 @@ public final class JigsawStructureUtil
 				field.setAccessible(true);
 
 				//? if >= 1.21.9 {
-				try {
+				/*try {
 					Field target = null;
 
 					for (Field f : structure.getClass().getDeclaredFields()) {
@@ -145,8 +145,8 @@ public final class JigsawStructureUtil
 				} catch (Throwable e) {
 					Structurify.getLogger().error(e.getMessage());
 				}
-				//?} else {
-				/*try {
+				*///?} else {
+				try {
 					if (Optional.class.isAssignableFrom(field.getType())) {
 						Optional<?> optionalValue = (Optional<?>) field.get(structure);
 						return optionalValue.map(val -> (Integer) val).orElse(0);
@@ -156,17 +156,17 @@ public final class JigsawStructureUtil
 				} catch (IllegalAccessException | IllegalArgumentException e) {
 					Structurify.getLogger().error(e.getMessage());
 				}
-				*///?}
+				//?}
 
 				break;
 			}
 		}
 
 		//? if >= 1.21.9 {
-		return new JigsawStructure.MaxDistance(0, 0);
-		//?} else {
-		/*return 0;
-		*///?}
+		/*return new JigsawStructure.MaxDistance(0, 0);
+		*///?} else {
+		return 0;
+		//?}
 	}
 
 	public static int getSizeForStructure(Structure structure) {
@@ -175,16 +175,16 @@ public final class JigsawStructureUtil
 		}
 
 		//? if yungs_api {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
 			return ((YungJigsawStructure) structure).maxDepth;
 		}
-		*///?}
+		//?}
 
 		//? if repurposed_structures {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).size;
 		}
-		*///?}
+		//?}
 
 		Class<?> clazz = structure.getClass();
 		Field[] fields = clazz.getDeclaredFields();

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class StructurifyClient
 {
-	private static StructurifyConfigScreen CONFIG_SCREEN;
+	private static StructurifyConfigScreen CONFIG_SCREEN = new StructurifyConfigScreen();
 	private static final StructurifyDebugRenderer DEBUG_RENDERER = new StructurifyDebugRenderer();
 
 	public static StructurifyDebugRenderer getDebugRenderer() {
@@ -17,14 +17,8 @@ public final class StructurifyClient
 	public static void init() {
 	}
 
-	public static StructurifyConfigScreen getConfigScreen(Screen screen) {
-		if (CONFIG_SCREEN == null) {
-			CONFIG_SCREEN = new StructurifyConfigScreen(screen);
-		}
-
-		CONFIG_SCREEN.setParent(screen);
-
-		return CONFIG_SCREEN;
+	public static Screen getConfigScreen(Screen screen) {
+		return CONFIG_SCREEN.generateScreen(screen);
 	}
 
 	@Nullable

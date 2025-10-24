@@ -1,7 +1,11 @@
 package com.faboslav.structurify.common.util;
 
+import com.faboslav.structurify.common.api.StructurifyOption;
+import dev.isxander.yacl3.api.LabelOption;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -9,6 +13,20 @@ import java.lang.reflect.Method;
 
 public final class YACLUtil {
 	private YACLUtil() {}
+
+	public static LabelOption createEmptyLabelOption() {
+		var emptyLineOption = LabelOption.create(Component.literal("\n"));
+		((StructurifyOption) emptyLineOption).structurify$setName(Component.empty());
+
+		return emptyLineOption;
+	}
+
+	public static LabelOption createEmptyLabelOption(MutableComponent component) {
+		var emptyLineOption = LabelOption.create(Component.literal("\n"));
+		((StructurifyOption) emptyLineOption).structurify$setName(component);
+
+		return emptyLineOption;
+	}
 
 	@Nullable
 	public static OptionListWidget getOptionListWidget(Object tab) {

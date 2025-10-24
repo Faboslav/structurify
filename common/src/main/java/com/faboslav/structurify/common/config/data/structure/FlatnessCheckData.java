@@ -10,9 +10,7 @@ public final class FlatnessCheckData
 	private boolean isEnabled = IS_ENABLED_DEFAULT_VALUE;
 	private boolean allowNonSolidBlocks = ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE;
 
-	public FlatnessCheckData() {
-
-	}
+	public FlatnessCheckData() {}
 
 	public boolean isUsingDefaultValues() {
 		return

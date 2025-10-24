@@ -3,9 +3,11 @@ package com.faboslav.structurify.common.config.client.gui;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.client.gui.widget.DynamicGridWidget;
 import com.faboslav.structurify.common.config.client.gui.widget.ImageButtonWidget;
+import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.mixin.yacl.CategoryTabAccessor;
 import com.faboslav.structurify.common.mixin.yacl.GroupSeparatorEntryAccessor;
 import com.faboslav.structurify.common.util.YACLUtil;
+import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
@@ -20,97 +22,28 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StructurifyConfigScreen extends Screen
+public class StructurifyConfigScreen
 {
-	private Screen parent;
-
-	private final StructureSetsConfigScreen structureSetsConfigScreen = new StructureSetsConfigScreen();
-
-	@Nullable
-	public YACLScreen structuresScreen = null;
-
 	@Nullable
 	public Map<String, YACLScreen> structureScreens = new HashMap<>();
 
 	public Map<String, StructurifyConfigScreenState> screenStates = new HashMap<>();
 
-	public StructurifyConfigScreen(@Nullable Screen parent) {
-		super(Component.translatable("structurify"));
-		this.parent = parent;
-	}
 
-	public StructureSetsConfigScreen getStructureSetsScreen() {
-		return this.structureSetsConfigScreen;
-	}
+	public Screen generateScreen(Screen parent) {
+		var config = Structurify.getConfig();
+		var yaclBuilder = YetAnotherConfigLib.createBuilder()
+			.title(Component.translatable("gui.structurify.structures_category.title"))
+			.save(config::save);
 
-	@Override
-	public void onClose() {
-		assert this.minecraft != null;
-		this.minecraft.setScreen(this.parent);
-	}
+		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 
-	public void setParent(@Nullable Screen parent) {
-		this.parent = parent;
-	}
+		StructuresConfigScreen.createStructuresTab(yaclBuilder, config);
+		StructureSetsConfigScreen.createStructureSetsTab(yaclBuilder, config);
 
-	@Override
-	public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
-		//? if <1.20.2 {
-		/*super.renderBackground(context);
-		 *///?} else if <=1.21.5 {
-		/*super.renderBackground(context, mouseX, mouseY, delta);
-		*///?}
+		var yaclScreen = (YACLScreen) yaclBuilder.build().generateScreen(parent);
 
-		super.render(context, mouseX, mouseY, delta);
-
-		assert this.minecraft != null;
-		context.drawCenteredString(this.minecraft.font, Component.translatable("gui.structurify.title"), this.width / 2, 10, 0xFFFFFF);
-	}
-
-	@Override
-	protected void init() {
-		super.init();
-
-		int fontHeight = this.font.lineHeight;
-		DynamicGridWidget grid = new DynamicGridWidget(10, 10 + fontHeight + 10, width - 13, height - 20 - fontHeight - 10 - 20);
-
-		grid.setPadding(3);
-
-		grid.addChild(new ImageButtonWidget(0, 0, 0, 0, Component.translatable("gui.structurify.structures_category.title"), Structurify.makeId("textures/gui/config/images/buttons/structures.png"), btn -> {
-			if (this.structuresScreen == null) {
-				this.structuresScreen = StructuresConfigScreen.createConfigGui(Structurify.getConfig(), this);
-			}
-
-			this.minecraft.setScreen(this.structuresScreen);
-			this.loadScreenState(this.structuresScreen);
-		}), 2, 1);
-
-		grid.addChild(new ImageButtonWidget(0, 0, 0, 0, Component.translatable("gui.structurify.structure_sets_category.title"), Structurify.makeId("textures/gui/config/images/buttons/structure_sets.png"), btn -> {
-			YACLScreen structureSetsScreen = this.structureSetsConfigScreen.getStructureSetsScreen();
-
-			if (structureSetsScreen == null) {
-				this.structureSetsConfigScreen.createStructureSetsScreen(Structurify.getConfig(), this);
-				structureSetsScreen = this.structureSetsConfigScreen.getStructureSetsScreen();
-			}
-
-			this.minecraft.setScreen(structureSetsScreen);
-			this.loadScreenState(structureSetsScreen);
-		}), 2, 1);
-
-		grid.calculateLayout();
-		grid.visitWidgets(this::addRenderableWidget);
-
-		int kofiButtonWidth = 135;
-		int discordButtonWidth = 135;
-		int discordAndKoFiButtonsWidth = kofiButtonWidth + discordButtonWidth + 30; // button widths + left margin of Ko-Fi button + right margin of Discord button
-		int doneButtonWidth = this.width - discordAndKoFiButtonsWidth;
-		var buttonWidget = Button.builder(CommonComponents.GUI_DONE, (btn) -> this.minecraft.setScreen(this.parent)).bounds(this.width / 2 - doneButtonWidth / 2, this.height - 30, doneButtonWidth, 20).build();
-		var donateButton = Button.builder(Component.literal("Buy Me a Coffee").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD), (btn) -> Util.getPlatform().openUri("https://ko-fi.com/faboslav")).bounds(10, this.height - 30, kofiButtonWidth, 20).build();
-		var discordButton = Button.builder(Component.literal("Join Our Discord").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.BOLD), (btn) -> Util.getPlatform().openUri("https://discord.com/invite/QGwFvvMQCn")).bounds(this.width - discordButtonWidth - 10, this.height - 30, discordButtonWidth, 20).build();
-
-		this.addRenderableWidget(buttonWidget);
-		this.addRenderableWidget(donateButton);
-		this.addRenderableWidget(discordButton);
+		return yaclScreen;
 	}
 
 	public void saveScreenState(YACLScreen yaclScreen) {
@@ -135,10 +68,10 @@ public class StructurifyConfigScreen extends Screen
 			this.screenStates.put(yaclScreen.getTitle().getString(), new StructurifyConfigScreenState(
 				categoryTab.getSearchField().getValue(),
 				//? if >= 1.21.4 {
-				optionListWidget.scrollAmount(),
-				//?} else {
-				/*optionListWidget.getScrollAmount(),
-				 *///?}
+				/*optionListWidget.scrollAmount(),
+				*///?} else {
+				optionListWidget.getScrollAmount(),
+				 //?}
 				collapsedGroups
 			));
 		}
