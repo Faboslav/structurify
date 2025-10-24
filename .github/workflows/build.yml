@@ -70,7 +70,7 @@ jobs:
 
     run-client:
         runs-on: ubuntu-latest
-        needs: [build, generate-build-matrix]
+        needs: [ build, generate-build-matrix ]
         if: ${{ success() && !cancelled() }}
         strategy:
             fail-fast: false
@@ -104,27 +104,14 @@ jobs:
             -   name: "Copy mod jar to run/mods"
                 run: mkdir -p run/mods && cp ./${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/*.jar run/mods
 
+            -   name: "Download ResourcefulLib"
+                run: |
+                    MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "resourceful-lib" "${{ steps.gradle-properties.outputs.DEPS_RESOURCEFUL_LIB_LIB }}" "${{ matrix.mod_loader }}")
+                    wget -P run/mods "$MOD_URL"
+
             -   name: "Download YACL"
                 run: |
                     MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "yacl" "${{ steps.gradle-properties.outputs.DEPS_YACL }}-${{ matrix.mod_loader }}" "${{ matrix.mod_loader }}")
-                    wget -P run/mods "$MOD_URL"
-
-            -   name: "Download ModMenu"
-                if: ${{ matrix.mod_loader == 'fabric' }}
-                run: |
-                    MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "modmenu" "${{ steps.gradle-properties.outputs.DEPS_MOD_MENU }}" "${{ matrix.mod_loader }}")
-                    wget -P run/mods "$MOD_URL"
-
-            -   name: "Download Repurposed Structures"
-                if: ${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES != '' && matrix.version != '1.21.4' }}
-                run: |
-                    MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "repurposed-structures-${{ matrix.mod_loader_modrinth }}" "${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES }}-${{ matrix.mod_loader }}" "${{ matrix.mod_loader }}")
-                    wget -P run/mods "$MOD_URL"
-
-            -   name: "Download MidnightLib"
-                if: ${{ steps.gradle-properties.outputs.DEPS_MIDNIGHT_LIB != '' }}
-                run: |
-                    MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "midnightlib" "${{ steps.gradle-properties.outputs.DEPS_MIDNIGHT_LIB }}-${{ matrix.mod_loader }}" "${{ matrix.mod_loader }}")
                     wget -P run/mods "$MOD_URL"
 
             -   name: Run ${{ matrix.version }} ${{ matrix.mod_loader }} client
@@ -142,7 +129,7 @@ jobs:
 
     run-server:
         runs-on: ubuntu-latest
-        needs: [build, generate-build-matrix]
+        needs: [ build, generate-build-matrix ]
         if: ${{ success() && !cancelled() }}
         strategy:
             fail-fast: false
@@ -176,21 +163,14 @@ jobs:
             -   name: "Copy mod jar to run/mods"
                 run: mkdir -p run/mods && cp ./${{ matrix.mod_loader }}/versions/${{ matrix.version }}/build/libs/*.jar run/mods
 
+            -   name: "Download ResourcefulLib"
+                run: |
+                    MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "resourceful-lib" "${{ steps.gradle-properties.outputs.DEPS_RESOURCEFUL_LIB_LIB }}" "${{ matrix.mod_loader }}")
+                    wget -P run/mods "$MOD_URL"
+
             -   name: "Download YACL"
                 run: |
                     MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "yacl" "${{ steps.gradle-properties.outputs.DEPS_YACL }}-${{ matrix.mod_loader }}" "${{ matrix.mod_loader }}")
-                    wget -P run/mods "$MOD_URL"
-
-            -   name: "Download ModMenu"
-                if: ${{ matrix.mod_loader == 'fabric' }}
-                run: |
-                    MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "modmenu" "${{ steps.gradle-properties.outputs.DEPS_MOD_MENU }}" "${{ matrix.mod_loader }}")
-                    wget -P run/mods "$MOD_URL"
-
-            -   name: "Download Repurposed Structures"
-                if: ${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES != '' && matrix.version != '1.21.4' }}
-                run: |
-                    MOD_URL=$(./.github/scripts/get-modrinth-dependency-url.sh "repurposed-structures-${{ matrix.mod_loader_modrinth }}" "${{ steps.gradle-properties.outputs.DEPS_REPURPOSED_STRUCTURES }}-${{ matrix.mod_loader }}" "${{ matrix.mod_loader }}")
                     wget -P run/mods "$MOD_URL"
 
             -   name: Run ${{ matrix.version }} ${{ matrix.mod_loader }} server
