@@ -27,7 +27,6 @@ public final class StructurifyFabricClient implements ClientModInitializer
 	}
 
 	//? >= 1.21.9 {
-	// TODO
 	//?} else {
 	/*private static void onRenderLevelStage(WorldRenderContext context) {
 		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), context.matrixStack(), context.consumers());
