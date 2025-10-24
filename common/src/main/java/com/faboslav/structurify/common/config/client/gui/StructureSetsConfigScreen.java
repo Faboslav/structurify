@@ -12,7 +12,10 @@ import com.faboslav.structurify.common.util.LanguageUtil;
 import com.faboslav.structurify.common.util.TextUtil;
 import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.*;
+import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
+import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -73,7 +76,7 @@ public final class StructureSetsConfigScreen
 				.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(StructureSetData.MIN_SALT, StructureSetData.MAX_SALT).formatValue((value) -> Component.literal(value.toString()))).build();
 
 			var frequencyDescriptionBuilder = OptionDescription.createBuilder();
-			frequencyDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName,"gui.structurify.structure_sets.frequency.description"));
+			frequencyDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, "gui.structurify.structure_sets.frequency.description"));
 
 			var frequencyOption = Option.<Float>createBuilder()
 				.name(Component.translatable("gui.structurify.structure_sets.frequency.title"))
@@ -111,11 +114,7 @@ public final class StructureSetsConfigScreen
 					.build();
 
 				overrideGlobalSpacingAndSeparationModifierOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
-					boolean available = false;
-
-					if (enableGlobalSpacingAndSeparationModifier) {
-						available = true;
-					}
+					boolean available = enableGlobalSpacingAndSeparationModifier;
 
 					var structureSetOption = structureSetOptions.get(structureSetStringId);
 					structureSetOption.getValue().setAvailable(available);
@@ -138,7 +137,7 @@ public final class StructureSetsConfigScreen
 							var structureSetOption = structureSetOptions.get(structureSetStringId);
 							var overrideSpacingAndSeparationModifierDescription = structureSetOption.getKey().pendingValue();
 
-							if(enableGlobalSpacingAndSeparationOption.pendingValue() && !overrideSpacingAndSeparationModifierDescription) {
+							if (enableGlobalSpacingAndSeparationOption.pendingValue() && !overrideSpacingAndSeparationModifierDescription) {
 								spacing = (int) (spacing * globalSpacingAndSeparationModifierOption.pendingValue());
 							}
 
@@ -167,7 +166,7 @@ public final class StructureSetsConfigScreen
 							var structureSetOption = structureSetOptions.get(structureSetStringId);
 							var overrideSpacingAndSeparationModifierDescription = structureSetOption.getKey().pendingValue();
 
-							if(enableGlobalSpacingAndSeparationOption.pendingValue() && !overrideSpacingAndSeparationModifierDescription) {
+							if (enableGlobalSpacingAndSeparationOption.pendingValue() && !overrideSpacingAndSeparationModifierDescription) {
 								separation = (int) (separation * globalSpacingAndSeparationModifierOption.pendingValue());
 							}
 

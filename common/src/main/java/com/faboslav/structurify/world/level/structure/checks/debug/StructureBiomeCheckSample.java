@@ -9,5 +9,6 @@ public record StructureBiomeCheckSample(
 	int z,
 	ResourceLocation biome,
 	boolean result
-) {
+)
+{
 }

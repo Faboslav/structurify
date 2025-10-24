@@ -1,13 +1,15 @@
 package com.faboslav.structurify.common.config.client.gui.structure;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.data.StructureLikeData;
 import com.faboslav.structurify.common.config.data.StructureNamespaceData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
 import com.faboslav.structurify.common.util.LanguageUtil;
-import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.LabelOption;
+import dev.isxander.yacl3.api.Option;
+import dev.isxander.yacl3.api.OptionAddable;
+import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +23,11 @@ public final class FlatnessCheckOptions
 	public static String FLATNESS_CHECK_IS_ENABLED_OPTION_NAME = "is_enabled";
 	public static String FLATNESS_CHECK_ALLOW_NON_SOLID_BLOCKS_OPTION_NAME = "allow_non_solid_blocks";
 
-	public static Map<String, Option<?>> addFlatnessCheckOptions(OptionAddable builder, StructurifyConfig config, String id) {
+	public static Map<String, Option<?>> addFlatnessCheckOptions(
+		OptionAddable builder,
+		StructurifyConfig config,
+		String id
+	) {
 		boolean isEnabledGlobally = config.getStructureNamespaceData().get(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER).getFlatnessCheckData().isEnabled();
 		boolean isGlobal = id.equals(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER);
 		boolean isNamespace = !id.contains(":");
@@ -30,7 +36,7 @@ public final class FlatnessCheckOptions
 		Map<String, ? extends StructureLikeData> structureLikeData;
 		var flatnessCheckOptions = new HashMap<String, Option<?>>();
 
-		if(isNamespace) {
+		if (isNamespace) {
 			namespace = id;
 			structureLikeData = config.getStructureNamespaceData();
 		} else {
@@ -42,7 +48,7 @@ public final class FlatnessCheckOptions
 		boolean isEnabled = structureLikeData.get(id).getFlatnessCheckData().isEnabled();
 		var title = Component.translatable("gui.structurify.structures.flatness_check_group.title");
 
-		if(isGlobal || isNamespace) {
+		if (isGlobal || isNamespace) {
 			title = Component.literal("„" + LanguageUtil.translateId(null, namespace).getString() + "“ ").append(title);
 		}
 
@@ -52,7 +58,7 @@ public final class FlatnessCheckOptions
 
 		@Nullable Option<Boolean> isOverridingGlobalFlatnessCheckOption;
 
-		if(!isGlobal) {
+		if (!isGlobal) {
 			isOverridingGlobalFlatnessCheckOption = Option.<Boolean>createBuilder()
 				.name(Component.translatable("gui.structurify.structures.structure.override_global_flatness_check.title"))
 				.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.override_global_flatness_check.description", namespace, id)))
@@ -85,11 +91,11 @@ public final class FlatnessCheckOptions
 			.controller(opt -> BooleanControllerBuilder.create(opt)
 				.valueFormatter(currentIsEnabled -> {
 					if (currentIsEnabled) {
-						if(isGlobal) {
+						if (isGlobal) {
 							return Component.translatable("gui.structurify.label.yes_global");
 						}
 
-						if(isNamespace) {
+						if (isNamespace) {
 							return Component.translatable("gui.structurify.label.yes_namespace", namespace);
 						}
 
@@ -123,7 +129,7 @@ public final class FlatnessCheckOptions
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
 				.valueFormatter(allowNonSolidBlocks -> {
-					if(allowNonSolidBlocks) {
+					if (allowNonSolidBlocks) {
 						return Component.translatable("gui.structurify.label.yes");
 					}
 
@@ -134,9 +140,9 @@ public final class FlatnessCheckOptions
 		flatnessCheckOptions.put(FLATNESS_CHECK_ALLOW_NON_SOLID_BLOCKS_OPTION_NAME, allowNonSolidBlocksOption);
 		builder.option(allowNonSolidBlocksOption);
 
-		if(isOverridingGlobalFlatnessCheckOption != null) {
+		if (isOverridingGlobalFlatnessCheckOption != null) {
 			isOverridingGlobalFlatnessCheckOption.addListener((opt, currentOverrideGlobalFlatnessCheck) -> {
-				if(!currentOverrideGlobalFlatnessCheck) {
+				if (!currentOverrideGlobalFlatnessCheck) {
 					isEnabledOption.setAvailable(false);
 					isEnabledOption.requestSetDefault();
 
@@ -155,7 +161,7 @@ public final class FlatnessCheckOptions
 		}
 
 		isEnabledOption.addListener((opt, currentIsEnabled) -> {
-			if(!currentIsEnabled) {
+			if (!currentIsEnabled) {
 				allowNonSolidBlocksOption.requestSetDefault();
 			}
 

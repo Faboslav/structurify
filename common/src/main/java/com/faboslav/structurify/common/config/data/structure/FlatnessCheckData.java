@@ -10,13 +10,14 @@ public final class FlatnessCheckData
 	private boolean isEnabled = IS_ENABLED_DEFAULT_VALUE;
 	private boolean allowNonSolidBlocks = ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE;
 
-	public FlatnessCheckData() {}
+	public FlatnessCheckData() {
+	}
 
 	public boolean isUsingDefaultValues() {
 		return
 			this.overrideGlobalFlatnessCheck == OVERRIDE_GLOBAL_FLATNESS_CHECK_DEFAULT_VALUE
 			&& this.isEnabled == IS_ENABLED_DEFAULT_VALUE
-			   && this.allowNonSolidBlocks == ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE;
+			&& this.allowNonSolidBlocks == ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE;
 	}
 
 	public boolean isOverridingGlobalFlatnessCheck() {

@@ -1,7 +1,5 @@
 package com.faboslav.structurify.common.config.data.structure;
 
-import com.faboslav.structurify.common.Structurify;
-
 public final class JigsawData
 {
 	public static final int MIN_SIZE = 0;

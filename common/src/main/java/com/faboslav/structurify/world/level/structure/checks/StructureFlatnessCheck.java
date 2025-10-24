@@ -26,11 +26,11 @@ public final class StructureFlatnessCheck
 
 		FlatnessCheckData flatnessCheckDataToCheck = globalFlatnessCheckData;
 
-		if(namespaceFlatnessCheckData.isOverridingGlobalFlatnessCheck() || namespaceFlatnessCheckData.isEnabled()) {
+		if (namespaceFlatnessCheckData.isOverridingGlobalFlatnessCheck() || namespaceFlatnessCheckData.isEnabled()) {
 			flatnessCheckDataToCheck = namespaceFlatnessCheckData;
 		}
 
-		if(structureFlatnessCheckData.isOverridingGlobalFlatnessCheck() || structureFlatnessCheckData.isEnabled()) {
+		if (structureFlatnessCheckData.isOverridingGlobalFlatnessCheck() || structureFlatnessCheckData.isEnabled()) {
 			flatnessCheckDataToCheck = structureFlatnessCheckData;
 		}
 
@@ -53,7 +53,7 @@ public final class StructureFlatnessCheck
 		Set<StructureFlatnessCheckSample> flatnessCheckSamples = new HashSet<>();
 		int structureArea = 0;
 
-		for(var structurePiece : structurePieces) {
+		for (var structurePiece : structurePieces) {
 			BoundingBox structurePieceBoundingBox = structurePiece.getBoundingBox();
 			int spanX = structurePieceBoundingBox.getXSpan();
 			int spanZ = structurePieceBoundingBox.getZSpan();
@@ -101,7 +101,7 @@ public final class StructureFlatnessCheck
 					int firstWorldSurfaceFreeHeight = chunkGenerator.getFirstFreeHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, heightAccessor, randomState);
 					boolean isSolid = firstWorldSurfaceFreeHeight - firstOceanFloorOccupiedHeight == 1;
 
-					if(Structurify.getConfig().getDebugData().isEnabled()) {
+					if (Structurify.getConfig().getDebugData().isEnabled()) {
 						flatnessCheckSamples.add(new StructureFlatnessCheckSample(structureId, x, z, firstOceanFloorOccupiedHeight, firstWorldSurfaceFreeHeight, isSolid));
 					}
 
@@ -125,5 +125,6 @@ public final class StructureFlatnessCheck
 		return true;
 	}
 
-	private StructureFlatnessCheck() {}
+	private StructureFlatnessCheck() {
+	}
 }

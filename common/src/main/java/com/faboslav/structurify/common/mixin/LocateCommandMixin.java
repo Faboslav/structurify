@@ -59,7 +59,7 @@ public class LocateCommandMixin
 					}
 
 					if (areAllStructuresInTagDisabled) {
-						throw new RuntimeException(new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.structure_is_disabled", "#" + structureTagKey.get().location().toString())).create());
+						throw new RuntimeException(new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.structure_is_disabled", "#" + structureTagKey.get().location())).create());
 					}
 				});
 			} catch (RuntimeException e) {

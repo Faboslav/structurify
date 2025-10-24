@@ -5,7 +5,7 @@ import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureNamespaceData;
 import com.faboslav.structurify.common.util.BiomeUtil;
-import com.faboslav.structurify.world.level.structure.checks.*;
+import com.faboslav.structurify.world.level.structure.checks.StructureChecker;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.core.Holder;
@@ -59,7 +59,7 @@ public abstract class StructureMixin implements StructurifyStructure
 
 	@Unique
 	public StructureNamespaceData structurify$getGlobalStructureNamespaceData() {
-		if(this.structurify$globalStructureNamespaceData == null) {
+		if (this.structurify$globalStructureNamespaceData == null) {
 			this.structurify$globalStructureNamespaceData = Structurify.getConfig().getStructureNamespaceData().get(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER);
 		}
 
@@ -72,10 +72,10 @@ public abstract class StructureMixin implements StructurifyStructure
 
 	@Unique
 	public StructureNamespaceData structurify$getStructureNamespaceData() {
-		if(this.structurify$structureNamespaceData == null) {
+		if (this.structurify$structureNamespaceData == null) {
 			var structureIdentifier = this.structurify$getStructureIdentifier();
 
-			if(structureIdentifier != null) {
+			if (structureIdentifier != null) {
 				this.structurify$structureNamespaceData = Structurify.getConfig().getStructureNamespaceData().get(structureIdentifier.getNamespace());
 			}
 		}
@@ -89,10 +89,10 @@ public abstract class StructureMixin implements StructurifyStructure
 
 	@Unique
 	public StructureData structurify$getStructureData() {
-		if(this.structurify$structureData == null) {
+		if (this.structurify$structureData == null) {
 			var structureIdentifier = this.structurify$getStructureIdentifier();
 
-			if(structureIdentifier != null) {
+			if (structureIdentifier != null) {
 				this.structurify$structureData = Structurify.getConfig().getStructureData().get(structureIdentifier.toString());
 			}
 		}
@@ -151,7 +151,7 @@ public abstract class StructureMixin implements StructurifyStructure
 	private GenerationStep.Decoration structurify$step(
 		Operation<GenerationStep.Decoration> original
 	) {
-		if(this.structurify$getStructureData() == null) {
+		if (this.structurify$getStructureData() == null) {
 			return original.call();
 		}
 
@@ -164,7 +164,7 @@ public abstract class StructureMixin implements StructurifyStructure
 	private TerrainAdjustment structurify$terrainAdaptation(
 		Operation<TerrainAdjustment> original
 	) {
-		if(this.structurify$getStructureData() == null) {
+		if (this.structurify$getStructureData() == null) {
 			return original.call();
 		}
 
@@ -193,7 +193,7 @@ public abstract class StructureMixin implements StructurifyStructure
 	) {
 		//? if >= 1.21.4 {
 		/*var structureStart = original.call(structure, level, registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
-		*///?} else {
+		 *///?} else {
 		var structureStart = original.call(registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
 		//?}
 
@@ -203,7 +203,7 @@ public abstract class StructureMixin implements StructurifyStructure
 
 		var structureCheckResult = StructureChecker.checkStructure(structureStart, this, chunkGenerator, heightAccessor, randomState, biomeSource);
 
-		if(!structureCheckResult) {
+		if (!structureCheckResult) {
 			return StructureStart.INVALID_START;
 		}
 

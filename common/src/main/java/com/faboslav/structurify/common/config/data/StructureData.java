@@ -19,7 +19,7 @@ public class StructureData implements StructureLikeData
 
 	private boolean isDisabled = IS_DISABLED_DEFAULT_VALUE;
 	private List<String> biomes;
-	private	GenerationStep.Decoration step;
+	private GenerationStep.Decoration step;
 	private TerrainAdjustment terrainAdaptation;
 	private JigsawData jigsawData;
 	private DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckData;

@@ -18,7 +18,8 @@ public record StructureFlatnessCheckOverview(
 	int failedNonSolidChecks,
 	int nonSolidFlatnessChecksThreshold,
 	boolean result
-) {
+)
+{
 	@Override
 	public String toString() {
 		return structureId + "\n" +
@@ -26,6 +27,6 @@ public record StructureFlatnessCheckOverview(
 			   "Height threshold: " + flatnessCheckThreshold + " (min Y: " + minHeight + ", max Y: " + maxHeight + ")\n" +
 			   "Non solid checks: " + nonSolidChecks + "\n" +
 			   "Failed checks: " + failedNonSolidChecks + "/" + nonSolidFlatnessChecksThreshold + "\n" +
-			   "Result: " + (result ? "success" : "fail");
+			   "Result: " + (result ? "success":"fail");
 	}
 }

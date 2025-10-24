@@ -26,7 +26,6 @@ import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 //? if >= 1.21.3 {
 /*import net.minecraft.client.renderer.ShapeRenderer;
@@ -40,7 +39,7 @@ public final class StructurifyDebugRenderer
 		Minecraft minecraft,
 		PoseStack poseStack,
 		@Nullable MultiBufferSource bufferSource
-		) {
+	) {
 		DebugData debugData = Structurify.getConfig().getDebugData();
 
 		if (!debugData.isEnabled()) {
@@ -49,7 +48,7 @@ public final class StructurifyDebugRenderer
 
 		DebugData.DebugMode debugMode = debugData.getDebugMode();
 
-		if(bufferSource == null) {
+		if (bufferSource == null) {
 			bufferSource = minecraft.renderBuffers().bufferSource();
 		}
 
@@ -58,12 +57,12 @@ public final class StructurifyDebugRenderer
 
 		final Camera camera = minecraft.gameRenderer.getMainCamera();
 		final var cameraPosition = camera.getPosition();
-		final BlockPos cameraBlockPosition =  BlockPos.containing(cameraPosition);
+		final BlockPos cameraBlockPosition = BlockPos.containing(cameraPosition);
 		final double camX = cameraPosition.x;
 		final double camY = cameraPosition.y;
 		final double camZ = cameraPosition.z;
 
-		if(debugMode == DebugData.DebugMode.FLATNESS) {
+		if (debugMode == DebugData.DebugMode.FLATNESS) {
 			var structureFlatnessCheckOverviews = Structurify.getConfig().getDebugData().getStructureFlatnessCheckOverviews();
 			synchronized (structureFlatnessCheckOverviews) {
 				for (StructureFlatnessCheckOverview structureFlatnessCheckOverview : structureFlatnessCheckOverviews.values().stream().filter(o -> isWithinChunkRadius(cameraBlockPosition, o.structureBoundingBox().getCenter(), chunkRadius)).toList()) {
@@ -77,7 +76,7 @@ public final class StructurifyDebugRenderer
 					this.renderStructureFlatnessCheckSample(structureFlatnessCheckSample, poseStack, bufferSource, camX, camY, camZ);
 				}
 			}
-		} else if(debugMode == DebugData.DebugMode.BIOME) {
+		} else if (debugMode == DebugData.DebugMode.BIOME) {
 			var structureBiomeCheckOverviews = Structurify.getConfig().getDebugData().getStructureBiomeCheckOverviews();
 			synchronized (structureBiomeCheckOverviews) {
 				for (StructureBiomeCheckOverview structureBiomeCheckOverview : structureBiomeCheckOverviews.values().stream().filter(o -> isWithinChunkRadius(cameraBlockPosition, o.structureBoundingBox().getCenter(), chunkRadius)).toList()) {
@@ -224,25 +223,33 @@ public final class StructurifyDebugRenderer
 		double cameraZ,
 		float alpha
 	) {
-			var aabb = new AABB(
-				boundingBox.minX(), boundingBox.minY(), boundingBox.minZ(),
-				boundingBox.maxX() + 1, boundingBox.maxY() + 1, boundingBox.maxZ() + 1
-			).move(-cameraX, -cameraY, -cameraZ);
+		var aabb = new AABB(
+			boundingBox.minX(), boundingBox.minY(), boundingBox.minZ(),
+			boundingBox.maxX() + 1, boundingBox.maxY() + 1, boundingBox.maxZ() + 1
+		).move(-cameraX, -cameraY, -cameraZ);
 
-			renderLineBox(
-				poseStack,
-				vertexConsumer,
-				aabb,
-				1.0f, 1.0f, 1.0f, alpha
-			);
+		renderLineBox(
+			poseStack,
+			vertexConsumer,
+			aabb,
+			1.0f, 1.0f, 1.0f, alpha
+		);
 	}
 
-	public static void renderLineBox(PoseStack poseStack, VertexConsumer buffer, AABB box, float red, float green, float blue, float alpha) {
+	public static void renderLineBox(
+		PoseStack poseStack,
+		VertexConsumer buffer,
+		AABB box,
+		float red,
+		float green,
+		float blue,
+		float alpha
+	) {
 		//? if >= 1.21.9 {
 		/*ShapeRenderer.renderLineBox(poseStack.last(), buffer, box, red, green, blue, alpha);
-		*///?} else if >= 1.21.3 {
+		 *///?} else if >= 1.21.3 {
 		/*ShapeRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
-		*///?} else {
+		 *///?} else {
 		LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
 		//?}
 	}
@@ -262,7 +269,7 @@ public final class StructurifyDebugRenderer
 		double centerZ = (box.minZ() + box.maxZ() + 1) * 0.5;
 
 		// Put text just above the top
-		double topY   = box.maxY() + 1.0;
+		double topY = box.maxY() + 1.0;
 		double labelY = topY + 0.25;
 
 		poseStack.pushPose();
@@ -275,7 +282,7 @@ public final class StructurifyDebugRenderer
 		// Use horizontal diagonal length as a size proxy
 		float spanX = box.getXSpan();
 		float spanZ = box.getZSpan();
-		float diagXZ = (float)Math.sqrt(spanX * spanX + spanZ * spanZ);
+		float diagXZ = (float) Math.sqrt(spanX * spanX + spanZ * spanZ);
 
 		// Tune the divisor to your liking; bigger divisor = smaller growth
 		// Min scale factor is 1 so small structures stay readable.

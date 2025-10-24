@@ -68,7 +68,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	public Component getTranslatedBiome(String biome) {
-		return LanguageUtil.translateId("biome", biome).append((" ("+biome+") "));
+		return LanguageUtil.translateId("biome", biome).append((" (" + biome + ") "));
 	}
 
 	@Override

@@ -10,7 +10,8 @@ public class DistanceFromWorldCenterCheckData
 	private int minDistanceFromWorldCenter = MIN_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
 	private int maxDistanceFromWorldCenter = MAX_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
 
-	public DistanceFromWorldCenterCheckData() {}
+	public DistanceFromWorldCenterCheckData() {
+	}
 
 	public boolean isUsingDefaultValues() {
 		return

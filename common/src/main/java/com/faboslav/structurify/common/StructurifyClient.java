@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class StructurifyClient
 {
-	private static StructurifyConfigScreen CONFIG_SCREEN = new StructurifyConfigScreen();
+	private static final StructurifyConfigScreen CONFIG_SCREEN = new StructurifyConfigScreen();
 	private static final StructurifyDebugRenderer DEBUG_RENDERER = new StructurifyDebugRenderer();
 
 	public static StructurifyDebugRenderer getDebugRenderer() {

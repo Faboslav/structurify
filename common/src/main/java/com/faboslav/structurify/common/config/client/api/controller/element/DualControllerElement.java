@@ -83,7 +83,7 @@ public final class DualControllerElement extends AbstractWidget
 		return firstElement.charTyped(characterEvent) || secondElement.charTyped(characterEvent) || secondElement.charTyped(characterEvent);
 	}
 	*///?} else {
-    @Override
+	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		boolean firstElementMouseClicked = firstElement.mouseClicked(mouseX, mouseY, button);
 		boolean secondElementMouseClicked = secondElement.mouseClicked(mouseX, mouseY, button);
@@ -120,7 +120,7 @@ public final class DualControllerElement extends AbstractWidget
 	public boolean charTyped(char chr, int modifiers) {
 		return firstElement.charTyped(chr, modifiers) || secondElement.charTyped(chr, modifiers);
 	}
-    //?}
+	//?}
 
 	//? if >=1.20.4 {
 	/*@Override

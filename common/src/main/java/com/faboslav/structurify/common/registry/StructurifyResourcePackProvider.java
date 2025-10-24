@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 //? if >=1.21 {
 /*import com.faboslav.structurify.common.mixin.ResourcePackManagerAccessor;
-*///?}
+ *///?}
 
 public final class StructurifyResourcePackProvider
 {
@@ -30,9 +30,9 @@ public final class StructurifyResourcePackProvider
 
 		//? if >=1.21 {
 		/*vanillaResourcePackProviders.addAll(((ResourcePackManagerAccessor) ServerPacksSource.createVanillaTrustedRepository()).getSources());
-		*///?} else {
+		 *///?} else {
 		vanillaResourcePackProviders.add(new ServerPacksSource());
-		 //?}
+		//?}
 
 		return vanillaResourcePackProviders;
 	}

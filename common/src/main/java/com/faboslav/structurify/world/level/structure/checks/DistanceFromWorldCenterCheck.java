@@ -23,11 +23,11 @@ public class DistanceFromWorldCenterCheck
 
 		DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckDataToCheck = globalDistanceFromWorldCenterData;
 
-		if(namespaceDistanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter()) {
+		if (namespaceDistanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter()) {
 			distanceFromWorldCenterCheckDataToCheck = namespaceDistanceFromWorldCenterData;
 		}
 
-		if(structureDistanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter()) {
+		if (structureDistanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter()) {
 			distanceFromWorldCenterCheckDataToCheck = structureDistanceFromWorldCenterData;
 		}
 
@@ -50,10 +50,6 @@ public class DistanceFromWorldCenterCheck
 		var isFarEnoughFromWorldCenter = minDistanceFromWorldCenter == 0 || (distanceFromWorldCenter >= minDistanceFromWorldCenter);
 		var isCloseEnoughToWorldCenter = maxDistanceFromWorldCenter == 0 || (distanceFromWorldCenter <= maxDistanceFromWorldCenter);
 
-		if(isFarEnoughFromWorldCenter && isCloseEnoughToWorldCenter) {
-			return true;
-		}
-
-		return false;
+		return isFarEnoughFromWorldCenter && isCloseEnoughToWorldCenter;
 	}
 }

@@ -19,7 +19,7 @@ public abstract class JigsawStructureMixin extends StructureMixin
 		)
 	)
 	protected int structurify$findGenerationPointGetMaxDepth(int originalMaxDepth) {
-		if(this.structurify$getStructureData() == null) {
+		if (this.structurify$getStructureData() == null) {
 			return originalMaxDepth;
 		}
 
@@ -38,13 +38,13 @@ public abstract class JigsawStructureMixin extends StructureMixin
 			opcode = Opcodes.GETFIELD
 		)
 	)
-	//? if >= 1.21.9 {
+		//? if >= 1.21.9 {
 	/*protected JigsawStructure.MaxDistance structurify$findGenerationPointGetMaxDistanceFromCenter(JigsawStructure.MaxDistance originalMaxDistanceFromCenter)
-	*///?} else {
+	 *///?} else {
 	protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
 	//?}
 	{
-		if(this.structurify$getStructureData() == null) {
+		if (this.structurify$getStructureData() == null) {
 			return originalMaxDistanceFromCenter;
 		}
 

@@ -18,8 +18,6 @@ import com.faboslav.structurify.common.platform.PlatformHooks;
 //?}
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.RecordComponent;
 import java.util.Optional;
 
 public final class JigsawStructureUtil
@@ -55,7 +53,7 @@ public final class JigsawStructureUtil
 
 	//? if >= 1.21.9 {
 	/*public static JigsawStructure.MaxDistance getMaxDistanceFromCenterForStructure(Structure structure)
-	*///?} else {
+	 *///?} else {
 	public static int getMaxDistanceFromCenterForStructure(Structure structure)
 	//?}
 	{
@@ -164,7 +162,7 @@ public final class JigsawStructureUtil
 
 		//? if >= 1.21.9 {
 		/*return new JigsawStructure.MaxDistance(0, 0);
-		*///?} else {
+		 *///?} else {
 		return 0;
 		//?}
 	}
@@ -190,7 +188,7 @@ public final class JigsawStructureUtil
 		Field[] fields = clazz.getDeclaredFields();
 
 		for (Field field : fields) {
-			if (field.getName().equals("size") ||  field.getName().equals("max_depth")) {
+			if (field.getName().equals("size") || field.getName().equals("max_depth")) {
 				field.setAccessible(true);
 
 				try {

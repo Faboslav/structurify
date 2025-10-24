@@ -40,13 +40,7 @@ public final class StructurifyRegistryManagerProvider
 			return null;
 		}
 
-		var biomeRegistry = registryManager.lookup(Registries.BIOME).orElse(null);
-
-		if (biomeRegistry == null) {
-			return null;
-		}
-
-		return biomeRegistry;
+		return registryManager.lookup(Registries.BIOME).orElse(null);
 	}
 
 	public static void setRegistryManager(HolderLookup.Provider registryAccess) {

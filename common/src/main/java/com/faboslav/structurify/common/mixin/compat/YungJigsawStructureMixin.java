@@ -26,7 +26,7 @@ public abstract class YungJigsawStructureMixin extends Structure implements Stru
 		)
 	)
 	protected int structurify$findGenerationPointGetMaxDepth(int originalMaxDepth) {
-		if(this.structurify$getStructureData() == null) {
+		if (this.structurify$getStructureData() == null) {
 			return originalMaxDepth;
 		}
 
@@ -42,7 +42,7 @@ public abstract class YungJigsawStructureMixin extends Structure implements Stru
 		)
 	)
 	protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter) {
-		if(this.structurify$getStructureData() == null) {
+		if (this.structurify$getStructureData() == null) {
 			return originalMaxDistanceFromCenter;
 		}
 

@@ -4,5 +4,5 @@ import net.minecraft.network.chat.Component;
 
 public interface StructurifyOption
 {
-	 void structurify$setName(Component name);
+	void structurify$setName(Component name);
 }

@@ -204,9 +204,9 @@ public final class StructurifyCommand
 		BlockPos blockPos = BlockPos.containing(source.getPosition());
 		//? if > 1.21.1 {
 		/*var registry = serverLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-		*///?} else {
+		 *///?} else {
 		var registry = source.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
-		 //?}
+		//?}
 
 		HolderSet<Structure> holderSet = LocateCommandInvoker.structurify$invokeGetHolders(structure, registry)
 			.orElseThrow(() -> LocateCommandInvoker.structurify$getStructureInvalidError().create(structure.asPrintable()));

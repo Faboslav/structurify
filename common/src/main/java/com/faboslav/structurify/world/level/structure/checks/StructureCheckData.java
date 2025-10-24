@@ -1,6 +1,5 @@
 package com.faboslav.structurify.world.level.structure.checks;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +31,7 @@ public final class StructureCheckData
 	}
 
 	public List<StructurePiece> getStructurePieces() {
-		if(this.structurePieces.isEmpty()) {
+		if (this.structurePieces.isEmpty()) {
 			this.setStructureCheckData();
 		}
 
@@ -40,7 +39,7 @@ public final class StructureCheckData
 	}
 
 	public int[][] getStructurePieceSamples() {
-		if(this.structurePieceSamples == null) {
+		if (this.structurePieceSamples == null) {
 			this.setStructureCheckData();
 		}
 

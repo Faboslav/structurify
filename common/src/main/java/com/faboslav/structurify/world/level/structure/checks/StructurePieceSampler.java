@@ -15,7 +15,7 @@ public final class StructurePieceSampler
 	public static List<StructurePiece> getStructurePieces(StructureStart structureStart) {
 		List<StructurePiece> structurePieces = structureStart.getPieces();
 
-		if(Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MINIMAL) {
+		if (Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MINIMAL) {
 			return structurePieces;
 		}
 
@@ -31,13 +31,13 @@ public final class StructurePieceSampler
 
 		int[][] pieceSamples = getStructurePieceCorners(structurePieces);
 
-		if(Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MINIMAL) {
+		if (Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MINIMAL) {
 			return pieceSamples;
 		}
 
 		pieceSamples = mergeTouchingPositions(pieceSamples);
 
-		if(Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MERGED_SAMPLES) {
+		if (Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MERGED_SAMPLES) {
 			return pieceSamples;
 		}
 
@@ -194,5 +194,6 @@ public final class StructurePieceSampler
 			   && outer.minZ() <= inner.minZ() && outer.maxZ() >= inner.maxZ();
 	}
 
-	private StructurePieceSampler() {}
+	private StructurePieceSampler() {
+	}
 }

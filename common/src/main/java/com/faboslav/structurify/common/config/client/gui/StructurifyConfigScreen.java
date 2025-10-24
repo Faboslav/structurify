@@ -1,8 +1,6 @@
 package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.config.client.gui.widget.DynamicGridWidget;
-import com.faboslav.structurify.common.config.client.gui.widget.ImageButtonWidget;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.mixin.yacl.CategoryTabAccessor;
 import com.faboslav.structurify.common.mixin.yacl.GroupSeparatorEntryAccessor;
@@ -10,12 +8,7 @@ import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
-import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,11 +48,11 @@ public class StructurifyConfigScreen
 			var collapsedGroups = new HashMap<String, Boolean>();
 
 			for (OptionListWidget.Entry entry : optionListWidget.children()) {
-				if(entry instanceof OptionListWidget.GroupSeparatorEntry groupSeparatorEntry) {
+				if (entry instanceof OptionListWidget.GroupSeparatorEntry groupSeparatorEntry) {
 					GroupSeparatorEntryAccessor yaclGroupSeparatorEntry = (GroupSeparatorEntryAccessor) entry;
 					var groupName = yaclGroupSeparatorEntry.getGroup().name().getString();
 
-					if(!collapsedGroups.containsKey(groupName)) {
+					if (!collapsedGroups.containsKey(groupName)) {
 						collapsedGroups.put(groupName, groupSeparatorEntry.isExpanded());
 					}
 				}
@@ -69,9 +62,9 @@ public class StructurifyConfigScreen
 				categoryTab.getSearchField().getValue(),
 				//? if >= 1.21.4 {
 				/*optionListWidget.scrollAmount(),
-				*///?} else {
+				 *///?} else {
 				optionListWidget.getScrollAmount(),
-				 //?}
+				//?}
 				collapsedGroups
 			));
 		}
@@ -90,7 +83,7 @@ public class StructurifyConfigScreen
 				optionListWidget.setScrollAmount(screenState.lastScrollAmount());
 
 				for (OptionListWidget.Entry entry : optionListWidget.children()) {
-					if(entry instanceof OptionListWidget.GroupSeparatorEntry groupSeparatorEntry) {
+					if (entry instanceof OptionListWidget.GroupSeparatorEntry groupSeparatorEntry) {
 						GroupSeparatorEntryAccessor yaclGroupSeparatorEntry = (GroupSeparatorEntryAccessor) entry;
 						var groupName = yaclGroupSeparatorEntry.getGroup().name().getString();
 

@@ -25,7 +25,11 @@ public class DistanceFromWorldCenterOptions
 	public static String OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME = "override_global_distance_from_world_center";
 	public static String DISTANCE_FROM_WORLD_CENTER_OPTION_NAME = "distance_from_world_center";
 
-	public static Map<String, Option<?>> addDistanceFromWorldCenterOptions(OptionAddable builder, StructurifyConfig config, String id) {
+	public static Map<String, Option<?>> addDistanceFromWorldCenterOptions(
+		OptionAddable builder,
+		StructurifyConfig config,
+		String id
+	) {
 		boolean isEnabledGlobally = !config.getStructureNamespaceData().get(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER).getDistanceFromWorldCenterCheckData().isUsingDefaultValues();
 		boolean isGlobal = id.equals(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER);
 		boolean isEnabledForNamespace = !config.getStructureNamespaceData().get(id.split(":")[0]).getDistanceFromWorldCenterCheckData().isUsingDefaultValues();
@@ -34,7 +38,7 @@ public class DistanceFromWorldCenterOptions
 		String namespace;
 		Map<String, ? extends StructureLikeData> structureLikeData;
 
-		if(isNamespace) {
+		if (isNamespace) {
 			namespace = id;
 			structureLikeData = config.getStructureNamespaceData();
 		} else {
@@ -47,7 +51,7 @@ public class DistanceFromWorldCenterOptions
 
 		var title = Component.translatable("gui.structurify.structures.distance_from_world_center_group.title");
 
-		if(isGlobal || isNamespace) {
+		if (isGlobal || isNamespace) {
 			title = Component.literal("„" + LanguageUtil.translateId(null, namespace).getString() + "“ ").append(title);
 		}
 
@@ -57,7 +61,7 @@ public class DistanceFromWorldCenterOptions
 
 		@Nullable Option<Boolean> isOverridingGlobalDistanceFromWorldCenterOption;
 
-		if(!isGlobal) {
+		if (!isGlobal) {
 			isOverridingGlobalDistanceFromWorldCenterOption = Option.<Boolean>createBuilder()
 				.name(Component.translatable("gui.structurify.structures.structure.override_global_distance_from_world_center.title"))
 				.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.override_global_distance_from_world_center.description", namespace, id)))
@@ -106,12 +110,12 @@ public class DistanceFromWorldCenterOptions
 
 		builder.option(distanceFromWorldCenterOption);
 
-		if(isOverridingGlobalDistanceFromWorldCenterOption != null) {
+		if (isOverridingGlobalDistanceFromWorldCenterOption != null) {
 			isOverridingGlobalDistanceFromWorldCenterOption.addListener((opt, currentOverrideGlobalFlatnessCheck) -> {
 				minStructureDistanceFromWorldOption.setAvailable(currentOverrideGlobalFlatnessCheck);
 				maxStructureDistanceFromWorldOption.setAvailable(currentOverrideGlobalFlatnessCheck);
 
-				if(!currentOverrideGlobalFlatnessCheck) {
+				if (!currentOverrideGlobalFlatnessCheck) {
 					minStructureDistanceFromWorldOption.requestSetDefault();
 					maxStructureDistanceFromWorldOption.requestSetDefault();
 				}

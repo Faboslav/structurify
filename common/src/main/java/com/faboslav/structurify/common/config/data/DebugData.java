@@ -17,7 +17,7 @@ public final class DebugData
 	private final Map<Long, StructureFlatnessCheckOverview> structureFlatnessCheckOverviews = new ConcurrentHashMap<>();
 	private final Map<Long, Set<StructureFlatnessCheckSample>> structureFlatnessCheckSamples = new ConcurrentHashMap<>();
 
-	private final Map<Long, StructureBiomeCheckOverview> structureBiomeCheckOverviews= new ConcurrentHashMap<>();
+	private final Map<Long, StructureBiomeCheckOverview> structureBiomeCheckOverviews = new ConcurrentHashMap<>();
 	private final Map<Long, Set<StructureBiomeCheckSample>> structureBiomeCheckSamples = new ConcurrentHashMap<>();
 
 	private boolean isEnabled = false;
@@ -48,13 +48,16 @@ public final class DebugData
 		this.samplingMode = samplingMode;
 	}
 
-	public void addStructureFlatnessCheckSample(Long structureKey, StructureFlatnessCheckSample structureFlatnessCheckSample) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+	public void addStructureFlatnessCheckSample(
+		Long structureKey,
+		StructureFlatnessCheckSample structureFlatnessCheckSample
+	) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
 		synchronized (this.structureFlatnessCheckSamples) {
-			if(!this.structureFlatnessCheckSamples.containsKey(structureKey)) {
+			if (!this.structureFlatnessCheckSamples.containsKey(structureKey)) {
 				this.structureFlatnessCheckSamples.put(structureKey, ConcurrentHashMap.newKeySet());
 			}
 
@@ -63,7 +66,7 @@ public final class DebugData
 	}
 
 	public void removeStructureFlatnessCheckSamples(Long structureKey) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
@@ -71,7 +74,7 @@ public final class DebugData
 	}
 
 	public void clearStructureFlatnessCheckSamples() {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
@@ -85,7 +88,7 @@ public final class DebugData
 	}
 
 	public void clearStructureFlatnessCheckOverviews() {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
@@ -94,8 +97,11 @@ public final class DebugData
 		}
 	}
 
-	public void addStructureFlatnessCheckInfo(Long structureKey, StructureFlatnessCheckOverview structureFlatnessCheckInfo) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+	public void addStructureFlatnessCheckInfo(
+		Long structureKey,
+		StructureFlatnessCheckOverview structureFlatnessCheckInfo
+	) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
@@ -105,7 +111,7 @@ public final class DebugData
 	}
 
 	public void removeStructureFlatnessCheckInfo(Long structureKey) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
@@ -116,8 +122,11 @@ public final class DebugData
 		return this.structureFlatnessCheckOverviews;
 	}
 
-	public void addStructureBiomeCheckOverview(Long structureKey, StructureBiomeCheckOverview structureBiomeCheckOverview) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+	public void addStructureBiomeCheckOverview(
+		Long structureKey,
+		StructureBiomeCheckOverview structureBiomeCheckOverview
+	) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
@@ -127,7 +136,7 @@ public final class DebugData
 	}
 
 	public void removeStructureBiomeCheckOverview(Long structureKey) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
@@ -135,7 +144,7 @@ public final class DebugData
 	}
 
 	public void clearStructureBiomeCheckOverviews() {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
@@ -149,12 +158,12 @@ public final class DebugData
 	}
 
 	public void addStructureBiomeCheckSample(Long structureKey, StructureBiomeCheckSample structureBiomeCheckSample) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
 		synchronized (this.structureBiomeCheckSamples) {
-			if(!this.structureBiomeCheckSamples.containsKey(structureKey)) {
+			if (!this.structureBiomeCheckSamples.containsKey(structureKey)) {
 				this.structureBiomeCheckSamples.put(structureKey, ConcurrentHashMap.newKeySet());
 			}
 
@@ -163,7 +172,7 @@ public final class DebugData
 	}
 
 	public void removeStructureBiomeCheckSamples(Long structureKey) {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
@@ -171,7 +180,7 @@ public final class DebugData
 	}
 
 	public void clearStructureBiomeCheckSamples() {
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 
@@ -184,7 +193,8 @@ public final class DebugData
 		return this.structureBiomeCheckSamples;
 	}
 
-	public enum DebugMode {
+	public enum DebugMode
+	{
 		NONE("none"),
 		BIOME("biome"),
 		FLATNESS("flatness"),
@@ -205,7 +215,8 @@ public final class DebugData
 		}
 	}
 
-	public enum SamplingMode {
+	public enum SamplingMode
+	{
 		MINIMAL("minimal"),
 		MERGED_SAMPLES("merged_samples"),
 		FINAL("final");

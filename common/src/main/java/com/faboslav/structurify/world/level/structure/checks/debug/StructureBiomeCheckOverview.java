@@ -14,12 +14,13 @@ public record StructureBiomeCheckOverview(
 	BiomeCheckData.BiomeCheckMode biomeCheckMode,
 	int checks,
 	boolean result
-) {
+)
+{
 	@Override
 	public String toString() {
 		return structureId + "\n" +
 			   "Mode: " + biomeCheckMode + "\n" +
 			   "Possible checks: " + checks + "\n" +
-			   "Result: " + (result ? "success" : "fail") + "\n";
+			   "Result: " + (result ? "success":"fail") + "\n";
 	}
 }

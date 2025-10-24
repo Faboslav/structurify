@@ -106,9 +106,9 @@ public final class BiomeUtil
 				var replacedBiomeIds = modCompat.getReplacedBiomes(biomeIds);
 				biomeIds.addAll(replacedBiomeIds);
 			} catch (Throwable e) {
-			Structurify.getLogger().error("Failed to get replaced biomes from mod compat");
-			e.printStackTrace();
-		}
+				Structurify.getLogger().error("Failed to get replaced biomes from mod compat");
+				e.printStackTrace();
+			}
 		}
 
 		ArrayList<Holder<Biome>> biomeHolders = new ArrayList<>();

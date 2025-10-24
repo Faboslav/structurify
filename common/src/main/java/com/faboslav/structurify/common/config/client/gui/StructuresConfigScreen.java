@@ -1,7 +1,6 @@
 package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.api.StructurifyOption;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.HolderOption;
@@ -11,15 +10,12 @@ import com.faboslav.structurify.common.config.client.gui.structure.DistanceFromW
 import com.faboslav.structurify.common.config.client.gui.structure.FlatnessCheckOptions;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
-import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
-import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -53,13 +49,13 @@ public final class StructuresConfigScreen
 		addStructures(structureCategoryBuilder, config);
 
 		globalDistanceFromWorldCenterOption.addListener((opt, enableGlobalFlatnessCheck) -> {
-			for(var overrideDistanceFromWorldCenterOption : overrideDistanceFromWorldCenterOptions) {
+			for (var overrideDistanceFromWorldCenterOption : overrideDistanceFromWorldCenterOptions) {
 				overrideDistanceFromWorldCenterOption.setAvailable(!globalDistanceFromWorldCenterOption.isPendingValueDefault());
 			}
 		});
 
 		enableGlobalFlatnessCheckOption.addListener((opt, enableGlobalFlatnessCheck) -> {
-			for(int i = 0; i < overrideFlatnessCheckOptions.size(); i++) {
+			for (int i = 0; i < overrideFlatnessCheckOptions.size(); i++) {
 				var overrideFlatnessCheckOption = overrideFlatnessCheckOptions.get(i);
 				overrideFlatnessCheckOption.setAvailable(enableGlobalFlatnessCheck);
 				overrideFlatnessCheckOption.requestSetDefault();
@@ -71,7 +67,7 @@ public final class StructuresConfigScreen
 		});
 
 		enableGlobalBiomeCheckOption.addListener((opt, enableGlobalBiomeCheck) -> {
-			for(int i = 0; i < overrideBiomeCheckOptions.size(); i++) {
+			for (int i = 0; i < overrideBiomeCheckOptions.size(); i++) {
 				var overrideBiomeCheckOption = overrideBiomeCheckOptions.get(i);
 				overrideBiomeCheckOption.setAvailable(enableGlobalBiomeCheck);
 				overrideBiomeCheckOption.requestSetDefault();
@@ -193,7 +189,11 @@ public final class StructuresConfigScreen
 		structureCategoryBuilder.group(invisibleGroup.build());
 	}
 
-	private static Option<Boolean> addStructure(StructureData structureData, String structureId, HolderLookup.RegistryLookup<Biome> biomeRegistry) {
+	private static Option<Boolean> addStructure(
+		StructureData structureData,
+		String structureId,
+		HolderLookup.RegistryLookup<Biome> biomeRegistry
+	) {
 		var structureOptionBuilder = Option.<Boolean>createBuilder()
 			.name(LanguageUtil.translateId("structure", structureId))
 			.binding(

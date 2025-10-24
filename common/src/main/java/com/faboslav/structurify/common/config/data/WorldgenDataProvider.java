@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.config.data;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;
@@ -100,7 +99,7 @@ public final class WorldgenDataProvider
 		for (var structureReference : structureRegistry.listElements().toList()) {
 			String structureNamespace = structureReference.key().location().getNamespace();
 
-			if(!structuresNamespaces.containsKey(structureNamespace)) {
+			if (!structuresNamespaces.containsKey(structureNamespace)) {
 				structuresNamespaces.put(structureNamespace, new StructureNamespaceData());
 			}
 		}
@@ -159,7 +158,7 @@ public final class WorldgenDataProvider
 
 			StructureData structureData = new StructureData(defaultBiomes, structure.step(), structure.terrainAdaptation());
 
-			if(JigsawStructureUtil.isJigsawLikeStructure(structure)) {
+			if (JigsawStructureUtil.isJigsawLikeStructure(structure)) {
 				int horizontalMaxDistanceFromCenter;
 				int verticalMaxDistanceFromCenter;
 

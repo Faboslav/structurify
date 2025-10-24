@@ -47,12 +47,12 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 		this.listeners = new ArrayList<>(listeners);
 
 		this.controller = controlGetter.apply(this);
-		this.optionPair = this.controller.optionPair;
-		this.firstOption = this.controller.optionPair.getFirstOption();
-		this.secondOption = this.controller.optionPair.getSecondOption();
+		this.optionPair = this.controller.optionPair();
+		this.firstOption = this.controller.optionPair().firstOption();
+		this.secondOption = this.controller.optionPair().secondOption();
 
-		optionPair.getFirstOption().addListener((opt, pending) -> triggerListeners(false));
-		optionPair.getSecondOption().addListener((opt, pending) -> triggerListeners(false));
+		optionPair.firstOption().addListener((opt, pending) -> triggerListeners(false));
+		optionPair.secondOption().addListener((opt, pending) -> triggerListeners(false));
 
 		addListener((opt, pending) -> description = descriptionFunction.apply(pending));
 		triggerListeners(true);
@@ -60,12 +60,12 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 
 	@Override
 	public @NotNull Component name() {
-		return optionPair.getFirstOption().name().copy().append(" & ").append(optionPair.getSecondOption().name().copy());
+		return optionPair.firstOption().name().copy().append(" & ").append(optionPair.secondOption().name().copy());
 	}
 
 	@Override
 	public @NotNull OptionDescription description() {
-		return OptionDescription.of(optionPair.getFirstOption().description().text().copy().append("\n\n").append(optionPair.getSecondOption().description().text()));
+		return OptionDescription.of(optionPair.firstOption().description().text().copy().append("\n\n").append(optionPair.secondOption().description().text()));
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 
 	@Override
 	public boolean available() {
-		return optionPair.getFirstOption().available() && optionPair.getSecondOption().available();
+		return optionPair.firstOption().available() && optionPair.secondOption().available();
 	}
 
 	@Override
@@ -133,8 +133,8 @@ public final class HolderOption<K extends Option<?>, V extends Option<?>> implem
 	public void requestSet(@NotNull OptionPair<K, V> value) {
 		Validate.notNull(value, "`value` cannot be null");
 
-		K firstOption = optionPair.getFirstOption();
-		V secondOption = optionPair.getSecondOption();
+		K firstOption = optionPair.firstOption();
+		V secondOption = optionPair.secondOption();
 
 		// This just doesnt work, why?
 		//firstOption.requestSet(firstOption.pendingValue());

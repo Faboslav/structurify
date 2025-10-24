@@ -29,9 +29,9 @@ public abstract class LabelControllerElementMixin
 		int button,
 		Operation<Boolean> original
 	) {
-		Style style = this.getStyle((int)mouseX, (int)mouseY);
+		Style style = this.getStyle((int) mouseX, (int) mouseY);
 
-		if(style == null) {
+		if (style == null) {
 			return false;
 		}
 

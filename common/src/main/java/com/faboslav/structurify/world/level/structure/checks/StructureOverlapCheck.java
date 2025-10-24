@@ -19,11 +19,7 @@ public final class StructureOverlapCheck
 	) {
 		long[] structureChunks = getStructurePiecesSections(structureCheckData.getStructureStart());
 
-		if (!claimStructureSections(structurifyChunkGenerator, structureChunks, structureCheckData.getStructureId())) {
-			return true;
-		}
-
-		return false;
+		return !claimStructureSections(structurifyChunkGenerator, structureChunks, structureCheckData.getStructureId());
 	}
 
 	private static long[] getStructurePiecesSections(StructureStart start) {
@@ -58,7 +54,11 @@ public final class StructureOverlapCheck
 		return structurePieceSectionKeys;
 	}
 
-	private static boolean claimStructureSections(StructurifyChunkGenerator structurifyChunkGenerator, long[] sectionKeysToClaim, ResourceLocation structureId) {
+	private static boolean claimStructureSections(
+		StructurifyChunkGenerator structurifyChunkGenerator,
+		long[] sectionKeysToClaim,
+		ResourceLocation structureId
+	) {
 		final long token = ThreadLocalRandom.current().nextLong();
 		final long[] salted = new long[sectionKeysToClaim.length];
 

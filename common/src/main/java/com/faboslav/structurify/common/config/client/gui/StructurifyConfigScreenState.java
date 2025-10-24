@@ -6,5 +6,6 @@ public record StructurifyConfigScreenState(
 	String lastSearchText,
 	double lastScrollAmount,
 	Map<String, Boolean> collapsedGroups
-) {
+)
+{
 }

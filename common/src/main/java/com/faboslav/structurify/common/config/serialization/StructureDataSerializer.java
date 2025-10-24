@@ -2,9 +2,6 @@ package com.faboslav.structurify.common.config.serialization;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.StructureData;
-import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
-import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
-import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -43,7 +40,7 @@ public final class StructureDataSerializer
 			var blacklistedBiomes = new ArrayList<>(structureData.getDefaultBiomes());
 			blacklistedBiomes.removeAll(structureJson.getAsJsonArray(BIOMES_PROPERTY).asList().stream().map(JsonElement::getAsString).collect(Collectors.toCollection(ArrayList::new)));
 			blacklistedBiomes.stream().distinct().forEach(biomes::remove);
-		} else if(structureJson.has(WHITELISTED_BIOMES_PROPERTY) && structureJson.has(BLACKLISTED_BIOMES_PROPERTY)){
+		} else if (structureJson.has(WHITELISTED_BIOMES_PROPERTY) && structureJson.has(BLACKLISTED_BIOMES_PROPERTY)) {
 			var whitelistedBiomes = structureJson.getAsJsonArray(WHITELISTED_BIOMES_PROPERTY);
 			for (JsonElement whitelistedBiome : whitelistedBiomes) {
 				if (biomes.contains(whitelistedBiome.getAsString())) {
@@ -92,7 +89,7 @@ public final class StructureDataSerializer
 			structureData.setTerrainAdaptation(terrainAdaptation);
 		}
 
-		if(structureData.isJigsawStructure()) {
+		if (structureData.isJigsawStructure()) {
 			JigsawDataSerializer.load(structureJson, structureData.getJigsawData());
 		}
 
@@ -121,16 +118,16 @@ public final class StructureDataSerializer
 		structure.addProperty(STEP_PROPERTY, structureData.getStep().getSerializedName());
 		structure.addProperty(TERRAIN_ADAPTATION_PROPERTY, structureData.getTerrainAdaptation().getSerializedName());
 
-		if(structureData.isJigsawStructure()) {
+		if (structureData.isJigsawStructure()) {
 			var jigsawData = structureData.getJigsawData();
 
-			if(!jigsawData.isUsingDefaultValues()) {
+			if (!jigsawData.isUsingDefaultValues()) {
 				JigsawDataSerializer.save(structure, jigsawData);
 			}
 		}
 
 		var distanceFromWorldCenterData = structureData.getDistanceFromWorldCenterCheckData();
-		if(!distanceFromWorldCenterData.isUsingDefaultValues()) {
+		if (!distanceFromWorldCenterData.isUsingDefaultValues()) {
 			DistanceFromWorldCenterDataSerializer.save(structure, distanceFromWorldCenterData);
 		}
 
@@ -140,7 +137,7 @@ public final class StructureDataSerializer
 		}
 
 		var biomeCheckData = structureData.getBiomeCheckData();
-		if(!biomeCheckData.isUsingDefaultValues()) {
+		if (!biomeCheckData.isUsingDefaultValues()) {
 			BiomeCheckDataSerializer.save(structure, biomeCheckData);
 		}
 

@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 //? if >= 1.21.9 {
 /*import net.minecraft.client.input.MouseButtonEvent;
-*///?}
+ *///?}
 
 public class StructureButtonController extends BooleanController
 {

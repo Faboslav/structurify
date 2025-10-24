@@ -34,11 +34,11 @@ public abstract class ControllerWidgetMixin
 		method = "matchesSearch"
 	)
 	public boolean structurify$matchesSearch(String query, Operation<Boolean> original) {
-		if(original.call(query)) {
+		if (original.call(query)) {
 			return true;
 		}
 
-		if(this.structurify$optionNameString == "" || this.structurify$optionDescriptionString == "") {
+		if (this.structurify$optionNameString == "" || this.structurify$optionDescriptionString == "") {
 			return true;
 		}
 

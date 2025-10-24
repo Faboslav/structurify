@@ -67,7 +67,7 @@ public final class BiomeStringController extends AbstractDropdownController<Stri
 
 	@Override
 	public Component formatValue() {
-		return LanguageUtil.translateId("biome", getString()).append((" ("+getString()+") "));
+		return LanguageUtil.translateId("biome", getString()).append((" (" + getString() + ") "));
 	}
 
 	@Override

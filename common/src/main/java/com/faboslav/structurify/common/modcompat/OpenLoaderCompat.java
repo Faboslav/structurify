@@ -34,7 +34,7 @@ public final class OpenLoaderCompat implements ModCompat
 		resourcePackProviders.add(new OpenLoaderRepositorySource(RepoType.DATA, config, config.dataPacks, configDir));
 		//?} else {
 		/*resourcePackProviders.add(new OpenLoaderRepositorySource(PackType.SERVER_DATA));
-		*///?}
+		 *///?}
 
 		return resourcePackProviders;
 	}

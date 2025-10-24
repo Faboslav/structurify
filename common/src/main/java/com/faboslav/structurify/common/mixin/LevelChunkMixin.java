@@ -2,14 +2,16 @@ package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
-import com.faboslav.structurify.world.level.structure.checks.*;
+import com.faboslav.structurify.world.level.structure.checks.StructureChecker;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -61,7 +63,7 @@ public abstract class LevelChunkMixin extends ChunkAccess
 	private void structurify$runPostLoad(Operation<Void> original) {
 		original.call();
 
-		if(!Structurify.getConfig().getDebugData().isEnabled()) {
+		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;
 		}
 

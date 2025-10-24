@@ -13,9 +13,7 @@ import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public final class BiomeCheckOptions
@@ -25,7 +23,12 @@ public final class BiomeCheckOptions
 	public static String BIOME_CHECK_MODE_OPTION_NAME = "mode";
 	public static String BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME = "blacklisted_biomes";
 
-	public static Map<String, Option<?>> addBiomeCheckOptions(ConfigCategory.Builder categoryBuilder, OptionGroup.Builder groupBuilder, StructurifyConfig config, String id) {
+	public static Map<String, Option<?>> addBiomeCheckOptions(
+		ConfigCategory.Builder categoryBuilder,
+		OptionGroup.Builder groupBuilder,
+		StructurifyConfig config,
+		String id
+	) {
 		boolean isEnabledGlobally = config.getStructureNamespaceData().get(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER).getBiomeCheckData().isEnabled();
 		boolean isGlobal = id.equals(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER);
 		boolean isEnabledForNamespace = config.getStructureNamespaceData().get(id.split(":")[0]).getBiomeCheckData().isEnabled();
@@ -34,7 +37,7 @@ public final class BiomeCheckOptions
 		String namespace;
 		Map<String, ? extends StructureLikeData> structureLikeData;
 
-		if(isNamespace) {
+		if (isNamespace) {
 			namespace = id;
 			structureLikeData = config.getStructureNamespaceData();
 		} else {
@@ -47,7 +50,7 @@ public final class BiomeCheckOptions
 		boolean isEnabled = structureLikeData.get(id).getBiomeCheckData().isEnabled();
 		var title = Component.translatable("gui.structurify.structures.biome_check_group.title");
 
-		if(isGlobal || isNamespace) {
+		if (isGlobal || isNamespace) {
 			title = Component.literal("„" + LanguageUtil.translateId(null, namespace).getString() + "“ ").append(title);
 		}
 
@@ -57,7 +60,7 @@ public final class BiomeCheckOptions
 
 		@Nullable Option<Boolean> isOverridingGlobalBiomeCheckOption;
 
-		if(!isGlobal) {
+		if (!isGlobal) {
 			isOverridingGlobalBiomeCheckOption = Option.<Boolean>createBuilder()
 				.name(Component.translatable("gui.structurify.structures.structure.override_global_biome_check.title"))
 				.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.override_global_biome_check.description", namespace, id)))
@@ -129,11 +132,11 @@ public final class BiomeCheckOptions
 
 		biomeCheckOptions.put(BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME, blacklistedBiomesOption);
 
-		if(isOverridingGlobalBiomeCheckOption != null) {
+		if (isOverridingGlobalBiomeCheckOption != null) {
 			isOverridingGlobalBiomeCheckOption.addListener((opt, currentOverrideGlobalBiomeCheck) -> {
 				isEnabledOption.setAvailable(currentOverrideGlobalBiomeCheck);
 
-				if(!currentOverrideGlobalBiomeCheck) {
+				if (!currentOverrideGlobalBiomeCheck) {
 					isEnabledOption.requestSetDefault();
 				}
 

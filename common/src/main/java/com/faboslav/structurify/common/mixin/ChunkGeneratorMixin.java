@@ -2,7 +2,6 @@ package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
-import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
 import com.faboslav.structurify.world.level.structure.checks.DistanceFromWorldCenterCheck;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
@@ -79,12 +78,12 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 
 		var structureKey = structureSelectionEntry.structure().unwrapKey();
 
-		if(structureKey.isPresent()) {
+		if (structureKey.isPresent()) {
 			ResourceLocation structureName = structureKey.get().location();
 			var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName.toString(), null);
 
 			if (structureData != null) {
-				if(structureData.isDisabled()) {
+				if (structureData.isDisabled()) {
 					return false;
 				}
 
@@ -99,9 +98,9 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 
 		//? if >=1.21.4 {
 		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
-		*///?} else {
+		 *///?} else {
 		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
-		 //?}
+		//?}
 	}
 
 	@WrapMethod(
@@ -124,7 +123,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 		for (Holder<Structure> holder : holderSet) {
 			var structureKey = holder.unwrapKey();
 
-			if(structureKey.isEmpty()) {
+			if (structureKey.isEmpty()) {
 				continue;
 			}
 
@@ -136,7 +135,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 			}
 		}
 
-		if(areAllStructureDisabled) {
+		if (areAllStructureDisabled) {
 			return null;
 		}
 

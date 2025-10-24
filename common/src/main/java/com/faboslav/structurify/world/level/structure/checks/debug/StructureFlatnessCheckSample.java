@@ -9,5 +9,6 @@ public record StructureFlatnessCheckSample(
 	int occY,
 	int freeY,
 	boolean isSolid
-) {
+)
+{
 }

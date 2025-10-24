@@ -77,12 +77,12 @@ public final class StructureConfigScreen
 
 		structureSettingsGroup.option(terrainAdaptationOption);
 
-		if(config.getStructureData().get(structureId).isJigsawStructure()) {
+		if (config.getStructureData().get(structureId).isJigsawStructure()) {
 			var jigsawOptions = JigsawOptions.getJigsawCheckOptions(structureData);
 			structureSettingsGroup.options(jigsawOptions);
 
 			isDisabledOption.addListener((opt, currentIsDisabled) -> {
-				for(var jigsawOption : jigsawOptions) {
+				for (var jigsawOption : jigsawOptions) {
 					jigsawOption.setAvailable(!currentIsDisabled);
 				}
 			});

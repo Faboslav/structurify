@@ -2,7 +2,9 @@ package com.faboslav.structurify.common.config;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.*;
-import com.faboslav.structurify.common.config.serialization.*;
+import com.faboslav.structurify.common.config.serialization.StructureDataSerializer;
+import com.faboslav.structurify.common.config.serialization.StructureNamespaceDataSerializer;
+import com.faboslav.structurify.common.config.serialization.StructureSetDataSerializer;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.platform.PlatformHooks;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
@@ -33,7 +35,7 @@ public final class StructurifyConfig
 	public boolean enableGlobalSpacingAndSeparationModifier = ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	public double globalSpacingAndSeparationModifier = GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 
-	private DebugData debugData = new DebugData();
+	private final DebugData debugData = new DebugData();
 	private Map<String, StructureNamespaceData> structureNamespaceData = new TreeMap<>();
 	private Map<String, StructureData> structureData = new TreeMap<>();
 	private Map<String, StructureSetData> structureSetData = new TreeMap<>();
@@ -160,7 +162,7 @@ public final class StructurifyConfig
 
 			StructureNamespaceData structureNamespaceData = this.structureNamespaceData.get(structureNamespaceJson.get(StructureNamespaceDataSerializer.NAME_PROPERTY).getAsString());
 
-			if(structureNamespaceData == null) {
+			if (structureNamespaceData == null) {
 				continue;
 			}
 
@@ -190,7 +192,7 @@ public final class StructurifyConfig
 
 			StructureData structureData = this.structureData.get(structureJson.get(StructureDataSerializer.NAME_PROPERTY).getAsString());
 
-			if(structureData == null) {
+			if (structureData == null) {
 				continue;
 			}
 
@@ -355,7 +357,7 @@ public final class StructurifyConfig
 				var structureSetData = structureSetDataEntry.getValue();
 				var salt = structureSetData.getSalt();
 
-				if(structureSetSalts.containsKey(salt)) {
+				if (structureSetSalts.containsKey(salt)) {
 					Structurify.getLogger().warn("Salt value for structure set {} is currently {}, which is already being used by {} structure set.", structureSetName, salt, structureSetSalts.get(salt));
 				} else {
 					structureSetSalts.put(structureSetData.getSalt(), structureSetName);

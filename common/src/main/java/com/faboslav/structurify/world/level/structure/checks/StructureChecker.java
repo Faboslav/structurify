@@ -30,23 +30,19 @@ public final class StructureChecker
 
 		var biomeCheckResult = checkBiomes(structureCheckData, biomeSource, randomState);
 
-		if(!biomeCheckResult) {
+		if (!biomeCheckResult) {
 			return false;
 		}
 
 		var flatnessCheckResult = checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState);
 
-		if(!flatnessCheckResult) {
+		if (!flatnessCheckResult) {
 			return false;
 		}
 
 		var overlapCheckResult = checkOverlap(structureCheckData, chunkGenerator);
 
-		if(!overlapCheckResult) {
-			return false;
-		}
-
-		return true;
+		return overlapCheckResult;
 	}
 
 	public static void debugCheckStructure(
@@ -78,7 +74,7 @@ public final class StructureChecker
 			return true;
 		}
 
-		if(biomeSource instanceof CheckerboardColumnBiomeSource) {
+		if (biomeSource instanceof CheckerboardColumnBiomeSource) {
 			return true;
 		}
 
@@ -98,18 +94,13 @@ public final class StructureChecker
 
 		var biomeCheckResult = StructureBiomeCheck.checkBiomes(structureCheckData, biomeSource, randomState);
 
-		if(!biomeCheckResult) {
-			/*
-			if(Structurify.getConfig().getDebugData().isEnabled()) {
-				var structureKey = ChunkPos.asLong(structureCheckData.getStructureCenter());
-				Structurify.getDebugRenderer().removeStructureFlatnessCheckInfo(structureKey);
-				Structurify.getDebugRenderer().removeStructureFlatnessCheckSamples(structureKey);
-			}*/
-
-			return false;
-		}
-
-		return true;
+		/*
+		if(Structurify.getConfig().getDebugData().isEnabled()) {
+			var structureKey = ChunkPos.asLong(structureCheckData.getStructureCenter());
+			Structurify.getDebugRenderer().removeStructureFlatnessCheckInfo(structureKey);
+			Structurify.getDebugRenderer().removeStructureFlatnessCheckSamples(structureKey);
+		}*/
+		return biomeCheckResult;
 	}
 
 	private static boolean checkFlatness(
@@ -148,45 +139,35 @@ public final class StructureChecker
 			randomState
 		);
 
-		if(!flatnessCheckResult) {
-			/*
-			if(Structurify.getConfig().getDebugData().isEnabled()) {
-				var structureKey = ChunkPos.asLong(structureCheckData.getStructureCenter());
+		/*
+		if(Structurify.getConfig().getDebugData().isEnabled()) {
+			var structureKey = ChunkPos.asLong(structureCheckData.getStructureCenter());
 
-				Structurify.getDebugRenderer().removeStructureBiomeCheckOverview(structureKey);
-				Structurify.getDebugRenderer().removeStructureBiomeCheckSamples(structureKey);
-			}*/
-
-			return false;
-		}
-
-		return true;
+			Structurify.getDebugRenderer().removeStructureBiomeCheckOverview(structureKey);
+			Structurify.getDebugRenderer().removeStructureBiomeCheckSamples(structureKey);
+		}*/
+		return flatnessCheckResult;
 	}
 
 	private static boolean checkOverlap(
 		StructureCheckData structureCheckData,
 		ChunkGenerator chunkGenerator
 	) {
-		if(!Structurify.getConfig().preventStructureOverlap) {
+		if (!Structurify.getConfig().preventStructureOverlap) {
 			return true;
 		}
 
 		boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, (StructurifyChunkGenerator) chunkGenerator);
 
-		if (overlapCheckResult) {
-			/*
-			if(Structurify.getConfig().getDebugData().isEnabled()) {
-				var structureKey = ChunkPos.asLong(structureCheckData.getStructureCenter());
+		/*
+		if(Structurify.getConfig().getDebugData().isEnabled()) {
+			var structureKey = ChunkPos.asLong(structureCheckData.getStructureCenter());
 
-				Structurify.getDebugRenderer().removeStructureFlatnessCheckInfo(structureKey);
-				Structurify.getDebugRenderer().removeStructureFlatnessCheckSamples(structureKey);
-				Structurify.getDebugRenderer().removeStructureBiomeCheckOverview(structureKey);
-				Structurify.getDebugRenderer().removeStructureBiomeCheckSamples(structureKey);
-			}*/
-
-			return false;
-		}
-
-		return true;
+			Structurify.getDebugRenderer().removeStructureFlatnessCheckInfo(structureKey);
+			Structurify.getDebugRenderer().removeStructureFlatnessCheckSamples(structureKey);
+			Structurify.getDebugRenderer().removeStructureBiomeCheckOverview(structureKey);
+			Structurify.getDebugRenderer().removeStructureBiomeCheckSamples(structureKey);
+		}*/
+		return !overlapCheckResult;
 	}
 }

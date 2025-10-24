@@ -1,7 +1,6 @@
 package com.faboslav.structurify.common.config.serialization;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -18,7 +17,7 @@ public final class StructureSetDataSerializer
 	public static void load(JsonObject structureSetJson, StructureSetData structureSetData) {
 		var structureSetName = structureSetJson.get(NAME_PROPERTY).getAsString();
 
-		if(structureSetJson.has(SALT_PROPERTY)) {
+		if (structureSetJson.has(SALT_PROPERTY)) {
 			var salt = structureSetJson.get(SALT_PROPERTY).getAsInt();
 
 			if ((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
@@ -29,7 +28,7 @@ public final class StructureSetDataSerializer
 			structureSetData.setSalt(salt);
 		}
 
-		if(structureSetJson.has(FREQUENCY_PROPERTY)) {
+		if (structureSetJson.has(FREQUENCY_PROPERTY)) {
 			var frequency = structureSetJson.get(FREQUENCY_PROPERTY).getAsFloat();
 
 			if (frequency < StructureSetData.MIN_FREQUENCY || frequency > StructureSetData.MAX_FREQUENCY) {
@@ -40,12 +39,12 @@ public final class StructureSetDataSerializer
 			structureSetData.setFrequency(frequency);
 		}
 
-		if(structureSetJson.has(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY)) {
+		if (structureSetJson.has(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY)) {
 			var overrideGlobalSpacingAndSeparationModifier = structureSetJson.get(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY).getAsBoolean();
 			structureSetData.setOverrideGlobalSpacingAndSeparationModifier(overrideGlobalSpacingAndSeparationModifier);
 		}
 
-		if(structureSetJson.has(SPACING_PROPERTY) && structureSetJson.has(SEPARATION_PROPERTY)) {
+		if (structureSetJson.has(SPACING_PROPERTY) && structureSetJson.has(SEPARATION_PROPERTY)) {
 			var spacing = structureSetJson.get(SPACING_PROPERTY).getAsInt();
 			var separation = structureSetJson.get(SEPARATION_PROPERTY).getAsInt();
 

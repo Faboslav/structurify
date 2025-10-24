@@ -31,7 +31,10 @@ public interface LocateCommandInvoker
 	}
 
 	@Invoker("getHolders")
-	static Optional<? extends HolderSet.ListBacked<Structure>> structurify$invokeGetHolders(ResourceOrTagKeyArgument.Result<Structure> structure, Registry<Structure> structureRegistry) {
+	static Optional<? extends HolderSet.ListBacked<Structure>> structurify$invokeGetHolders(
+		ResourceOrTagKeyArgument.Result<Structure> structure,
+		Registry<Structure> structureRegistry
+	) {
 		throw new UnsupportedOperationException();
 	}
 }

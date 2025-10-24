@@ -28,9 +28,9 @@ public final class BiomeCheckData
 
 		return
 			this.overrideGlobalBiomeCheck == OVERRIDE_GLOBAL_BIOME_CHECK_DEFAULT_VALUE
-				&& this.isEnabled == IS_ENABLED_DEFAULT_VALUE
-			   && this.mode == MODE_DEFAULT_VALUE
-			   && this.blacklistedBiomes.equals(defaultBlacklistedBiomes);
+			&& this.isEnabled == IS_ENABLED_DEFAULT_VALUE
+			&& this.mode == MODE_DEFAULT_VALUE
+			&& this.blacklistedBiomes.equals(defaultBlacklistedBiomes);
 	}
 
 	public boolean isOverridingGlobalBiomeCheck() {
@@ -65,7 +65,8 @@ public final class BiomeCheckData
 		this.blacklistedBiomes = blacklistedBiomes;
 	}
 
-	public enum BiomeCheckMode {
+	public enum BiomeCheckMode
+	{
 		STRICT,
 		BLACKLIST
 	}
