@@ -150,13 +150,6 @@ public final class FlatnessCheckOptions
 				} else {
 					isEnabledOption.setAvailable(true);
 				}
-
-				var configScreen = StructurifyClient.getConfigScreen();
-				if (configScreen == null || configScreen.structureScreens == null) {
-					return;
-				}
-
-				configScreen.structureScreens.clear();
 			});
 		}
 
@@ -166,13 +159,6 @@ public final class FlatnessCheckOptions
 			}
 
 			allowNonSolidBlocksOption.setAvailable(currentIsEnabled);
-
-			var configScreen = StructurifyClient.getConfigScreen();
-			if (configScreen == null || configScreen.structureScreens == null) {
-				return;
-			}
-
-			configScreen.structureScreens.clear();
 		});
 
 		return flatnessCheckOptions;

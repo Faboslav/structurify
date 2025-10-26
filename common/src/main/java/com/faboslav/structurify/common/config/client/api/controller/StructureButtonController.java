@@ -58,15 +58,8 @@ public class StructureButtonController extends BooleanController
 					return;
 				}
 
-				YACLScreen structureScreen;
-
-				if (!configScreen.structureScreens.containsKey(structureId)) {
-					structureScreen = StructureConfigScreen.create(Structurify.getConfig(), structureId, screen);
-					configScreen.structureScreens.put(structureId, structureScreen);
-				} else {
-					structureScreen = configScreen.structureScreens.get(structureId);
-				}
-
+				screen.finishOrSave();
+				YACLScreen structureScreen = StructureConfigScreen.create(Structurify.getConfig(), structureId, screen);
 				configScreen.saveScreenState(screen);
 				this.client.setScreen(structureScreen);
 				configScreen.loadScreenState(structureScreen);

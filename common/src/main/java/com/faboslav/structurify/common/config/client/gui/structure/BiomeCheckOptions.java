@@ -84,7 +84,7 @@ public final class BiomeCheckOptions
 		var isEnabledOption = Option.<Boolean>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.enable_biome_check.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.enable_biome_check.description")))
-			.available(biomeCheckData.isOverridingGlobalBiomeCheck())
+			.available(isGlobal || biomeCheckData.isOverridingGlobalBiomeCheck() || (!isEnabledGlobally && !isEnabledForNamespace))
 			.binding(
 				BiomeCheckData.IS_ENABLED_DEFAULT_VALUE,
 				biomeCheckData::isEnabled,
@@ -139,13 +139,6 @@ public final class BiomeCheckOptions
 				if (!currentOverrideGlobalBiomeCheck) {
 					isEnabledOption.requestSetDefault();
 				}
-
-				var configScreen = StructurifyClient.getConfigScreen();
-				if (configScreen == null || configScreen.structureScreens == null) {
-					return;
-				}
-
-				configScreen.structureScreens.clear();
 			});
 		}
 

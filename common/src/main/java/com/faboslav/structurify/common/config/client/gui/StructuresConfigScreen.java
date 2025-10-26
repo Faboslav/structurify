@@ -24,6 +24,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -134,54 +135,57 @@ public final class StructuresConfigScreen
 
 	private static void addStructures(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
 		var structures = WorldgenDataProvider.getStructures();
-		List<OptionGroup> optionGroups = new ArrayList<>();
-		OptionGroup.Builder namespaceGroupBuilder = null;
-		List<Option<Boolean>> namespaceStructures = new ArrayList<>();
-		String currentStructureNamespace = null;
-
-		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
+		var structureGroups = new HashMap<String, HashMap<ResourceLocation, StructureData>>();
 
 		for (Map.Entry<String, StructureData> entry : structures.entrySet()) {
 			String structureStringId = entry.getKey();
-			StructureData structureData = entry.getValue();
-
 			ResourceLocation structureId = Structurify.makeNamespacedId(structureStringId);
 			String structureNamespace = structureId.getNamespace();
+			StructureData structureData = entry.getValue();
 
-			if (currentStructureNamespace != null && !structureNamespace.equals(currentStructureNamespace)) {
-				var invisibleGroup = new InvisibleOptionGroup.Builder().name(Component.literal(""));
-				invisibleGroup.option(YACLUtil.createEmptyLabelOption());
-				structureCategoryBuilder.group(invisibleGroup.build());
-
-				namespaceGroupBuilder = OptionGroup.createBuilder()
-					.name(Component.translatable("gui.structurify.structures.structures_group.title", LanguageUtil.translateId(null, structureNamespace).getString()).withStyle(style -> style.withUnderlined(true)))
-					.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structures_group.description", structureNamespace)));
-
-				namespaceGroupBuilder.option(LabelOption.create(Component.translatable("gui.structurify.structures.structures.structure.title").withStyle(style -> style.withBold(true))));
-				for (var namespaceStructureOption : namespaceStructures) {
-					namespaceGroupBuilder.option(namespaceStructureOption);
-				}
-
-				var namespaceDistanceFromWorldCenterOptions = DistanceFromWorldCenterOptions.addDistanceFromWorldCenterOptions(namespaceGroupBuilder, config, structureNamespace);
-				overrideDistanceFromWorldCenterOptions.add((Option<Boolean>) namespaceDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME));
-
-				var namespaceFlatnessCheckOptions = FlatnessCheckOptions.addFlatnessCheckOptions(namespaceGroupBuilder, config, structureNamespace);
-				overrideFlatnessCheckOptions.add((Option<Boolean>) namespaceFlatnessCheckOptions.get(FlatnessCheckOptions.OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME));
-				enableFlatnessCheckOptions.add((Option<Boolean>) namespaceFlatnessCheckOptions.get(FlatnessCheckOptions.FLATNESS_CHECK_IS_ENABLED_OPTION_NAME));
-
-				var namespaceBiomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(structureCategoryBuilder, namespaceGroupBuilder, config, structureNamespace);
-				OptionGroup blackListedBiomesOption = (OptionGroup) namespaceBiomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME);
-				structureCategoryBuilder.group(namespaceGroupBuilder.build());
-				structureCategoryBuilder.group(blackListedBiomesOption);
-				overrideBiomeCheckOptions.add((Option<Boolean>) namespaceBiomeCheckOptions.get(BiomeCheckOptions.OVERRIDE_GLOBAL_BIOME_CHECK_OPTION_NAME));
-				enableBiomeCheckOptions.add((Option<Boolean>) namespaceBiomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_IS_ENABLED_OPTION_NAME));
+			if(!structureGroups.containsKey(structureNamespace)) {
+				structureGroups.put(structureNamespace, new HashMap<>());
 			}
 
-			var structureOption = addStructure(structureData, structureStringId, biomeRegistry);
-			namespaceStructures.add(structureOption);
-			structureOptions.add(structureOption);
+			structureGroups.get(structureNamespace).put(structureId, structureData);
+		}
 
-			currentStructureNamespace = structureNamespace;
+		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
+
+		for (Map.Entry<String, HashMap<ResourceLocation, StructureData>> structureGroup : structureGroups.entrySet()) {
+			String structureNamespace = structureGroup.getKey();
+			var namespaceStructures = structureGroup.getValue();
+
+			var invisibleGroup = new InvisibleOptionGroup.Builder().name(Component.literal(""));
+			invisibleGroup.option(YACLUtil.createEmptyLabelOption());
+			structureCategoryBuilder.group(invisibleGroup.build());
+
+			OptionGroup.Builder namespaceGroupBuilder = OptionGroup.createBuilder()
+				.name(Component.translatable("gui.structurify.structures.structures_group.title", LanguageUtil.translateId(null, structureNamespace).getString()).withStyle(style -> style.withUnderlined(true)))
+				.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structures_group.description", structureNamespace)));
+			namespaceGroupBuilder.option(LabelOption.create(Component.translatable("gui.structurify.structures.structures.structure.title").withStyle(style -> style.withBold(true))));
+
+			for (var namespaceStructure : namespaceStructures.entrySet()) {
+				var structureData = namespaceStructure.getValue();
+				var structureStringId = namespaceStructure.getKey().toString();
+				var structureOption = addStructure(structureData, structureStringId, biomeRegistry);
+				namespaceGroupBuilder.option(structureOption);
+				structureOptions.add(structureOption);
+			}
+
+			var namespaceDistanceFromWorldCenterOptions = DistanceFromWorldCenterOptions.addDistanceFromWorldCenterOptions(namespaceGroupBuilder, config, structureNamespace);
+			overrideDistanceFromWorldCenterOptions.add((Option<Boolean>) namespaceDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME));
+
+			var namespaceFlatnessCheckOptions = FlatnessCheckOptions.addFlatnessCheckOptions(namespaceGroupBuilder, config, structureNamespace);
+			overrideFlatnessCheckOptions.add((Option<Boolean>) namespaceFlatnessCheckOptions.get(FlatnessCheckOptions.OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME));
+			enableFlatnessCheckOptions.add((Option<Boolean>) namespaceFlatnessCheckOptions.get(FlatnessCheckOptions.FLATNESS_CHECK_IS_ENABLED_OPTION_NAME));
+
+			var namespaceBiomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(structureCategoryBuilder, namespaceGroupBuilder, config, structureNamespace);
+			OptionGroup blackListedBiomesOption = (OptionGroup) namespaceBiomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME);
+			structureCategoryBuilder.group(namespaceGroupBuilder.build());
+			structureCategoryBuilder.group(blackListedBiomesOption);
+			overrideBiomeCheckOptions.add((Option<Boolean>) namespaceBiomeCheckOptions.get(BiomeCheckOptions.OVERRIDE_GLOBAL_BIOME_CHECK_OPTION_NAME));
+			enableBiomeCheckOptions.add((Option<Boolean>) namespaceBiomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_IS_ENABLED_OPTION_NAME));
 		}
 
 		var invisibleGroup = new InvisibleOptionGroup.Builder().name(Component.literal(""));

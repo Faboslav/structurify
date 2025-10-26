@@ -17,9 +17,6 @@ import java.util.Map;
 
 public class StructurifyConfigScreen
 {
-	@Nullable
-	public Map<String, YACLScreen> structureScreens = new HashMap<>();
-
 	public Map<String, StructurifyConfigScreenState> screenStates = new HashMap<>();
 
 

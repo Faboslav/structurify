@@ -119,13 +119,6 @@ public class DistanceFromWorldCenterOptions
 					minStructureDistanceFromWorldOption.requestSetDefault();
 					maxStructureDistanceFromWorldOption.requestSetDefault();
 				}
-
-				var configScreen = StructurifyClient.getConfigScreen();
-				if (configScreen == null || configScreen.structureScreens == null) {
-					return;
-				}
-
-				configScreen.structureScreens.clear();
 			});
 		}
 
