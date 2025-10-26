@@ -1,17 +1,22 @@
-## 2.0.0
+## 2.0.0a
 
-- Improved flatness and biome check performance, now it should be actually unrecognizable opposite to the previous versions
-- Improved overall runtime (world generation) performance of the mod by caching values
-- Improved GUI workflows, setting up everything should be easier and more clear
-- GUI can be now opened and reloaded from the game (in the world)
-- Updated biome dropdown, which should now display the full id of biome/tag, so seemingly duplicate tags like "#minecraf:is_ocean" and "#c:is_ocean" can be recognized more easily
+- Added structure overlap prevention
 - Added global and per namespace flatness checks, which means flatness check can now be configured globally, per namespace or per structure
+- Added global and per namespace biome checks
+- Added global and per namespace max/min distance from world center checks
 - Added "step" as a configurable field for structures
 - Added "terrain adaptation" as a configurable field for structures
 - Added "size" as a configurable field for jigsaw structures
 - Added "max distance from center" as a configurable field for jigsaw structures
 - Added missing frequency description
+- Improved flatness and biome check performance, now it should be actually unrecognizable opposite to the previous versions
+- Improved overall runtime (world generation) performance of the mod by caching values
+- Improved GUI workflows, setting up everything should be easier and more clear
+- Fixed GUI, which can now be opened and reloaded from the game (in the world)
+- Updated biome dropdown, which should now display the full id of biome/tag, so seemingly duplicate tags like "#minecraf:is_ocean" and "#c:is_ocean" can be recognized more easily
 - Lot of other small tweaks/fixes
+
+Be aware that there are so many changes that it felt right to mark this as an alpha first and wait for feedback.
 
 ## 1.0.21
 
