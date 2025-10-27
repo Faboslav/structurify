@@ -16,7 +16,7 @@
 - Updated biome dropdown, which should now display the full id of biome/tag, so seemingly duplicate tags like "#minecraf:is_ocean" and "#c:is_ocean" can be recognized more easily
 - Lot of other small tweaks/fixes
 
-Be aware that there are so many changes that it felt right to mark this as an alpha first and wait for feedback.
+Be aware that there are so many changes that everything can be unstable/non working, so it felt right to mark this as an alpha first and wait for your feedback.
 
 ## 1.0.21
 
