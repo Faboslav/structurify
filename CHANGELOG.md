@@ -1,3 +1,7 @@
+## 2.0.1a
+
+- Fixed YACL related crash on 1.21.1
+
 ## 2.0.0a
 
 - Added structure overlap prevention
