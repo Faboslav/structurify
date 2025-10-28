@@ -75,11 +75,12 @@ public class StructureButtonController extends BooleanController
 			super.render(graphics, mouseX, mouseY, delta);
 		}
 
+		/*
 		@Override
 		public void mouseMoved(double mouseX, double mouseY) {
 			this.configurationButton.mouseMoved(mouseX, mouseY);
 			super.mouseMoved(mouseX, mouseY);
-		}
+		}*/
 
 		@Override
 		public boolean isMouseOver(double mouseX, double mouseY) {
@@ -117,13 +118,5 @@ public class StructureButtonController extends BooleanController
 			return this.configurationButton.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) || super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
 		}
 		*///?}
-
-		//? if >=1.20.4 {
-		@Override
-		public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-			return this.configurationButton.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount) || super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
-		}
-		//?}
-
 	}
 }
