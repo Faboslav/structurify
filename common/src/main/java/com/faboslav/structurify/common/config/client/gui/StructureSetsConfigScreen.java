@@ -190,7 +190,7 @@ public final class StructureSetsConfigScreen
 				});
 
 				var spacingAndSeparationOption = HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
-					.controller(opt -> DualControllerBuilder.create(LabelOption.createBuilder().line(translatedStructureSetName).build(), spacingOption, separationOption))
+					.controller(opt -> DualControllerBuilder.create(spacingOption, separationOption))
 					.available(!config.enableGlobalSpacingAndSeparationModifier || config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier()).build();
 
 				currentGroupBuilder.option(overrideGlobalSpacingAndSeparationModifierOption);

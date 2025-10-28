@@ -1,6 +1,7 @@
 ## 2.0.2a
 
 - Fixed null crash in flatness/biome checks
+- Fixed not working spacing/separation field problem 
 
 ## 2.0.1a
 

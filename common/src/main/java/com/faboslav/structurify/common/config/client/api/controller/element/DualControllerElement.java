@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.client.api.controller.element;
 
+import com.faboslav.structurify.common.Structurify;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.TextScaledButtonWidget;
@@ -15,7 +16,6 @@ import net.minecraft.client.input.MouseButtonEvent;
 
 public final class DualControllerElement extends AbstractWidget
 {
-	private final AbstractWidget labelElement;
 	private final AbstractWidget firstElement;
 	private final AbstractWidget secondElement;
 	@Nullable
@@ -23,14 +23,12 @@ public final class DualControllerElement extends AbstractWidget
 
 	public DualControllerElement(
 		Dimension<Integer> dim,
-		AbstractWidget labelElement,
 		AbstractWidget firstElement,
 		AbstractWidget secondElement,
 		@Nullable TextScaledButtonWidget resetButton
 	) {
 		super(dim);
 
-		this.labelElement = labelElement;
 		this.firstElement = firstElement;
 		this.secondElement = secondElement;
 		this.resetButton = resetButton;
@@ -38,7 +36,6 @@ public final class DualControllerElement extends AbstractWidget
 
 	@Override
 	public void mouseMoved(double mouseX, double mouseY) {
-		labelElement.mouseMoved(mouseX, mouseY);
 		firstElement.mouseMoved(mouseX, mouseY);
 		secondElement.mouseMoved(mouseX, mouseY);
 		resetButton.mouseMoved(mouseX, mouseY);
@@ -47,20 +44,25 @@ public final class DualControllerElement extends AbstractWidget
 	//? if >=1.21.9 {
 	@Override
 	public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
-		boolean firstElementMouseClicked = firstElement.mouseClicked(mouseButtonEvent, doubleClick);
-		boolean secondElementMouseClicked = secondElement.mouseClicked(mouseButtonEvent, doubleClick);
-		boolean resetButtonMouseClicked = resetButton.mouseClicked(mouseButtonEvent, doubleClick);
+		firstElement.setFocused(false);
+		secondElement.setFocused(false);
 
-		return firstElementMouseClicked || secondElementMouseClicked || resetButtonMouseClicked;
+		if(firstElement.mouseClicked(mouseButtonEvent, doubleClick)) {
+			firstElement.setFocused(true);
+			return true;
+		}
+
+		if(secondElement.mouseClicked(mouseButtonEvent, doubleClick)) {
+			secondElement.setFocused(true);
+			return true;
+		}
+
+		return resetButton.mouseClicked(mouseButtonEvent, doubleClick);
 	}
 
 	@Override
 	public boolean mouseReleased(MouseButtonEvent mouseButtonEvent) {
-		boolean firstElementMouseReleased = firstElement.mouseReleased(mouseButtonEvent);
-		boolean secondElementMouseReleased = secondElement.mouseReleased(mouseButtonEvent);
-		boolean resetButtonMouseReleased = resetButton.mouseReleased(mouseButtonEvent);
-
-		return firstElementMouseReleased || secondElementMouseReleased || resetButtonMouseReleased;
+		return firstElement.mouseReleased(mouseButtonEvent) || secondElement.mouseReleased(mouseButtonEvent) || resetButton.mouseReleased(mouseButtonEvent);
 	}
 
 	@Override
@@ -85,20 +87,25 @@ public final class DualControllerElement extends AbstractWidget
 	//?} else {
 	/*@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		boolean firstElementMouseClicked = firstElement.mouseClicked(mouseX, mouseY, button);
-		boolean secondElementMouseClicked = secondElement.mouseClicked(mouseX, mouseY, button);
-		boolean resetButtonMouseClicked = resetButton.mouseClicked(mouseX, mouseY, button);
+		firstElement.setFocused(false);
+		secondElement.setFocused(false);
 
-		return firstElementMouseClicked || secondElementMouseClicked || resetButtonMouseClicked;
+		if(firstElement.mouseClicked(mouseX, mouseY, button)) {
+			firstElement.setFocused(true);
+			return true;
+		}
+
+		if(secondElement.mouseClicked(mouseX, mouseY, button)) {
+			secondElement.setFocused(true);
+			return true;
+		}
+
+		return resetButton.mouseClicked(mouseX, mouseY, button);
 	}
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		boolean firstElementMouseReleased = firstElement.mouseReleased(mouseX, mouseY, button);
-		boolean secondElementMouseReleased = secondElement.mouseReleased(mouseX, mouseY, button);
-		boolean resetButtonMouseReleased = resetButton.mouseReleased(mouseX, mouseY, button);
-
-		return firstElementMouseReleased || secondElementMouseReleased || resetButtonMouseReleased;
+		return firstElement.mouseReleased(mouseX, mouseY, button) || secondElement.mouseReleased(mouseX, mouseY, button) || resetButton.mouseReleased(mouseX, mouseY, button);
 	}
 
 	@Override
@@ -131,13 +138,11 @@ public final class DualControllerElement extends AbstractWidget
 
 	@Override
 	public void setFocused(boolean focused) {
-		firstElement.setFocused(focused);
-		secondElement.setFocused(focused);
 	}
 
 	@Override
 	public boolean isFocused() {
-		return firstElement.isFocused() || secondElement.isFocused();
+		return false;
 	}
 
 	@Override
@@ -180,11 +185,10 @@ public final class DualControllerElement extends AbstractWidget
 
 	@Override
 	public boolean matchesSearch(String query) {
-		boolean matchesSearchInLabel = labelElement.matchesSearch(query);
 		boolean matchesSearchInFirstElement = firstElement.matchesSearch(query);
 		boolean matchesSearchInSecondElement = firstElement.matchesSearch(query);
 
-		return matchesSearchInLabel || matchesSearchInFirstElement || matchesSearchInSecondElement;
+		return matchesSearchInFirstElement || matchesSearchInSecondElement;
 	}
 
 	@Override
