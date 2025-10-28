@@ -11,11 +11,20 @@ public interface StructurifyStructure
 {
 	void structurify$setStructureIdentifier(@Nullable ResourceLocation structureSetIdentifier);
 
+	@Nullable
 	StructureNamespaceData structurify$getGlobalStructureNamespaceData();
 
+	@Nullable
 	StructureNamespaceData structurify$getStructureNamespaceData();
 
+	@Nullable
+	StructureNamespaceData structurify$getStructureNamespaceData(@Nullable ResourceLocation structureIdentifier);
+
+	@Nullable
 	StructureData structurify$getStructureData();
+
+	@Nullable
+	StructureData structurify$getStructureData(@Nullable ResourceLocation structureIdentifier);
 
 	@Nullable
 	ResourceLocation structurify$getStructureIdentifier();

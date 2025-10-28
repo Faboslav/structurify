@@ -2,7 +2,6 @@ package com.faboslav.structurify.world.level.structure.checks;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
-import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import com.faboslav.structurify.world.level.structure.checks.debug.StructureBiomeCheckOverview;
 import com.faboslav.structurify.world.level.structure.checks.debug.StructureBiomeCheckSample;
@@ -13,24 +12,41 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.levelgen.RandomState;
+import org.jetbrains.annotations.Nullable;
 
 public final class StructureBiomeCheck
 {
+	@Nullable
 	public static BiomeCheckData getBiomeCheckData(
-		StructurifyStructure structure
+		StructureCheckData structureCheckData
 	) {
-		var globalBiomeCheckData = structure.structurify$getGlobalStructureNamespaceData().getBiomeCheckData();
-		var namespaceBiomeCheckData = structure.structurify$getStructureNamespaceData().getBiomeCheckData();
-		var structureBiomeCheckData = structure.structurify$getStructureData().getBiomeCheckData();
+		var structure = structureCheckData.getStructure();
+		var structureId = structureCheckData.getStructureId();
+		var globalNamespaceData = structure.structurify$getGlobalStructureNamespaceData();
+		var structureNamespaceData = structure.structurify$getStructureNamespaceData(structureId);
+		var structureData = structure.structurify$getStructureData(structureId);
 
-		BiomeCheckData biomeCheckDataToCheck = globalBiomeCheckData;
+		@Nullable
+		BiomeCheckData biomeCheckDataToCheck = null;
 
-		if (namespaceBiomeCheckData.isOverridingGlobalBiomeCheck() || namespaceBiomeCheckData.isEnabled()) {
-			biomeCheckDataToCheck = namespaceBiomeCheckData;
+		if(globalNamespaceData != null) {
+			biomeCheckDataToCheck = globalNamespaceData.getBiomeCheckData();;
 		}
 
-		if (structureBiomeCheckData.isOverridingGlobalBiomeCheck() || structureBiomeCheckData.isEnabled()) {
-			biomeCheckDataToCheck = structureBiomeCheckData;
+		if(structureNamespaceData != null) {
+			var namespaceBiomeCheckData = structureNamespaceData.getBiomeCheckData();
+
+			if (namespaceBiomeCheckData.isOverridingGlobalBiomeCheck() || namespaceBiomeCheckData.isEnabled()) {
+				biomeCheckDataToCheck = namespaceBiomeCheckData;
+			}
+		}
+
+		if(structureData != null) {
+			var structureBiomeCheckData = structureData.getBiomeCheckData();
+
+			if (structureBiomeCheckData.isOverridingGlobalBiomeCheck() || structureBiomeCheckData.isEnabled()) {
+				biomeCheckDataToCheck = structureBiomeCheckData;
+			}
 		}
 
 		return biomeCheckDataToCheck;
@@ -39,12 +55,11 @@ public final class StructureBiomeCheck
 
 	public static boolean checkBiomes(
 		StructureCheckData structureCheckData,
+		BiomeCheckData biomeCheckData,
 		BiomeSource biomeSource,
 		RandomState randomState
 	) {
 		StructurifyStructure structure = structureCheckData.getStructure();
-		StructureData structureData = structure.structurify$getStructureData();
-		BiomeCheckData biomeCheckData = structureData.getBiomeCheckData();
 		HolderSet<Biome> allowedBiomes = structure.structurify$getStructureBiomes();
 		HolderSet<Biome> blacklistedBiomes = structure.structurify$getStructureBlacklistedBiomes();
 		BiomeCheckData.BiomeCheckMode mode = biomeCheckData.getMode();
@@ -67,13 +82,13 @@ public final class StructureBiomeCheck
 			Holder<Biome> biome = biomeSource.getNoiseBiome(quartX, sampleQuartY, quartZ, sampler);
 
 			if (mode == BiomeCheckData.BiomeCheckMode.STRICT) {
-				if (!allowedBiomes.contains(biome)) {
+				if (allowedBiomes != null && !allowedBiomes.contains(biome)) {
 					debugAddStructureBiomeCheckSample(structureCheckData, blockX, blockY, blockZ, biome, false);
 					debugAddStructureBiomeCheckOverview(structureCheckData, false);
 					return false;
 				}
 			} else if (mode == BiomeCheckData.BiomeCheckMode.BLACKLIST) {
-				if (blacklistedBiomes.contains(biome)) {
+				if (blacklistedBiomes != null && blacklistedBiomes.contains(biome)) {
 					debugAddStructureBiomeCheckSample(structureCheckData, blockX, blockY, blockZ, biome, false);
 					debugAddStructureBiomeCheckOverview(structureCheckData, false);
 					return false;

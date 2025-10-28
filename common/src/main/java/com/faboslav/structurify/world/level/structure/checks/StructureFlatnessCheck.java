@@ -11,27 +11,44 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public final class StructureFlatnessCheck
 {
+	@Nullable
 	public static FlatnessCheckData getFlatnessCheckData(
-		StructurifyStructure structure
+		StructureCheckData structureCheckData
 	) {
-		var globalFlatnessCheckData = structure.structurify$getGlobalStructureNamespaceData().getFlatnessCheckData();
-		var namespaceFlatnessCheckData = structure.structurify$getStructureNamespaceData().getFlatnessCheckData();
-		var structureFlatnessCheckData = structure.structurify$getStructureData().getFlatnessCheckData();
+		var structure = structureCheckData.getStructure();
+		var structureId = structureCheckData.getStructureId();
+		var globalNamespaceData = structure.structurify$getGlobalStructureNamespaceData();
+		var structureNamespaceData = structure.structurify$getStructureNamespaceData(structureId);
+		var structureData = structure.structurify$getStructureData(structureId);
 
-		FlatnessCheckData flatnessCheckDataToCheck = globalFlatnessCheckData;
+		@Nullable
+		FlatnessCheckData flatnessCheckDataToCheck = null;
 
-		if (namespaceFlatnessCheckData.isOverridingGlobalFlatnessCheck() || namespaceFlatnessCheckData.isEnabled()) {
-			flatnessCheckDataToCheck = namespaceFlatnessCheckData;
+		if(globalNamespaceData != null) {
+			flatnessCheckDataToCheck = globalNamespaceData.getFlatnessCheckData();;
 		}
 
-		if (structureFlatnessCheckData.isOverridingGlobalFlatnessCheck() || structureFlatnessCheckData.isEnabled()) {
-			flatnessCheckDataToCheck = structureFlatnessCheckData;
+		if(structureNamespaceData != null) {
+			var namespaceFlatnessCheckData = structureNamespaceData.getFlatnessCheckData();
+
+			if (namespaceFlatnessCheckData.isOverridingGlobalFlatnessCheck() || namespaceFlatnessCheckData.isEnabled()) {
+				flatnessCheckDataToCheck = namespaceFlatnessCheckData;
+			}
+		}
+
+		if(structureData != null) {
+			var structureFlatnessCheckData = structureData.getFlatnessCheckData();
+
+			if (structureFlatnessCheckData.isOverridingGlobalFlatnessCheck() || structureFlatnessCheckData.isEnabled()) {
+				flatnessCheckDataToCheck = structureFlatnessCheckData;
+			}
 		}
 
 		return flatnessCheckDataToCheck;

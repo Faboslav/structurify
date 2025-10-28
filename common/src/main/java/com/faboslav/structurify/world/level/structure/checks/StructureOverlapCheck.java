@@ -18,7 +18,6 @@ public final class StructureOverlapCheck
 		StructurifyChunkGenerator structurifyChunkGenerator
 	) {
 		long[] structureChunks = getStructurePiecesSections(structureCheckData.getStructureStart());
-
 		return !claimStructureSections(structurifyChunkGenerator, structureChunks, structureCheckData.getStructureId());
 	}
 

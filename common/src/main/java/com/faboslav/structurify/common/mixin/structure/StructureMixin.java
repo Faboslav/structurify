@@ -71,9 +71,18 @@ public abstract class StructureMixin implements StructurifyStructure
 	private StructureNamespaceData structurify$structureNamespaceData = null;
 
 	@Unique
+	@Nullable
 	public StructureNamespaceData structurify$getStructureNamespaceData() {
+		return this.structurify$getStructureNamespaceData(this.structurify$getStructureIdentifier());
+	}
+
+	@Unique
+	@Nullable
+	public StructureNamespaceData structurify$getStructureNamespaceData(@Nullable ResourceLocation structureIdentifier) {
 		if (this.structurify$structureNamespaceData == null) {
-			var structureIdentifier = this.structurify$getStructureIdentifier();
+			if(structureIdentifier == null) {
+				structureIdentifier = this.structurify$getStructureIdentifier();
+			}
 
 			if (structureIdentifier != null) {
 				this.structurify$structureNamespaceData = Structurify.getConfig().getStructureNamespaceData().get(structureIdentifier.getNamespace());
@@ -88,9 +97,26 @@ public abstract class StructureMixin implements StructurifyStructure
 	private StructureData structurify$structureData = null;
 
 	@Unique
+	@Nullable
 	public StructureData structurify$getStructureData() {
 		if (this.structurify$structureData == null) {
 			var structureIdentifier = this.structurify$getStructureIdentifier();
+
+			if (structureIdentifier != null) {
+				this.structurify$structureData = Structurify.getConfig().getStructureData().get(structureIdentifier.toString());
+			}
+		}
+
+		return this.structurify$structureData;
+	}
+
+	@Unique
+	@Nullable
+	public StructureData structurify$getStructureData(@Nullable ResourceLocation structureIdentifier) {
+		if (this.structurify$structureData == null) {
+			if(structureIdentifier == null) {
+				structureIdentifier = this.structurify$getStructureIdentifier();
+			}
 
 			if (structureIdentifier != null) {
 				this.structurify$structureData = Structurify.getConfig().getStructureData().get(structureIdentifier.toString());
@@ -197,11 +223,18 @@ public abstract class StructureMixin implements StructurifyStructure
 		/*var structureStart = original.call(registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
 		*///?}
 
+		var possibleStructureId = structure.unwrapKey();
+		ResourceLocation structureId = null;
+
+		if(possibleStructureId.isPresent()) {
+			structureId = possibleStructureId.get().location();
+		}
+
 		if (structureStart == StructureStart.INVALID_START) {
 			return structureStart;
 		}
 
-		var structureCheckResult = StructureChecker.checkStructure(structureStart, this, chunkGenerator, heightAccessor, randomState, biomeSource);
+		var structureCheckResult = StructureChecker.checkStructure(structureStart, structureId, this, chunkGenerator, heightAccessor, randomState, biomeSource);
 
 		if (!structureCheckResult) {
 			return StructureStart.INVALID_START;

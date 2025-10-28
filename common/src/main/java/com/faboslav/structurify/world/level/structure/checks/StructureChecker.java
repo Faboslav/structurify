@@ -14,18 +14,25 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public final class StructureChecker
 {
 	public static boolean checkStructure(
 		StructureStart structureStart,
+		@Nullable ResourceLocation structureId,
 		StructurifyStructure structure,
 		ChunkGenerator chunkGenerator,
 		LevelHeightAccessor heightAccessor,
 		RandomState randomState,
 		BiomeSource biomeSource
 	) {
-		ResourceLocation structureId = structure.structurify$getStructureIdentifier();
+		if(structureId == null) {
+			structureId = structure.structurify$getStructureIdentifier();
+		}
+
 		StructureCheckData structureCheckData = new StructureCheckData(structureId, structure, structureStart);
 
 		var biomeCheckResult = checkBiomes(structureCheckData, biomeSource, randomState);
@@ -68,9 +75,9 @@ public final class StructureChecker
 	) {
 		var structure = structureCheckData.getStructure();
 		var structureData = structure.structurify$getStructureData();
-		BiomeCheckData biomeCheckData = StructureBiomeCheck.getBiomeCheckData(structure);
+		BiomeCheckData biomeCheckData = StructureBiomeCheck.getBiomeCheckData(structureCheckData);
 
-		if (!biomeCheckData.isEnabled()) {
+		if (biomeCheckData == null || !biomeCheckData.isEnabled()) {
 			return true;
 		}
 
@@ -92,7 +99,11 @@ public final class StructureChecker
 			return true;
 		}
 
-		var biomeCheckResult = StructureBiomeCheck.checkBiomes(structureCheckData, biomeSource, randomState);
+		var biomeCheckResult = StructureBiomeCheck.checkBiomes(structureCheckData, biomeCheckData, biomeSource, randomState);
+
+		if(!biomeCheckResult) {
+			return false;
+		}
 
 		/*
 		if(Structurify.getConfig().getDebugData().isEnabled()) {
@@ -100,7 +111,7 @@ public final class StructureChecker
 			Structurify.getDebugRenderer().removeStructureFlatnessCheckInfo(structureKey);
 			Structurify.getDebugRenderer().removeStructureFlatnessCheckSamples(structureKey);
 		}*/
-		return biomeCheckResult;
+		return true;
 	}
 
 	private static boolean checkFlatness(
@@ -111,9 +122,9 @@ public final class StructureChecker
 	) {
 		var structure = structureCheckData.getStructure();
 		var structureData = structure.structurify$getStructureData();
-		FlatnessCheckData flatnessCheckData = StructureFlatnessCheck.getFlatnessCheckData(structure);
+		FlatnessCheckData flatnessCheckData = StructureFlatnessCheck.getFlatnessCheckData(structureCheckData);
 
-		if (!flatnessCheckData.isEnabled()) {
+		if (flatnessCheckData == null || !flatnessCheckData.isEnabled()) {
 			return true;
 		}
 

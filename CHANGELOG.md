@@ -1,3 +1,7 @@
+## 2.0.2a
+
+- Fixed null crash in flatness/biome checks
+
 ## 2.0.1a
 
 - Fixed YACL related crash on 1.21.1

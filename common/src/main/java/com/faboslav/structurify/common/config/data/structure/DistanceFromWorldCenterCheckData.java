@@ -20,6 +20,10 @@ public class DistanceFromWorldCenterCheckData
 			&& this.maxDistanceFromWorldCenter == MAX_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
 	}
 
+	public boolean isEnabled() {
+		return this.minDistanceFromWorldCenter != MIN_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE || this.maxDistanceFromWorldCenter != MAX_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
+	}
+
 	public boolean isOverridingGlobalDistanceFromWorldCenter() {
 		return this.overrideGlobalDistanceFromWorldCenter;
 	}

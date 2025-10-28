@@ -3,7 +3,7 @@ package com.faboslav.structurify.common.mixin;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
 import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
-import com.faboslav.structurify.world.level.structure.checks.DistanceFromWorldCenterCheck;
+import com.faboslav.structurify.world.level.structure.checks.StructureDistanceFromWorldCenterCheck;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.datafixers.util.Pair;
@@ -27,9 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 //? if >=1.21.4 {
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-
-import java.util.Map;
-import java.util.Set;
 //?}
 
 @Mixin(ChunkGenerator.class)
@@ -87,11 +84,14 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 					return false;
 				}
 
-				var distanceFromWorldCenterCheckData = DistanceFromWorldCenterCheck.getDistanceFromWorldCenterData(structureName, structureData);
-				var distanceFromWorldCenterCheckResult = DistanceFromWorldCenterCheck.checkDistanceFromWorldCenter(distanceFromWorldCenterCheckData, chunkPos);
+				var distanceFromWorldCenterCheckData = StructureDistanceFromWorldCenterCheck.getDistanceFromWorldCenterData(structureName, structureData);
 
-				if (!distanceFromWorldCenterCheckResult) {
-					return false;
+				if(distanceFromWorldCenterCheckData != null) {
+					var distanceFromWorldCenterCheckResult = StructureDistanceFromWorldCenterCheck.checkDistanceFromWorldCenter(distanceFromWorldCenterCheckData, chunkPos);
+
+					if (!distanceFromWorldCenterCheckResult) {
+						return false;
+					}
 				}
 			}
 		}
