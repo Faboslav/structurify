@@ -1,3 +1,7 @@
+## 2.0.3a
+
+- Fixed null crash in flatness/biome checks (yes again)
+
 ## 2.0.2a
 
 - Fixed null crash in flatness/biome checks

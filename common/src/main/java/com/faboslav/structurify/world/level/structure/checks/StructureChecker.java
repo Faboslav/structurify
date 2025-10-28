@@ -74,7 +74,6 @@ public final class StructureChecker
 		RandomState randomState
 	) {
 		var structure = structureCheckData.getStructure();
-		var structureData = structure.structurify$getStructureData();
 		BiomeCheckData biomeCheckData = StructureBiomeCheck.getBiomeCheckData(structureCheckData);
 
 		if (biomeCheckData == null || !biomeCheckData.isEnabled()) {
@@ -82,6 +81,12 @@ public final class StructureChecker
 		}
 
 		if (biomeSource instanceof CheckerboardColumnBiomeSource) {
+			return true;
+		}
+
+		var structureData = structure.structurify$getStructureData();
+
+		if(structureData == null) {
 			return true;
 		}
 
@@ -121,10 +126,15 @@ public final class StructureChecker
 		RandomState randomState
 	) {
 		var structure = structureCheckData.getStructure();
-		var structureData = structure.structurify$getStructureData();
 		FlatnessCheckData flatnessCheckData = StructureFlatnessCheck.getFlatnessCheckData(structureCheckData);
 
 		if (flatnessCheckData == null || !flatnessCheckData.isEnabled()) {
+			return true;
+		}
+
+		var structureData = structure.structurify$getStructureData();
+
+		if(structureData == null) {
 			return true;
 		}
 
