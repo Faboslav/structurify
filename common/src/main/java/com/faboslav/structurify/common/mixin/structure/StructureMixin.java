@@ -177,11 +177,13 @@ public abstract class StructureMixin implements StructurifyStructure
 	private GenerationStep.Decoration structurify$step(
 		Operation<GenerationStep.Decoration> original
 	) {
-		if (this.structurify$getStructureData() == null) {
+		var structureData = this.structurify$getStructureData();
+
+		if (structureData == null) {
 			return original.call();
 		}
 
-		return this.structurify$getStructureData().getStep();
+		return structureData.getStep();
 	}
 
 	@WrapMethod(
@@ -190,11 +192,13 @@ public abstract class StructureMixin implements StructurifyStructure
 	private TerrainAdjustment structurify$terrainAdaptation(
 		Operation<TerrainAdjustment> original
 	) {
-		if (this.structurify$getStructureData() == null) {
+		var structureData = this.structurify$getStructureData();
+
+		if (structureData == null) {
 			return original.call();
 		}
 
-		return this.structurify$getStructureData().getTerrainAdaptation();
+		return structureData.getTerrainAdaptation();
 	}
 
 	@WrapMethod(
@@ -222,13 +226,14 @@ public abstract class StructureMixin implements StructurifyStructure
 		 //?} else {
 		/*var structureStart = original.call(registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
 		*///?}
-
-		var possibleStructureId = structure.unwrapKey();
 		ResourceLocation structureId = null;
 
-		if(possibleStructureId.isPresent()) {
-			structureId = possibleStructureId.get().location();
-		}
+		//? if >= 1.21.4 {
+		var possibleStructureId = structure.unwrapKey();
+		structureId = possibleStructureId.map(ResourceKey::location).orElseGet(this::structurify$getStructureIdentifier);
+		//?} else {
+		/*structureId = this.structurify$getStructureIdentifier();
+		*///?}
 
 		if (structureStart == StructureStart.INVALID_START) {
 			return structureStart;
