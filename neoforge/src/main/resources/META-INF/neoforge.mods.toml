@@ -11,13 +11,13 @@ authors = "${modAuthor}"
 description = "${modDescription}"
 logoFile = "icon.png"
 logoBlur = false
-displayURL = "https://www.curseforge.com/minecraft/mc-mods/structurify"
+displayURL = "${modGitHub}"
 
 [[mixins]]
-config = "structurify-common.mixins.json"
+config = "${modId}-common.mixins.json"
 
 [[mixins]]
-config = "structurify-neoforge.mixins.json"
+config = "${modId}-neoforge.mixins.json"
 
 [[dependencies.${ modId }]]
 modId = "neoforge"
@@ -45,6 +45,4 @@ modrinth = "yacl"
 curseforge = "yacl"
 
 [modproperties.${ modId }]
-catalogueImageIcon = "catalogue_icon.png"
-catalogueBackground = "catalogue_background.png"
-configuredBackground = "catalogue_background.png"
+catalogueImageIcon = "icon.png"

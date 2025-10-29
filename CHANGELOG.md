@@ -1,3 +1,7 @@
+## 2.0.4a
+
+- Decreased the mod size
+
 ## 2.0.3a
 
 - Fixed null crash in flatness/biome checks (yes again)

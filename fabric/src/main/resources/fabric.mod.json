@@ -49,10 +49,9 @@
 		"catalogue": {
 			"configFactory": "com.faboslav.structurify.fabric.modcompat.CatalogueCompat",
 			"icon": {
-				"image": "catalogue_icon.png"
+				"image": "icon.png"
 			},
-			"banner": "catalogue_logo.png",
-			"background": "catalogue_background.png"
+			"banner": "logo.png"
 		},
 		"mc-publish": {
 			"dependencies": [
