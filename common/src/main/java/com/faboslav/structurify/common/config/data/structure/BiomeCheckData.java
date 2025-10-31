@@ -9,7 +9,11 @@ public final class BiomeCheckData
 	public static final boolean OVERRIDE_GLOBAL_BIOME_CHECK_DEFAULT_VALUE = false;
 	public final static boolean IS_ENABLED_DEFAULT_VALUE = false;
 	public final static BiomeCheckMode MODE_DEFAULT_VALUE = BiomeCheckMode.BLACKLIST;
+	//? if >= 1.21.1 {
 	public final static List<String> BLACKLISTED_BIOMES_DEFAULT_VALUE = List.of("#minecraft:is_river", "#c:is_river", "#minecraft:is_ocean", "#c:is_ocean");
+	//?} else {
+	/*public final static List<String> BLACKLISTED_BIOMES_DEFAULT_VALUE = List.of("#minecraft:is_river", "#c:river", "#minecraft:is_ocean", "#c:ocean");
+	*///?}
 
 	private boolean overrideGlobalBiomeCheck = OVERRIDE_GLOBAL_BIOME_CHECK_DEFAULT_VALUE;
 	private boolean isEnabled = IS_ENABLED_DEFAULT_VALUE;
