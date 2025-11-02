@@ -1,6 +1,9 @@
 ## 2.0.4a
 
 - Decreased the mod size
+- Fixed default blacklisted biome tags
+- Fixed load/save of max horizontal/vertical distance from structure center for jigsaw structures
+- Fixed load of min/max distance from world center
 
 ## 2.0.3a
 

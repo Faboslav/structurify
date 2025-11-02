@@ -93,6 +93,7 @@ public final class StructureDataSerializer
 			JigsawDataSerializer.load(structureJson, structureData.getJigsawData());
 		}
 
+		DistanceFromWorldCenterDataSerializer.load(structureJson, structureData.getDistanceFromWorldCenterCheckData());
 		FlatnessCheckDataSerializer.load(structureJson, structureData.getFlatnessCheckData());
 		BiomeCheckDataSerializer.load(structureJson, structureData.getBiomeCheckData());
 	}

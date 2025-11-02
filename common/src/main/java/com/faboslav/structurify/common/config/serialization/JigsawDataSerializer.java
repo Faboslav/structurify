@@ -15,7 +15,7 @@ public final class JigsawDataSerializer
 			jigsawData.setSize(size);
 		}
 
-		if (structureJson.has(MAX_HORIZONTAL_DISTANCE_FROM_CENTER_PROPERTY) && structureJson.has(MAX_HORIZONTAL_DISTANCE_FROM_CENTER_PROPERTY)) {
+		if (structureJson.has(MAX_HORIZONTAL_DISTANCE_FROM_CENTER_PROPERTY) && structureJson.has(MAX_VERTICAL_DISTANCE_FROM_CENTER_PROPERTY)) {
 			var maxHorizontalDistanceFromCenter = structureJson.get(MAX_HORIZONTAL_DISTANCE_FROM_CENTER_PROPERTY).getAsInt();
 			jigsawData.setHorizontalMaxDistanceFromCenter(maxHorizontalDistanceFromCenter);
 
@@ -26,7 +26,7 @@ public final class JigsawDataSerializer
 
 	public static void save(JsonObject structureJson, JigsawData jigsawData) {
 		structureJson.addProperty(SIZE_PROPERTY, jigsawData.getSize());
-		structureJson.addProperty(MAX_VERTICAL_DISTANCE_FROM_CENTER_PROPERTY, jigsawData.getHorizontalMaxDistanceFromCenter());
+		structureJson.addProperty(MAX_HORIZONTAL_DISTANCE_FROM_CENTER_PROPERTY, jigsawData.getHorizontalMaxDistanceFromCenter());
 		structureJson.addProperty(MAX_VERTICAL_DISTANCE_FROM_CENTER_PROPERTY, jigsawData.getVerticalMaxDistanceFromCenter());
 	}
 }
