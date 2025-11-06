@@ -1,3 +1,8 @@
+## 2.0.5a
+
+- Updated overlap prevention check to use smaller sections, which should result in better overlap prevention
+- Added debug renderer for overlap prevention check
+
 ## 2.0.4a
 
 - Decreased the mod size

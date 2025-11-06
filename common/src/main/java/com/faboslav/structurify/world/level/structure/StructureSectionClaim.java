@@ -1,7 +1,6 @@
 package com.faboslav.structurify.world.level.structure;
 
-import net.minecraft.resources.ResourceLocation;
-
-public record StructureSectionClaim(long token, ResourceLocation structureId)
+// Maybe just keep the long, and create separate debug data
+public record StructureSectionClaim(long token, String structureId, String pieceId)
 {
 }

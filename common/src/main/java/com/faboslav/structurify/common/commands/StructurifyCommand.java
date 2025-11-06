@@ -108,6 +108,7 @@ public final class StructurifyCommand
 									return 0;
 								}
 
+								Structurify.getConfig().getDebugData().setEnabled(true);
 								Structurify.getConfig().getDebugData().setDebugMode(debugMode);
 								reloadStructureChecks(ctx);
 
@@ -115,6 +116,7 @@ public final class StructurifyCommand
 									() -> Component.literal("Structurify debug mode changed to " + debugMode + "."),
 									!ctx.getSource().isPlayer()
 								);
+
 								return 1;
 							})
 						)
