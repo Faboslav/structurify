@@ -6,7 +6,9 @@ import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
 import com.faboslav.structurify.common.util.BiomeUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.CheckerboardColumnBiomeSource;
@@ -15,8 +17,6 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public final class StructureChecker
 {
@@ -33,23 +33,36 @@ public final class StructureChecker
 			structureId = structure.structurify$getStructureIdentifier();
 		}
 
-		StructureCheckData structureCheckData = new StructureCheckData(structureId, structure, structureStart);
+		if(structureId == null) {
+			return true;
+		}
 
-		var biomeCheckResult = checkBiomes(structureCheckData, biomeSource, randomState);
+		StructureCheckData structureCheckData = new StructureCheckData(structureId, structure, structureStart);
+		long structureCheckId = generateStructureCheckId(structureId, structureCheckData.getStructureCenter());
+		StructurifyChunkGenerator structurifyChunkGenerator = (StructurifyChunkGenerator) chunkGenerator;
+
+		var cachedBiomeChecks = structurifyChunkGenerator.structurify$getBiomeChecks();
+		boolean biomeCheckResult = cachedBiomeChecks.computeIfAbsent(structureCheckId, id -> checkBiomes(structureCheckData, biomeSource, randomState));
 
 		if (!biomeCheckResult) {
 			return false;
 		}
 
-		var flatnessCheckResult = checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState);
+		var cachedFlatnessChecks = structurifyChunkGenerator.structurify$getFlatnessChecks();
+		boolean flatnessCheckResult = cachedFlatnessChecks.computeIfAbsent(structureCheckId, id -> checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState));
 
 		if (!flatnessCheckResult) {
 			return false;
 		}
 
-		var overlapCheckResult = checkOverlap(structureCheckData, chunkGenerator);
+		var cachedOverlapChecks = structurifyChunkGenerator.structurify$getOverlapChecks();
+		boolean overlapCheckResult = cachedOverlapChecks.computeIfAbsent(structureCheckId, id -> checkOverlap(structureCheckData, structurifyChunkGenerator));
 
-		return overlapCheckResult;
+		if (!overlapCheckResult) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public static void debugCheckStructure(
@@ -65,7 +78,7 @@ public final class StructureChecker
 
 		checkBiomes(structureCheckData, biomeSource, randomState);
 		checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState);
-		checkOverlap(structureCheckData, chunkGenerator);
+		checkOverlap(structureCheckData, (StructurifyChunkGenerator) chunkGenerator);
 	}
 
 	private static boolean checkBiomes(
@@ -87,12 +100,6 @@ public final class StructureChecker
 		var structureData = structure.structurify$getStructureData();
 
 		if(structureData == null) {
-			return true;
-		}
-
-		var structureStep = structureData.getStep();
-
-		if (structureStep != GenerationStep.Decoration.SURFACE_STRUCTURES && structureStep != GenerationStep.Decoration.LOCAL_MODIFICATIONS) {
 			return true;
 		}
 
@@ -167,18 +174,23 @@ public final class StructureChecker
 			Structurify.getDebugRenderer().removeStructureBiomeCheckOverview(structureKey);
 			Structurify.getDebugRenderer().removeStructureBiomeCheckSamples(structureKey);
 		}*/
-		return flatnessCheckResult;
+
+		if(!flatnessCheckResult) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private static boolean checkOverlap(
 		StructureCheckData structureCheckData,
-		ChunkGenerator chunkGenerator
+		StructurifyChunkGenerator chunkGenerator
 	) {
 		if (!Structurify.getConfig().preventStructureOverlap) {
 			return true;
 		}
 
-		boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, (StructurifyChunkGenerator) chunkGenerator);
+		boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, chunkGenerator);
 
 		/*
 		if(Structurify.getConfig().getDebugData().isEnabled()) {
@@ -189,6 +201,22 @@ public final class StructureChecker
 			Structurify.getDebugRenderer().removeStructureBiomeCheckOverview(structureKey);
 			Structurify.getDebugRenderer().removeStructureBiomeCheckSamples(structureKey);
 		}*/
-		return !overlapCheckResult;
+
+		if(overlapCheckResult) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public static long generateStructureCheckId(ResourceLocation structureId, BlockPos structureCenter) {
+		long structHash = structureId.hashCode();
+		structHash ^= (structHash >>> 33);
+		structHash *= 0xff51afd7ed558ccdL;
+		structHash ^= (structHash >>> 33);
+		structHash *= 0xc4ceb9fe1a85ec53L;
+		structHash ^= (structHash >>> 33);
+
+		return Long.rotateLeft(structHash, 23) ^ Long.rotateLeft(ChunkPos.asLong(structureCenter), 11);
 	}
 }

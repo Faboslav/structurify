@@ -6,9 +6,14 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
+
+//? if >= 1.21.3 {
+import net.minecraft.client.renderer.ShapeRenderer;
+//?} else {
+/*import net.minecraft.client.renderer.LevelRenderer;
+*///?}
 
 public final class RenderUtil
 {

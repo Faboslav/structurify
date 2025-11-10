@@ -78,9 +78,9 @@ public final class StructureFlatnessCheck
 		}
 
 		int flatnessCheckHeightThreshold = net.minecraft.util.Mth.clamp(
-			(int) Math.round(Math.sqrt(structureArea) * 0.25),
-			2,
-			20
+			(int) Math.round(Math.sqrt(structureArea) * 0.33),
+			3,
+			21
 		);
 
 		int totalFlatnessChecks = structurePieceSamples.length;

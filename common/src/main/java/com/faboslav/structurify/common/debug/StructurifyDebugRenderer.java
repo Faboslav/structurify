@@ -21,12 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-//? if >= 1.21.3 {
-
-//?} else {
-/*import net.minecraft.client.renderer.LevelRenderer;
- *///?}
-
 public final class StructurifyDebugRenderer
 {
 	public void render(

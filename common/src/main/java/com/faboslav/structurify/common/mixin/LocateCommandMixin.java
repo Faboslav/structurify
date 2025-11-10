@@ -31,7 +31,7 @@ public class LocateCommandMixin
 		Operation<Integer> original
 	) throws CommandSyntaxException {
 		if (Structurify.getConfig().disableAllStructures) {
-			//throw new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.exception.all_structures_are_disabled")).create();
+			throw new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.exception.all_structures_are_disabled")).create();
 		}
 
 		// TODO handle the custom checks here?

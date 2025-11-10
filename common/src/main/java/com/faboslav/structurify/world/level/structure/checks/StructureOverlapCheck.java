@@ -1,10 +1,12 @@
 package com.faboslav.structurify.world.level.structure.checks;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
 import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
 import java.util.HashSet;
@@ -21,40 +23,49 @@ public final class StructureOverlapCheck
 		StructureCheckData structureCheckData,
 		StructurifyChunkGenerator structurifyChunkGenerator
 	) {
-		long[] structureCells = getStructurePiecesSections(structureCheckData.getStructureStart());
-		return !claimStructureSections(structurifyChunkGenerator, structureCells, structureCheckData.getStructureId());
+		StructureStart start = structureCheckData.getStructureStart();
+		long[] structureCells = getStructurePiecesSections(start);
+
+		long structureCenter = start.getBoundingBox().getCenter().asLong();
+
+		boolean overlapCheckResult = !claimStructureSections(
+			structurifyChunkGenerator,
+			structureCells,
+			structureCheckData.getStructureId(),
+			structureCenter
+		);
+
+		return overlapCheckResult;
 	}
 
 	private static long[] getStructurePiecesSections(StructureStart start) {
-		Set<Long> structurePieceSectionUniqueKeys = new HashSet<>();
+		Set<Long> unique = new HashSet<>();
 
-		for (var piece : start.getPieces()) {
-			BoundingBox b = piece.getBoundingBox();
+		for (StructurePiece piece : start.getPieces()) {
+			BoundingBox box = piece.getBoundingBox();
 
-			int minCx = Math.floorDiv(b.minX(), CELL_X);
-			int maxCx = Math.floorDiv(b.maxX(), CELL_X);
-			int minCy = Math.floorDiv(b.minY(), CELL_Y);
-			int maxCy = Math.floorDiv(b.maxY(), CELL_Y);
-			int minCz = Math.floorDiv(b.minZ(), CELL_Z);
-			int maxCz = Math.floorDiv(b.maxZ(), CELL_Z);
+			int minCx = Math.floorDiv(box.minX(), CELL_X);
+			int maxCx = Math.floorDiv(box.maxX(), CELL_X);
+			int minCy = Math.floorDiv(box.minY(), CELL_Y);
+			int maxCy = Math.floorDiv(box.maxY(), CELL_Y);
+			int minCz = Math.floorDiv(box.minZ(), CELL_Z);
+			int maxCz = Math.floorDiv(box.maxZ(), CELL_Z);
 
 			for (int cz = minCz; cz <= maxCz; cz++) {
 				for (int cx = minCx; cx <= maxCx; cx++) {
 					for (int cy = minCy; cy <= maxCy; cy++) {
-						structurePieceSectionUniqueKeys.add(packCell(cx, cy, cz));
+						unique.add(packCell(cx, cy, cz));
 					}
 				}
 			}
 		}
 
-		long[] structurePieceSectionKeys = new long[structurePieceSectionUniqueKeys.size()];
+		long[] keys = new long[unique.size()];
 		int i = 0;
-
-		for (Long structurePieceSectionKey : structurePieceSectionUniqueKeys) {
-			structurePieceSectionKeys[i++] = structurePieceSectionKey;
+		for (Long k : unique) {
+			keys[i++] = k;
 		}
-
-		return structurePieceSectionKeys;
+		return keys;
 	}
 
 	private static long packCell(int x, int y, int z) {
@@ -67,33 +78,37 @@ public final class StructureOverlapCheck
 		int x = (int) (packedKey >> 42);
 		int y = (int) ((packedKey >> 21) & 0x1FFFFF);
 		int z = (int) (packedKey & 0x1FFFFF);
-
 		if (x >= 0x100000) x -= 0x200000;
 		if (y >= 0x100000) y -= 0x200000;
 		if (z >= 0x100000) z -= 0x200000;
-
 		return new BlockPos(x * cellX, y * cellY, z * cellZ);
 	}
 
 	private static boolean claimStructureSections(
-		StructurifyChunkGenerator structurifyChunkGenerator,
+		StructurifyChunkGenerator gen,
 		long[] sectionKeysToClaim,
-		ResourceLocation structureId
+		ResourceLocation structureId,
+		long structureCenter
 	) {
 		final long token = ThreadLocalRandom.current().nextLong();
-		final long[] salted = new long[sectionKeysToClaim.length];
+		final StructureSectionClaim claim = new StructureSectionClaim(token, structureId.toString(), structureCenter);
+		final long[] claimed = new long[sectionKeysToClaim.length];
 
 		int acquired = 0;
 		for (; acquired < sectionKeysToClaim.length; acquired++) {
 			long key = sectionKeysToClaim[acquired];
-			salted[acquired] = key;
-			StructureSectionClaim structureSectionClaim = new StructureSectionClaim(token, structureId.toString(), "");
+			claimed[acquired] = key;
 
-			StructureSectionClaim prev = structurifyChunkGenerator.structurify$getStructureSectionClaims().putIfAbsent(key, structureSectionClaim);
+			StructureSectionClaim prev = gen.structurify$getStructureSectionClaims().putIfAbsent(key, claim);
 			if (prev != null) {
-				for (int i = 0; i < acquired; i++) {
-					structurifyChunkGenerator.structurify$getStructureSectionClaims().remove(salted[i], structureSectionClaim);
+				if (structureId.toString().equals(prev.structureId()) && structureCenter == prev.structureCenter()) {
+					continue;
 				}
+
+				for (int i = 0; i < acquired; i++) {
+					gen.structurify$getStructureSectionClaims().remove(claimed[i], claim);
+				}
+
 				return false;
 			}
 		}

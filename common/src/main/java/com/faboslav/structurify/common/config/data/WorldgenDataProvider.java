@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.data;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;
@@ -172,6 +173,21 @@ public final class WorldgenDataProvider
 				*///?}
 				int maxSize = JigsawStructureUtil.getSizeForStructure(structure);
 				structureData.setJigsawData(new JigsawData(maxSize, horizontalMaxDistanceFromCenter, verticalMaxDistanceFromCenter));
+			}
+
+			// TODO handle this in a better way and another code
+			if(structureId.equals("minecraft:shipwreck_beached")) {
+				var flatnessCheckData = structureData.getFlatnessCheckData();
+				flatnessCheckData.overrideGlobalFlatnessCheck(true);
+				flatnessCheckData.enable(false);
+			}
+
+			if(structureId.equals("nova_structures:illager_camp")) {
+				var biomes = structureData.getBiomes();
+
+				if(biomes.contains("minecraft:river")) {
+					biomes.remove("minecraft:river");
+				}
 			}
 
 			structures.put(structureId, structureData);

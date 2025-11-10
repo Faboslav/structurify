@@ -235,7 +235,7 @@ public abstract class StructureMixin implements StructurifyStructure
 		/*structureId = this.structurify$getStructureIdentifier();
 		*///?}
 
-		if (structureStart == StructureStart.INVALID_START) {
+		if (structureStart == StructureStart.INVALID_START || !structureStart.isValid()) {
 			return structureStart;
 		}
 

@@ -19,7 +19,13 @@ import java.util.stream.Collectors;
 
 public final class BiomeUtil
 {
+	//? if >= 1.21.1 {
 	public static TagKey<Biome> C_IS_OCEAN = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:is_ocean"));
+	public static TagKey<Biome> C_IS_RIVER = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:is_river"));
+	//?} else {
+	/*public static TagKey<Biome> C_IS_OCEAN = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:ocean"));
+	public static TagKey<Biome> C_IS_RIVER = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:river"));
+	*///?}
 
 	public static Set<ResourceKey<Biome>> getOceanBiomes() {
 		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
@@ -45,6 +51,13 @@ public final class BiomeUtil
 		);
 
 		biomeRegistry.get(C_IS_OCEAN).ifPresent(named ->
+			oceanBiomes.addAll(named.stream()
+				.map(h -> h.unwrapKey().orElse(null))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet()))
+		);
+
+		biomeRegistry.get(C_IS_RIVER).ifPresent(named ->
 			oceanBiomes.addAll(named.stream()
 				.map(h -> h.unwrapKey().orElse(null))
 				.filter(Objects::nonNull)

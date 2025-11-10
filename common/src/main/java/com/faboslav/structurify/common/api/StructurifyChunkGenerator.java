@@ -7,4 +7,10 @@ import java.util.Map;
 public interface StructurifyChunkGenerator
 {
 	Map<Long, StructureSectionClaim> structurify$getStructureSectionClaims();
+
+	Map<Long, Boolean> structurify$getFlatnessChecks();
+
+	Map<Long, Boolean> structurify$getBiomeChecks();
+
+	Map<Long, Boolean> structurify$getOverlapChecks();
 }

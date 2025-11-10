@@ -1,5 +1,7 @@
 ## 2.0.5a
 
+- Fixed some cases when locate command pointed to position without generated structure
+- Biome check should now run for all structures (previously it was only the surface structures)
 - Updated overlap prevention check to use smaller sections, which should result in better overlap prevention
 - Added debug renderer for overlap prevention check
 

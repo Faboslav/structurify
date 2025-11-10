@@ -36,8 +36,32 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 	private final Map<Long, StructureSectionClaim> structurify$structureSectionClaims = new ConcurrentHashMap<>();
 
 	@Unique
+	private final Map<Long, Boolean> structurify$flatnessChecks = new ConcurrentHashMap<>();
+
+	@Unique
+	private final Map<Long, Boolean> structurify$biomeChecks = new ConcurrentHashMap<>();
+
+	@Unique
+	private final Map<Long, Boolean> structurify$overlapChecks = new ConcurrentHashMap<>();
+
+	@Unique
 	public Map<Long, StructureSectionClaim> structurify$getStructureSectionClaims() {
 		return this.structurify$structureSectionClaims;
+	}
+
+	@Unique
+	public Map<Long, Boolean> structurify$getFlatnessChecks() {
+		return this.structurify$flatnessChecks;
+	}
+
+	@Unique
+	public Map<Long, Boolean> structurify$getBiomeChecks() {
+		return this.structurify$biomeChecks;
+	}
+
+	@Unique
+	public Map<Long, Boolean> structurify$getOverlapChecks() {
+		return this.structurify$overlapChecks;
 	}
 
 	@WrapMethod(
