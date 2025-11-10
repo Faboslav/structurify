@@ -1,6 +1,7 @@
 ## 2.0.5a
 
 - Fixed some cases when locate command pointed to position without generated structure
+- Fixed load/save of "override_global_distance_from_world_center" property
 - Biome check should now run for all structures (previously it was only the surface structures)
 - Updated overlap prevention check to use smaller sections, which should result in better overlap prevention
 - Added debug renderer for overlap prevention check
