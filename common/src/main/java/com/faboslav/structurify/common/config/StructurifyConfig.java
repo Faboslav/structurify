@@ -241,6 +241,7 @@ public final class StructurifyConfig
 
 				if (!Files.exists(backupConfigPath)) {
 					Files.move(configPath, backupConfigPath);
+					pruneBackupConfigFiles(5);
 				}
 			}
 
@@ -399,6 +400,51 @@ public final class StructurifyConfig
 			Structurify.getLogger().error("Failed to load Structurify backup configs");
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	private void pruneBackupConfigFiles(int keep) {
+		try {
+			if (!Files.exists(BACKUP_CONFIG_DIR) || !Files.isDirectory(BACKUP_CONFIG_DIR)) {
+				return;
+			}
+
+			List<Path> backups = Files.list(BACKUP_CONFIG_DIR)
+				.filter(path -> {
+					String name = path.getFileName().toString();
+					return name.startsWith(BACKUP_PREFIX) && name.endsWith(".json");
+				})
+				.sorted((a, b) -> {
+					String ta = a.getFileName().toString()
+						.replace(BACKUP_PREFIX, "")
+						.replace(".json", "");
+					String tb = b.getFileName().toString()
+						.replace(BACKUP_PREFIX, "")
+						.replace(".json", "");
+					try {
+						LocalDateTime da = LocalDateTime.parse(ta, DATETIME_FORMATTER);
+						LocalDateTime db = LocalDateTime.parse(tb, DATETIME_FORMATTER);
+						return db.compareTo(da);
+					} catch (Exception e) {
+						return 0;
+					}
+				})
+				.toList();
+
+			if (backups.size() <= keep) {
+				return;
+			}
+
+			for (int i = keep; i < backups.size(); i++) {
+				try {
+					Files.deleteIfExists(backups.get(i));
+				} catch (IOException ex) {
+					Structurify.getLogger().warn("Failed to delete old backup {}", backups.get(i).getFileName().toString());
+				}
+			}
+		} catch (IOException e) {
+			Structurify.getLogger().error("Failed to prune Structurify backup configs");
+			e.printStackTrace();
 		}
 	}
 }

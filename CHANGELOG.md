@@ -1,3 +1,8 @@
+## 2.0.6a
+
+- Only changed data should be saved to the config file to prevent huge json files
+- On save only the 5 newest backup config files should be kept
+
 ## 2.0.5a
 
 - Fixed some cases when locate command pointed to position without generated structure
