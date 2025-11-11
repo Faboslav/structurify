@@ -175,7 +175,6 @@ public final class WorldgenDataProvider
 				structureData.setJigsawData(new JigsawData(maxSize, horizontalMaxDistanceFromCenter, verticalMaxDistanceFromCenter));
 			}
 
-			// TODO handle this in a better way and another code
 			if(structureId.equals("minecraft:shipwreck_beached")) {
 				var flatnessCheckData = structureData.getFlatnessCheckData();
 				flatnessCheckData.overrideGlobalFlatnessCheck(true);
@@ -227,14 +226,25 @@ public final class WorldgenDataProvider
 				separation = randomSpreadStructurePlacement.structurify$getOriginalSeparation();
 			}
 
-			if (structureSet.placement() instanceof StructurePlacement) {
-				structureSets.put(structureSetStringId, new StructureSetData(
-					salt,
-					frequency,
-					spacing,
-					separation
-				));
+			var structureSetData = new StructureSetData(
+				salt,
+				frequency,
+				spacing,
+				separation
+			);
+
+			if(
+				structureSetStringId.equals("alexscaves:acid_pit")
+				|| structureSetStringId.equals("alexscaves:cake_cave")
+				|| structureSetStringId.equals("alexscaves:dino_bowl")
+				|| structureSetStringId.equals("alexscaves:ferrocave")
+				|| structureSetStringId.equals("alexscaves:forlorn_canyon")
+				|| structureSetStringId.equals("alexscaves:ocean_trench")
+			) {
+				structureSetData.setOverrideGlobalSpacingAndSeparationModifier(true);
 			}
+
+			structureSets.put(structureSetStringId, structureSetData);
 		}
 
 		return structureSets;

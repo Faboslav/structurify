@@ -34,8 +34,6 @@ public class LocateCommandMixin
 			throw new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.exception.all_structures_are_disabled")).create();
 		}
 
-		// TODO handle the custom checks here?
-
 		Optional<ResourceKey<Structure>> structureRegistryKey = predicate.unwrap().left();
 		Optional<TagKey<Structure>> structureTagKey = predicate.unwrap().right();
 

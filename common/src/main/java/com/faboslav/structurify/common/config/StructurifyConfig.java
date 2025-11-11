@@ -232,7 +232,6 @@ public final class StructurifyConfig
 
 		try {
 			if (Files.exists(configPath)) {
-				// TODO delete all old backups here
 				Path backupConfigPath = this.getBackupConfigPath();
 
 				if (!Files.exists(BACKUP_CONFIG_DIR) || !Files.isDirectory(BACKUP_CONFIG_DIR)) {
