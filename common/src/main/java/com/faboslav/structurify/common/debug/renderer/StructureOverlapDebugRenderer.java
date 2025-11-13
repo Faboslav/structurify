@@ -2,12 +2,12 @@ package com.faboslav.structurify.common.debug.renderer;
 
 import com.faboslav.structurify.common.util.RenderUtil;
 import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
-import com.faboslav.structurify.world.level.structure.checks.StructureOverlapCheck;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 
@@ -32,13 +32,15 @@ public final class StructureOverlapDebugRenderer
 		final float b = 0.2f;
 		final float a = 0.95f;
 
+		final int sectionSize = SectionPos.SECTION_SIZE;
+
 		AABB col = new AABB(
 			x,
 			y,
 			z,
-			x + StructureOverlapCheck.CELL_X,
-			y + StructureOverlapCheck.CELL_Y,
-			z + StructureOverlapCheck.CELL_Z
+			x + sectionSize,
+			y + sectionSize,
+			z + sectionSize
 		).move(-camX, -camY, -camZ);
 
 		BoundingBox box = new BoundingBox(
@@ -56,7 +58,16 @@ public final class StructureOverlapDebugRenderer
 			col,
 			r, g, b, a
 		);
-		RenderUtil.renderLabel(box, structureSectionClaim.structureId(), minecraft, poseStack, bufferSource, camX, camY, camZ);
-	}
 
+		RenderUtil.renderLabel(
+			box,
+			structureSectionClaim.structureId(),
+			minecraft,
+			poseStack,
+			bufferSource,
+			camX,
+			camY,
+			camZ
+		);
+	}
 }

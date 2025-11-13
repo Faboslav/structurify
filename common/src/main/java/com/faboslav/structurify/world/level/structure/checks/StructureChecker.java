@@ -190,6 +190,18 @@ public final class StructureChecker
 			return true;
 		}
 
+		var structureData = structureCheckData.getStructure().structurify$getStructureData();
+
+		if(structureData == null) {
+			return true;
+		}
+
+		var structureStep = structureData.getStep();
+
+		if (structureStep == GenerationStep.Decoration.RAW_GENERATION) {
+			return true;
+		}
+
 		boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, chunkGenerator);
 
 		/*
@@ -202,7 +214,7 @@ public final class StructureChecker
 			Structurify.getDebugRenderer().removeStructureBiomeCheckSamples(structureKey);
 		}*/
 
-		if(overlapCheckResult) {
+		if (overlapCheckResult) {
 			return false;
 		}
 

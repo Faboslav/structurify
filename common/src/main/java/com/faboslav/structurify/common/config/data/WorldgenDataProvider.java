@@ -189,6 +189,23 @@ public final class WorldgenDataProvider
 				}
 			}
 
+			if(
+				structureId.equals("alexscaves:acid_pit")
+				|| structureId.equals("alexscaves:cake_cave")
+				|| structureId.equals("alexscaves:dino_bowl")
+				|| structureId.equals("alexscaves:ferrocave")
+				|| structureId.equals("alexscaves:forlorn_canyon")
+				|| structureId.equals("alexscaves:ocean_trench")
+			) {
+				var flatnessCheckData = structureData.getFlatnessCheckData();
+				flatnessCheckData.overrideGlobalFlatnessCheck(true);
+				flatnessCheckData.enable(false);
+
+				var biomeCheckData = structureData.getBiomeCheckData();
+				biomeCheckData.overrideGlobalBiomeCheck(true);
+				biomeCheckData.enable(false);
+			}
+
 			structures.put(structureId, structureData);
 		}
 

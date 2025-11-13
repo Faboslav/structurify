@@ -88,18 +88,23 @@ public final class StructurifyDebugRenderer
 
 					synchronized (structureSectionClaims) {
 						for (var entry : structureSectionClaims.entrySet()) {
-							var key = entry.getKey();
+							var sectionKey = entry.getKey();
 							var structureSectionClaim = entry.getValue();
 
-							var pos = StructureOverlapCheck.unpackCell(
-								key,
-								StructureOverlapCheck.CELL_X,
-								StructureOverlapCheck.CELL_Y,
-								StructureOverlapCheck.CELL_Z
-							);
+							var sectionPos = SectionPos.of(sectionKey);
+							var pos = sectionPos.origin();
 
 							if (isWithinChunkRadius(cameraBlockPosition, pos.getX(), pos.getY(), pos.getZ(), chunkRadius)) {
-								StructureOverlapDebugRenderer.renderStructureSectionClaim(structureSectionClaim, minecraft, poseStack, bufferSource, pos, camX, camY, camZ);
+								StructureOverlapDebugRenderer.renderStructureSectionClaim(
+									structureSectionClaim,
+									minecraft,
+									poseStack,
+									bufferSource,
+									pos,
+									camX,
+									camY,
+									camZ
+								);
 							}
 						}
 					}

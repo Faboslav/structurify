@@ -1,5 +1,6 @@
 ## 2.0.6a
 
+- Rollback of the structure overlap changes, as smaller overlap checks are not reliable enough
 - Only changed data should be saved to the config file to prevent huge json files
 - On save only the 5 newest backup config files should be kept
 

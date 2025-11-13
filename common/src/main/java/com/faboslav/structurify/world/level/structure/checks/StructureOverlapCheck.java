@@ -1,12 +1,11 @@
 package com.faboslav.structurify.world.level.structure.checks;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
 import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
 import java.util.HashSet;
@@ -15,9 +14,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public final class StructureOverlapCheck
 {
-	public static final int CELL_X = 8;
-	public static final int CELL_Y = 8;
-	public static final int CELL_Z = 8;
 
 	public static boolean checkForOverlap(
 		StructureCheckData structureCheckData,
@@ -39,49 +35,35 @@ public final class StructureOverlapCheck
 	}
 
 	private static long[] getStructurePiecesSections(StructureStart start) {
-		Set<Long> unique = new HashSet<>();
+		Set<Long> structurePieceSectionUniqueKeys = new HashSet<>();
 
-		for (StructurePiece piece : start.getPieces()) {
-			BoundingBox box = piece.getBoundingBox();
+		for (var piece : start.getPieces()) {
+			BoundingBox b = piece.getBoundingBox();
 
-			int minCx = Math.floorDiv(box.minX(), CELL_X);
-			int maxCx = Math.floorDiv(box.maxX(), CELL_X);
-			int minCy = Math.floorDiv(box.minY(), CELL_Y);
-			int maxCy = Math.floorDiv(box.maxY(), CELL_Y);
-			int minCz = Math.floorDiv(box.minZ(), CELL_Z);
-			int maxCz = Math.floorDiv(box.maxZ(), CELL_Z);
+			int minSx = SectionPos.blockToSectionCoord(b.minX());
+			int maxSx = SectionPos.blockToSectionCoord(b.maxX());
+			int minSz = SectionPos.blockToSectionCoord(b.minZ());
+			int maxSz = SectionPos.blockToSectionCoord(b.maxZ());
+			int minSy = SectionPos.blockToSectionCoord(b.minY());
+			int maxSy = SectionPos.blockToSectionCoord(b.maxY());
 
-			for (int cz = minCz; cz <= maxCz; cz++) {
-				for (int cx = minCx; cx <= maxCx; cx++) {
-					for (int cy = minCy; cy <= maxCy; cy++) {
-						unique.add(packCell(cx, cy, cz));
+			for (int sz = minSz; sz <= maxSz; sz++) {
+				for (int sx = minSx; sx <= maxSx; sx++) {
+					for (int sy = minSy; sy <= maxSy; sy++) {
+						structurePieceSectionUniqueKeys.add(SectionPos.asLong(sx, sy, sz));
 					}
 				}
 			}
 		}
 
-		long[] keys = new long[unique.size()];
+		long[] structurePieceSectionKeys = new long[structurePieceSectionUniqueKeys.size()];
 		int i = 0;
-		for (Long k : unique) {
-			keys[i++] = k;
+
+		for (Long structurePieceSectionKey : structurePieceSectionUniqueKeys) {
+			structurePieceSectionKeys[i++] = structurePieceSectionKey;
 		}
-		return keys;
-	}
 
-	private static long packCell(int x, int y, int z) {
-		return ((long)(x & 0x1FFFFF) << 42)
-			   | ((long)(y & 0x1FFFFF) << 21)
-			   | (long)(z & 0x1FFFFF);
-	}
-
-	public static BlockPos unpackCell(long packedKey, int cellX, int cellY, int cellZ) {
-		int x = (int) (packedKey >> 42);
-		int y = (int) ((packedKey >> 21) & 0x1FFFFF);
-		int z = (int) (packedKey & 0x1FFFFF);
-		if (x >= 0x100000) x -= 0x200000;
-		if (y >= 0x100000) y -= 0x200000;
-		if (z >= 0x100000) z -= 0x200000;
-		return new BlockPos(x * cellX, y * cellY, z * cellZ);
+		return structurePieceSectionKeys;
 	}
 
 	private static boolean claimStructureSections(
