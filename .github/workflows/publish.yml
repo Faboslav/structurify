@@ -114,7 +114,7 @@ jobs:
 
                     name: ${{ steps.gradle-properties.outputs.MOD_NAME }} ${{ steps.gradle-properties.outputs.MOD_VERSION }}
                     version: ${{ matrix.mod_loader }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
-                    version-type: alpha
+                    version-type: beta
                     loaders: ${{ join(matrix.supported_mod_loaders, ' ') }}
                     game-versions: |
                         >=${{ steps.gradle-properties.outputs.MIN_MINECRAFT_VERSION }} <=${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}

@@ -5,7 +5,6 @@ import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
-import com.faboslav.structurify.common.util.BiomeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
@@ -103,26 +102,12 @@ public final class StructureChecker
 			return true;
 		}
 
-		boolean isOceanStructure = structure.structurify$getStructureBiomes().stream()
-			.map(h -> h.unwrapKey().orElse(null))
-			.anyMatch(k -> k != null && BiomeUtil.getOceanBiomes().contains(k));
-
-		if (isOceanStructure) {
-			return true;
-		}
-
 		var biomeCheckResult = StructureBiomeCheck.checkBiomes(structureCheckData, biomeCheckData, biomeSource, randomState);
 
 		if(!biomeCheckResult) {
 			return false;
 		}
 
-		/*
-		if(Structurify.getConfig().getDebugData().isEnabled()) {
-			var structureKey = ChunkPos.asLong(structureCheckData.getStructureCenter());
-			Structurify.getDebugRenderer().removeStructureFlatnessCheckInfo(structureKey);
-			Structurify.getDebugRenderer().removeStructureFlatnessCheckSamples(structureKey);
-		}*/
 		return true;
 	}
 
@@ -132,30 +117,9 @@ public final class StructureChecker
 		LevelHeightAccessor heightAccessor,
 		RandomState randomState
 	) {
-		var structure = structureCheckData.getStructure();
 		FlatnessCheckData flatnessCheckData = StructureFlatnessCheck.getFlatnessCheckData(structureCheckData);
 
-		if (flatnessCheckData == null || !flatnessCheckData.isEnabled()) {
-			return true;
-		}
-
-		var structureData = structure.structurify$getStructureData();
-
-		if(structureData == null) {
-			return true;
-		}
-
-		var structureStep = structureData.getStep();
-
-		if (structureStep != GenerationStep.Decoration.SURFACE_STRUCTURES && structureStep != GenerationStep.Decoration.LOCAL_MODIFICATIONS) {
-			return true;
-		}
-
-		boolean isOceanStructure = structure.structurify$getStructureBiomes().stream()
-			.map(h -> h.unwrapKey().orElse(null))
-			.anyMatch(k -> k != null && BiomeUtil.getOceanBiomes().contains(k));
-
-		if (isOceanStructure) {
+		if(!StructureFlatnessCheck.canDoFlatnessCheck(structureCheckData)) {
 			return true;
 		}
 
@@ -166,14 +130,6 @@ public final class StructureChecker
 			heightAccessor,
 			randomState
 		);
-
-		/*
-		if(Structurify.getConfig().getDebugData().isEnabled()) {
-			var structureKey = ChunkPos.asLong(structureCheckData.getStructureCenter());
-
-			Structurify.getDebugRenderer().removeStructureBiomeCheckOverview(structureKey);
-			Structurify.getDebugRenderer().removeStructureBiomeCheckSamples(structureKey);
-		}*/
 
 		if(!flatnessCheckResult) {
 			return false;
@@ -203,16 +159,6 @@ public final class StructureChecker
 		}
 
 		boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, chunkGenerator);
-
-		/*
-		if(Structurify.getConfig().getDebugData().isEnabled()) {
-			var structureKey = ChunkPos.asLong(structureCheckData.getStructureCenter());
-
-			Structurify.getDebugRenderer().removeStructureFlatnessCheckInfo(structureKey);
-			Structurify.getDebugRenderer().removeStructureFlatnessCheckSamples(structureKey);
-			Structurify.getDebugRenderer().removeStructureBiomeCheckOverview(structureKey);
-			Structurify.getDebugRenderer().removeStructureBiomeCheckSamples(structureKey);
-		}*/
 
 		if (overlapCheckResult) {
 			return false;

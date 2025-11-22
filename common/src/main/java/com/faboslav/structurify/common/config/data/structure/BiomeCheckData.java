@@ -16,7 +16,9 @@ public final class BiomeCheckData
 	*///?}
 
 	private boolean overrideGlobalBiomeCheck = OVERRIDE_GLOBAL_BIOME_CHECK_DEFAULT_VALUE;
+	private boolean defaultOverrideGlobalBiomeCheck = OVERRIDE_GLOBAL_BIOME_CHECK_DEFAULT_VALUE;
 	private boolean isEnabled = IS_ENABLED_DEFAULT_VALUE;
+	private boolean defaultIsEnabled = IS_ENABLED_DEFAULT_VALUE;
 	private BiomeCheckMode mode = MODE_DEFAULT_VALUE;
 	private List<String> blacklistedBiomes = BLACKLISTED_BIOMES_DEFAULT_VALUE;
 
@@ -31,8 +33,8 @@ public final class BiomeCheckData
 		Collections.sort(defaultBlacklistedBiomes);
 
 		return
-			this.overrideGlobalBiomeCheck == OVERRIDE_GLOBAL_BIOME_CHECK_DEFAULT_VALUE
-			&& this.isEnabled == IS_ENABLED_DEFAULT_VALUE
+			this.overrideGlobalBiomeCheck == this.defaultOverrideGlobalBiomeCheck
+			&& this.isEnabled == this.defaultIsEnabled
 			&& this.mode == MODE_DEFAULT_VALUE
 			&& blacklistedBiomes.equals(defaultBlacklistedBiomes);
 	}
@@ -45,12 +47,20 @@ public final class BiomeCheckData
 		this.overrideGlobalBiomeCheck = overrideGlobalBiomeCheck;
 	}
 
+	public void defaultOverrideGlobalBiomeCheck(boolean defaultOverrideGlobalBiomeCheck) {
+		this.defaultOverrideGlobalBiomeCheck = defaultOverrideGlobalBiomeCheck;
+	}
+
 	public boolean isEnabled() {
 		return this.isEnabled;
 	}
 
 	public void enable(boolean isEnabled) {
 		this.isEnabled = isEnabled;
+	}
+
+	public void defaultEnable(boolean defaultIsEnabled) {
+		this.defaultIsEnabled = defaultIsEnabled;
 	}
 
 	public BiomeCheckMode getMode() {

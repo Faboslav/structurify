@@ -1,3 +1,8 @@
+## 2.0.7b
+
+- Improved flatness/biome checks logic related to ocean/river structures
+- Minor GUI fixes
+
 ## 2.0.6a
 
 - Rollback of the structure overlap changes, as smaller overlap checks are not reliable enough

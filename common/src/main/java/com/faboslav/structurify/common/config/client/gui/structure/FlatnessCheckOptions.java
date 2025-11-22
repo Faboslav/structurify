@@ -2,10 +2,14 @@ package com.faboslav.structurify.common.config.client.gui.structure;
 
 import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
+import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureLikeData;
 import com.faboslav.structurify.common.config.data.StructureNamespaceData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
+import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+import com.faboslav.structurify.common.util.BiomeUtil;
 import com.faboslav.structurify.common.util.LanguageUtil;
+import com.faboslav.structurify.world.level.structure.checks.StructureFlatnessCheck;
 import dev.isxander.yacl3.api.LabelOption;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionAddable;
@@ -33,19 +37,21 @@ public final class FlatnessCheckOptions
 		boolean isNamespace = !id.contains(":");
 		String namespace;
 		boolean isEnabledForNamespace = config.getStructureNamespaceData().get(id.split(":")[0]).getFlatnessCheckData().isEnabled();
-		Map<String, ? extends StructureLikeData> structureLikeData;
+		Map<String, ? extends StructureLikeData> structuresLikeData;
 		var flatnessCheckOptions = new HashMap<String, Option<?>>();
 
 		if (isNamespace) {
 			namespace = id;
-			structureLikeData = config.getStructureNamespaceData();
+			structuresLikeData = config.getStructureNamespaceData();
 		} else {
 			namespace = id.split(":")[0];
-			structureLikeData = config.getStructureData();
+			structuresLikeData = config.getStructureData();
 		}
 
-		var flatnessCheckData = structureLikeData.get(id).getFlatnessCheckData();
-		boolean isEnabled = structureLikeData.get(id).getFlatnessCheckData().isEnabled();
+		var structureLikeData = structuresLikeData.get(id);
+
+		var flatnessCheckData = structureLikeData.getFlatnessCheckData();
+		boolean isEnabled = structureLikeData.getFlatnessCheckData().isEnabled();
 		var title = Component.translatable("gui.structurify.structures.flatness_check_group.title");
 
 		if (isGlobal || isNamespace) {
@@ -65,8 +71,8 @@ public final class FlatnessCheckOptions
 				.available(isEnabledGlobally || isEnabledForNamespace)
 				.binding(
 					FlatnessCheckData.OVERRIDE_GLOBAL_FLATNESS_CHECK_DEFAULT_VALUE,
-					() -> structureLikeData.get(id).getFlatnessCheckData().isOverridingGlobalFlatnessCheck(),
-					overrideGlobalFlatnessCheck -> structureLikeData.get(id).getFlatnessCheckData().overrideGlobalFlatnessCheck(overrideGlobalFlatnessCheck)
+					() -> structuresLikeData.get(id).getFlatnessCheckData().isOverridingGlobalFlatnessCheck(),
+					overrideGlobalFlatnessCheck -> structuresLikeData.get(id).getFlatnessCheckData().overrideGlobalFlatnessCheck(overrideGlobalFlatnessCheck)
 				).controller(opt -> BooleanControllerBuilder.create(opt)
 					.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
 					.coloured(true)
@@ -85,8 +91,8 @@ public final class FlatnessCheckOptions
 			.available(isGlobal || flatnessCheckData.isOverridingGlobalFlatnessCheck() || (!isEnabledGlobally && !isEnabledForNamespace))
 			.binding(
 				FlatnessCheckData.IS_ENABLED_DEFAULT_VALUE,
-				() -> structureLikeData.get(id).getFlatnessCheckData().isEnabled(),
-				enableFlatnessCheck -> structureLikeData.get(id).getFlatnessCheckData().enable(enableFlatnessCheck)
+				() -> structuresLikeData.get(id).getFlatnessCheckData().isEnabled(),
+				enableFlatnessCheck -> structuresLikeData.get(id).getFlatnessCheckData().enable(enableFlatnessCheck)
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
 				.valueFormatter(currentIsEnabled -> {
@@ -101,13 +107,6 @@ public final class FlatnessCheckOptions
 
 						return Component.translatable("gui.structurify.label.yes");
 					}
-
-					/*
-					if(
-						(isOverridingGlobalFlatnessCheckOption != null && !isOverridingGlobalFlatnessCheckOption.pendingValue())
-						&& isEnabledGlobally || isEnabledForNamespace) {
-						return Component.translatable("gui.structurify.label.yes");
-					}*/
 
 					return Component.translatable("gui.structurify.label.no");
 				})
@@ -124,8 +123,8 @@ public final class FlatnessCheckOptions
 			.available(isEnabled)
 			.binding(
 				FlatnessCheckData.ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE,
-				() -> structureLikeData.get(id).getFlatnessCheckData().areNonSolidBlocksAllowed(),
-				allowNonSolidBlocks -> structureLikeData.get(id).getFlatnessCheckData().allowNonSolidBlocks(allowNonSolidBlocks)
+				() -> structuresLikeData.get(id).getFlatnessCheckData().areNonSolidBlocksAllowed(),
+				allowNonSolidBlocks -> structuresLikeData.get(id).getFlatnessCheckData().allowNonSolidBlocks(allowNonSolidBlocks)
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
 				.valueFormatter(allowNonSolidBlocks -> {

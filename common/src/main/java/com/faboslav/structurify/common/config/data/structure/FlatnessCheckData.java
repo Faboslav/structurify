@@ -7,7 +7,9 @@ public final class FlatnessCheckData
 	public final static boolean ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE = false;
 
 	private boolean overrideGlobalFlatnessCheck = OVERRIDE_GLOBAL_FLATNESS_CHECK_DEFAULT_VALUE;
+	private boolean defaultOverrideGlobalFlatnessCheck = OVERRIDE_GLOBAL_FLATNESS_CHECK_DEFAULT_VALUE;
 	private boolean isEnabled = IS_ENABLED_DEFAULT_VALUE;
+	private boolean defaultIsEnabled = IS_ENABLED_DEFAULT_VALUE;
 	private boolean allowNonSolidBlocks = ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE;
 
 	public FlatnessCheckData() {
@@ -15,8 +17,8 @@ public final class FlatnessCheckData
 
 	public boolean isUsingDefaultValues() {
 		return
-			this.overrideGlobalFlatnessCheck == OVERRIDE_GLOBAL_FLATNESS_CHECK_DEFAULT_VALUE
-			&& this.isEnabled == IS_ENABLED_DEFAULT_VALUE
+			this.overrideGlobalFlatnessCheck == this.defaultOverrideGlobalFlatnessCheck
+			&& this.isEnabled == this.defaultIsEnabled
 			&& this.allowNonSolidBlocks == ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE;
 	}
 
@@ -28,12 +30,20 @@ public final class FlatnessCheckData
 		this.overrideGlobalFlatnessCheck = overrideGlobalFlatnessCheck;
 	}
 
+	public void defaultOverrideGlobalFlatnessCheck(boolean defaultOverrideGlobalFlatnessCheck) {
+		this.defaultOverrideGlobalFlatnessCheck = defaultOverrideGlobalFlatnessCheck;
+	}
+
 	public boolean isEnabled() {
 		return this.isEnabled;
 	}
 
 	public void enable(boolean isEnabled) {
 		this.isEnabled = isEnabled;
+	}
+
+	public void defaultEnable(boolean defaultIsEnabled) {
+		this.defaultIsEnabled = defaultIsEnabled;
 	}
 
 	public boolean areNonSolidBlocksAllowed() {

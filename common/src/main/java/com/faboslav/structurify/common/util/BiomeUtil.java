@@ -27,7 +27,7 @@ public final class BiomeUtil
 	public static TagKey<Biome> C_IS_RIVER = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:river"));
 	*///?}
 
-	public static Set<ResourceKey<Biome>> getOceanBiomes() {
+	public static Set<ResourceKey<Biome>> getWaterBiomes() {
 		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
 
 		if (biomeRegistry == null) {
@@ -65,6 +65,18 @@ public final class BiomeUtil
 		);
 
 		return oceanBiomes;
+	}
+
+	public static boolean isWaterStructure(HolderSet<Biome> structureBiomes) {
+		if(structureBiomes == null || structureBiomes.size() == 0) {
+			return false;
+		}
+
+		var waterBiomes = BiomeUtil.getWaterBiomes();
+
+		return structureBiomes.stream()
+			.map(h -> h.unwrapKey().orElse(null))
+			.allMatch(k -> k != null && waterBiomes.contains(k));
 	}
 
 	public static HolderSet<Biome> getBiomes(

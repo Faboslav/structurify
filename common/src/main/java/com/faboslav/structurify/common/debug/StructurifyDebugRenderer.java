@@ -41,7 +41,7 @@ public final class StructurifyDebugRenderer
 		}
 
 		var singlePlayerServer = minecraft.getSingleplayerServer();
-		int chunkRadius = Math.max(singlePlayerServer == null ? 8:singlePlayerServer.getPlayerList().getViewDistance(), 8);
+		int chunkRadius = Math.max(singlePlayerServer == null ? 6 : singlePlayerServer.getPlayerList().getViewDistance(), 6);
 
 		final Camera camera = minecraft.gameRenderer.getMainCamera();
 		final var cameraPosition = camera.getPosition();

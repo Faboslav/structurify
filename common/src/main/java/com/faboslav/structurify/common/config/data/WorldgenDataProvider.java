@@ -5,9 +5,14 @@ import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlace
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+import com.faboslav.structurify.common.util.BiomeUtil;
 import com.faboslav.structurify.common.util.JigsawStructureUtil;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 
 import java.util.*;
@@ -175,9 +180,27 @@ public final class WorldgenDataProvider
 				structureData.setJigsawData(new JigsawData(maxSize, horizontalMaxDistanceFromCenter, verticalMaxDistanceFromCenter));
 			}
 
+			HolderSet<Biome> defaultBiomeHolders = BiomeUtil.getBiomeHolders(defaultBiomes, biomeRegistry);
+
+			if(BiomeUtil.isWaterStructure(defaultBiomeHolders)) {
+				var flatnessCheckData = structureData.getFlatnessCheckData();
+				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);
+				flatnessCheckData.overrideGlobalFlatnessCheck(true);
+				flatnessCheckData.defaultEnable(false);
+				flatnessCheckData.enable(false);
+
+				var biomeCheckData = structureData.getBiomeCheckData();
+				biomeCheckData.defaultOverrideGlobalBiomeCheck(true);
+				biomeCheckData.overrideGlobalBiomeCheck(true);
+				biomeCheckData.defaultEnable(false);
+				biomeCheckData.enable(false);
+			}
+
 			if(structureId.equals("minecraft:shipwreck_beached")) {
 				var flatnessCheckData = structureData.getFlatnessCheckData();
+				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);
 				flatnessCheckData.overrideGlobalFlatnessCheck(true);
+				flatnessCheckData.defaultEnable(false);
 				flatnessCheckData.enable(false);
 			}
 

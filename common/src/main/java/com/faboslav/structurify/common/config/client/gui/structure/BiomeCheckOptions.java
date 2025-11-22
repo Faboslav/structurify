@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.config.client.gui.structure;
 
-import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
 import com.faboslav.structurify.common.config.data.StructureLikeData;
@@ -47,7 +46,6 @@ public final class BiomeCheckOptions
 
 		var biomeCheckOptions = new HashMap<String, Option<?>>();
 		var biomeCheckData = structureLikeData.get(id).getBiomeCheckData();
-		boolean isEnabled = structureLikeData.get(id).getBiomeCheckData().isEnabled();
 		var title = Component.translatable("gui.structurify.structures.biome_check_group.title");
 
 		if (isGlobal || isNamespace) {
@@ -91,7 +89,21 @@ public final class BiomeCheckOptions
 				biomeCheckData::enable
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+				.valueFormatter(currentIsEnabled -> {
+					if (currentIsEnabled) {
+						if (isGlobal) {
+							return Component.translatable("gui.structurify.label.yes_global");
+						}
+
+						if (isNamespace) {
+							return Component.translatable("gui.structurify.label.yes_namespace", namespace);
+						}
+
+						return Component.translatable("gui.structurify.label.yes");
+					}
+
+					return Component.translatable("gui.structurify.label.no");
+				})
 				.coloured(true)).build();
 
 		biomeCheckOptions.put(BIOME_CHECK_IS_ENABLED_OPTION_NAME, isEnabledOption);
