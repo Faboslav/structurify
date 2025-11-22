@@ -23,7 +23,6 @@ public final class BiomeCheckOptions
 	public static String BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME = "blacklisted_biomes";
 
 	public static Map<String, Option<?>> addBiomeCheckOptions(
-		ConfigCategory.Builder categoryBuilder,
 		OptionGroup.Builder groupBuilder,
 		StructurifyConfig config,
 		String id
@@ -68,7 +67,7 @@ public final class BiomeCheckOptions
 					() -> structureLikeData.get(id).getBiomeCheckData().isOverridingGlobalBiomeCheck(),
 					overrideGlobalBiomeCheck -> structureLikeData.get(id).getBiomeCheckData().overrideGlobalBiomeCheck(overrideGlobalBiomeCheck)
 				).controller(opt -> BooleanControllerBuilder.create(opt)
-					.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+					.formatValue(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
 					.coloured(true)
 				)
 				.build();
@@ -89,7 +88,7 @@ public final class BiomeCheckOptions
 				biomeCheckData::enable
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(currentIsEnabled -> {
+				.formatValue(currentIsEnabled -> {
 					if (currentIsEnabled) {
 						if (isGlobal) {
 							return Component.translatable("gui.structurify.label.yes_global");
@@ -119,7 +118,7 @@ public final class BiomeCheckOptions
 				biomeCheckData::setMode
 			).controller(opt -> EnumControllerBuilder.create(opt)
 				.enumClass(BiomeCheckData.BiomeCheckMode.class)
-				.valueFormatter(biomeCheckMode -> Component.translatable("gui.structurify.structures.structure.biome_check_mode." + biomeCheckMode.name().toLowerCase()))).build();
+				.formatValue(biomeCheckMode -> Component.translatable("gui.structurify.structures.structure.biome_check_mode." + biomeCheckMode.name().toLowerCase()))).build();
 
 		biomeCheckOptions.put(BIOME_CHECK_MODE_OPTION_NAME, modeOption);
 		groupBuilder.option(modeOption);
@@ -127,16 +126,15 @@ public final class BiomeCheckOptions
 		var blacklistedBiomesOption = ListOption.<String>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.biome_check_blacklisted_biomes.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biome_check_blacklisted_biomes.description")))
-			.available(biomeCheckData.isEnabled())
+			.available(biomeCheckData.isEnabled() && biomeCheckData.getMode() == BiomeCheckData.BiomeCheckMode.BLACKLIST)
 			.collapsed(false)
 			.insertEntriesAtEnd(false)
 			.binding(
 				BiomeCheckData.BLACKLISTED_BIOMES_DEFAULT_VALUE,
-				() -> biomeCheckData.getBlacklistedBiomes(),
-				blacklistedBiomes -> biomeCheckData.setBlacklistedBiomes(blacklistedBiomes)
+				structureLikeData.get(id).getBiomeCheckData()::getBlacklistedBiomes,
+				structureLikeData.get(id).getBiomeCheckData()::setBlacklistedBiomes
 			)
 			.controller(BiomeStringControllerBuilder::create)
-			.available(biomeCheckData.getMode() == BiomeCheckData.BiomeCheckMode.BLACKLIST)
 			.initial("").build();
 
 		// This is needed, since options inside list are not disabled by .available() setting

@@ -74,7 +74,7 @@ public final class FlatnessCheckOptions
 					() -> structuresLikeData.get(id).getFlatnessCheckData().isOverridingGlobalFlatnessCheck(),
 					overrideGlobalFlatnessCheck -> structuresLikeData.get(id).getFlatnessCheckData().overrideGlobalFlatnessCheck(overrideGlobalFlatnessCheck)
 				).controller(opt -> BooleanControllerBuilder.create(opt)
-					.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+					.formatValue(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
 					.coloured(true)
 				)
 				.build();
@@ -95,7 +95,7 @@ public final class FlatnessCheckOptions
 				enableFlatnessCheck -> structuresLikeData.get(id).getFlatnessCheckData().enable(enableFlatnessCheck)
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(currentIsEnabled -> {
+				.formatValue(currentIsEnabled -> {
 					if (currentIsEnabled) {
 						if (isGlobal) {
 							return Component.translatable("gui.structurify.label.yes_global");
@@ -127,7 +127,7 @@ public final class FlatnessCheckOptions
 				allowNonSolidBlocks -> structuresLikeData.get(id).getFlatnessCheckData().allowNonSolidBlocks(allowNonSolidBlocks)
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(allowNonSolidBlocks -> {
+				.formatValue(allowNonSolidBlocks -> {
 					if (allowNonSolidBlocks) {
 						return Component.translatable("gui.structurify.label.yes");
 					}

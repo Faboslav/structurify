@@ -47,7 +47,7 @@ public final class StructureConfigScreen
 				() -> config.getStructureData().get(structureId).isDisabled(),
 				isDisabled -> config.getStructureData().get(structureId).setDisabled(isDisabled)
 			)
-			.controller(opt -> BooleanControllerBuilder.create(opt).valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes").withStyle(style -> style.withColor(ChatFormatting.RED)):Component.translatable("gui.structurify.label.no").withStyle(style -> style.withColor(ChatFormatting.GREEN)))).build();
+			.controller(opt -> BooleanControllerBuilder.create(opt).formatValue(val -> val ? Component.translatable("gui.structurify.label.yes").withStyle(style -> style.withColor(ChatFormatting.RED)):Component.translatable("gui.structurify.label.no").withStyle(style -> style.withColor(ChatFormatting.GREEN)))).build();
 
 		structureSettingsGroup.option(isDisabledOption);
 
@@ -60,7 +60,7 @@ public final class StructureConfigScreen
 				step -> config.getStructureData().get(structureId).setStep(step)
 			).controller(opt -> EnumControllerBuilder.create(opt)
 				.enumClass(GenerationStep.Decoration.class)
-				.valueFormatter(step -> Component.translatable(getHumanReadableName(step.name().toLowerCase())))).build();
+				.formatValue(step -> Component.translatable(getHumanReadableName(step.name().toLowerCase())))).build();
 
 		structureSettingsGroup.option(stepOption);
 
@@ -73,7 +73,7 @@ public final class StructureConfigScreen
 				terrainAdaptation -> config.getStructureData().get(structureId).setTerrainAdaptation(terrainAdaptation)
 			).controller(opt -> EnumControllerBuilder.create(opt)
 				.enumClass(TerrainAdjustment.class)
-				.valueFormatter(terrainAdaptation -> Component.translatable(getHumanReadableName(terrainAdaptation.name().toLowerCase())))).build();
+				.formatValue(terrainAdaptation -> Component.translatable(getHumanReadableName(terrainAdaptation.name().toLowerCase())))).build();
 
 		structureSettingsGroup.option(terrainAdaptationOption);
 
@@ -113,7 +113,7 @@ public final class StructureConfigScreen
 		structureCategoryBuilder.group(flatnessOptionsGroup.build());
 
 		var biomesOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("biomes"));
-		var biomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(structureCategoryBuilder, biomesOptionsGroup, config, structureId);
+		var biomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(biomesOptionsGroup, config, structureId);
 		structureCategoryBuilder.group(biomesOptionsGroup.build());
 		var blacklistedBiomesOption = biomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME);
 		structureCategoryBuilder.group((OptionGroup) blacklistedBiomesOption);

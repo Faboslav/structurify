@@ -108,7 +108,7 @@ public final class StructureSetsConfigScreen
 						overrideGlobalSpacingAndSeparationModifier -> config.getStructureSetData().get(structureSetStringId).setOverrideGlobalSpacingAndSeparationModifier(overrideGlobalSpacingAndSeparationModifier)
 					)
 					.controller(opt -> BooleanControllerBuilder.create(opt)
-						.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+						.formatValue(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
 						.coloured(true)
 					).available(config.enableGlobalSpacingAndSeparationModifier)
 					.build();
@@ -133,7 +133,7 @@ public final class StructureSetsConfigScreen
 					)
 					.controller(opt -> IntegerFieldControllerBuilder
 						.create(opt)
-						.valueFormatter(spacing -> {
+						.formatValue(spacing -> {
 							var structureSetOption = structureSetOptions.get(structureSetStringId);
 							var overrideSpacingAndSeparationModifierDescription = structureSetOption.getKey().pendingValue();
 
@@ -162,7 +162,7 @@ public final class StructureSetsConfigScreen
 					)
 					.controller(opt -> IntegerFieldControllerBuilder
 						.create(opt)
-						.valueFormatter(separation -> {
+						.formatValue(separation -> {
 							var structureSetOption = structureSetOptions.get(structureSetStringId);
 							var overrideSpacingAndSeparationModifierDescription = structureSetOption.getKey().pendingValue();
 
@@ -203,8 +203,8 @@ public final class StructureSetsConfigScreen
 		}
 
 		if (currentGroupBuilder != null) {
-			OptionGroup buildedGroup = currentGroupBuilder.build();
-			optionGroups.add(buildedGroup);
+			OptionGroup builtGroup = currentGroupBuilder.build();
+			optionGroups.add(builtGroup);
 		}
 
 		for (OptionGroup structureOptionGroup : optionGroups) {
@@ -237,7 +237,7 @@ public final class StructureSetsConfigScreen
 				enableGlobalSpacingAndSeparationModifier -> config.enableGlobalSpacingAndSeparationModifier = enableGlobalSpacingAndSeparationModifier
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
-				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+				.formatValue(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
 				.coloured(true)).build();
 
 		generalStructuresSetsGroupBuilder.option(enableGlobalSpacingAndSeparationOption);

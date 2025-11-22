@@ -97,7 +97,7 @@ public final class StructuresConfigScreen
 				() -> config.disableAllStructures,
 				disableAllStructures -> config.disableAllStructures = disableAllStructures
 			)
-			.controller(opt -> BooleanControllerBuilder.create(opt).valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes").withStyle(style -> style.withColor(ChatFormatting.RED)):Component.translatable("gui.structurify.label.no").withStyle(style -> style.withColor(ChatFormatting.GREEN)))).build();
+			.controller(opt -> BooleanControllerBuilder.create(opt).formatValue(val -> val ? Component.translatable("gui.structurify.label.yes").withStyle(style -> style.withColor(ChatFormatting.RED)):Component.translatable("gui.structurify.label.no").withStyle(style -> style.withColor(ChatFormatting.GREEN)))).build();
 
 		disableAllStructuresOption.addListener((opt, disableAllStructures) -> {
 			for (var structureOption : structureOptions) {
@@ -115,7 +115,7 @@ public final class StructuresConfigScreen
 				() -> config.preventStructureOverlap,
 				preventStructureOverlap -> config.preventStructureOverlap = preventStructureOverlap
 			)
-			.controller(opt -> BooleanControllerBuilder.create(opt).valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes").withStyle(style -> style.withColor(ChatFormatting.GREEN)):Component.translatable("gui.structurify.label.no").withStyle(style -> style.withColor(ChatFormatting.RED)))).build();
+			.controller(opt -> BooleanControllerBuilder.create(opt).formatValue(val -> val ? Component.translatable("gui.structurify.label.yes").withStyle(style -> style.withColor(ChatFormatting.GREEN)):Component.translatable("gui.structurify.label.no").withStyle(style -> style.withColor(ChatFormatting.RED)))).build();
 
 		globalStructuresGroupBuilder.option(preventStructureOverlapOption);
 
@@ -125,7 +125,7 @@ public final class StructuresConfigScreen
 		var globalFlatnessCheckOptions = FlatnessCheckOptions.addFlatnessCheckOptions(globalStructuresGroupBuilder, config, "global");
 		enableGlobalFlatnessCheckOption = (Option<Boolean>) globalFlatnessCheckOptions.get(FlatnessCheckOptions.FLATNESS_CHECK_IS_ENABLED_OPTION_NAME);
 
-		var globalBiomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(structureCategoryBuilder, globalStructuresGroupBuilder, config, "global");
+		var globalBiomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(globalStructuresGroupBuilder, config, "global");
 		OptionGroup blackListedBiomesOption = (OptionGroup) globalBiomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME);
 		enableGlobalBiomeCheckOption = (Option<Boolean>) globalBiomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_IS_ENABLED_OPTION_NAME);
 
@@ -180,7 +180,7 @@ public final class StructuresConfigScreen
 			overrideFlatnessCheckOptions.add((Option<Boolean>) namespaceFlatnessCheckOptions.get(FlatnessCheckOptions.OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME));
 			enableFlatnessCheckOptions.add((Option<Boolean>) namespaceFlatnessCheckOptions.get(FlatnessCheckOptions.FLATNESS_CHECK_IS_ENABLED_OPTION_NAME));
 
-			var namespaceBiomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(structureCategoryBuilder, namespaceGroupBuilder, config, structureNamespace);
+			var namespaceBiomeCheckOptions = BiomeCheckOptions.addBiomeCheckOptions(namespaceGroupBuilder, config, structureNamespace);
 			OptionGroup blackListedBiomesOption = (OptionGroup) namespaceBiomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME);
 			structureCategoryBuilder.group(namespaceGroupBuilder.build());
 			structureCategoryBuilder.group(blackListedBiomesOption);
@@ -206,7 +206,7 @@ public final class StructuresConfigScreen
 				isEnabled -> structureData.setDisabled(!isEnabled)
 			)
 			.controller(opt -> StructureButtonControllerBuilder.create(opt, structureId)
-				.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.enabled"):Component.translatable("gui.structurify.label.disabled"))
+				.formatValue(val -> val ? Component.translatable("gui.structurify.label.enabled"):Component.translatable("gui.structurify.label.disabled"))
 				.coloured(true));
 
 		structureOptionBuilder.description(v -> {

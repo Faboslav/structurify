@@ -70,7 +70,7 @@ public class DistanceFromWorldCenterOptions
 					distanceFromWorldCenterData::isOverridingGlobalDistanceFromWorldCenter,
 					distanceFromWorldCenterData::overrideGlobalDistanceFromWorldCenter
 				).controller(opt -> BooleanControllerBuilder.create(opt)
-					.valueFormatter(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+					.formatValue(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
 					.coloured(true)
 				)
 				.build();
