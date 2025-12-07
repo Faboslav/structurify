@@ -1,3 +1,7 @@
+## 2.0.8b
+
+- Fixed case when flatness check prevented underground structures from generating
+
 ## 2.0.7b
 
 - Improved flatness/biome checks logic related to ocean/river structures

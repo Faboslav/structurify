@@ -7,12 +7,14 @@ import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import com.faboslav.structurify.common.util.BiomeUtil;
 import com.faboslav.structurify.common.util.JigsawStructureUtil;
+import com.faboslav.structurify.common.util.StructureUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 
 import java.util.*;
@@ -194,6 +196,14 @@ public final class WorldgenDataProvider
 				biomeCheckData.overrideGlobalBiomeCheck(true);
 				biomeCheckData.defaultEnable(false);
 				biomeCheckData.enable(false);
+			}
+
+			if (StructureUtil.isUndergroundStructure(structureData.getStep())) {
+				var flatnessCheckData = structureData.getFlatnessCheckData();
+				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);
+				flatnessCheckData.overrideGlobalFlatnessCheck(true);
+				flatnessCheckData.defaultEnable(false);
+				flatnessCheckData.enable(false);
 			}
 
 			if(structureId.equals("minecraft:shipwreck_beached")) {
