@@ -351,7 +351,7 @@ public final class StructurifyConfig
 		var structureSetSalts = new HashMap<Integer, String>();
 
 		this.structureSetData.entrySet().stream()
-			.filter(entry -> !saveOnlyChanged || entry.getValue().isUsingDefaultValues())
+			.filter(entry -> !saveOnlyChanged || !entry.getValue().isUsingDefaultValues())
 			.forEach(structureSetDataEntry -> {
 				var structureSetName = structureSetDataEntry.getKey();
 				var structureSetData = structureSetDataEntry.getValue();

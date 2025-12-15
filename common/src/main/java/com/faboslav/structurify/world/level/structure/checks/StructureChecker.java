@@ -1,10 +1,10 @@
 package com.faboslav.structurify.world.level.structure.checks;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
+import com.faboslav.structurify.common.config.data.structure.OverlapCheckData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
@@ -12,7 +12,6 @@ import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.CheckerboardColumnBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import org.jetbrains.annotations.Nullable;
@@ -119,7 +118,7 @@ public final class StructureChecker
 	) {
 		FlatnessCheckData flatnessCheckData = StructureFlatnessCheck.getFlatnessCheckData(structureCheckData);
 
-		if(!StructureFlatnessCheck.canDoFlatnessCheck(structureCheckData)) {
+		if(!StructureFlatnessCheck.canDoFlatnessCheck(structureCheckData, flatnessCheckData)) {
 			return true;
 		}
 
@@ -142,23 +141,13 @@ public final class StructureChecker
 		StructureCheckData structureCheckData,
 		StructurifyChunkGenerator chunkGenerator
 	) {
-		if (!Structurify.getConfig().preventStructureOverlap) {
+		OverlapCheckData overlapCheckData = StructureOverlapCheck.getOverlapCheckData(structureCheckData);
+
+		if(!StructureOverlapCheck.canDoOverlapCheck(structureCheckData, overlapCheckData)) {
 			return true;
 		}
 
-		var structureData = structureCheckData.getStructure().structurify$getStructureData();
-
-		if(structureData == null) {
-			return true;
-		}
-
-		var structureStep = structureData.getStep();
-
-		if (structureStep == GenerationStep.Decoration.RAW_GENERATION) {
-			return true;
-		}
-
-		boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, chunkGenerator);
+		boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, overlapCheckData, chunkGenerator);
 
 		if (overlapCheckResult) {
 			return false;

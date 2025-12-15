@@ -1,3 +1,12 @@
+## 2.0.9b
+
+- Added an option to exclude structure/namespace from structure overlap prevention
+- Fixed problems which occurred only when generating/loading the world for the first time
+- Fixed structure sets saving
+- Updated UI for structure sets frequency field to support lower values (for example 0.004)
+- Frequency field is now hidden for structure sets which doesn't support it and can display lower values (for example 0.004)
+- Salt field is now hidden for structure sets which doesn't support it
+
 ## 2.0.8b
 
 - Fixed case when flatness check prevented underground structures from generating

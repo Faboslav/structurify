@@ -1,15 +1,10 @@
 package com.faboslav.structurify.common.config.client.gui.structure;
 
-import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
-import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureLikeData;
 import com.faboslav.structurify.common.config.data.StructureNamespaceData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
-import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
-import com.faboslav.structurify.common.util.BiomeUtil;
 import com.faboslav.structurify.common.util.LanguageUtil;
-import com.faboslav.structurify.world.level.structure.checks.StructureFlatnessCheck;
 import dev.isxander.yacl3.api.LabelOption;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionAddable;

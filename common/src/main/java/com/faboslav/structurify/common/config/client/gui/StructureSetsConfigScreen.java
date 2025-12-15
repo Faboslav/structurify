@@ -62,35 +62,45 @@ public final class StructureSetsConfigScreen
 
 			var translatedStructureSetName = LanguageUtil.translateId("structure", structureSetStringId);
 
-			var saltDescriptionBuilder = OptionDescription.createBuilder();
-			saltDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, "gui.structurify.structure_sets.salt.description"));
+			currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName.copy().withStyle(style -> style.withBold(true))).build());
 
-			var saltOption = Option.<Integer>createBuilder()
-				.name(Component.translatable("gui.structurify.structure_sets.salt.title"))
-				.description(saltDescriptionBuilder.build())
-				.binding(
-					config.getStructureSetData().get(structureSetStringId).getDefaultSalt(),
-					() -> config.getStructureSetData().get(structureSetStringId).getSalt(),
-					salt -> config.getStructureSetData().get(structureSetStringId).setSalt(salt)
-				)
-				.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(StructureSetData.MIN_SALT, StructureSetData.MAX_SALT).formatValue((value) -> Component.literal(value.toString()))).build();
+			var defaultSalt = config.getStructureSetData().get(structureSetStringId).getDefaultSalt();
+
+			if(defaultSalt != 0) {
+				var saltDescriptionBuilder = OptionDescription.createBuilder();
+				saltDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, "gui.structurify.structure_sets.salt.description"));
+
+				var saltOption = Option.<Integer>createBuilder()
+					.name(Component.translatable("gui.structurify.structure_sets.salt.title"))
+					.description(saltDescriptionBuilder.build())
+					.binding(
+						config.getStructureSetData().get(structureSetStringId).getDefaultSalt(),
+						() -> config.getStructureSetData().get(structureSetStringId).getSalt(),
+						salt -> config.getStructureSetData().get(structureSetStringId).setSalt(salt)
+					)
+					.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(StructureSetData.MIN_SALT, StructureSetData.MAX_SALT).formatValue((value) -> Component.literal(value.toString()))).build();
+
+				currentGroupBuilder.option(saltOption);
+			}
 
 			var frequencyDescriptionBuilder = OptionDescription.createBuilder();
 			frequencyDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, "gui.structurify.structure_sets.frequency.description"));
 
-			var frequencyOption = Option.<Float>createBuilder()
-				.name(Component.translatable("gui.structurify.structure_sets.frequency.title"))
-				.description(frequencyDescriptionBuilder.build())
-				.binding(
-					config.getStructureSetData().get(structureSetStringId).getDefaultFrequency(),
-					() -> config.getStructureSetData().get(structureSetStringId).getFrequency(),
-					frequency -> config.getStructureSetData().get(structureSetStringId).setFrequency(frequency)
-				)
-				.controller(opt -> FloatSliderControllerBuilder.create(opt).range(StructureSetData.MIN_FREQUENCY, StructureSetData.MAX_FREQUENCY).step(0.01F).formatValue((value) -> Component.literal(String.format(Locale.ROOT, "%.2f", value)))).build();
+			var defaultFrequency = config.getStructureSetData().get(structureSetStringId).getDefaultFrequency();
 
-			currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName.copy().withStyle(style -> style.withBold(true))).build());
-			currentGroupBuilder.option(saltOption);
-			currentGroupBuilder.option(frequencyOption);
+			if(defaultFrequency != 0) {
+				var frequencyOption = Option.<Float>createBuilder()
+					.name(Component.translatable("gui.structurify.structure_sets.frequency.title"))
+					.description(frequencyDescriptionBuilder.build())
+					.binding(
+						config.getStructureSetData().get(structureSetStringId).getDefaultFrequency(),
+						() -> config.getStructureSetData().get(structureSetStringId).getFrequency(),
+						frequency -> config.getStructureSetData().get(structureSetStringId).setFrequency(frequency)
+					)
+					.controller(opt -> FloatSliderControllerBuilder.create(opt).range(StructureSetData.MIN_FREQUENCY, StructureSetData.MAX_FREQUENCY).step(0.001F).formatValue((value) -> Component.literal(String.format(Locale.ROOT, "%.3f", value)))).build();
+
+				currentGroupBuilder.option(frequencyOption);
+			}
 
 			var defaultSpacing = config.getStructureSetData().get(structureSetStringId).getDefaultSpacing();
 			var defaultSeparation = config.getStructureSetData().get(structureSetStringId).getDefaultSeparation();

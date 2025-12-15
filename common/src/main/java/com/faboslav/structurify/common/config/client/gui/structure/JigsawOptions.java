@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public final class JigsawOptions
 {
-	public static ArrayList<Option<?>> getJigsawCheckOptions(StructureData structureData) {
+	public static ArrayList<Option<?>> addJigsawOptions(StructureData structureData) {
 		var jigsawData = structureData.getJigsawData();
 		var jigsawOptions = new ArrayList<Option<?>>();
 

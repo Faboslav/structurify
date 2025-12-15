@@ -3,10 +3,7 @@ package com.faboslav.structurify.common.config.client.gui;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
-import com.faboslav.structurify.common.config.client.gui.structure.BiomeCheckOptions;
-import com.faboslav.structurify.common.config.client.gui.structure.DistanceFromWorldCenterOptions;
-import com.faboslav.structurify.common.config.client.gui.structure.FlatnessCheckOptions;
-import com.faboslav.structurify.common.config.client.gui.structure.JigsawOptions;
+import com.faboslav.structurify.common.config.client.gui.structure.*;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
@@ -78,7 +75,7 @@ public final class StructureConfigScreen
 		structureSettingsGroup.option(terrainAdaptationOption);
 
 		if (config.getStructureData().get(structureId).isJigsawStructure()) {
-			var jigsawOptions = JigsawOptions.getJigsawCheckOptions(structureData);
+			var jigsawOptions = JigsawOptions.addJigsawOptions(structureData);
 			structureSettingsGroup.options(jigsawOptions);
 
 			isDisabledOption.addListener((opt, currentIsDisabled) -> {
@@ -107,6 +104,10 @@ public final class StructureConfigScreen
 		var distanceFromWorldCenterOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("distance"));
 		DistanceFromWorldCenterOptions.addDistanceFromWorldCenterOptions(distanceFromWorldCenterOptionsGroup, config, structureId);
 		structureCategoryBuilder.group(distanceFromWorldCenterOptionsGroup.build());
+
+		var overlapOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("overlap"));
+		OverlapCheckOptions.addOverlapCheckOptions(overlapOptionsGroup, config, structureId);
+		structureCategoryBuilder.group(overlapOptionsGroup.build());
 
 		var flatnessOptionsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("flatness"));
 		FlatnessCheckOptions.addFlatnessCheckOptions(flatnessOptionsGroup, config, structureId);

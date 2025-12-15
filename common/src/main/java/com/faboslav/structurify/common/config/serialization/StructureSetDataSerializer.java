@@ -72,8 +72,8 @@ public final class StructureSetDataSerializer
 		var overrideGlobalSpacingAndSeparationModifier = structureSetData.overrideGlobalSpacingAndSeparationModifier();
 		var salt = structureSetData.getSalt();
 		var frequency = structureSetData.getFrequency();
-		var spacing = structureSetData.getSpacing();
-		var separation = structureSetData.getSeparation();
+
+		JsonObject structureSet = new JsonObject();
 
 		if ((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
 			Structurify.getLogger().warn("Salt value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, salt, structureSetData.getDefaultSalt());
@@ -85,28 +85,33 @@ public final class StructureSetDataSerializer
 			frequency = structureSetData.getDefaultFrequency();
 		}
 
-		if (separation >= spacing) {
-			Structurify.getLogger().warn("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}. ", structureSetName, separation, spacing, spacing - 1);
-			separation = spacing - 1;
+		if(structureSetData.getDefaultSpacing() != 0 && structureSetData.getDefaultSeparation() != 0) {
+			var spacing = structureSetData.getSpacing();
+			var separation = structureSetData.getSeparation();
+
+			if (separation >= spacing) {
+				Structurify.getLogger().warn("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}. ", structureSetName, separation, spacing, spacing - 1);
+				separation = spacing - 1;
+			}
+
+			if (separation < 0) {
+				Structurify.getLogger().warn("Separatiton value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, separation);
+				separation = 0;
+			}
+
+			if (spacing < 1) {
+				Structurify.getLogger().warn("Spacing value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, spacing);
+				separation = 0;
+			}
+
+			structureSet.addProperty(SPACING_PROPERTY, spacing);
+			structureSet.addProperty(SEPARATION_PROPERTY, separation);
 		}
 
-		if (separation < 0) {
-			Structurify.getLogger().warn("Separatiton value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, separation);
-			separation = 0;
-		}
-
-		if (spacing < 1) {
-			Structurify.getLogger().warn("Spacing value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, spacing);
-			separation = 0;
-		}
-
-		JsonObject structureSet = new JsonObject();
 		structureSet.addProperty(NAME_PROPERTY, structureSetName);
 		structureSet.addProperty(SALT_PROPERTY, salt);
 		structureSet.addProperty(FREQUENCY_PROPERTY, frequency);
 		structureSet.addProperty(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, overrideGlobalSpacingAndSeparationModifier);
-		structureSet.addProperty(SPACING_PROPERTY, spacing);
-		structureSet.addProperty(SEPARATION_PROPERTY, separation);
 		structureSetsJson.add(structureSet);
 	}
 }

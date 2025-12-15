@@ -1,9 +1,6 @@
 package com.faboslav.structurify.common.config.data;
 
-import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
-import com.faboslav.structurify.common.config.data.structure.DistanceFromWorldCenterCheckData;
-import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
-import com.faboslav.structurify.common.config.data.structure.JigsawData;
+import com.faboslav.structurify.common.config.data.structure.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 
@@ -23,6 +20,7 @@ public class StructureData implements StructureLikeData
 	private TerrainAdjustment terrainAdaptation;
 	private JigsawData jigsawData;
 	private DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckData;
+	private OverlapCheckData overlapCheckData;
 	private FlatnessCheckData flatnessCheckData;
 	private BiomeCheckData biomeCheckData;
 
@@ -39,6 +37,7 @@ public class StructureData implements StructureLikeData
 		this.terrainAdaptation = terrainAdaptation;
 		this.jigsawData = new JigsawData(0, 0, 0);
 		this.distanceFromWorldCenterCheckData = new DistanceFromWorldCenterCheckData();
+		this.overlapCheckData = new OverlapCheckData();
 		this.flatnessCheckData = new FlatnessCheckData();
 		this.biomeCheckData = new BiomeCheckData();
 	}
@@ -56,6 +55,7 @@ public class StructureData implements StructureLikeData
 			   && biomes.equals(defaultBiomes)
 			   && (!isJigsawStructure() || (isJigsawStructure() && this.getJigsawData().isUsingDefaultValues()))
 			   && this.getDistanceFromWorldCenterCheckData().isUsingDefaultValues()
+			   && this.getOverlapCheckData().isUsingDefaultValues()
 			   && this.getFlatnessCheckData().isUsingDefaultValues()
 			   && this.getBiomeCheckData().isUsingDefaultValues();
 	}
@@ -125,6 +125,14 @@ public class StructureData implements StructureLikeData
 
 	public void setDistanceFromWorldCenterCheckData(DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckData) {
 		this.distanceFromWorldCenterCheckData = distanceFromWorldCenterCheckData;
+	}
+
+	public OverlapCheckData getOverlapCheckData() {
+		return this.overlapCheckData;
+	}
+
+	public void setOverlapCheckData(OverlapCheckData overlapCheckData) {
+		this.overlapCheckData = overlapCheckData;
 	}
 
 	public FlatnessCheckData getFlatnessCheckData() {

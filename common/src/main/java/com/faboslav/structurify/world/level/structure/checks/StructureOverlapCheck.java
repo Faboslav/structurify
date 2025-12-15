@@ -1,12 +1,14 @@
 package com.faboslav.structurify.world.level.structure.checks;
 
+import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
+import com.faboslav.structurify.common.config.data.structure.OverlapCheckData;
 import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,9 +16,61 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public final class StructureOverlapCheck
 {
+	@Nullable
+	public static OverlapCheckData getOverlapCheckData(
+		StructureCheckData structureCheckData
+	) {
+		var structure = structureCheckData.getStructure();
+		var structureId = structureCheckData.getStructureId();
+		var structureNamespaceData = structure.structurify$getStructureNamespaceData(structureId);
+		var structureData = structure.structurify$getStructureData(structureId);
+
+		@Nullable
+		OverlapCheckData overlapCheckDataToCheck = null;
+
+		if(structureNamespaceData != null) {
+			var namespaceOverlapCheckData = structureNamespaceData.getOverlapCheckData();
+
+			if (namespaceOverlapCheckData.isExcludedFromOverlapPrevention()) {
+				overlapCheckDataToCheck = namespaceOverlapCheckData;
+			}
+		}
+
+		if(structureData != null) {
+			var structureOverlapCheckData = structureData.getOverlapCheckData();
+
+			if (structureOverlapCheckData.isExcludedFromOverlapPrevention()) {
+				overlapCheckDataToCheck = structureOverlapCheckData;
+			}
+		}
+
+		return overlapCheckDataToCheck;
+	}
+
+	public static boolean canDoOverlapCheck(
+		StructureCheckData structureCheckData,
+		@Nullable OverlapCheckData overlapCheckData
+	) {
+		if (!Structurify.getConfig().preventStructureOverlap) {
+			return false;
+		}
+
+		var structureData = structureCheckData.getStructure().structurify$getStructureData();
+
+		if(structureData == null) {
+			return false;
+		}
+
+		if(overlapCheckData != null && overlapCheckData.isExcludedFromOverlapPrevention()) {
+			return false;
+		}
+
+		return true;
+	}
 
 	public static boolean checkForOverlap(
 		StructureCheckData structureCheckData,
+		OverlapCheckData overlapCheckData,
 		StructurifyChunkGenerator structurifyChunkGenerator
 	) {
 		StructureStart start = structureCheckData.getStructureStart();

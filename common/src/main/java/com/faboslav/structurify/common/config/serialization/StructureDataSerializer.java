@@ -94,6 +94,7 @@ public final class StructureDataSerializer
 		}
 
 		DistanceFromWorldCenterDataSerializer.load(structureJson, structureData.getDistanceFromWorldCenterCheckData());
+		OverlapCheckDataSerializer.load(structureJson, structureData.getOverlapCheckData());
 		FlatnessCheckDataSerializer.load(structureJson, structureData.getFlatnessCheckData());
 		BiomeCheckDataSerializer.load(structureJson, structureData.getBiomeCheckData());
 	}
@@ -130,6 +131,11 @@ public final class StructureDataSerializer
 		var distanceFromWorldCenterData = structureData.getDistanceFromWorldCenterCheckData();
 		if (!distanceFromWorldCenterData.isUsingDefaultValues()) {
 			DistanceFromWorldCenterDataSerializer.save(structure, distanceFromWorldCenterData);
+		}
+
+		var overlapCheckData = structureData.getOverlapCheckData();
+		if(!overlapCheckData.isUsingDefaultValues()) {
+			OverlapCheckDataSerializer.save(structure, overlapCheckData);
 		}
 
 		var flatnessCheckData = structureData.getFlatnessCheckData();

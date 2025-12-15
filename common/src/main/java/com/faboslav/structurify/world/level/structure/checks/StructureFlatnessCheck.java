@@ -60,10 +60,10 @@ public final class StructureFlatnessCheck
 	}
 
 	public static boolean canDoFlatnessCheck(
-		StructureCheckData structureCheckData
+		StructureCheckData structureCheckData,
+		@Nullable FlatnessCheckData flatnessCheckData
 	) {
 		var structure = structureCheckData.getStructure();
-		FlatnessCheckData flatnessCheckData = StructureFlatnessCheck.getFlatnessCheckData(structureCheckData);
 
 		if (flatnessCheckData == null || !flatnessCheckData.isEnabled()) {
 			return false;

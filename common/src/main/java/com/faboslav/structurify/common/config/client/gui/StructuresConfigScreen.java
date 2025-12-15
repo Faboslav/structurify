@@ -8,6 +8,7 @@ import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionG
 import com.faboslav.structurify.common.config.client.gui.structure.BiomeCheckOptions;
 import com.faboslav.structurify.common.config.client.gui.structure.DistanceFromWorldCenterOptions;
 import com.faboslav.structurify.common.config.client.gui.structure.FlatnessCheckOptions;
+import com.faboslav.structurify.common.config.client.gui.structure.OverlapCheckOptions;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
@@ -175,6 +176,8 @@ public final class StructuresConfigScreen
 
 			var namespaceDistanceFromWorldCenterOptions = DistanceFromWorldCenterOptions.addDistanceFromWorldCenterOptions(namespaceGroupBuilder, config, structureNamespace);
 			overrideDistanceFromWorldCenterOptions.add((Option<Boolean>) namespaceDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME));
+
+			OverlapCheckOptions.addOverlapCheckOptions(namespaceGroupBuilder, config, structureNamespace);
 
 			var namespaceFlatnessCheckOptions = FlatnessCheckOptions.addFlatnessCheckOptions(namespaceGroupBuilder, config, structureNamespace);
 			overrideFlatnessCheckOptions.add((Option<Boolean>) namespaceFlatnessCheckOptions.get(FlatnessCheckOptions.OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME));

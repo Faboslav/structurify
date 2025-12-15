@@ -206,6 +206,12 @@ public final class WorldgenDataProvider
 				flatnessCheckData.enable(false);
 			}
 
+			if (StructureUtil.isRawGenerationStructure(structureData.getStep())) {
+				var overlapCheckData = structureData.getOverlapCheckData();
+				overlapCheckData.defaultExcludeFromOverlapPrevention(true);
+				overlapCheckData.excludeFromOverlapPrevention(true);
+			}
+
 			if(structureId.equals("minecraft:shipwreck_beached")) {
 				var flatnessCheckData = structureData.getFlatnessCheckData();
 				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);

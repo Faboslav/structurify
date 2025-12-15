@@ -11,4 +11,13 @@ public final class StructureUtil
 
 		return true;
 	}
+
+	public static boolean isRawGenerationStructure(GenerationStep.Decoration structureStep) {
+		if (structureStep == GenerationStep.Decoration.RAW_GENERATION) {
+			return true;
+		}
+
+		return false;
+	}
+
 }

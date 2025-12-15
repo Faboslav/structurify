@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -80,7 +81,7 @@ public final class BiomeUtil
 	}
 
 	public static HolderSet<Biome> getBiomes(
-		ResourceLocation structureId,
+		@Nullable ResourceLocation structureId,
 		HolderSet<Biome> originalBiomes
 	) {
 		if (

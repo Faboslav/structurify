@@ -32,11 +32,11 @@ public final class StructureSetData
 	}
 
 	public boolean isUsingDefaultValues() {
-		return this.overrideGlobalSpacingAndSeparationModifier != OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE
-			   || this.salt != defaultSalt
-			   || this.frequency != defaultFrequency
-			   || this.spacing != defaultSpacing
-			   || this.separation != this.defaultSeparation;
+		return this.overrideGlobalSpacingAndSeparationModifier == OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE
+			   && this.salt == this.defaultSalt
+			   && this.frequency == this.defaultFrequency
+			   && this.spacing == this.defaultSpacing
+			   && this.separation == this.defaultSeparation;
 	}
 
 	public boolean overrideGlobalSpacingAndSeparationModifier() {

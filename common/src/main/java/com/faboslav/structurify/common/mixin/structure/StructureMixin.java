@@ -102,7 +102,7 @@ public abstract class StructureMixin implements StructurifyStructure
 		if (this.structurify$structureData == null) {
 			var structureIdentifier = this.structurify$getStructureIdentifier();
 
-			if (structureIdentifier != null) {
+			if (structureIdentifier != null && Structurify.getConfig().getStructureData().containsKey(structureIdentifier.toString())) {
 				this.structurify$structureData = Structurify.getConfig().getStructureData().get(structureIdentifier.toString());
 			}
 		}
@@ -150,6 +150,11 @@ public abstract class StructureMixin implements StructurifyStructure
 	@Nullable
 	public HolderSet<Biome> structurify$getStructureBlacklistedBiomes() {
 		if (this.structurify$structureBlacklistedBiomes == null) {
+			var structureId = structurify$getStructureIdentifier();
+			if(structureId == null || !Structurify.getConfig().getStructureData().containsKey(structureId.toString())) {
+				return null;
+			}
+
 			var blacklistedBiomeHolderSet = BiomeUtil.getBlacklistedBiomes(structurify$getStructureIdentifier());
 			this.structurify$setStructureBlacklistedBiomes(blacklistedBiomeHolderSet);
 		}
@@ -164,6 +169,11 @@ public abstract class StructureMixin implements StructurifyStructure
 		Operation<HolderSet<Biome>> original
 	) {
 		if (this.structurify$structureBiomes == null) {
+			var structureId = structurify$getStructureIdentifier();
+			if(structureId == null || !Structurify.getConfig().getStructureData().containsKey(structureId.toString())) {
+				return original.call();
+			}
+
 			var biomeHolderSet = BiomeUtil.getBiomes(structurify$getStructureIdentifier(), original.call());
 			this.structurify$setStructureBiomes(biomeHolderSet);
 		}
