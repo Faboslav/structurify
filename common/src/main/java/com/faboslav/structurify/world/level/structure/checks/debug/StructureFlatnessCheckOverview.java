@@ -1,13 +1,13 @@
 package com.faboslav.structurify.world.level.structure.checks.debug;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 
 import java.util.List;
 
 public record StructureFlatnessCheckOverview(
-	ResourceLocation structureId,
+	Identifier structureId,
 	BoundingBox structureBoundingBox,
 	List<StructurePiece> structurePieces,
 	int structureArea,

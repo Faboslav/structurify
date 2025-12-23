@@ -77,7 +77,7 @@ public final class StructurifyConfig
 			return;
 		}
 
-		this.save();
+		this.save(false);
 	}
 
 	public void load() {
@@ -228,6 +228,10 @@ public final class StructurifyConfig
 	}
 
 	public void save() {
+		this.save(true);
+	}
+
+	public void save(boolean syncRegistries) {
 		Structurify.getLogger().info("Saving Structurify config...");
 
 		try {
@@ -259,9 +263,11 @@ public final class StructurifyConfig
 
 			Structurify.getLogger().info("Structurify config saved");
 
-			Structurify.getLogger().info("Syncing changes to registries...");
-			UpdateRegistriesEvent.EVENT.invoke(new UpdateRegistriesEvent(StructurifyRegistryManagerProvider.getRegistryManager()));
-			Structurify.getLogger().info("Registries synced");
+			if(syncRegistries) {
+				Structurify.getLogger().info("Syncing changes to registries...");
+				UpdateRegistriesEvent.EVENT.invoke(new UpdateRegistriesEvent(StructurifyRegistryManagerProvider.getRegistryManager()));
+				Structurify.getLogger().info("Registries synced");
+			}
 		} catch (Exception e) {
 			Structurify.getLogger().error("Failed to save Structurify config");
 			e.printStackTrace();

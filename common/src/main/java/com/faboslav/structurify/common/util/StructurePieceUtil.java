@@ -1,7 +1,7 @@
 package com.faboslav.structurify.common.util;
 
 import com.faboslav.structurify.common.mixin.structure.pools.SinglePoolElementAccessor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
@@ -16,7 +16,7 @@ public class StructurePieceUtil
 			StructurePoolElement element = poolPiece.getElement();
 
 			if (element instanceof SinglePoolElement single) {
-				ResourceLocation template = ((SinglePoolElementAccessor) single).getTemplate().left().orElse(null);
+				Identifier template = ((SinglePoolElementAccessor) single).getTemplate().left().orElse(null);
 
 				if (template != null) {
 					pieceName = template.toString();

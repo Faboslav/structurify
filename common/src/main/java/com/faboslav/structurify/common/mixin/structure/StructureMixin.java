@@ -11,7 +11,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.Biome;
@@ -39,9 +39,9 @@ public abstract class StructureMixin implements StructurifyStructure
 {
 	@Unique
 	@Nullable
-	public ResourceLocation structurify$structureIdentifier = null;
+	public Identifier structurify$structureIdentifier = null;
 
-	public void structurify$setStructureIdentifier(ResourceLocation structureSetIdentifier) {
+	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
 		this.structurify$structureIdentifier = structureSetIdentifier;
 		this.structurify$globalStructureNamespaceData = null;
 		this.structurify$structureNamespaceData = null;
@@ -49,7 +49,7 @@ public abstract class StructureMixin implements StructurifyStructure
 	}
 
 	@Nullable
-	public ResourceLocation structurify$getStructureIdentifier() {
+	public Identifier structurify$getStructureIdentifier() {
 		return this.structurify$structureIdentifier;
 	}
 
@@ -78,7 +78,7 @@ public abstract class StructureMixin implements StructurifyStructure
 
 	@Unique
 	@Nullable
-	public StructureNamespaceData structurify$getStructureNamespaceData(@Nullable ResourceLocation structureIdentifier) {
+	public StructureNamespaceData structurify$getStructureNamespaceData(@Nullable Identifier structureIdentifier) {
 		if (this.structurify$structureNamespaceData == null) {
 			if(structureIdentifier == null) {
 				structureIdentifier = this.structurify$getStructureIdentifier();
@@ -112,7 +112,7 @@ public abstract class StructureMixin implements StructurifyStructure
 
 	@Unique
 	@Nullable
-	public StructureData structurify$getStructureData(@Nullable ResourceLocation structureIdentifier) {
+	public StructureData structurify$getStructureData(@Nullable Identifier structureIdentifier) {
 		if (this.structurify$structureData == null) {
 			if(structureIdentifier == null) {
 				structureIdentifier = this.structurify$getStructureIdentifier();
@@ -236,11 +236,11 @@ public abstract class StructureMixin implements StructurifyStructure
 		 //?} else {
 		/*var structureStart = original.call(registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
 		*///?}
-		ResourceLocation structureId = null;
+		Identifier structureId = null;
 
 		//? if >= 1.21.4 {
 		var possibleStructureId = structure.unwrapKey();
-		structureId = possibleStructureId.map(ResourceKey::location).orElseGet(this::structurify$getStructureIdentifier);
+		structureId = possibleStructureId.map(ResourceKey::/*? if >= 1.21.11 {*/identifier/*?} else {*//*location*//*?}*/).orElseGet(this::structurify$getStructureIdentifier);
 		//?} else {
 		/*structureId = this.structurify$getStructureIdentifier();
 		*///?}

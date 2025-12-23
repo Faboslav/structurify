@@ -6,7 +6,7 @@ import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public final class StructurifyRegistryUpdater
 {
@@ -44,7 +44,7 @@ public final class StructurifyRegistryUpdater
 			var structure = structureReference.value();
 			var structureRegistryKey = structureReference.key();
 
-			ResourceLocation structureId = structureRegistryKey.location();
+			Identifier structureId = structureRegistryKey/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/;
 			var structurifyStructure = ((StructurifyStructure) structure);
 			structurifyStructure.structurify$setStructureIdentifier(structureId);
 		}
@@ -63,7 +63,7 @@ public final class StructurifyRegistryUpdater
 			var structureSet = structureSetReference.value();
 			var structureSetRegistryKey = structureSetReference.key();
 
-			ResourceLocation structureSetId = structureSetRegistryKey.location();
+			Identifier structureSetId = structureSetRegistryKey/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/;
 			StructurifyStructurePlacement structurifyStructurePlacement = ((StructurifyStructurePlacement) structureSet.placement());
 			structurifyStructurePlacement.structurify$setStructureSetIdentifier(structureSetId);
 		}

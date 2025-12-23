@@ -5,7 +5,7 @@ import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
 import com.faboslav.structurify.common.config.data.structure.OverlapCheckData;
 import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
 import net.minecraft.core.SectionPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import org.jetbrains.annotations.Nullable;
@@ -123,7 +123,7 @@ public final class StructureOverlapCheck
 	private static boolean claimStructureSections(
 		StructurifyChunkGenerator gen,
 		long[] sectionKeysToClaim,
-		ResourceLocation structureId,
+		Identifier structureId,
 		long structureCenter
 	) {
 		final long token = ThreadLocalRandom.current().nextLong();

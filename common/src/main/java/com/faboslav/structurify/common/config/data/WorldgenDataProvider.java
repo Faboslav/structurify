@@ -12,7 +12,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
@@ -88,7 +88,7 @@ public final class WorldgenDataProvider
 		}
 
 		for (var biome : biomeRegistry.listElements().toList()) {
-			biomes.add(biome.unwrapKey().get().location().toString());
+			biomes.add(biome.unwrapKey().get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString());
 		}
 
 		return biomes;
@@ -105,7 +105,7 @@ public final class WorldgenDataProvider
 		Map<String, StructureNamespaceData> structuresNamespaces = new TreeMap<>(alphabeticallComparator);
 
 		for (var structureReference : structureRegistry.listElements().toList()) {
-			String structureNamespace = structureReference.key().location().getNamespace();
+			String structureNamespace = structureReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.getNamespace();
 
 			if (!structuresNamespaces.containsKey(structureNamespace)) {
 				structuresNamespaces.put(structureNamespace, new StructureNamespaceData());
@@ -130,14 +130,14 @@ public final class WorldgenDataProvider
 
 		for (var structureReference : structureRegistry.listElements().toList()) {
 			var structure = structureReference.value();
-			String structureId = structureReference.key().location().toString();
+			String structureId = structureReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 			var biomeStorage = structure.biomes().unwrap();
 			var defaultBiomes = new ArrayList<String>();
 
 			biomeStorage.mapLeft(biomeTagKey -> {
 				biomeRegistry.get(biomeTagKey).ifPresent(biomes -> {
 					for (var biome : biomes) {
-						String biomeKey = biome.unwrapKey().get().location().toString();
+						String biomeKey = biome.unwrapKey().get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 
 						if (defaultBiomes.contains(biomeKey)) {
 							continue;
@@ -152,7 +152,7 @@ public final class WorldgenDataProvider
 
 			biomeStorage.mapRight(biomes -> {
 				for (var biome : biomes) {
-					String biomeKey = biome.unwrapKey().get().location().toString();
+					String biomeKey = biome.unwrapKey().get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 
 					if (defaultBiomes.contains(biomeKey)) {
 						continue;
@@ -263,7 +263,7 @@ public final class WorldgenDataProvider
 
 		for (var structureSetReference : structureSetRegistry.listElements().toList()) {
 			var structureSet = structureSetReference.value();
-			ResourceLocation structureSetId = structureSetReference.key().location();
+			Identifier structureSetId = structureSetReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/;
 			String structureSetStringId = structureSetId.toString();
 
 			var structureSetPlacement = structureSet.placement();

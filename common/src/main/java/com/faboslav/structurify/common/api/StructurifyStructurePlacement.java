@@ -1,14 +1,14 @@
 package com.faboslav.structurify.common.api;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public interface StructurifyStructurePlacement
 {
-	void structurify$setStructureSetIdentifier(@Nullable ResourceLocation structureSetIdentifier);
+	void structurify$setStructureSetIdentifier(@Nullable Identifier structureSetIdentifier);
 
 	@Nullable
-	ResourceLocation structurify$getStructureSetIdentifier();
+	Identifier structurify$getStructureSetIdentifier();
 
 	int structurify$getOriginalSalt();
 

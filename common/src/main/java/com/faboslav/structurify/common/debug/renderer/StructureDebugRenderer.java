@@ -5,11 +5,16 @@ import com.faboslav.structurify.common.util.StructurePieceUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 
 import java.util.List;
+
+//? if >= 1.21.11 {
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+//?} else {
+/*import net.minecraft.client.renderer.RenderType;
+ *///?}
 
 public class StructureDebugRenderer
 {
@@ -30,7 +35,20 @@ public class StructureDebugRenderer
 				continue;
 			}
 
-			RenderUtil.renderBoundingBox(structurePieceBoundingBox, poseStack, bufferSource.getBuffer(RenderType.lines()), camX, camY, camZ, 0.2f);
+			RenderUtil.renderBoundingBox(
+				structurePieceBoundingBox,
+				poseStack, bufferSource.getBuffer(
+					//? if >= 1.21.11 {
+					RenderTypes.lines()
+					//?} else {
+					/*RenderType.lines()
+			 		*///?}
+				),
+				camX,
+				camY,
+				camZ,
+				0.2f
+			);
 			String pieceName = StructurePieceUtil.getStructurePieceName(structurePiece);
 			RenderUtil.renderLabel(structurePieceBoundingBox, pieceName, minecraft, poseStack, bufferSource, camX, camY, camZ);
 		}

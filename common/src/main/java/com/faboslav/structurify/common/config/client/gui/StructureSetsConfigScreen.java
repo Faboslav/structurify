@@ -18,7 +18,7 @@ import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.*;
 
@@ -44,7 +44,7 @@ public final class StructureSetsConfigScreen
 
 		for (Map.Entry<String, StructureSetData> entry : structureSets.entrySet()) {
 			String structureSetStringId = entry.getKey();
-			ResourceLocation structureSetId = Structurify.makeNamespacedId(structureSetStringId);
+			Identifier structureSetId = Structurify.makeNamespacedId(structureSetStringId);
 			String namespace = structureSetId.getNamespace();
 
 			// Create new group for each namespace

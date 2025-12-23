@@ -1,9 +1,9 @@
 package com.faboslav.structurify.world.level.structure.checks.debug;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public record StructureFlatnessCheckSample(
-	ResourceLocation structureId,
+	Identifier structureId,
 	int x,
 	int z,
 	int occY,

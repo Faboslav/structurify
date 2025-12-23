@@ -134,7 +134,7 @@ public final class StructureBiomeCheck
 				x,
 				y,
 				z,
-				biome.unwrapKey().get().location(),
+				biome.unwrapKey().get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/,
 				result
 			)
 		);

@@ -6,9 +6,14 @@ import com.faboslav.structurify.world.level.structure.checks.debug.StructureBiom
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
+
+//? if >= 1.21.11 {
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+//?} else {
+/*import net.minecraft.client.renderer.RenderType;
+ *///?}
 
 public class BiomeCheckDebugRenderer
 {
@@ -22,7 +27,21 @@ public class BiomeCheckDebugRenderer
 		double camZ
 	) {
 		BoundingBox structureBoundingBox = structureBiomeCheckOverview.structureBoundingBox();
-		RenderUtil.renderBoundingBox(structureBoundingBox, poseStack, bufferSource.getBuffer(RenderType.lines()), camX, camY, camZ, 0.8f);
+		RenderUtil.renderBoundingBox(
+			structureBoundingBox,
+			poseStack,
+			bufferSource.getBuffer(
+				//? if >= 1.21.11 {
+				RenderTypes.lines()
+				//?} else {
+				/*RenderType.lines()
+				 *///?}
+			),
+			camX,
+			camY,
+			camZ,
+			0.8f
+		);
 		RenderUtil.renderLabel(structureBoundingBox, structureBiomeCheckOverview.toString(), minecraft, poseStack, bufferSource, camX, camY, camZ);
 
 		StructureDebugRenderer.renderStructurePieces(structureBoundingBox, structureBiomeCheckOverview.structurePieces(), minecraft, poseStack, bufferSource, camX, camY, camZ);
@@ -51,7 +70,7 @@ public class BiomeCheckDebugRenderer
 
 		RenderUtil.renderLineBox(
 			poseStack,
-			bufferSource.getBuffer(RenderType.lines()),
+			bufferSource.getBuffer(RenderTypes.lines()),
 			col,
 			r, g, b, a
 		);

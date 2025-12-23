@@ -44,7 +44,11 @@ public final class StructurifyDebugRenderer
 		int chunkRadius = Math.max(singlePlayerServer == null ? 6 : singlePlayerServer.getPlayerList().getViewDistance(), 6);
 
 		final Camera camera = minecraft.gameRenderer.getMainCamera();
-		final var cameraPosition = camera.getPosition();
+		//? if >= 1.21.11 {
+		final var cameraPosition = camera.position();
+		//?} else {
+		/*final var cameraPosition = camera.getPosition();
+		*///?}
 		final BlockPos cameraBlockPosition = BlockPos.containing(cameraPosition);
 		final double camX = cameraPosition.x;
 		final double camY = cameraPosition.y;

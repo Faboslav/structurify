@@ -2,7 +2,7 @@ package com.faboslav.structurify.world.level.structure.checks;
 
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 public final class StructureCheckData
 {
-	private final ResourceLocation structureId;
+	private final Identifier structureId;
 	private final StructurifyStructure structure;
 	private final StructureStart structureStart;
 	private final BlockPos structureCenter;
@@ -20,7 +20,7 @@ public final class StructureCheckData
 	private int[][] structurePieceSamples = null;
 
 	public StructureCheckData(
-		ResourceLocation structureId,
+		Identifier structureId,
 		StructurifyStructure structure,
 		StructureStart structureStart
 	) {
@@ -46,7 +46,7 @@ public final class StructureCheckData
 		return this.structurePieceSamples;
 	}
 
-	public ResourceLocation getStructureId() {
+	public Identifier getStructureId() {
 		return this.structureId;
 	}
 

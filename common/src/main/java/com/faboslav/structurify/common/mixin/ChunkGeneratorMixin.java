@@ -8,7 +8,7 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -100,7 +100,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 		var structureKey = structureSelectionEntry.structure().unwrapKey();
 
 		if (structureKey.isPresent()) {
-			ResourceLocation structureName = structureKey.get().location();
+			Identifier structureName = structureKey.get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/;
 			var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName.toString(), null);
 
 			if (structureData != null) {
@@ -151,7 +151,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 				continue;
 			}
 
-			String structureName = structureKey.get().location().toString();
+			String structureName = structureKey.get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 			var structureData = Structurify.getConfig().getStructureData().getOrDefault(structureName, null);
 
 			if (structureData == null || !structureData.isDisabled()) {

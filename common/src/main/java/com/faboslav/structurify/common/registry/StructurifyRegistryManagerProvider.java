@@ -2,7 +2,7 @@ package com.faboslav.structurify.common.registry;
 
 import com.faboslav.structurify.common.Structurify;
 import com.mojang.serialization.Lifecycle;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.MappedRegistry;
@@ -16,6 +16,10 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.storage.PrimaryLevelData;
 import org.jetbrains.annotations.Nullable;
+
+//? if >= 1.21.11 {
+import net.minecraft.server.permissions.PermissionSet;
+//?}
 
 public final class StructurifyRegistryManagerProvider
 {
@@ -63,7 +67,7 @@ public final class StructurifyRegistryManagerProvider
 
 			var resourcePackManager = new PackRepository(StructurifyResourcePackProvider.getResourcePackProviders().toArray(new RepositorySource[0]));
 			var dataPacks = new WorldLoader.PackConfig(resourcePackManager, WorldDataConfiguration.DEFAULT, false, false);
-			var serverConfig = new WorldLoader.InitConfig(dataPacks, Commands.CommandSelection.INTEGRATED, 2);
+			var serverConfig = new WorldLoader.InitConfig(dataPacks, Commands.CommandSelection.INTEGRATED, /*? if >= 1.21.11 {*/PermissionSet.ALL_PERMISSIONS/*?} else {*//*2*//*?}*/);
 
 			var saveLoader = Util.blockUntilDone(executor ->
 				WorldLoader.load(serverConfig, loadContextSupplierContext -> {

@@ -5,7 +5,7 @@ import com.faboslav.structurify.world.level.structure.checks.StructureChecker;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.core.SectionPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.LevelAccessor;
@@ -45,7 +45,7 @@ public abstract class StructureManagerMixin
 	) {
 		var structureStart = original.call(sectionPos, structure, structureAccess);
 		StructurifyStructure structurifyStructure = (StructurifyStructure) structure;
-		ResourceLocation structureId = structurifyStructure.structurify$getStructureIdentifier();
+		Identifier structureId = structurifyStructure.structurify$getStructureIdentifier();
 
 		if (structureStart == null || structureStart == StructureStart.INVALID_START || !structureStart.isValid()) {
 			return structureStart;

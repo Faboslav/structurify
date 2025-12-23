@@ -5,7 +5,7 @@ import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureNamespaceData;
 import com.faboslav.structurify.common.config.data.structure.DistanceFromWorldCenterCheckData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +13,7 @@ public class StructureDistanceFromWorldCenterCheck
 {
 	@Nullable
 	public static DistanceFromWorldCenterCheckData getDistanceFromWorldCenterData(
-		ResourceLocation structureId,
+		Identifier structureId,
 		StructureData structureData
 	) {
 		var globalStructureData = Structurify.getConfig().getStructureNamespaceData().get(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER);

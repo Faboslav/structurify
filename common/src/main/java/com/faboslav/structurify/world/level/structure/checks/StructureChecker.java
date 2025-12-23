@@ -6,7 +6,7 @@ import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
 import com.faboslav.structurify.common.config.data.structure.OverlapCheckData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.BiomeSource;
@@ -20,7 +20,7 @@ public final class StructureChecker
 {
 	public static boolean checkStructure(
 		StructureStart structureStart,
-		@Nullable ResourceLocation structureId,
+		@Nullable Identifier structureId,
 		StructurifyStructure structure,
 		ChunkGenerator chunkGenerator,
 		LevelHeightAccessor heightAccessor,
@@ -71,7 +71,7 @@ public final class StructureChecker
 		RandomState randomState,
 		BiomeSource biomeSource
 	) {
-		ResourceLocation structureId = structure.structurify$getStructureIdentifier();
+		Identifier structureId = structure.structurify$getStructureIdentifier();
 		StructureCheckData structureCheckData = new StructureCheckData(structureId, structure, structureStart);
 
 		checkBiomes(structureCheckData, biomeSource, randomState);
@@ -156,7 +156,7 @@ public final class StructureChecker
 		return true;
 	}
 
-	public static long generateStructureCheckId(ResourceLocation structureId, BlockPos structureCenter) {
+	public static long generateStructureCheckId(Identifier structureId, BlockPos structureCenter) {
 		long structHash = structureId.hashCode();
 		structHash ^= (structHash >>> 33);
 		structHash *= 0xff51afd7ed558ccdL;

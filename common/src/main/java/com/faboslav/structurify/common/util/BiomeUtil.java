@@ -9,7 +9,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
@@ -81,7 +81,7 @@ public final class BiomeUtil
 	}
 
 	public static HolderSet<Biome> getBiomes(
-		@Nullable ResourceLocation structureId,
+		@Nullable Identifier structureId,
 		HolderSet<Biome> originalBiomes
 	) {
 		if (
@@ -103,7 +103,7 @@ public final class BiomeUtil
 		return getBiomeHolders(biomeIds, biomeRegistry);
 	}
 
-	public static HolderSet<Biome> getBlacklistedBiomes(ResourceLocation structureId) {
+	public static HolderSet<Biome> getBlacklistedBiomes(Identifier structureId) {
 		if (
 			structureId == null
 			|| !Structurify.getConfig().getStructureData().containsKey(structureId.toString())

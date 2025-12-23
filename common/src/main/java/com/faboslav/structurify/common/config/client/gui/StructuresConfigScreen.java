@@ -20,7 +20,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 
@@ -136,11 +136,11 @@ public final class StructuresConfigScreen
 
 	private static void addStructures(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
 		var structures = WorldgenDataProvider.getStructures();
-		var structureGroups = new HashMap<String, HashMap<ResourceLocation, StructureData>>();
+		var structureGroups = new HashMap<String, HashMap<Identifier, StructureData>>();
 
 		for (Map.Entry<String, StructureData> entry : structures.entrySet()) {
 			String structureStringId = entry.getKey();
-			ResourceLocation structureId = Structurify.makeNamespacedId(structureStringId);
+			Identifier structureId = Structurify.makeNamespacedId(structureStringId);
 			String structureNamespace = structureId.getNamespace();
 			StructureData structureData = entry.getValue();
 
@@ -153,7 +153,7 @@ public final class StructuresConfigScreen
 
 		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
 
-		for (Map.Entry<String, HashMap<ResourceLocation, StructureData>> structureGroup : structureGroups.entrySet()) {
+		for (Map.Entry<String, HashMap<Identifier, StructureData>> structureGroup : structureGroups.entrySet()) {
 			String structureNamespace = structureGroup.getKey();
 			var namespaceStructures = structureGroup.getValue();
 
@@ -231,7 +231,7 @@ public final class StructuresConfigScreen
 					}
 
 					for (var biomeHolder : biomeTagHolder.stream().toList()) {
-						descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biomeHolder.unwrap().left().get().location().toLanguageKey())));
+						descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biomeHolder.unwrap().left().get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toLanguageKey())));
 					}
 				} else {
 					descriptionBuilder.text(Component.literal(" - ").append(LanguageUtil.translateId("biome", biome)));

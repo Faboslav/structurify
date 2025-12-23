@@ -5,11 +5,16 @@ import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
+
+//? if >= 1.21.11 {
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+//?} else {
+/*import net.minecraft.client.renderer.RenderType;
+ *///?}
 
 public final class StructureOverlapDebugRenderer
 {
@@ -54,7 +59,13 @@ public final class StructureOverlapDebugRenderer
 
 		RenderUtil.renderLineBox(
 			poseStack,
-			bufferSource.getBuffer(RenderType.lines()),
+			bufferSource.getBuffer(
+				//? if >= 1.21.11 {
+				RenderTypes.lines()
+				//?} else {
+				/*RenderType.lines()
+				 *///?}
+			),
 			col,
 			r, g, b, a
 		);

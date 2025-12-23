@@ -10,7 +10,7 @@ import dev.isxander.yacl3.gui.image.impl.ResourceTextureImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.FileNotFoundException;
@@ -121,7 +121,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	private void renderBiomeImage(String biomeName, GuiGraphics graphics, int x, int y, float delta) {
-		ResourceLocation imageId;
+		Identifier imageId;
 
 		if (biomeName.contains("#") || !biomeName.contains(":")) {
 			imageId = Structurify.makeId("textures/gui/config/images/biomes/unknown.png");

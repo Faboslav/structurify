@@ -11,7 +11,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -29,6 +29,10 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 
 import java.util.concurrent.CompletableFuture;
 
+//? if >= 1.21.11 {
+import net.minecraft.server.permissions.Permissions;
+//?}
+
 public final class StructurifyCommand
 {
 	private static final SuggestionProvider<CommandSourceStack> DEBUG_MODE_SUGGESTIONS =
@@ -41,7 +45,11 @@ public final class StructurifyCommand
 	public static void createCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
 		dispatcher.register(
 			Commands.literal("structurify")
-				.requires(source -> source.hasPermission(2))
+				//? if >= 1.21.11 {
+				.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+				//?} else {
+				/*.requires(source -> source.hasPermission(2))
+				*///?}
 				.then(Commands.literal("dump")
 					.executes(ctx -> {
 						Structurify.getConfig().dump();
@@ -65,7 +73,11 @@ public final class StructurifyCommand
 				)
 				.then(Commands.literal("debug")
 					.then(Commands.literal("enable")
-						.requires(src -> src.hasPermission(2))
+						//? if >= 1.21.11 {
+						.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+						//?} else {
+						/*.requires(source -> source.hasPermission(2))
+						 *///?}
 						.executes(ctx -> {
 							Structurify.getConfig().getDebugData().setEnabled(true);
 							Structurify.getConfig().getDebugData().setDebugMode(DebugData.DebugMode.FLATNESS);
@@ -80,7 +92,11 @@ public final class StructurifyCommand
 						})
 					)
 					.then(Commands.literal("disable")
-						.requires(src -> src.hasPermission(2))
+						//? if >= 1.21.11 {
+						.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+						//?} else {
+						/*.requires(source -> source.hasPermission(2))
+						 *///?}
 						.executes(ctx -> {
 							Structurify.getConfig().getDebugData().setEnabled(false);
 							Structurify.getConfig().getDebugData().setDebugMode(DebugData.DebugMode.NONE);
@@ -96,7 +112,11 @@ public final class StructurifyCommand
 					.then(Commands.literal("debug_mode")
 						.then(Commands.argument("debugMode", StringArgumentType.word())
 							.suggests(DEBUG_MODE_SUGGESTIONS)
-							.requires(src -> src.hasPermission(2))
+							//? if >= 1.21.11 {
+							.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+							//?} else {
+							/*.requires(source -> source.hasPermission(2))
+							 *///?}
 							.executes(ctx -> {
 								var raw = StringArgumentType.getString(ctx, "debugMode");
 
@@ -124,7 +144,11 @@ public final class StructurifyCommand
 					.then(Commands.literal("sampling_mode")
 						.then(Commands.argument("samplingMode", StringArgumentType.word())
 							.suggests(SAMPLING_MODE_SUGGESTIONS)
-							.requires(src -> src.hasPermission(2))
+							//? if >= 1.21.11 {
+							.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+							//?} else {
+							/*.requires(source -> source.hasPermission(2))
+							 *///?}
 							.executes(ctx -> {
 								var raw = StringArgumentType.getString(ctx, "samplingMode");
 
@@ -156,7 +180,11 @@ public final class StructurifyCommand
 						)
 					)
 					.then(Commands.literal("structures")
-						.requires(src -> src.hasPermission(2))
+						//? if >= 1.21.11 {
+						.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+						//?} else {
+						/*.requires(source -> source.hasPermission(2))
+						 *///?}
 						.executes(ctx -> getStructures(ctx.getSource()))
 					)
 				)

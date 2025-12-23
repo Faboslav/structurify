@@ -38,7 +38,7 @@ public class LocateCommandMixin
 		Optional<TagKey<Structure>> structureTagKey = predicate.unwrap().right();
 
 		if (structureRegistryKey.isPresent()) {
-			String structureId = structureRegistryKey.get().location().toString();
+			String structureId = structureRegistryKey.get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 
 			if (structurify$isStructureDisabled(structureId)) {
 				throw new SimpleCommandExceptionType(Component.translatable("command.structurify.locate.structure_is_disabled", structureId)).create();
@@ -49,7 +49,7 @@ public class LocateCommandMixin
 					boolean areAllStructuresInTagDisabled = true;
 
 					for (var tagStructure : tagStructures) {
-						String tagStructureId = tagStructure.unwrapKey().get().location().toString();
+						String tagStructureId = tagStructure.unwrapKey().get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 
 						if (!structurify$isStructureDisabled(tagStructureId)) {
 							areAllStructuresInTagDisabled = false;

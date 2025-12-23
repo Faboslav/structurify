@@ -2,11 +2,11 @@ package com.faboslav.structurify.common.util;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.StructureSetData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public final class RandomSpreadUtil
 {
-	private static StructureSetData getStructureSetData(ResourceLocation structureSetIdentifier) {
+	private static StructureSetData getStructureSetData(Identifier structureSetIdentifier) {
 		if (structureSetIdentifier == null || !Structurify.getConfig().getStructureSetData().containsKey(structureSetIdentifier.toString())) {
 			return null;
 		}
@@ -14,7 +14,7 @@ public final class RandomSpreadUtil
 		return Structurify.getConfig().getStructureSetData().get(structureSetIdentifier.toString());
 	}
 
-	public static int getModifiedSalt(ResourceLocation structureSetIdentifier, int originalSalt) {
+	public static int getModifiedSalt(Identifier structureSetIdentifier, int originalSalt) {
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 
 		if (structureSetData == null) {
@@ -24,7 +24,7 @@ public final class RandomSpreadUtil
 		return structureSetData.getSalt();
 	}
 
-	public static float getModifiedFrequency(ResourceLocation structureSetIdentifier, float originalFrequency) {
+	public static float getModifiedFrequency(Identifier structureSetIdentifier, float originalFrequency) {
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 
 		if (structureSetData == null) {
@@ -34,7 +34,7 @@ public final class RandomSpreadUtil
 		return structureSetData.getFrequency();
 	}
 
-	public static int getModifiedSpacing(ResourceLocation structureSetIdentifier, int originalSpacing) {
+	public static int getModifiedSpacing(Identifier structureSetIdentifier, int originalSpacing) {
 		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
 		return getModifiedSpacing(structureSetData, originalSpacing);
 	}
@@ -56,7 +56,7 @@ public final class RandomSpreadUtil
 	}
 
 	public static int getModifiedSeparation(
-		ResourceLocation structureSetIdentifier,
+		Identifier structureSetIdentifier,
 		int spacing,
 		int originalSeparation
 	) {

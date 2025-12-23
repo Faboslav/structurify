@@ -6,7 +6,7 @@ import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import com.faboslav.structurify.common.registry.StructurifyRegistryUpdater;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +25,9 @@ public final class Structurify
 		return LOGGER;
 	}
 
-	public static ResourceLocation makeId(String path) {
+	public static Identifier makeId(String path) {
 		//? if >=1.21 {
-		return ResourceLocation.tryBuild(
+		return Identifier.tryBuild(
 			MOD_ID,
 			path
 		);
@@ -39,9 +39,9 @@ public final class Structurify
 		*///?}
 	}
 
-	public static ResourceLocation makeNamespacedId(String id) {
+	public static Identifier makeNamespacedId(String id) {
 		//? if >=1.21 {
-		return ResourceLocation.parse(
+		return Identifier.parse(
 			id
 		);
 		//?} else {

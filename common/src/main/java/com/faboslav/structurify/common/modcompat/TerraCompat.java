@@ -1,6 +1,6 @@
 package com.faboslav.structurify.common.modcompat;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -40,13 +40,13 @@ public final class TerraCompat implements ModCompat
 		return terraBiomes;
 	}
 
-	public Map<ResourceLocation, List<ResourceLocation>> getTerraBiomes(String className, String methodName) {
+	public Map<Identifier, List<Identifier>> getTerraBiomes(String className, String methodName) {
 		try {
 			Class<?> clazz = Class.forName(className);
 			Method method = clazz.getDeclaredMethod(methodName);
 			method.setAccessible(true);
 			Object result = method.invoke(null);
-			return (Map<ResourceLocation, List<ResourceLocation>>) result;
+			return (Map<Identifier, List<Identifier>>) result;
 
 		} catch (Exception e) {
 			return null;
