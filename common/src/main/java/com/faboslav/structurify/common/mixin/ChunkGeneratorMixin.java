@@ -2,8 +2,8 @@ package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
-import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
-import com.faboslav.structurify.world.level.structure.checks.StructureDistanceFromWorldCenterCheck;
+import com.faboslav.structurify.common.world.level.structure.StructureSectionClaim;
+import com.faboslav.structurify.common.world.level.structure.checks.StructureDistanceFromWorldCenterCheck;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.datafixers.util.Pair;

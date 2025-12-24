@@ -1,4 +1,4 @@
-package com.faboslav.structurify.world.level.structure.checks.debug;
+package com.faboslav.structurify.common.world.level.structure.checks.debug;
 
 import net.minecraft.resources.Identifier;
 

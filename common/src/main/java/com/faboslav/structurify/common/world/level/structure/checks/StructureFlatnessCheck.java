@@ -1,18 +1,12 @@
-package com.faboslav.structurify.world.level.structure.checks;
+package com.faboslav.structurify.common.world.level.structure.checks;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.api.StructurifyStructure;
-import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
-import com.faboslav.structurify.common.util.BiomeUtil;
-import com.faboslav.structurify.world.level.structure.checks.debug.StructureFlatnessCheckOverview;
-import com.faboslav.structurify.world.level.structure.checks.debug.StructureFlatnessCheckSample;
-import net.minecraft.core.HolderSet;
+import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckOverview;
+import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckSample;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;

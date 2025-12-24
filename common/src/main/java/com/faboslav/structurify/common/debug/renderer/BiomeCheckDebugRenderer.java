@@ -1,8 +1,8 @@
 package com.faboslav.structurify.common.debug.renderer;
 
 import com.faboslav.structurify.common.util.RenderUtil;
-import com.faboslav.structurify.world.level.structure.checks.debug.StructureBiomeCheckOverview;
-import com.faboslav.structurify.world.level.structure.checks.debug.StructureBiomeCheckSample;
+import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckOverview;
+import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckSample;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;

@@ -11,6 +11,7 @@ public final class StructureSetData
 	public static final int MAX_SEPARATION = 1024;
 
 	private boolean overrideGlobalSpacingAndSeparationModifier = OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
+	private boolean defaultOverrideGlobalSpacingAndSeparationModifier = OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	private final int defaultSalt;
 	private final float defaultFrequency;
 	private final int defaultSpacing;
@@ -32,7 +33,7 @@ public final class StructureSetData
 	}
 
 	public boolean isUsingDefaultValues() {
-		return this.overrideGlobalSpacingAndSeparationModifier == OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE
+		return this.overrideGlobalSpacingAndSeparationModifier == this.defaultOverrideGlobalSpacingAndSeparationModifier
 			   && this.salt == this.defaultSalt
 			   && this.frequency == this.defaultFrequency
 			   && this.spacing == this.defaultSpacing
@@ -45,6 +46,14 @@ public final class StructureSetData
 
 	public void setOverrideGlobalSpacingAndSeparationModifier(boolean overrideGlobalSpacingAndSeparationModifier) {
 		this.overrideGlobalSpacingAndSeparationModifier = overrideGlobalSpacingAndSeparationModifier;
+	}
+
+	public boolean defaultOverrideGlobalSpacingAndSeparationModifier() {
+		return this.defaultOverrideGlobalSpacingAndSeparationModifier;
+	}
+
+	public void setDefaultOverrideGlobalSpacingAndSeparationModifier(boolean defaultOverrideGlobalSpacingAndSeparationModifier) {
+		this.defaultOverrideGlobalSpacingAndSeparationModifier = defaultOverrideGlobalSpacingAndSeparationModifier;
 	}
 
 	public int getDefaultSalt() {

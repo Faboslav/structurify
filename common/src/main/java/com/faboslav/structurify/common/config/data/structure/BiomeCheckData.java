@@ -1,5 +1,8 @@
 package com.faboslav.structurify.common.config.data.structure;
 
+import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.config.data.StructureData;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

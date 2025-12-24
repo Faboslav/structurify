@@ -20,16 +20,16 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import java.util.*;
 
 //? if yungs_api || repurposed_structures {
-/*import com.faboslav.structurify.common.platform.PlatformHooks;
-*///?}
+import com.faboslav.structurify.common.platform.PlatformHooks;
+//?}
 
 //? if yungs_api {
 /*import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
  *///?}
 
 //? if repurposed_structures {
-/*import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
-*///?}
+import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
+//?}
 
 public final class WorldgenDataProvider
 {
@@ -228,6 +228,24 @@ public final class WorldgenDataProvider
 				}
 			}
 
+			if(structureId.contains("aquamirae:")) {
+				var overlapCheckData = structureData.getOverlapCheckData();
+				overlapCheckData.defaultExcludeFromOverlapPrevention(true);
+				overlapCheckData.excludeFromOverlapPrevention(true);
+
+				var flatnessCheckData = structureData.getFlatnessCheckData();
+				flatnessCheckData.overrideGlobalFlatnessCheck(true);
+				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);
+				flatnessCheckData.enable(false);
+				flatnessCheckData.defaultEnable(false);
+
+				var biomeCheckData = structureData.getBiomeCheckData();
+				biomeCheckData.overrideGlobalBiomeCheck(true);
+				biomeCheckData.defaultOverrideGlobalBiomeCheck(true);
+				biomeCheckData.enable(false);
+				biomeCheckData.defaultEnable(false);
+			}
+
 			if(
 				structureId.equals("alexscaves:acid_pit")
 				|| structureId.equals("alexscaves:cake_cave")
@@ -238,11 +256,15 @@ public final class WorldgenDataProvider
 			) {
 				var flatnessCheckData = structureData.getFlatnessCheckData();
 				flatnessCheckData.overrideGlobalFlatnessCheck(true);
+				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);
 				flatnessCheckData.enable(false);
+				flatnessCheckData.defaultEnable(false);
 
 				var biomeCheckData = structureData.getBiomeCheckData();
 				biomeCheckData.overrideGlobalBiomeCheck(true);
+				biomeCheckData.defaultOverrideGlobalBiomeCheck(true);
 				biomeCheckData.enable(false);
+				biomeCheckData.defaultEnable(false);
 			}
 
 			structures.put(structureId, structureData);
@@ -298,6 +320,7 @@ public final class WorldgenDataProvider
 				|| structureSetStringId.equals("alexscaves:ocean_trench")
 			) {
 				structureSetData.setOverrideGlobalSpacingAndSeparationModifier(true);
+				structureSetData.setDefaultOverrideGlobalSpacingAndSeparationModifier(true);
 			}
 
 			structureSets.put(structureSetStringId, structureSetData);

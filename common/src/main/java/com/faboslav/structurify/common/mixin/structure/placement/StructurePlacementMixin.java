@@ -84,7 +84,7 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		)
 	)
 	protected float structurify$isStructureChunkGetFrequency(float originalFrequency) {
-		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetIdentifier(), originalFrequency);
+		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetResourceLocation(), originalFrequency);
 	}
 	*///?}
 }

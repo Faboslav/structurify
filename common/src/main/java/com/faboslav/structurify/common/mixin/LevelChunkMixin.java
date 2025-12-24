@@ -2,7 +2,7 @@ package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
-import com.faboslav.structurify.world.level.structure.checks.StructureChecker;
+import com.faboslav.structurify.common.world.level.structure.checks.StructureChecker;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.core.Registry;
@@ -21,9 +21,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 //? if <= 1.21.8 {
-/*import net.minecraft.core.Registry;
-import net.minecraft.world.level.biome.Biome;
-*///?}
+
+//?}
 
 @Mixin(LevelChunk.class)
 public abstract class LevelChunkMixin extends ChunkAccess

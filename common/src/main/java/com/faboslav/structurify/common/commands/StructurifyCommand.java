@@ -4,7 +4,7 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.DebugData;
 import com.faboslav.structurify.common.mixin.LocateCommandInvoker;
-import com.faboslav.structurify.world.level.structure.checks.StructureChecker;
+import com.faboslav.structurify.common.world.level.structure.checks.StructureChecker;
 import com.google.common.base.Stopwatch;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;

@@ -72,11 +72,19 @@ dependencies {
 		modImplementation(commonMod.modrinth("structure-gel-api", structureGelApiVersion)) { isTransitive = false }
 	}
 
+	// Alex Caves
 	val alexCavesWithDeps: List<Dependency> = fletchingTable.modrinthBundle("alexs-caves", commonMod.mc, "forge") {
 		recursive = true
 		include("required", "optional", "embedded")
 	}
 	for (mod in alexCavesWithDeps) modImplementation(mod)
+
+	// Aquamira
+	val aquamiraeWithDeps: List<Dependency> = fletchingTable.modrinthBundle("aquamirae", commonMod.mc, "forge") {
+		recursive = true
+		include("required", "optional", "embedded")
+	}
+	for (mod in aquamiraeWithDeps) modImplementation(mod)
 
 	val fossilsAndArcheologyRevivalWithDeps: List<Dependency> = fletchingTable.modrinthBundle("fossils-and-archeology-revival", commonMod.mc, "forge") {
 		recursive = true

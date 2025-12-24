@@ -5,7 +5,7 @@ import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureNamespaceData;
 import com.faboslav.structurify.common.util.BiomeUtil;
-import com.faboslav.structurify.world.level.structure.checks.StructureChecker;
+import com.faboslav.structurify.common.world.level.structure.checks.StructureChecker;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.core.Holder;
@@ -242,7 +242,7 @@ public abstract class StructureMixin implements StructurifyStructure
 		var possibleStructureId = structure.unwrapKey();
 		structureId = possibleStructureId.map(ResourceKey::/*? if >= 1.21.11 {*/identifier/*?} else {*//*location*//*?}*/).orElseGet(this::structurify$getStructureIdentifier);
 		//?} else {
-		/*structureId = this.structurify$getStructureIdentifier();
+		/*structureId = this.structurify$getStructureResourceLocation();
 		*///?}
 
 		if (structureStart == StructureStart.INVALID_START || !structureStart.isValid()) {

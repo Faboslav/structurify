@@ -23,7 +23,7 @@ public abstract class StructureGelApiModifySpreadMixin implements StructurifyRan
 	private int offset;
 
 	@Nullable
-	public ResourceLocation structureSetIdentifier = null;
+	public ResourceLocation structureSetResourceLocation = null;
 
 	@Shadow
 	@Final
@@ -33,13 +33,13 @@ public abstract class StructureGelApiModifySpreadMixin implements StructurifyRan
 	@Final
 	public abstract int offset();
 
-	public void structurify$setStructureSetIdentifier(ResourceLocation structureSetIdentifier) {
-		this.structureSetIdentifier = structureSetIdentifier;
+	public void structurify$setStructureSetResourceLocation(ResourceLocation structureSetResourceLocation) {
+		this.structureSetResourceLocation = structureSetResourceLocation;
 	}
 
 	@Nullable
-	public ResourceLocation structurify$getStructureSetIdentifier() {
-		return this.structureSetIdentifier;
+	public ResourceLocation structurify$getStructureSetResourceLocation() {
+		return this.structureSetResourceLocation;
 	}
 
 	public int structurify$getOriginalSpacing() {
@@ -55,7 +55,7 @@ public abstract class StructureGelApiModifySpreadMixin implements StructurifyRan
 		at = @At("RETURN")
 	)
 	protected int structurify$getSpacing(int originalSpacing) {
-		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetIdentifier(), originalSpacing);
+		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetResourceLocation(), originalSpacing);
 	}
 
 	@ModifyReturnValue(
@@ -63,6 +63,6 @@ public abstract class StructureGelApiModifySpreadMixin implements StructurifyRan
 		at = @At("RETURN")
 	)
 	protected int structurify$getOffset(int originalOffset) {
-		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalOffset);
+		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetResourceLocation(), this.spacing(), originalOffset);
 	}
 }

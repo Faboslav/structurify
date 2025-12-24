@@ -1,4 +1,4 @@
-package com.faboslav.structurify.world.level.structure.checks;
+package com.faboslav.structurify.common.world.level.structure.checks;
 
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
 import com.faboslav.structurify.common.api.StructurifyStructure;

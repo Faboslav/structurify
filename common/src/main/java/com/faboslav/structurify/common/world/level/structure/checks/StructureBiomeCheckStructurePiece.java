@@ -1,4 +1,4 @@
-package com.faboslav.structurify.world.level.structure.checks;
+package com.faboslav.structurify.common.world.level.structure.checks;
 
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 

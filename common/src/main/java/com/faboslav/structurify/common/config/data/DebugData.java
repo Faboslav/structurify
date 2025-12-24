@@ -1,10 +1,10 @@
 package com.faboslav.structurify.common.config.data;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.world.level.structure.checks.debug.StructureBiomeCheckOverview;
-import com.faboslav.structurify.world.level.structure.checks.debug.StructureBiomeCheckSample;
-import com.faboslav.structurify.world.level.structure.checks.debug.StructureFlatnessCheckOverview;
-import com.faboslav.structurify.world.level.structure.checks.debug.StructureFlatnessCheckSample;
+import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckOverview;
+import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckSample;
+import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckOverview;
+import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckSample;
 
 import java.util.Arrays;
 import java.util.Map;

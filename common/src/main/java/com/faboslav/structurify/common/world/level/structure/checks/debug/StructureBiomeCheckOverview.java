@@ -1,4 +1,4 @@
-package com.faboslav.structurify.world.level.structure.checks.debug;
+package com.faboslav.structurify.common.world.level.structure.checks.debug;
 
 import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import net.minecraft.resources.Identifier;

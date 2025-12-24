@@ -1,7 +1,7 @@
 package com.faboslav.structurify.common.debug.renderer;
 
 import com.faboslav.structurify.common.util.RenderUtil;
-import com.faboslav.structurify.world.level.structure.StructureSectionClaim;
+import com.faboslav.structurify.common.world.level.structure.StructureSectionClaim;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
