@@ -38,7 +38,7 @@ public abstract class JigsawStructureMixin extends StructureMixin
 			opcode = Opcodes.GETFIELD
 		)
 	)
-		//? if >= 1.21.9 {
+	//? if >= 1.21.9 {
 	protected JigsawStructure.MaxDistance structurify$findGenerationPointGetMaxDistanceFromCenter(JigsawStructure.MaxDistance originalMaxDistanceFromCenter)
 	 //?} else {
 	/*protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)

@@ -74,7 +74,11 @@ public final class JigsawStructureUtil
 
 		//? if repurposed_structures {
 		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
-			return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
+			//? if >= 1.21.10 {
+			return new JigsawStructure.MaxDistance(((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0));
+			//?} else {
+			/*return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
+			*///?}
 		}
 		//?}
 
