@@ -1,3 +1,11 @@
+## 2.0.11
+
+- Added compat with Mine Cells
+## 2.0.10
+
+- Ported to 2.0.11
+- Fixed save of some default values
+
 ## 2.0.9b
 
 - Added an option to exclude structure/namespace from structure overlap prevention

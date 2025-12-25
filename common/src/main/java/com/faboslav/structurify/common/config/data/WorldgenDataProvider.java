@@ -228,7 +228,7 @@ public final class WorldgenDataProvider
 				}
 			}
 
-			if(structureId.contains("aquamirae:")) {
+			if(structureId.contains("aquamirae:") || (structureId.contains("minecells:") && !structureId.contains("minecells:overworld_portal"))) {
 				var overlapCheckData = structureData.getOverlapCheckData();
 				overlapCheckData.defaultExcludeFromOverlapPrevention(true);
 				overlapCheckData.excludeFromOverlapPrevention(true);
@@ -318,6 +318,7 @@ public final class WorldgenDataProvider
 				|| structureSetStringId.equals("alexscaves:ferrocave")
 				|| structureSetStringId.equals("alexscaves:forlorn_canyon")
 				|| structureSetStringId.equals("alexscaves:ocean_trench")
+				|| (structureSetStringId.contains("minecells:") && !structureSetStringId.contains("minecells:overworld_portal"))
 			) {
 				structureSetData.setOverrideGlobalSpacingAndSeparationModifier(true);
 				structureSetData.setDefaultOverrideGlobalSpacingAndSeparationModifier(true);
