@@ -239,7 +239,7 @@ public class StructureButtonController extends BooleanController
 		//?} else {
 		/*@Override
 		public boolean mouseClicked(double mouseX, double mouseY, int button) {
-			this.configurationButton.active = this.booleanElement.isAvailable();
+			this.configurationButton.active = this.booleanElement.isActive();
 
 			boolean overConfig = this.configurationButton.isMouseOver(mouseX, mouseY);
 			if (overConfig) {
