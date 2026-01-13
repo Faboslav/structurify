@@ -5,6 +5,7 @@ import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.HolderOption;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
+import com.faboslav.structurify.common.config.client.api.option.OptionPair;
 import com.faboslav.structurify.common.config.client.gui.structure.BiomeCheckOptions;
 import com.faboslav.structurify.common.config.client.gui.structure.DistanceFromWorldCenterOptions;
 import com.faboslav.structurify.common.config.client.gui.structure.FlatnessCheckOptions;
@@ -33,7 +34,7 @@ import java.util.Map;
 public final class StructuresConfigScreen
 {
 	private final static List<Option<Boolean>> structureOptions = new ArrayList<>();
-	private static HolderOption<Option<Integer>, Option<Integer>> globalDistanceFromWorldCenterOption = null;
+	private static Option<OptionPair<Option<Integer>, Option<Integer>>> globalDistanceFromWorldCenterOption = null;
 	private static Option<Boolean> enableGlobalFlatnessCheckOption = null;
 	private static Option<Boolean> enableGlobalBiomeCheckOption = null;
 	private final static List<Option<Boolean>> overrideDistanceFromWorldCenterOptions = new ArrayList<>();
@@ -121,7 +122,7 @@ public final class StructuresConfigScreen
 		globalStructuresGroupBuilder.option(preventStructureOverlapOption);
 
 		var globalDistanceFromWorldCenterOptions = DistanceFromWorldCenterOptions.addDistanceFromWorldCenterOptions(globalStructuresGroupBuilder, config, "global");
-		globalDistanceFromWorldCenterOption = (HolderOption<Option<Integer>, Option<Integer>>) globalDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.DISTANCE_FROM_WORLD_CENTER_OPTION_NAME);
+		globalDistanceFromWorldCenterOption = (Option<OptionPair<Option<Integer>, Option<Integer>>>) globalDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.DISTANCE_FROM_WORLD_CENTER_OPTION_NAME);
 
 		var globalFlatnessCheckOptions = FlatnessCheckOptions.addFlatnessCheckOptions(globalStructuresGroupBuilder, config, "global");
 		enableGlobalFlatnessCheckOption = (Option<Boolean>) globalFlatnessCheckOptions.get(FlatnessCheckOptions.FLATNESS_CHECK_IS_ENABLED_OPTION_NAME);

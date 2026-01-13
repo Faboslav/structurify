@@ -95,14 +95,16 @@ public final class WorldgenDataProvider
 	}
 
 	public static Map<String, StructureNamespaceData> loadStructureNamespaces() {
+		Map<String, StructureNamespaceData> structuresNamespaces = new TreeMap<>(alphabeticallComparator);
+		structuresNamespaces.put(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER, new StructureNamespaceData());
+
 		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
 
 		if (registryManager == null) {
-			return Collections.emptyMap();
+			return structuresNamespaces;
 		}
 
 		var structureRegistry = registryManager.lookupOrThrow(Registries.STRUCTURE);
-		Map<String, StructureNamespaceData> structuresNamespaces = new TreeMap<>(alphabeticallComparator);
 
 		for (var structureReference : structureRegistry.listElements().toList()) {
 			String structureNamespace = structureReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.getNamespace();
@@ -111,8 +113,6 @@ public final class WorldgenDataProvider
 				structuresNamespaces.put(structureNamespace, new StructureNamespaceData());
 			}
 		}
-
-		structuresNamespaces.put(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER, new StructureNamespaceData());
 
 		return structuresNamespaces;
 	}

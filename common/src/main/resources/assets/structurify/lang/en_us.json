@@ -44,6 +44,7 @@
 	"gui.structurify.structures.structure.allow_non_solid_blocks_in_flatness_check.title": "Allow non solid blocks",
 	"gui.structurify.structures.structure.allow_non_solid_blocks_in_flatness_check.description": "Liquid, air and other \"special\" blocks will count as solid blocks and will not fail the check.",
 	"gui.structurify.structures.biome_check_group.title": "Biome check settings",
+	"gui.structurify.structures.structure.detail_button.tooltip": "Opens „%s“ structure settings",
 	"gui.structurify.structures.structure.override_global_biome_check.title": "Override global settings",
 	"gui.structurify.structures.structure.override_global_biome_check.description": "Whenever to override biome check from global or „%s“ namespace settings with specific settings of the „%s“ structure.",
 	"gui.structurify.structures.structure.enable_biome_check.title": "Enable",

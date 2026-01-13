@@ -6,25 +6,20 @@ import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.controller.ControllerBuilder;
 
-public class DualControllerBuilder<K extends Option<?>, V extends Option<?>> implements ControllerBuilder<OptionPair<K, V>>
+public final class DualControllerBuilder<K extends Option<?>, V extends Option<?>> implements ControllerBuilder<OptionPair<K, V>>
 {
-	private final K firstOption;
-	private final V secondOption;
+	private final OptionPair<K, V> optionPair;
 
-	public DualControllerBuilder(K firstOption, V secondOption) {
-		this.firstOption = firstOption;
-		this.secondOption = secondOption;
+	public DualControllerBuilder(OptionPair<K, V> optionPair) {
+		this.optionPair = optionPair;
 	}
 
 	@Override
 	public Controller<OptionPair<K, V>> build() {
-		return new DualController<>(new OptionPair<>(firstOption, secondOption));
+		return new DualController<>(optionPair);
 	}
 
-	public static <K extends Option<?>, V extends Option<?>> DualControllerBuilder<K, V> create(
-		K firstOption,
-		V secondOption
-	) {
-		return new DualControllerBuilder<>( firstOption, secondOption);
+	public static <K extends Option<?>, V extends Option<?>> DualControllerBuilder<K, V> create(OptionPair<K, V> optionPair) {
+		return new DualControllerBuilder<>(optionPair);
 	}
 }

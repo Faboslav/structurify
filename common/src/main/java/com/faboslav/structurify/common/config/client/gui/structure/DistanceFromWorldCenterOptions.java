@@ -3,6 +3,7 @@ package com.faboslav.structurify.common.config.client.gui.structure;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.DualControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.HolderOption;
+import com.faboslav.structurify.common.config.client.api.option.OptionPair;
 import com.faboslav.structurify.common.config.data.StructureLikeData;
 import com.faboslav.structurify.common.config.data.StructureNamespaceData;
 import com.faboslav.structurify.common.config.data.structure.DistanceFromWorldCenterCheckData;
@@ -103,8 +104,14 @@ public class DistanceFromWorldCenterOptions
 			)
 			.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(0, 100000)).build();
 
-		var distanceFromWorldCenterOption = HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
-			.controller(opt -> DualControllerBuilder.create(minStructureDistanceFromWorldOption, maxStructureDistanceFromWorldOption)).build();
+		var distanceFromWorldCenterPair = new OptionPair<>(minStructureDistanceFromWorldOption, maxStructureDistanceFromWorldOption);
+
+		var distanceFromWorldCenterOption =
+			HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
+				.optionPair(distanceFromWorldCenterPair)
+				.controller(opt -> DualControllerBuilder.create(distanceFromWorldCenterPair))
+				.build();
+
 		distanceFromWorldCenterOptions.put(DISTANCE_FROM_WORLD_CENTER_OPTION_NAME, distanceFromWorldCenterOption);
 
 		builder.option(distanceFromWorldCenterOption);

@@ -131,7 +131,7 @@ public final class StructureSetsConfigScreen
 				});
 
 				var spacingDescriptionBuilder = OptionDescription.createBuilder();
-				spacingDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.spacing.description"));
+				spacingDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, Component.translatable("gui.structurify.structure_sets.spacing.description")));
 
 				var spacingOption = Option.<Integer>createBuilder()
 					.name(Component.translatable("gui.structurify.structure_sets.spacing.title"))
@@ -199,9 +199,13 @@ public final class StructureSetsConfigScreen
 					}
 				});
 
-				var spacingAndSeparationOption = HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
-					.controller(opt -> DualControllerBuilder.create(spacingOption, separationOption))
-					.available(!config.enableGlobalSpacingAndSeparationModifier || config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier()).build();
+				var spacingAndSeparationPair = new OptionPair<>(spacingOption, separationOption);
+				var spacingAndSeparationOption =
+					HolderOption.createBuilder(spacingAndSeparationPair)
+						.controller(opt -> DualControllerBuilder.create(spacingAndSeparationPair))
+						.available(!config.enableGlobalSpacingAndSeparationModifier
+								   || config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier())
+						.build();
 
 				currentGroupBuilder.option(overrideGlobalSpacingAndSeparationModifierOption);
 				currentGroupBuilder.option(spacingAndSeparationOption);

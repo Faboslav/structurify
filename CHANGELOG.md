@@ -1,9 +1,17 @@
+## 2.0.12
+
+- Fixed spacing and separation sometimes not saving
+- Fixed min and max world distance from center sometimes not saving
+- Fixed some minor ui related problems
+- Improved error handling (for example when mod or datapack includes invalid definitions)
+
 ## 2.0.11
 
 - Added compat with Mine Cells
+
 ## 2.0.10
 
-- Ported to 2.0.11
+- Ported to 2.0.12
 - Fixed save of some default values
 
 ## 2.0.9b
