@@ -3,6 +3,8 @@ package com.faboslav.structurify.common.config.data;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
+import com.faboslav.structurify.common.api.StructurifyStructureSelectionEntry;
+import com.faboslav.structurify.common.api.StructurifyWithStructureSet;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import com.faboslav.structurify.common.util.BiomeUtil;
@@ -285,8 +287,8 @@ public final class WorldgenDataProvider
 
 		for (var structureSetReference : structureSetRegistry.listElements().toList()) {
 			var structureSet = structureSetReference.value();
-			Identifier structureSetId = structureSetReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/;
-			String structureSetStringId = structureSetId.toString();
+			String structureSetId = structureSetReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
+			((StructurifyWithStructureSet) (Object) structureSet).structurify$setStructureSetId(structureSetId);
 
 			var structureSetPlacement = structureSet.placement();
 			int salt = 0;
@@ -304,27 +306,35 @@ public final class WorldgenDataProvider
 				separation = randomSpreadStructurePlacement.structurify$getOriginalSeparation();
 			}
 
+			var structureWeights = new HashMap<String, Integer>();
+
+			for(var structureSelectionEntry : structureSet.structures()) {
+				StructurifyStructureSelectionEntry structurifyStructureSelectionEntry = ((StructurifyStructureSelectionEntry) (Object) structureSelectionEntry);
+				structureWeights.put(structureSelectionEntry.structure().getRegisteredName(), structurifyStructureSelectionEntry.structurify$getOriginalWeight());
+			}
+
 			var structureSetData = new StructureSetData(
 				salt,
 				frequency,
 				spacing,
-				separation
+				separation,
+				structureWeights
 			);
 
 			if(
-				structureSetStringId.equals("alexscaves:acid_pit")
-				|| structureSetStringId.equals("alexscaves:cake_cave")
-				|| structureSetStringId.equals("alexscaves:dino_bowl")
-				|| structureSetStringId.equals("alexscaves:ferrocave")
-				|| structureSetStringId.equals("alexscaves:forlorn_canyon")
-				|| structureSetStringId.equals("alexscaves:ocean_trench")
-				|| (structureSetStringId.contains("minecells:") && !structureSetStringId.contains("minecells:overworld_portal"))
+				structureSetId.equals("alexscaves:acid_pit")
+				|| structureSetId.equals("alexscaves:cake_cave")
+				|| structureSetId.equals("alexscaves:dino_bowl")
+				|| structureSetId.equals("alexscaves:ferrocave")
+				|| structureSetId.equals("alexscaves:forlorn_canyon")
+				|| structureSetId.equals("alexscaves:ocean_trench")
+				|| (structureSetId.contains("minecells:") && !structureSetId.contains("minecells:overworld_portal"))
 			) {
 				structureSetData.setOverrideGlobalSpacingAndSeparationModifier(true);
 				structureSetData.setDefaultOverrideGlobalSpacingAndSeparationModifier(true);
 			}
 
-			structureSets.put(structureSetStringId, structureSetData);
+			structureSets.put(structureSetId, structureSetData);
 		}
 
 		return structureSets;

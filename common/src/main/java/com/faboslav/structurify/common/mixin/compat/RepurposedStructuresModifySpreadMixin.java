@@ -43,7 +43,7 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 		at = @At("RETURN")
 	)
 	protected int structurify$getSpacing(int originalSpacing) {
-		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetIdentifier(), originalSpacing);
+		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetId(), originalSpacing);
 	}
 
 	@ModifyReturnValue(
@@ -51,7 +51,7 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 		at = @At("RETURN")
 	)
 	protected int structurify$getSeparation(int originalSeparation) {
-		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalSeparation);
+		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetId(), this.spacing(), originalSeparation);
 	}
 
 	@ModifyExpressionValue(
@@ -64,7 +64,7 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 		)
 	)
 	protected int structurify$getStartChunkGetSpacing(int originalSpacing) {
-		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetIdentifier(), originalSpacing);
+		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetId(), originalSpacing);
 	}
 
 	@ModifyExpressionValue(
@@ -77,7 +77,7 @@ public abstract class RepurposedStructuresModifySpreadMixin extends RandomSpread
 		)
 	)
 	protected int structurify$getStartChunkGetSeparation(int originalSeparation) {
-		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetIdentifier(), this.spacing(), originalSeparation);
+		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetId(), this.spacing(), originalSeparation);
 	}
 }
 //?} else {

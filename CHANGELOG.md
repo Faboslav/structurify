@@ -1,3 +1,11 @@
+## 2.0.13
+
+- Added option to disable structure sets
+- Added new config screen to configure structure weihts in structure sets
+- Improved search (searching for specific structure (set) options should be much easier)
+- Improved worldgen performance related to Structurify logic
+- Fixed internal data caching (data should be now correctly updated in real time when saving a config)
+
 ## 2.0.12
 
 - Fixed spacing and separation sometimes not saving

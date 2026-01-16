@@ -1,9 +1,13 @@
 package com.faboslav.structurify.common.config.serialization;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.util.Map;
 
 public final class StructureSetDataSerializer
 {
@@ -13,6 +17,7 @@ public final class StructureSetDataSerializer
 	private static final String OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY = "override_global_spacing_and_separation_modifier";
 	private static final String SPACING_PROPERTY = "spacing";
 	private static final String SEPARATION_PROPERTY = "separation";
+	private static final String STRUCTURE_WEIGHT_PROPERTY = "structure_weights";
 
 	public static void load(JsonObject structureSetJson, StructureSetData structureSetData) {
 		var structureSetName = structureSetJson.get(NAME_PROPERTY).getAsString();
@@ -59,12 +64,34 @@ public final class StructureSetDataSerializer
 			}
 
 			if (spacing < 1) {
-				Structurify.getLogger().info("Spacing value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, spacing);
-				separation = 0;
+				Structurify.getLogger().info("Spacing value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 1.", structureSetName, spacing);
+				spacing = 1;
 			}
 
 			structureSetData.setSpacing(spacing);
 			structureSetData.setSeparation(separation);
+		}
+
+		if(structureSetJson.has(STRUCTURE_WEIGHT_PROPERTY)) {
+			var structureWeights = structureSetJson.get(STRUCTURE_WEIGHT_PROPERTY).getAsJsonObject();
+
+			for (Map.Entry<String, JsonElement> structureWeightEntry : structureWeights.entrySet()) {
+				String structureId = structureWeightEntry.getKey();
+				JsonElement structureWeight = structureWeightEntry.getValue();
+
+				if (!structureWeight.isJsonPrimitive() || !structureWeight.getAsJsonPrimitive().isNumber()) {
+					continue;
+				}
+
+				int weight = structureWeight.getAsInt();
+
+				if (weight < StructureSetData.MIN_STRUCTURE_WEIGHT) {
+					Structurify.getLogger().info("Structure weight value for structure set {} is currently {}, which is lower than minimum value of {}, value will be automatically corrected to 1.", structureSetName, weight, StructureSetData.MIN_STRUCTURE_WEIGHT);
+					weight = 1;
+				}
+
+				structureSetData.getStructureWeights().put(structureId, weight);
+			}
 		}
 	}
 
@@ -108,10 +135,18 @@ public final class StructureSetDataSerializer
 			structureSet.addProperty(SEPARATION_PROPERTY, separation);
 		}
 
+		JsonObject structureWeights = new JsonObject();
+
+		for(var structureWeightEntry : structureSetData.getStructureWeights().entrySet()) {
+			structureWeights.addProperty(structureWeightEntry.getKey(), structureWeightEntry.getValue());
+		}
+
 		structureSet.addProperty(NAME_PROPERTY, structureSetName);
 		structureSet.addProperty(SALT_PROPERTY, salt);
 		structureSet.addProperty(FREQUENCY_PROPERTY, frequency);
 		structureSet.addProperty(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, overrideGlobalSpacingAndSeparationModifier);
+		structureSet.add(STRUCTURE_WEIGHT_PROPERTY, structureWeights);
+
 		structureSetsJson.add(structureSet);
 	}
 }

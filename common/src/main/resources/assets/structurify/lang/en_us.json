@@ -21,6 +21,8 @@
 	"gui.structurify.structures.prevent_structure_overlap.description": "When enabled all structures will be prevented from overlapping each other.",
 	"gui.structurify.structures.structure.title": "„%s“ settings",
 	"gui.structurify.structures.structure.description": "„%s“ settings",
+	"gui.structurify.structures.structure_set.title": "„%s“ settings",
+	"gui.structurify.structures.structure_set.description": "„%s“ settings",
 	"gui.structurify.structures.biomes_description": "Structure can be found in the following biomes:",
 	"gui.structurify.structures.warning": "Bear in mind that each structure may still be enabled or disabled by individual mods and datapacks.",
 	"gui.structurify.structures.structures.structure.title": "Structure settings",
@@ -45,6 +47,7 @@
 	"gui.structurify.structures.structure.allow_non_solid_blocks_in_flatness_check.description": "Liquid, air and other \"special\" blocks will count as solid blocks and will not fail the check.",
 	"gui.structurify.structures.biome_check_group.title": "Biome check settings",
 	"gui.structurify.structures.structure.detail_button.tooltip": "Opens „%s“ structure settings",
+	"gui.structurify.structures.structure_set.config_button.tooltip": "Opens „%s“ structure set settings",
 	"gui.structurify.structures.structure.override_global_biome_check.title": "Override global settings",
 	"gui.structurify.structures.structure.override_global_biome_check.description": "Whenever to override biome check from global or „%s“ namespace settings with specific settings of the „%s“ structure.",
 	"gui.structurify.structures.structure.enable_biome_check.title": "Enable",
@@ -92,5 +95,7 @@
 	"gui.structurify.structure_sets.spacing.title": "Spacing",
 	"gui.structurify.structure_sets.spacing.description": "Spacing is the average distance in chunks between structures within the same structure set (group of structures).",
 	"gui.structurify.structure_sets.separation.title": "Separation",
-	"gui.structurify.structure_sets.separation.description": "Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value."
+	"gui.structurify.structure_sets.separation.description": "Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value.",
+	"gui.structurify.structures.structure_sets.structure_set.title": "Structure set settings",
+	"gui.structurify.structures.structure_sets.structure_set.weights.title": "Structure weights"
 }

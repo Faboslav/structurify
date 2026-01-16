@@ -10,8 +10,11 @@ import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.TextScaledButtonWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.BooleanController;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import java.util.function.Function;
@@ -24,21 +27,32 @@ import net.minecraft.client.input.MouseButtonEvent;
 
 public class StructureButtonController extends BooleanController
 {
+	@FunctionalInterface
+	public interface OpenConfigCallback {
+		void openConfig(YACLScreen parentScreen, String id);
+	}
+
 	private final String structureId;
+	private final OpenConfigCallback openConfigCallback;
+	private final String buttonTooltip;
 
 	public StructureButtonController(
 		Option<Boolean> option,
 		String structureId,
 		Function<Boolean, Component> valueFormatter,
-		boolean coloured
+		boolean coloured,
+		OpenConfigCallback openConfigCallback,
+		String buttonTooltip
 	) {
 		super(option, valueFormatter, coloured);
 		this.structureId = structureId;
+		this.openConfigCallback = openConfigCallback;
+		this.buttonTooltip = buttonTooltip;
 	}
 
 	@Override
 	public AbstractWidget provideWidget(YACLScreen screen, Dimension<Integer> widgetDimension) {
-		return new BooleanWithConfigButtonWidget(this, screen, widgetDimension, structureId);
+		return new BooleanWithConfigButtonWidget(this, screen, widgetDimension, structureId, openConfigCallback, buttonTooltip);
 	}
 
 	public static final class BooleanWithConfigButtonWidget extends AbstractWidget
@@ -48,6 +62,8 @@ public class StructureButtonController extends BooleanController
 
 		private final YACLScreen screen;
 		private final String structureId;
+		private final OpenConfigCallback openConfigCallback;
+		private final String buttonTooltip;
 
 		private final BooleanControllerElement booleanElement;
 		private final TextScaledButtonWidget configurationButton;
@@ -58,12 +74,16 @@ public class StructureButtonController extends BooleanController
 			BooleanController controller,
 			YACLScreen screen,
 			Dimension<Integer> dim,
-			String structureId
+			String structureId,
+			OpenConfigCallback openConfigCallback,
+			String buttonTooltip
 		) {
 			super(dim);
 
 			this.screen = screen;
 			this.structureId = structureId;
+			this.openConfigCallback = openConfigCallback;
+			this.buttonTooltip = buttonTooltip;
 
 			this.booleanElement = new BooleanControllerElement(controller, screen, dim);
 
@@ -75,28 +95,19 @@ public class StructureButtonController extends BooleanController
 				CONFIG_BUTTON_HEIGHT,
 				1.0f,
 				Component.literal("\u2699").withStyle(style -> style.withBold(true)),
-				button -> openStructureConfig()
+				button -> this.openConfigCallback.openConfig(this.screen, this.structureId)
 			);
 
-			this.configurationButton.setTooltip(Tooltip.create(Component.translatable("gui.structurify.structures.structure.detail_button.tooltip", LanguageUtil.translateId("structure", structureId))));
+			this.configurationButton.setTooltip(Tooltip.create(
+				Component.translatable(
+					this.buttonTooltip,
+					LanguageUtil.translateId("structure", structureId)
+				)
+			));
 
 			this.setDimension(dim);
 		}
 
-		private void openStructureConfig() {
-			var configScreen = StructurifyClient.getConfigScreen();
-			if (configScreen == null) {
-				return;
-			}
-
-			screen.finishOrSave();
-
-			YACLScreen structureScreen = StructureConfigScreen.create(Structurify.getConfig(), structureId, screen);
-
-			configScreen.saveScreenState(screen);
-			this.client.setScreen(structureScreen);
-			configScreen.loadScreenState(structureScreen);
-		}
 		@Override
 		public void setDimension(Dimension<Integer> dim) {
 			super.setDimension(dim);
@@ -131,6 +142,21 @@ public class StructureButtonController extends BooleanController
 		public void mouseMoved(double mouseX, double mouseY) {
 			this.configurationButton.mouseMoved(mouseX, mouseY);
 			this.booleanElement.mouseMoved(mouseX, mouseY);
+		}
+
+		@Override
+		public boolean matchesSearch(String query) {
+			return this.booleanElement.matchesSearch(query);
+		}
+
+		@Override
+		public NarrationPriority narrationPriority() {
+			return this.booleanElement.narrationPriority();
+		}
+
+		@Override
+		public void updateNarration(NarrationElementOutput builder) {
+			this.booleanElement.updateNarration(builder);
 		}
 
 		@Override

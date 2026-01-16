@@ -3,6 +3,7 @@ package com.faboslav.structurify.common.registry;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
+import com.faboslav.structurify.common.api.StructurifyWithStructureSet;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -29,6 +30,7 @@ public final class StructurifyRegistryUpdater
 			StructurifyRegistryUpdater.updateStructureSets(registryManager);
 			Structurify.getLogger().info("Registries updated");
 		} catch (Exception e) {
+			Structurify.getLogger().error(String.valueOf(e));
 			Structurify.getLogger().info("Failed to update registries");
 		}
 	}
@@ -62,10 +64,17 @@ public final class StructurifyRegistryUpdater
 		for (var structureSetReference : structureSetRegistry.listElements().toList()) {
 			var structureSet = structureSetReference.value();
 			var structureSetRegistryKey = structureSetReference.key();
+			String structureSetId = structureSetRegistryKey/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 
-			Identifier structureSetId = structureSetRegistryKey/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/;
+			((StructurifyWithStructureSet) (Object) structureSet).structurify$setStructureSetId(structureSetId);
 			StructurifyStructurePlacement structurifyStructurePlacement = ((StructurifyStructurePlacement) structureSet.placement());
-			structurifyStructurePlacement.structurify$setStructureSetIdentifier(structureSetId);
+			structurifyStructurePlacement.structurify$setStructureSetId(structureSetId);
+
+			var structures = structureSet.structures();
+
+			for(var structure : structures) {
+				((StructurifyWithStructureSet) (Object) structure).structurify$setStructureSetId(structureSetId);
+			}
 		}
 
 		Structurify.getLogger().info("Structure Sets registries updated");

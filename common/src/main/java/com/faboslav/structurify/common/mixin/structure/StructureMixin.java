@@ -41,21 +41,40 @@ public abstract class StructureMixin implements StructurifyStructure
 	@Nullable
 	public Identifier structurify$structureIdentifier = null;
 
+	@Unique
+	@Nullable
+	private StructureNamespaceData structurify$globalStructureNamespaceData = null;
+
+	@Unique
+	@Nullable
+	private StructureNamespaceData structurify$structureNamespaceData = null;
+
+	@Unique
+	@Nullable
+	private StructureData structurify$structureData = null;
+
+	@Unique
+	@Nullable
+	public HolderSet<Biome> structurify$structureBiomes = null;
+
+	@Unique
+	@Nullable
+	public HolderSet<Biome> structurify$structureBlacklistedBiomes = null;
+
+
 	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
 		this.structurify$structureIdentifier = structureSetIdentifier;
 		this.structurify$globalStructureNamespaceData = null;
 		this.structurify$structureNamespaceData = null;
 		this.structurify$structureData = null;
+		this.structurify$structureBiomes = null;
+		this.structurify$structureBlacklistedBiomes = null;
 	}
 
 	@Nullable
 	public Identifier structurify$getStructureIdentifier() {
 		return this.structurify$structureIdentifier;
 	}
-
-	@Unique
-	@Nullable
-	private StructureNamespaceData structurify$globalStructureNamespaceData = null;
 
 	@Unique
 	public StructureNamespaceData structurify$getGlobalStructureNamespaceData() {
@@ -65,10 +84,6 @@ public abstract class StructureMixin implements StructurifyStructure
 
 		return this.structurify$globalStructureNamespaceData;
 	}
-
-	@Unique
-	@Nullable
-	private StructureNamespaceData structurify$structureNamespaceData = null;
 
 	@Unique
 	@Nullable
@@ -91,10 +106,6 @@ public abstract class StructureMixin implements StructurifyStructure
 
 		return this.structurify$structureNamespaceData;
 	}
-
-	@Unique
-	@Nullable
-	private StructureData structurify$structureData = null;
 
 	@Unique
 	@Nullable
@@ -126,10 +137,6 @@ public abstract class StructureMixin implements StructurifyStructure
 		return this.structurify$structureData;
 	}
 
-	@Unique
-	@Nullable
-	public HolderSet<Biome> structurify$structureBiomes = null;
-
 	public void structurify$setStructureBiomes(@Nullable HolderSet<Biome> biomeHolderSet) {
 		this.structurify$structureBiomes = biomeHolderSet;
 	}
@@ -138,10 +145,6 @@ public abstract class StructureMixin implements StructurifyStructure
 	public HolderSet<Biome> structurify$getStructureBiomes() {
 		return this.structurify$structureBiomes;
 	}
-
-	@Unique
-	@Nullable
-	public HolderSet<Biome> structurify$structureBlacklistedBiomes = null;
 
 	public void structurify$setStructureBlacklistedBiomes(@Nullable HolderSet<Biome> biomeHolderSet) {
 		this.structurify$structureBlacklistedBiomes = biomeHolderSet;

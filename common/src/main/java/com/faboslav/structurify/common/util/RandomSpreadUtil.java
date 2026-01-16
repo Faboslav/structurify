@@ -2,20 +2,19 @@ package com.faboslav.structurify.common.util;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.StructureSetData;
-import net.minecraft.resources.Identifier;
 
 public final class RandomSpreadUtil
 {
-	private static StructureSetData getStructureSetData(Identifier structureSetIdentifier) {
-		if (structureSetIdentifier == null || !Structurify.getConfig().getStructureSetData().containsKey(structureSetIdentifier.toString())) {
+	private static StructureSetData getStructureSetData(String structureSetId) {
+		if (structureSetId == null || !Structurify.getConfig().getStructureSetData().containsKey(structureSetId)) {
 			return null;
 		}
 
-		return Structurify.getConfig().getStructureSetData().get(structureSetIdentifier.toString());
+		return Structurify.getConfig().getStructureSetData().get(structureSetId);
 	}
 
-	public static int getModifiedSalt(Identifier structureSetIdentifier, int originalSalt) {
-		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
+	public static int getModifiedSalt(String structureSetId, int originalSalt) {
+		StructureSetData structureSetData = getStructureSetData(structureSetId);
 
 		if (structureSetData == null) {
 			return originalSalt;
@@ -24,8 +23,8 @@ public final class RandomSpreadUtil
 		return structureSetData.getSalt();
 	}
 
-	public static float getModifiedFrequency(Identifier structureSetIdentifier, float originalFrequency) {
-		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
+	public static float getModifiedFrequency(String structureSetId, float originalFrequency) {
+		StructureSetData structureSetData = getStructureSetData(structureSetId);
 
 		if (structureSetData == null) {
 			return originalFrequency;
@@ -34,8 +33,8 @@ public final class RandomSpreadUtil
 		return structureSetData.getFrequency();
 	}
 
-	public static int getModifiedSpacing(Identifier structureSetIdentifier, int originalSpacing) {
-		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
+	public static int getModifiedSpacing(String structureSetId, int originalSpacing) {
+		StructureSetData structureSetData = getStructureSetData(structureSetId);
 		return getModifiedSpacing(structureSetData, originalSpacing);
 	}
 
@@ -56,11 +55,11 @@ public final class RandomSpreadUtil
 	}
 
 	public static int getModifiedSeparation(
-		Identifier structureSetIdentifier,
+		String structureSetId,
 		int spacing,
 		int originalSeparation
 	) {
-		StructureSetData structureSetData = getStructureSetData(structureSetIdentifier);
+		StructureSetData structureSetData = getStructureSetData(structureSetId);
 		return getModifiedSeparation(structureSetData, spacing, originalSeparation);
 	}
 
@@ -96,5 +95,15 @@ public final class RandomSpreadUtil
 		}
 
 		return separation;
+	}
+
+	public static int getModifiedStructureWeight(String structureSetId, String structureId, int originalWeight) {
+		StructureSetData structureSetData = getStructureSetData(structureSetId);
+
+		if (structureSetData == null) {
+			return originalWeight;
+		}
+
+		return Math.max(1, structureSetData.getStructureWeights().getOrDefault(structureId, originalWeight));
 	}
 }

@@ -1,7 +1,10 @@
 package com.faboslav.structurify.common.config.data;
 
+import java.util.HashMap;
+
 public final class StructureSetData
 {
+	public static final boolean IS_DISABLED_DEFAULT_VALUE = false;
 	public static final boolean OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = false;
 	public static final int MIN_SALT = 0;
 	public static final int MAX_SALT = Integer.MAX_VALUE;
@@ -9,35 +12,52 @@ public final class StructureSetData
 	public static final float MAX_FREQUENCY = 1.0F;
 	public static final int MAX_SPACING = 1024;
 	public static final int MAX_SEPARATION = 1024;
+	public static final int MIN_STRUCTURE_WEIGHT = 0;
+	public static final int MAX_STRUCTURE_WEIGHT = 128;
 
+	private boolean isDisabled = IS_DISABLED_DEFAULT_VALUE;
 	private boolean overrideGlobalSpacingAndSeparationModifier = OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	private boolean defaultOverrideGlobalSpacingAndSeparationModifier = OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	private final int defaultSalt;
 	private final float defaultFrequency;
 	private final int defaultSpacing;
 	private final int defaultSeparation;
+	private final HashMap<String, Integer> defaultStructureWeights;
 	private int salt;
 	private float frequency;
 	private int spacing;
 	private int separation;
+	private final HashMap<String, Integer> structureWeights;
 
-	public StructureSetData(int salt, float frequency, int spacing, int separation) {
+	public StructureSetData(int salt, float frequency, int spacing, int separation, HashMap<String, Integer> structureWeights) {
 		this.defaultSalt = salt;
 		this.defaultFrequency = frequency;
 		this.defaultSpacing = spacing;
 		this.defaultSeparation = separation;
+		this.defaultStructureWeights = new HashMap<>(structureWeights);
 		this.salt = salt;
 		this.frequency = frequency;
 		this.spacing = spacing;
 		this.separation = separation;
+		this.structureWeights = new HashMap<>(structureWeights);
 	}
 
 	public boolean isUsingDefaultValues() {
-		return this.overrideGlobalSpacingAndSeparationModifier == this.defaultOverrideGlobalSpacingAndSeparationModifier
+		return this.isDisabled == IS_DISABLED_DEFAULT_VALUE
+			   && this.overrideGlobalSpacingAndSeparationModifier == this.defaultOverrideGlobalSpacingAndSeparationModifier
 			   && this.salt == this.defaultSalt
 			   && this.frequency == this.defaultFrequency
 			   && this.spacing == this.defaultSpacing
-			   && this.separation == this.defaultSeparation;
+			   && this.separation == this.defaultSeparation
+			   && this.structureWeights.equals(this.defaultStructureWeights);
+	}
+
+	public boolean isDisabled() {
+		return this.isDisabled;
+	}
+
+	public void setDisabled(boolean isDisabled) {
+		this.isDisabled = isDisabled;
 	}
 
 	public boolean overrideGlobalSpacingAndSeparationModifier() {
@@ -48,7 +68,7 @@ public final class StructureSetData
 		this.overrideGlobalSpacingAndSeparationModifier = overrideGlobalSpacingAndSeparationModifier;
 	}
 
-	public boolean defaultOverrideGlobalSpacingAndSeparationModifier() {
+	public boolean getDefaultOverrideGlobalSpacingAndSeparationModifier() {
 		return this.defaultOverrideGlobalSpacingAndSeparationModifier;
 	}
 
@@ -102,5 +122,13 @@ public final class StructureSetData
 
 	public void setSeparation(int separation) {
 		this.separation = separation;
+	}
+
+	public HashMap<String, Integer> getDefaultStructureWeights() {
+		return this.defaultStructureWeights;
+	}
+
+	public HashMap<String, Integer> getStructureWeights() {
+		return this.structureWeights;
 	}
 }

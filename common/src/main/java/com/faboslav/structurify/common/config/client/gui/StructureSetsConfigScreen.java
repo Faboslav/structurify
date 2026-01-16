@@ -1,11 +1,14 @@
 package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.DualControllerBuilder;
+import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.HolderOption;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
 import com.faboslav.structurify.common.config.client.api.option.OptionPair;
+import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.util.LanguageUtil;
@@ -16,7 +19,9 @@ import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
+import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
@@ -39,6 +44,7 @@ public final class StructureSetsConfigScreen
 		var structureSets = WorldgenDataProvider.getStructureSets();
 
 		List<OptionGroup> optionGroups = new ArrayList<>();
+		// TODO rename to something better
 		OptionGroup.Builder currentGroupBuilder = null;
 		String currentNamespace = null;
 
@@ -63,6 +69,36 @@ public final class StructureSetsConfigScreen
 			var translatedStructureSetName = LanguageUtil.translateId("structure", structureSetStringId);
 
 			currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName.copy().withStyle(style -> style.withBold(true))).build());
+
+			var isDisabledOption = Option.<Boolean>createBuilder()
+				.name(translatedStructureSetName)
+				.binding(
+					StructureSetData.IS_DISABLED_DEFAULT_VALUE,
+					() -> config.getStructureSetData().get(structureSetStringId).isDisabled(),
+					isDisabled -> config.getStructureSetData().get(structureSetStringId).setDisabled(isDisabled)
+				)
+				.controller(opt -> StructureButtonControllerBuilder.create(opt, structureSetStringId)
+					.openConfigCallback((screen, id) -> {
+						var configScreen = StructurifyClient.getConfigScreen();
+
+						if (configScreen == null) {
+							return;
+						}
+
+						screen.finishOrSave();
+
+						YACLScreen structureSetScreen = StructureSetConfigScreen.create(Structurify.getConfig(), id, screen);
+
+						configScreen.saveScreenState(screen);
+						Minecraft.getInstance().setScreen(structureSetScreen);
+						configScreen.loadScreenState(structureSetScreen);
+					})
+					.buttonTooltip("gui.structurify.structures.structure_set.config_button.tooltip")
+					.formatValue(val -> val ? Component.translatable("gui.structurify.label.enabled"):Component.translatable("gui.structurify.label.disabled"))
+					.coloured(true)
+				).build();
+
+			currentGroupBuilder.option(isDisabledOption);
 
 			var defaultSalt = config.getStructureSetData().get(structureSetStringId).getDefaultSalt();
 
@@ -113,7 +149,7 @@ public final class StructureSetsConfigScreen
 					.name(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.title"))
 					.description(overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.build())
 					.binding(
-						StructureSetData.OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE,
+						config.getStructureSetData().get(structureSetStringId).getDefaultOverrideGlobalSpacingAndSeparationModifier(),
 						() -> config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier(),
 						overrideGlobalSpacingAndSeparationModifier -> config.getStructureSetData().get(structureSetStringId).setOverrideGlobalSpacingAndSeparationModifier(overrideGlobalSpacingAndSeparationModifier)
 					)

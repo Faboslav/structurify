@@ -4,7 +4,6 @@ import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -27,15 +26,15 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 
 	@Unique
 	@Nullable
-	public Identifier structurify$structureIdentifier = null;
+	public String structurify$structureId = null;
 
-	public void structurify$setStructureSetIdentifier(Identifier structureSetIdentifier) {
-		this.structurify$structureIdentifier = structureSetIdentifier;
+	public void structurify$setStructureSetId(String structureSetId) {
+		this.structurify$structureId = structureSetId;
 	}
 
 	@Nullable
-	public Identifier structurify$getStructureSetIdentifier() {
-		return this.structurify$structureIdentifier;
+	public String structurify$getStructureSetId() {
+		return this.structurify$structureId;
 	}
 
 	public int structurify$getOriginalSalt() {
@@ -51,7 +50,7 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		at = @At("RETURN")
 	)
 	protected int structurify$getSalt(int originalSalt) {
-		return RandomSpreadUtil.getModifiedSalt(this.structurify$getStructureSetIdentifier(), originalSalt);
+		return RandomSpreadUtil.getModifiedSalt(this.structurify$getStructureSetId(), originalSalt);
 	}
 
 	@ModifyReturnValue(
@@ -59,7 +58,7 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		at = @At("RETURN")
 	)
 	protected float structurify$getFrequency(float originalFrequency) {
-		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetIdentifier(), originalFrequency);
+		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetId(), originalFrequency);
 	}
 
 	//? if >= 1.21.1 {
@@ -72,7 +71,7 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		)
 	)
 	protected float structurify$applyAdditionalChunkRestrictionsGetFrequency(float originalFrequency) {
-		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetIdentifier(), originalFrequency);
+		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetId(), originalFrequency);
 	}
 	//?} else {
 	/*@ModifyExpressionValue(

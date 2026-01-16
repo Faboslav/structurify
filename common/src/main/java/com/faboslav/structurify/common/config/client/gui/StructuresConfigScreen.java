@@ -1,6 +1,7 @@
 package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.HolderOption;
@@ -17,7 +18,9 @@ import com.faboslav.structurify.common.util.LanguageUtil;
 import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -211,7 +214,23 @@ public final class StructuresConfigScreen
 			)
 			.controller(opt -> StructureButtonControllerBuilder.create(opt, structureId)
 				.formatValue(val -> val ? Component.translatable("gui.structurify.label.enabled"):Component.translatable("gui.structurify.label.disabled"))
-				.coloured(true));
+				.coloured(true)
+				.openConfigCallback((screen, id) -> {
+					var configScreen = StructurifyClient.getConfigScreen();
+
+					if (configScreen == null) {
+						return;
+					}
+
+					screen.finishOrSave();
+
+					YACLScreen structureScreen = StructureConfigScreen.create(Structurify.getConfig(), id, screen);
+
+					configScreen.saveScreenState(screen);
+					Minecraft.getInstance().setScreen(structureScreen);
+					configScreen.loadScreenState(structureScreen);
+				}).buttonTooltip("gui.structurify.structures.structure.detail_button.tooltip")
+			);
 
 		structureOptionBuilder.description(v -> {
 			var descriptionBuilder = OptionDescription.createBuilder();

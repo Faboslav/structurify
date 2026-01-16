@@ -17,6 +17,8 @@
 		"compat.RepurposedStructuresModifySpreadMixin",
 		"compat.YungJigsawStructureMixin",
 		"structure.StructureMixin",
+		"structure.StructureSelectionEntryMixin",
+		"structure.StructureSetMixin",
 		"structure.jigsaw.JigsawStructureAccessor",
 		"structure.jigsaw.JigsawStructureMixin",
 		"structure.placement.RandomSpreadStructurePlacementMixin",
