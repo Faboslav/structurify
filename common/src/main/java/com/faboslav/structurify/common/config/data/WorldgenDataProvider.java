@@ -308,9 +308,10 @@ public final class WorldgenDataProvider
 
 			var structureWeights = new HashMap<String, Integer>();
 
-			for(var structureSelectionEntry : structureSet.structures()) {
+			for (var structureSelectionEntry : structureSet.structures()) {
 				StructurifyStructureSelectionEntry structurifyStructureSelectionEntry = ((StructurifyStructureSelectionEntry) (Object) structureSelectionEntry);
-				structureWeights.put(structureSelectionEntry.structure().getRegisteredName(), structurifyStructureSelectionEntry.structurify$getOriginalWeight());
+				var structureId = structureSelectionEntry.structure().unwrapKey().get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
+				structureWeights.put(structureId, structurifyStructureSelectionEntry.structurify$getOriginalWeight());
 			}
 
 			var structureSetData = new StructureSetData(

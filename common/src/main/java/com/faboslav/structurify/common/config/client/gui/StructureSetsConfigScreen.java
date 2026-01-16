@@ -70,12 +70,12 @@ public final class StructureSetsConfigScreen
 
 			currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName.copy().withStyle(style -> style.withBold(true))).build());
 
-			var isDisabledOption = Option.<Boolean>createBuilder()
+			var isEnabledOption = Option.<Boolean>createBuilder()
 				.name(translatedStructureSetName)
 				.binding(
-					StructureSetData.IS_DISABLED_DEFAULT_VALUE,
-					() -> config.getStructureSetData().get(structureSetStringId).isDisabled(),
-					isDisabled -> config.getStructureSetData().get(structureSetStringId).setDisabled(isDisabled)
+					!StructureSetData.IS_DISABLED_DEFAULT_VALUE,
+					() -> !config.getStructureSetData().get(structureSetStringId).isDisabled(),
+					isEnabled -> config.getStructureSetData().get(structureSetStringId).setDisabled(!isEnabled)
 				)
 				.controller(opt -> StructureButtonControllerBuilder.create(opt, structureSetStringId)
 					.openConfigCallback((screen, id) -> {
@@ -98,7 +98,7 @@ public final class StructureSetsConfigScreen
 					.coloured(true)
 				).build();
 
-			currentGroupBuilder.option(isDisabledOption);
+			currentGroupBuilder.option(isEnabledOption);
 
 			var defaultSalt = config.getStructureSetData().get(structureSetStringId).getDefaultSalt();
 

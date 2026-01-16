@@ -4,11 +4,11 @@ import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlace
 import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.legacy.structure_gel.api.structure.GridStructurePlacement;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(value = GridStructurePlacement.class, remap = false)
@@ -22,8 +22,9 @@ public abstract class StructureGelApiModifySpreadMixin implements StructurifyRan
 	@Final
 	private int offset;
 
+	@Unique
 	@Nullable
-	public ResourceLocation structureSetResourceLocation = null;
+	private String structurify$structureSetId = null;
 
 	@Shadow
 	@Final
@@ -33,15 +34,14 @@ public abstract class StructureGelApiModifySpreadMixin implements StructurifyRan
 	@Final
 	public abstract int offset();
 
-	public void structurify$setStructureSetResourceLocation(ResourceLocation structureSetResourceLocation) {
-		this.structureSetResourceLocation = structureSetResourceLocation;
+	public void structurify$setStructureSetId(String structureSetId) {
+		this.structurify$structureSetId = structureSetId;
 	}
 
 	@Nullable
-	public ResourceLocation structurify$getStructureSetResourceLocation() {
-		return this.structureSetResourceLocation;
+	public String structurify$getStructureSetId() {
+		return this.structurify$structureSetId;
 	}
-
 	public int structurify$getOriginalSpacing() {
 		return this.spacing;
 	}
@@ -55,7 +55,7 @@ public abstract class StructureGelApiModifySpreadMixin implements StructurifyRan
 		at = @At("RETURN")
 	)
 	protected int structurify$getSpacing(int originalSpacing) {
-		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetResourceLocation(), originalSpacing);
+		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetId(), originalSpacing);
 	}
 
 	@ModifyReturnValue(
@@ -63,6 +63,6 @@ public abstract class StructureGelApiModifySpreadMixin implements StructurifyRan
 		at = @At("RETURN")
 	)
 	protected int structurify$getOffset(int originalOffset) {
-		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetResourceLocation(), this.spacing(), originalOffset);
+		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetId(), this.spacing(), originalOffset);
 	}
 }

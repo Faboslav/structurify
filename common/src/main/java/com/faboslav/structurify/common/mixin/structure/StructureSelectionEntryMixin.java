@@ -46,7 +46,7 @@ public abstract class StructureSelectionEntryMixin implements StructurifyStructu
 		at = @At("RETURN")
 	)
 	private int structurify$getWeight(int originalWeight) {
-		var structureId = this.structure.getRegisteredName();
+		String structureId = this.structure.unwrapKey().get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 		return RandomSpreadUtil.getModifiedStructureWeight(this.structurify$getStructureSetId(), structureId, originalWeight);
 	}
 }
