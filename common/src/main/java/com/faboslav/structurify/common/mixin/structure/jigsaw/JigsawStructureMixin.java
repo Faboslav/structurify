@@ -2,14 +2,31 @@ package com.faboslav.structurify.common.mixin.structure.jigsaw;
 
 import com.faboslav.structurify.common.mixin.structure.StructureMixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(JigsawStructure.class)
 public abstract class JigsawStructureMixin extends StructureMixin
 {
+	@Unique
+	@Nullable
+	//? if >= 1.21.9 {
+	private JigsawStructure.MaxDistance structurify$maxDistance = null;
+	//?} else {
+	/*private int structurify$maxDistance = null;
+	*///?}
+
+	@Override
+	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
+		super.structurify$setStructureIdentifier(structureSetIdentifier);
+		this.structurify$maxDistance = null;
+	}
+
 	@ModifyExpressionValue(
 		method = "findGenerationPoint",
 		at = @At(
@@ -19,11 +36,13 @@ public abstract class JigsawStructureMixin extends StructureMixin
 		)
 	)
 	protected int structurify$findGenerationPointGetMaxDepth(int originalMaxDepth) {
-		if (this.structurify$getStructureData() == null) {
+		var structureData = this.structurify$getStructureData();
+
+		if (structureData == null) {
 			return originalMaxDepth;
 		}
 
-		return this.structurify$getStructureData().getJigsawData().getSize();
+		return structureData.getJigsawData().getSize();
 	}
 
 	@ModifyExpressionValue(
@@ -44,17 +63,23 @@ public abstract class JigsawStructureMixin extends StructureMixin
 	/*protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
 	*///?}
 	{
-		if (this.structurify$getStructureData() == null) {
+		var structureData = this.structurify$getStructureData();
+
+		if (structureData == null) {
 			return originalMaxDistanceFromCenter;
 		}
 
-		//? if >= 1.21.9 {
-		return new JigsawStructure.MaxDistance(
-			this.structurify$getStructureData().getJigsawData().getHorizontalMaxDistanceFromCenter(),
-			this.structurify$getStructureData().getJigsawData().getVerticalMaxDistanceFromCenter()
-		);
-		//?} else {
-		/*return this.structurify$getStructureData().getJigsawData().getHorizontalMaxDistanceFromCenter();
-		*///?}
+		if(this.structurify$maxDistance == null) {
+			//? if >= 1.21.9 {
+			this.structurify$maxDistance = new JigsawStructure.MaxDistance(
+				structureData.getJigsawData().getHorizontalMaxDistanceFromCenter(),
+				structureData.getJigsawData().getVerticalMaxDistanceFromCenter()
+			);
+			//?} else {
+			/*this.structurify$maxDistance = structureData.getJigsawData().getHorizontalMaxDistanceFromCenter();
+			 *///?}
+		}
+
+		return this.structurify$maxDistance;
 	}
 }

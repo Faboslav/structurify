@@ -43,23 +43,23 @@ public abstract class StructureMixin implements StructurifyStructure
 
 	@Unique
 	@Nullable
-	private StructureNamespaceData structurify$globalStructureNamespaceData = null;
+	protected StructureNamespaceData structurify$globalStructureNamespaceData = null;
 
 	@Unique
 	@Nullable
-	private StructureNamespaceData structurify$structureNamespaceData = null;
+	protected StructureNamespaceData structurify$structureNamespaceData = null;
 
 	@Unique
 	@Nullable
-	private StructureData structurify$structureData = null;
+	protected StructureData structurify$structureData = null;
 
 	@Unique
 	@Nullable
-	public HolderSet<Biome> structurify$structureBiomes = null;
+	protected HolderSet<Biome> structurify$structureBiomes = null;
 
 	@Unique
 	@Nullable
-	public HolderSet<Biome> structurify$structureBlacklistedBiomes = null;
+	protected HolderSet<Biome> structurify$structureBlacklistedBiomes = null;
 
 
 	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
@@ -100,7 +100,7 @@ public abstract class StructureMixin implements StructurifyStructure
 			}
 
 			if (structureIdentifier != null) {
-				this.structurify$structureNamespaceData = Structurify.getConfig().getStructureNamespaceData().get(structureIdentifier.getNamespace());
+				this.structurify$structureNamespaceData = Structurify.getConfig().getStructureNamespaceData().getOrDefault(structureIdentifier.getNamespace(), null);
 			}
 		}
 
@@ -110,15 +110,7 @@ public abstract class StructureMixin implements StructurifyStructure
 	@Unique
 	@Nullable
 	public StructureData structurify$getStructureData() {
-		if (this.structurify$structureData == null) {
-			var structureIdentifier = this.structurify$getStructureIdentifier();
-
-			if (structureIdentifier != null && Structurify.getConfig().getStructureData().containsKey(structureIdentifier.toString())) {
-				this.structurify$structureData = Structurify.getConfig().getStructureData().get(structureIdentifier.toString());
-			}
-		}
-
-		return this.structurify$structureData;
+		return this.structurify$getStructureData(this.structurify$getStructureIdentifier());
 	}
 
 	@Unique
@@ -130,7 +122,7 @@ public abstract class StructureMixin implements StructurifyStructure
 			}
 
 			if (structureIdentifier != null) {
-				this.structurify$structureData = Structurify.getConfig().getStructureData().get(structureIdentifier.toString());
+				this.structurify$structureData = Structurify.getConfig().getStructureData().getOrDefault(structureIdentifier.toString(), null);
 			}
 		}
 
@@ -154,11 +146,12 @@ public abstract class StructureMixin implements StructurifyStructure
 	public HolderSet<Biome> structurify$getStructureBlacklistedBiomes() {
 		if (this.structurify$structureBlacklistedBiomes == null) {
 			var structureId = structurify$getStructureIdentifier();
+
 			if(structureId == null || !Structurify.getConfig().getStructureData().containsKey(structureId.toString())) {
 				return null;
 			}
 
-			var blacklistedBiomeHolderSet = BiomeUtil.getBlacklistedBiomes(structurify$getStructureIdentifier());
+			var blacklistedBiomeHolderSet = BiomeUtil.getBlacklistedBiomes(structureId);
 			this.structurify$setStructureBlacklistedBiomes(blacklistedBiomeHolderSet);
 		}
 
@@ -173,11 +166,12 @@ public abstract class StructureMixin implements StructurifyStructure
 	) {
 		if (this.structurify$structureBiomes == null) {
 			var structureId = structurify$getStructureIdentifier();
+
 			if(structureId == null || !Structurify.getConfig().getStructureData().containsKey(structureId.toString())) {
 				return original.call();
 			}
 
-			var biomeHolderSet = BiomeUtil.getBiomes(structurify$getStructureIdentifier(), original.call());
+			var biomeHolderSet = BiomeUtil.getBiomes(structureId, original.call());
 			this.structurify$setStructureBiomes(biomeHolderSet);
 		}
 

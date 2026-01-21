@@ -4,7 +4,6 @@ import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
 import com.faboslav.structurify.common.config.client.gui.structure.*;
 import com.faboslav.structurify.common.config.data.StructureSetData;
-import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
@@ -13,7 +12,6 @@ import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.levelgen.structure.StructureSet;
 
 public final class StructureSetConfigScreen
 {
@@ -29,11 +27,11 @@ public final class StructureSetConfigScreen
 			.tooltip(Component.translatable("gui.structurify.structures.structure_set.description", translatedStructureSetName));
 
 		var structureSetSettingsGroup = new InvisibleOptionGroup.Builder().name(Component.literal("test"));
-		structureSetSettingsGroup.option(LabelOption.create(Component.translatable("gui.structurify.structures.structure_sets.structure_set.title").withStyle(style -> style.withBold(true))));
+		structureSetSettingsGroup.option(LabelOption.create(Component.translatable("gui.structurify.structure_sets.structure_set.title").withStyle(style -> style.withBold(true))));
 
 		var isDisabledOption = Option.<Boolean>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.is_disabled.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.is_disabled.description")))
+			.name(Component.translatable("gui.structurify.structure_sets.structure_set.is_disabled.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structure_sets.structure_set.is_disabled.description")))
 			.binding(
 				StructureSetData.IS_DISABLED_DEFAULT_VALUE,
 				structureSetData::isDisabled,
@@ -43,7 +41,7 @@ public final class StructureSetConfigScreen
 
 		structureSetSettingsGroup.option(isDisabledOption);
 
-		structureSetSettingsGroup.option(LabelOption.create(Component.translatable("gui.structurify.structures.structure_sets.structure_set.weights.title").withStyle(style -> style.withBold(true))));
+		structureSetSettingsGroup.option(LabelOption.create(Component.translatable("gui.structurify.structure_sets.structure_set.weights.title").withStyle(style -> style.withBold(true))));
 
 		for(var structureWeight : structureSetData.getStructureWeights().entrySet()) {
 			var structureId = structureWeight.getKey();
@@ -51,7 +49,7 @@ public final class StructureSetConfigScreen
 
 			var weightOption = Option.<Integer>createBuilder()
 				.name(translatedStructureName)
-				.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.jigsaw.size.description")))
+				.description(OptionDescription.of(Component.translatable("gui.structurify.structure_sets.structure_set.weight.description")))
 				.binding(
 					structureSetData.getDefaultStructureWeights().get(structureId),
 					() -> structureSetData.getStructureWeights().get(structureId),
