@@ -239,7 +239,7 @@ public abstract class StructureMixin implements StructurifyStructure
 		var possibleStructureId = structure.unwrapKey();
 		structureId = possibleStructureId.map(ResourceKey::/*? if >= 1.21.11 {*/identifier/*?} else {*//*location*//*?}*/).orElseGet(this::structurify$getStructureIdentifier);
 		//?} else {
-		/*structureId = this.structurify$getStructureResourceLocation();
+		/*structureId = this.structurify$getStructureIdentifier();
 		*///?}
 
 		if (structureStart == StructureStart.INVALID_START || !structureStart.isValid()) {

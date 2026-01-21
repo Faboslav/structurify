@@ -13,7 +13,7 @@ import java.util.List;
 //? if >= 1.21.11 {
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 //?} else {
-/*import net.minecraft.client.renderer.RenderType;
+/*import net.minecraft.client.renderer.rendertype.RenderTypes;
  *///?}
 
 public class StructureDebugRenderer
@@ -41,7 +41,7 @@ public class StructureDebugRenderer
 					//? if >= 1.21.11 {
 					RenderTypes.lines()
 					//?} else {
-					/*RenderType.lines()
+					/*RenderTypes.lines()
 			 		*///?}
 				),
 				camX,

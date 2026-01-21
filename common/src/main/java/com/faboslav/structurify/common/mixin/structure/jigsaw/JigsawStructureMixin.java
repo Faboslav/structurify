@@ -18,7 +18,7 @@ public abstract class JigsawStructureMixin extends StructureMixin
 	//? if >= 1.21.9 {
 	private JigsawStructure.MaxDistance structurify$maxDistance = null;
 	//?} else {
-	/*private int structurify$maxDistance = null;
+	/*private Integer structurify$maxDistance = null;
 	*///?}
 
 	@Override

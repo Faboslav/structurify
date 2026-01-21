@@ -32,7 +32,7 @@ public final class Structurify
 			path
 		);
 		//?} else {
-		/*return new ResourceLocation(
+		/*return new Identifier(
 			MOD_ID,
 			path
 		);
@@ -45,7 +45,7 @@ public final class Structurify
 			id
 		);
 		//?} else {
-		/*return new ResourceLocation(
+		/*return new Identifier(
 			id
 		);
 		*///?}

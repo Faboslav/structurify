@@ -13,7 +13,7 @@ import net.minecraft.world.phys.AABB;
 //? if >= 1.21.11 {
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 //?} else {
-/*import net.minecraft.client.renderer.RenderType;
+/*import net.minecraft.client.renderer.rendertype.RenderTypes;
  *///?}
 
 public final class StructureOverlapDebugRenderer
@@ -63,7 +63,7 @@ public final class StructureOverlapDebugRenderer
 				//? if >= 1.21.11 {
 				RenderTypes.lines()
 				//?} else {
-				/*RenderType.lines()
+				/*RenderTypes.lines()
 				 *///?}
 			),
 			col,
