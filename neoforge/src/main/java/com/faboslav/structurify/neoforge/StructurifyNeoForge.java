@@ -6,6 +6,7 @@ import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -33,8 +34,8 @@ public final class StructurifyNeoForge
 		}
 
 		eventBus.addListener(StructurifyNeoForge::registerCommand);
-		eventBus.addListener(StructurifyNeoForge::onResourceManagerReload);
-		eventBus.addListener(StructurifyNeoForge::onServerAboutToStart);
+		eventBus.addListener(EventPriority.LOWEST, StructurifyNeoForge::onResourceManagerReload);
+		eventBus.addListener(EventPriority.LOWEST, StructurifyNeoForge::onServerAboutToStart);
 	}
 
 	private static void registerCommand(RegisterCommandsEvent event) {

@@ -1,3 +1,7 @@
+## 2.0.14
+
+- Fixed compatibility issues related to structure sets (for example with CTOV)
+
 ## 2.0.13
 
 - Added option to disable structure sets

@@ -39,13 +39,13 @@ public abstract class StructureSetMixin implements StructurifyWithStructureSet
 	private List<StructureSet.StructureSelectionEntry> structurify$getStructures(Operation<List<StructureSet.StructureSelectionEntry>> originalStructures) {
 		if (this.structurify$structures == null) {
 			var structureSetId = this.structurify$getStructureSetId();
+			var updatedStructures = new ArrayList<>(originalStructures.call());
 
-			if(structureSetId == null || !Structurify.getConfig().getStructureSetData().containsKey(structureSetId)) {
-				return originalStructures.call();
+			if(structureSetId != null || Structurify.getConfig().getStructureSetData().containsKey(structureSetId)) {
+				return updatedStructures;
 			}
 
 			var structureSetData = Structurify.getConfig().getStructureSetData().get(structureSetId);
-			var updatedStructures = new ArrayList<StructureSet.StructureSelectionEntry>();
 
 			if(!structureSetData.isDisabled()) {
 				updatedStructures.addAll(originalStructures.call());

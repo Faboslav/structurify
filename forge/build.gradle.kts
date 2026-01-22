@@ -79,6 +79,13 @@ dependencies {
 	}
 	for (mod in betterModListDeps) modImplementation(mod)
 
+	// ChoiceTheorem's Overhauled Village
+	val ctov: List<Dependency> = fletchingTable.modrinthBundle("ct-overhaul-village", commonMod.mc, "forge") {
+		recursive = true
+		include("required", "optional", "embedded")
+	}
+	for (mod in ctov) modImplementation(mod)
+
 	// Fantasy structures
 	val fantasyStructures: List<Dependency> = fletchingTable.modrinthBundle("fantasy-structures-(by-berezka)", commonMod.mc, "forge") {
 		recursive = true

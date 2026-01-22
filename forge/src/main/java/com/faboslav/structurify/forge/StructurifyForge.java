@@ -10,6 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -33,8 +34,8 @@ public final class StructurifyForge
 		}
 
 		eventBus.addListener(StructurifyForge::registerCommand);
-		eventBus.addListener(StructurifyForge::onResourceManagerReload);
-		eventBus.addListener(StructurifyForge::onServerAboutToStart);
+		eventBus.addListener(EventPriority.LOWEST, StructurifyForge::onResourceManagerReload);
+		eventBus.addListener(EventPriority.LOWEST, StructurifyForge::onServerAboutToStart);
 	}
 
 	private static void registerCommand(RegisterCommandsEvent event) {
