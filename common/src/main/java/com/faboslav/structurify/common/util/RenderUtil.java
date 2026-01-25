@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 
-//? if >= 1.21.1 {
+//? if >= 1.21.11 {
 import net.minecraft.util.ARGB;
 //?}
 
