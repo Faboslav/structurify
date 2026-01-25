@@ -9,10 +9,13 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 
+//? if >= 1.21.1 {
+import net.minecraft.util.ARGB;
+//?}
+
 //? if >= 1.21.3 {
 import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 //?} else {
 /*import net.minecraft.client.renderer.LevelRenderer;
 *///?}
@@ -52,7 +55,15 @@ public final class RenderUtil
 	) {
 		//? if >= 1.21.11 {
 		var shape = Shapes.create(box);
-		ShapeRenderer.renderShape(poseStack, buffer, shape, red, green, blue, 1, alpha);
+
+		int a = (int)(alpha * 255.0f) & 0xFF;
+		int r = (int)(red   * 255.0f) & 0xFF;
+		int g = (int)(green * 255.0f) & 0xFF;
+		int b = (int)(blue  * 255.0f) & 0xFF;
+
+		int color = ARGB.color(a, r, g, b);
+
+		ShapeRenderer.renderShape(poseStack, buffer, shape, 0.0, 0.0, 0.0, color, 1.0f);
 		//?} else if >= 1.21.9 {
 		/*ShapeRenderer.renderLineBox(poseStack.last(), buffer, box, red, green, blue, alpha);
 		*///?} else if >= 1.21.3 {

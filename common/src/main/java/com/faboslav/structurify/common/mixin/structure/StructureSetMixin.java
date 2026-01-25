@@ -41,7 +41,7 @@ public abstract class StructureSetMixin implements StructurifyWithStructureSet
 			var structureSetId = this.structurify$getStructureSetId();
 			var updatedStructures = new ArrayList<>(originalStructures.call());
 
-			if(structureSetId != null || Structurify.getConfig().getStructureSetData().containsKey(structureSetId)) {
+			if(structureSetId == null || !Structurify.getConfig().getStructureSetData().containsKey(structureSetId)) {
 				return updatedStructures;
 			}
 

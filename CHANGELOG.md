@@ -1,3 +1,9 @@
+## 2.0.15
+
+- Fixed compatibility issues related to structure sets (again)
+- Fixed debug renderer (for the debug command)
+- Improved textations (mainly descriptions of fields)
+
 ## 2.0.14
 
 - Fixed compatibility issues related to structure sets (for example with CTOV)
