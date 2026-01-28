@@ -48,6 +48,13 @@ dependencies {
 		) { isTransitive = false }
 	}
 
+	// Litostitched
+	commonMod.depOrNull("lithostitched_minecraft")?.let { lithostitchedMcVersion ->
+		commonMod.depOrNull("lithostitched")?.let { lithostitchedVersion ->
+			modImplementation(commonMod.modrinth("lithostitched", "${lithostitchedVersion}-forge-${lithostitchedMcVersion}"))
+		}
+	}
+
 	// Yungs Api
 	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
 		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->

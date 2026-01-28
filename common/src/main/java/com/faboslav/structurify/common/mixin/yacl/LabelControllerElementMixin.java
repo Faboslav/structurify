@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class LabelControllerElementMixin
 {
 	//? if < 1.21.1 {
-	/*@Shadow
+	/*@Shadow(remap = false)
 	@Nullable
 	protected abstract Style getStyle(int mouseX, int mouseY);
 

@@ -11,10 +11,15 @@ import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Mixin(StructureSet.class)
 public abstract class StructureSetMixin implements StructurifyWithStructureSet
 {
+	@Unique
+	@Nullable
+	public List<StructureSet.StructureSelectionEntry> structurify$originalStructures = null;
+
 	@Unique
 	@Nullable
 	public List<StructureSet.StructureSelectionEntry> structurify$structures = null;
@@ -26,6 +31,7 @@ public abstract class StructureSetMixin implements StructurifyWithStructureSet
 	public void structurify$setStructureSetId(String structureSetId) {
 		this.structurify$structureSetId = structureSetId;
 		this.structurify$structures = null;
+		this.structurify$originalStructures = null;
 	}
 
 	@Nullable
@@ -37,18 +43,21 @@ public abstract class StructureSetMixin implements StructurifyWithStructureSet
 		method = "structures"
 	)
 	private List<StructureSet.StructureSelectionEntry> structurify$getStructures(Operation<List<StructureSet.StructureSelectionEntry>> originalStructures) {
-		if (this.structurify$structures == null) {
+		var structures = new ArrayList<>(originalStructures.call());
+
+		if (this.structurify$structures == null || (structurify$originalStructures != null && !Objects.equals(this.structurify$originalStructures, structures))) {
 			var structureSetId = this.structurify$getStructureSetId();
-			var updatedStructures = new ArrayList<>(originalStructures.call());
 
 			if(structureSetId == null || !Structurify.getConfig().getStructureSetData().containsKey(structureSetId)) {
-				return updatedStructures;
+				this.structurify$structures = structures;
+				this.structurify$originalStructures = structures;
+				return this.structurify$structures;
 			}
 
+			var updatedStructures = new ArrayList<>(structures);
 			var structureSetData = Structurify.getConfig().getStructureSetData().get(structureSetId);
 
 			if(!structureSetData.isDisabled()) {
-				updatedStructures.addAll(originalStructures.call());
 
 				for (var structureWeight : structureSetData.getStructureWeights().entrySet()) {
 					var structureId = structureWeight.getKey();
@@ -67,9 +76,10 @@ public abstract class StructureSetMixin implements StructurifyWithStructureSet
 				}
 			}
 
+			this.structurify$originalStructures = structures;
 			this.structurify$structures = updatedStructures;
 		}
 
-		return structurify$structures;
+		return this.structurify$structures;
 	}
 }

@@ -1,3 +1,7 @@
+## 2.0.16
+
+- Fixed compatibility issues related to structure sets (third time is the time)
+
 ## 2.0.15
 
 - Fixed compatibility issues related to structure sets (again)

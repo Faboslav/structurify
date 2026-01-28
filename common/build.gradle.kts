@@ -7,6 +7,7 @@ plugins {
 stonecutter {
 	constants["global_packs"] = rootProject.project(stonecutter.current.project).property("deps.global_packs").toString() != ""
 	constants["open_loader"] = rootProject.project(stonecutter.current.project).property("deps.open_loader").toString() != ""
+	constants["lithostitched"] = rootProject.project(stonecutter.current.project).property("deps.lithostitched").toString() != ""
 	constants["yungs_api"] = rootProject.project(stonecutter.current.project).property("deps.yungs_api").toString() != ""
 	constants["repurposed_structures"] = rootProject.project(stonecutter.current.project).property("deps.repurposed_structures")
 		.toString() != "" && rootProject.project(stonecutter.current.project).property("deps.midnight_lib")
@@ -46,7 +47,7 @@ dependencies {
 
 	// Global Packs
 	commonMod.depOrNull("global_packs")?.let { globalPacksVersion ->
-			modImplementation(commonMod.modrinth("globalpacks", globalPacksVersion))
+		modImplementation(commonMod.modrinth("globalpacks", globalPacksVersion))
 	}
 
 	// Open Loader
@@ -71,6 +72,13 @@ dependencies {
 	commonMod.depOrNull("terra")?.let { terraVersion ->
 		modImplementation("com.dfsek.terra:fabric:${terraVersion}")
 	}*/
+
+	// Litostitched
+	commonMod.depOrNull("lithostitched_minecraft")?.let { lithostitchedMcVersion ->
+		commonMod.depOrNull("lithostitched")?.let { lithostitchedVersion ->
+			modImplementation(commonMod.modrinth("lithostitched", "${lithostitchedVersion}-fabric-${lithostitchedMcVersion}"))
+		}
+	}
 
 	// Yungs api
 	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
