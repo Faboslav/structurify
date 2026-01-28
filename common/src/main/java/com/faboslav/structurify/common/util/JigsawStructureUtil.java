@@ -69,7 +69,11 @@ public final class JigsawStructureUtil
 
 		//? if lithostitched {
 		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("litostitched") && structure instanceof AlternateJigsawStructure) {
-			return ((AlternateJigsawStructure) structure).config().maxDistanceFromCenter();
+			//? if >= 1.21.10 {
+			return new JigsawStructure.MaxDistance(((AlternateJigsawStructure) structure).config().maxDistanceFromCenter().horizontal(), ((AlternateJigsawStructure) structure).config().maxDistanceFromCenter().vertical());
+			//?} else {
+			/*return ((AlternateJigsawStructure) structure).config().maxDistanceFromCenter();
+			*///?}
 		}
 		//?}
 
