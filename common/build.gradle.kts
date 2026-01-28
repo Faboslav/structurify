@@ -7,8 +7,8 @@ plugins {
 stonecutter {
 	constants["global_packs"] = rootProject.project(stonecutter.current.project).property("deps.global_packs").toString() != ""
 	constants["open_loader"] = rootProject.project(stonecutter.current.project).property("deps.open_loader").toString() != ""
-	constants["lithostitched"] = rootProject.project(stonecutter.current.project).property("deps.lithostitched").toString() != ""
-	constants["yungs_api"] = rootProject.project(stonecutter.current.project).property("deps.yungs_api").toString() != ""
+	constants["lithostitched"] = rootProject.project(stonecutter.current.project).property("deps.lithostitched").toString() != "" && rootProject.project(stonecutter.current.project).property("deps.lithostitched_minecraft").toString() != ""
+	constants["yungs_api"] = rootProject.project(stonecutter.current.project).property("deps.yungs_api").toString() != "" && rootProject.project(stonecutter.current.project).property("deps.yungs_api_minecraft").toString() != ""
 	constants["repurposed_structures"] = rootProject.project(stonecutter.current.project).property("deps.repurposed_structures")
 		.toString() != "" && rootProject.project(stonecutter.current.project).property("deps.midnight_lib")
 		.toString() != ""

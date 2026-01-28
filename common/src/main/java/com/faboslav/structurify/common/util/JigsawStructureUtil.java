@@ -2,7 +2,6 @@ package com.faboslav.structurify.common.util;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.mixin.structure.jigsaw.JigsawStructureAccessor;
-import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawStructure;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
@@ -67,15 +66,12 @@ public final class JigsawStructureUtil
 			return ((JigsawStructureAccessor) structure).structurify$getMaxDistanceFromCenter();
 		}
 
-		//? if lithostitched {
+		// TODO lithostitched
+		/*
 		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("litostitched") && structure instanceof AlternateJigsawStructure) {
-			//? if >= 1.21.10 {
 			return new JigsawStructure.MaxDistance(((AlternateJigsawStructure) structure).config().maxDistanceFromCenter().horizontal(), ((AlternateJigsawStructure) structure).config().maxDistanceFromCenter().vertical());
-			//?} else {
-			/*return ((AlternateJigsawStructure) structure).config().maxDistanceFromCenter();
-			*///?}
 		}
-		//?}
+		*/
 
 		//? if yungs_api {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
