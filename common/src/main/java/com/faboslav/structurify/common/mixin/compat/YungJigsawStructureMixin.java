@@ -23,8 +23,7 @@ public abstract class YungJigsawStructureMixin extends Structure implements Stru
 			value = "FIELD",
 			target = "Lcom/yungnickyoung/minecraft/yungsapi/world/structure/YungJigsawStructure;maxDepth:I",
 			opcode = Opcodes.GETFIELD
-		),
-		remap = false
+		)
 	)
 	protected int structurify$findGenerationPointGetMaxDepth(int originalMaxDepth) {
 		if (this.structurify$getStructureData() == null) {
@@ -40,8 +39,7 @@ public abstract class YungJigsawStructureMixin extends Structure implements Stru
 			value = "FIELD",
 			target = "Lcom/yungnickyoung/minecraft/yungsapi/world/structure/YungJigsawStructure;maxDistanceFromCenter:I",
 			opcode = Opcodes.GETFIELD
-		),
-		remap = false
+		)
 	)
 	protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter) {
 		if (this.structurify$getStructureData() == null) {

@@ -1,3 +1,7 @@
+## 2.0.17
+
+- Fixed compatibility issues related to Yung's API
+
 ## 2.0.16
 
 - Fixed compatibility issues related to structure sets (third time is the time)
