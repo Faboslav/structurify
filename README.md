@@ -1,27 +1,6 @@
-<br>
-
-<center>
-	<img title="Friends&amp;Foes" src="https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/logo/logo.png" alt="Structurify" width="743">
-</center>
-
-<br>
-
-<center>
-	<a style="text-decoration: none;" href="https://ko-fi.com/faboslav">
-		<img src="https://img.shields.io/static/v1?label=Support me&message=Ko-fi&color=4B4341&labelColor=4B4341&logoColor=ffffff&style=for-the-badge&logo=ko-fi" alt="Ko-fi">
-	</a>
-	<a style="text-decoration: none;" href="https://www.patreon.com/Faboslav">
-		<img src="https://img.shields.io/endpoint.svg?color=4B4341&label=Support me&labelColor=4B4341&logoColor=ffffff&url=https://shieldsio-patreon.vercel.app/api?username=Faboslav&type=patrons&style=for-the-badge" alt="Patreon">
-	</a>
-	<a style="text-decoration: none;" href="https://discord.com/invite/QGwFvvMQCn">
-		<img src="https://img.shields.io/discord/924964658169913404?style=for-the-badge&logo=discord&logoColor=ffffff&label=Join Discord&labelColor=4B4341&color=4B4341" alt="Join Discord">
-	</a>
-	<a style="text-decoration: none;" href="https://modrinth.com/mod/yacl">
-		<img src="https://img.shields.io/static/v1?label=&amp;message=Requires YACL&amp;color=4B4341&amp;labelColor=4B4341&amp;logoColor=white&amp;style=for-the-badge&amp;logo=modrinth" height="28" />
-	</a>
-</center>
-
-<br>
+<p align="center">
+	<img title="Structurify" src="https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/logo/logo.png" alt="Structurify" width="743">
+</p>
 
 Structurify is a configuration mod that makes configuring everything related to structures very easy and accessible, eliminating the hassle of creating multiple datapacks.
 
