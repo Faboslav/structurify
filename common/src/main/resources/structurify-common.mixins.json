@@ -14,7 +14,7 @@
 		"LocateCommandInvoker",
 		"LocateCommandMixin",
 		"ResourcePackManagerAccessor",
-		"compat.LitostitchedJigsawStructureMixin",
+		"StructureManagerMixin",
 		"compat.RepurposedStructuresModifySpreadMixin",
 		"compat.YungJigsawStructureMixin",
 		"structure.StructureMixin",

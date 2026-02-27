@@ -24,10 +24,6 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 			return this.isClassAvailable("me.earth.mc_runtime_test.McRuntimeTest");
 		}
 
-		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.compat.LitostitchedJigsawStructureMixin")) {
-			return this.isClassAvailable("dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawStructure");
-		}
-
 		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.compat.RepurposedStructuresModifySpreadMixin")) {
 			return this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread");
 		}

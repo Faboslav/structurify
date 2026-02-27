@@ -24,7 +24,7 @@ public record StructureFlatnessCheckOverview(
 	public String toString() {
 		return structureId + "\n" +
 			   "Pieces: " + structurePieces.size() + " (area: " + structureArea + ")\n" +
-			   "Height threshold: " + flatnessCheckThreshold + " (min Y: " + minHeight + ", max Y: " + maxHeight + ")\n" +
+			   "Height threshold: " + flatnessCheckThreshold + " (min Y: " + minHeight + ", max Y: " + maxHeight + ", diff: " + (maxHeight - minHeight) +")\n" +
 			   "Non solid checks: " + nonSolidChecks + "\n" +
 			   "Failed checks: " + failedNonSolidChecks + "/" + nonSolidFlatnessChecksThreshold + "\n" +
 			   "Result: " + (result ? "success":"fail");

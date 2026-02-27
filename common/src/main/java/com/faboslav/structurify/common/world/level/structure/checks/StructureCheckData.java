@@ -1,29 +1,37 @@
 package com.faboslav.structurify.common.world.level.structure.checks;
 
 import com.faboslav.structurify.common.api.StructurifyStructure;
+import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckSample;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class StructureCheckData
 {
+	private final long structureCheckId;
 	private final Identifier structureId;
 	private final StructurifyStructure structure;
 	private final StructureStart structureStart;
 	private final BlockPos structureCenter;
 
 	private List<StructurePiece> structurePieces = new ArrayList<>();
+	private int structureArea = 0;
 	private int[][] structurePieceSamples = null;
 
 	public StructureCheckData(
+		long structureCheckId,
 		Identifier structureId,
 		StructurifyStructure structure,
 		StructureStart structureStart
 	) {
+		this.structureCheckId = structureCheckId;
 		this.structureId = structureId;
 		this.structureStart = structureStart;
 		this.structure = structure;
@@ -38,12 +46,24 @@ public final class StructureCheckData
 		return this.structurePieces;
 	}
 
+	public int getStructureArea() {
+		if (this.structureArea == 0) {
+			this.setStructureCheckData();
+		}
+
+		return structureArea;
+	}
+
 	public int[][] getStructurePieceSamples() {
 		if (this.structurePieceSamples == null) {
 			this.setStructureCheckData();
 		}
 
 		return this.structurePieceSamples;
+	}
+
+	public long getStructureCheckId() {
+		return this.structureCheckId;
 	}
 
 	public Identifier getStructureId() {
@@ -65,5 +85,16 @@ public final class StructureCheckData
 	private void setStructureCheckData() {
 		this.structurePieces = StructurePieceSampler.getStructurePieces(this.structureStart);
 		this.structurePieceSamples = StructurePieceSampler.getStructurePieceSamples(this.structurePieces, this.structureCenter);
+
+		int structureArea = 0;
+
+		for (var structurePiece : this.structurePieces) {
+			BoundingBox structurePieceBoundingBox = structurePiece.getBoundingBox();
+			int spanX = structurePieceBoundingBox.getXSpan();
+			int spanZ = structurePieceBoundingBox.getZSpan();
+			structureArea += spanX * spanZ;
+		}
+
+		this.structureArea = structureArea;
 	}
 }

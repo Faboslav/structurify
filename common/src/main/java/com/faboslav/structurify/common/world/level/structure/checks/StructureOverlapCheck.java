@@ -4,13 +4,13 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
 import com.faboslav.structurify.common.config.data.structure.OverlapCheckData;
 import com.faboslav.structurify.common.world.level.structure.StructureSectionClaim;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.core.SectionPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -89,7 +89,7 @@ public final class StructureOverlapCheck
 	}
 
 	private static long[] getStructurePiecesSections(StructureStart start) {
-		Set<Long> structurePieceSectionUniqueKeys = new HashSet<>();
+		Set<Long> structurePieceSectionUniqueKeys = new LongOpenHashSet();
 
 		for (var piece : start.getPieces()) {
 			BoundingBox b = piece.getBoundingBox();

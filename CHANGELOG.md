@@ -1,3 +1,9 @@
+## 2.0.18
+
+- Improved min/max distance from world center check
+- Biome check is now disabled by default for all underground structures
+- Flatness check is now disabled by default for all swamp structures
+
 ## 2.0.17
 
 - Fixed compatibility issues related to Yung's API

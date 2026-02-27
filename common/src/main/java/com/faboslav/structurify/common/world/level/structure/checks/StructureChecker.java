@@ -27,6 +27,10 @@ public final class StructureChecker
 		RandomState randomState,
 		BiomeSource biomeSource
 	) {
+		if(structureStart == StructureStart.INVALID_START) {
+			return true;
+		}
+
 		if(structureId == null) {
 			structureId = structure.structurify$getStructureIdentifier();
 		}
@@ -35,26 +39,23 @@ public final class StructureChecker
 			return true;
 		}
 
-		StructureCheckData structureCheckData = new StructureCheckData(structureId, structure, structureStart);
-		long structureCheckId = generateStructureCheckId(structureId, structureCheckData.getStructureCenter());
+		BlockPos structureCenter = structureStart.getBoundingBox().getCenter();
+		long structureCheckId = generateStructureCheckId(structureId, structureCenter);
+		StructureCheckData structureCheckData = new StructureCheckData(structureCheckId, structureId, structure, structureStart);
 		StructurifyChunkGenerator structurifyChunkGenerator = (StructurifyChunkGenerator) chunkGenerator;
 
-		var cachedBiomeChecks = structurifyChunkGenerator.structurify$getBiomeChecks();
-		boolean biomeCheckResult = cachedBiomeChecks.computeIfAbsent(structureCheckId, id -> checkBiomes(structureCheckData, biomeSource, randomState));
+		boolean biomeCheckResult = structurifyChunkGenerator.structurify$getBiomeChecks().computeIfAbsent(structureCheckId, id -> checkBiomes(structureCheckData, biomeSource, randomState));
 
 		if (!biomeCheckResult) {
 			return false;
 		}
-
-		var cachedFlatnessChecks = structurifyChunkGenerator.structurify$getFlatnessChecks();
-		boolean flatnessCheckResult = cachedFlatnessChecks.computeIfAbsent(structureCheckId, id -> checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState));
+		boolean flatnessCheckResult = structurifyChunkGenerator.structurify$getFlatnessChecks().computeIfAbsent(structureCheckId, id -> checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState));
 
 		if (!flatnessCheckResult) {
 			return false;
 		}
 
-		var cachedOverlapChecks = structurifyChunkGenerator.structurify$getOverlapChecks();
-		boolean overlapCheckResult = cachedOverlapChecks.computeIfAbsent(structureCheckId, id -> checkOverlap(structureCheckData, structurifyChunkGenerator));
+		boolean overlapCheckResult = structurifyChunkGenerator.structurify$getOverlapChecks().computeIfAbsent(structureCheckId, id -> checkOverlap(structureCheckData, structurifyChunkGenerator));
 
 		if (!overlapCheckResult) {
 			return false;
@@ -71,8 +72,14 @@ public final class StructureChecker
 		RandomState randomState,
 		BiomeSource biomeSource
 	) {
+		if(structureStart == StructureStart.INVALID_START) {
+			return;
+		}
+
 		Identifier structureId = structure.structurify$getStructureIdentifier();
-		StructureCheckData structureCheckData = new StructureCheckData(structureId, structure, structureStart);
+		BlockPos structureCenter = structureStart.getBoundingBox().getCenter();
+		long structureCheckId = generateStructureCheckId(structureId, structureCenter);
+		StructureCheckData structureCheckData = new StructureCheckData(structureCheckId, structureId, structure, structureStart);
 
 		checkBiomes(structureCheckData, biomeSource, randomState);
 		checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState);

@@ -23,12 +23,15 @@ public final class BiomeUtil
 	//? if >= 1.21.1 {
 	public static TagKey<Biome> C_IS_OCEAN = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:is_ocean"));
 	public static TagKey<Biome> C_IS_RIVER = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:is_river"));
+	public static TagKey<Biome> C_IS_SWAMP = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:is_swamp"));
 	//?} else {
 	/*public static TagKey<Biome> C_IS_OCEAN = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:ocean"));
 	public static TagKey<Biome> C_IS_RIVER = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:river"));
+	public static TagKey<Biome> C_IS_SWAMP = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId("c:swamp"));
 	*///?}
 
-	public static Set<ResourceKey<Biome>> getWaterBiomes() {
+	public static Set<ResourceKey<Biome>> getWaterBiomes()
+	{
 		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
 
 		if (biomeRegistry == null) {
@@ -78,6 +81,52 @@ public final class BiomeUtil
 		return structureBiomes.stream()
 			.map(h -> h.unwrapKey().orElse(null))
 			.allMatch(k -> k != null && waterBiomes.contains(k));
+	}
+
+	public static Set<ResourceKey<Biome>> getSwampBiomes()
+	{
+		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
+
+		if (biomeRegistry == null) {
+			return new HashSet<>();
+		}
+
+		Set<ResourceKey<Biome>> swampBiomes = new HashSet<>();
+
+		biomeRegistry.get(BiomeTags.HAS_SWAMP_HUT).ifPresent(named ->
+			swampBiomes.addAll(named.stream()
+				.map(h -> h.unwrapKey().orElse(null))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet()))
+		);
+
+		biomeRegistry.get(BiomeTags.HAS_RUINED_PORTAL_SWAMP).ifPresent(named ->
+			swampBiomes.addAll(named.stream()
+				.map(h -> h.unwrapKey().orElse(null))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet()))
+		);
+
+		biomeRegistry.get(C_IS_SWAMP).ifPresent(named ->
+			swampBiomes.addAll(named.stream()
+				.map(h -> h.unwrapKey().orElse(null))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toSet()))
+		);
+
+		return swampBiomes;
+	}
+
+	public static boolean isSwampStructure(HolderSet<Biome> structureBiomes) {
+		if(structureBiomes == null || structureBiomes.size() == 0) {
+			return false;
+		}
+
+		var swampBiomes = BiomeUtil.getSwampBiomes();
+
+		return structureBiomes.stream()
+			.map(h -> h.unwrapKey().orElse(null))
+			.allMatch(k -> k != null && swampBiomes.contains(k));
 	}
 
 	public static HolderSet<Biome> getBiomes(

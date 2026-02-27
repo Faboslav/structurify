@@ -40,17 +40,17 @@ public class StructureDistanceFromWorldCenterCheck
 		DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckData,
 		ChunkPos chunkPos
 	) {
-		int minDistanceFromWorldCenter = distanceFromWorldCenterCheckData.getMinDistanceFromWorldCenter();
-		int maxDistanceFromWorldCenter = distanceFromWorldCenterCheckData.getMaxDistanceFromWorldCenter();
+		double minDistanceFromWorldCenter = distanceFromWorldCenterCheckData.getMinDistanceFromWorldCenter();
+		double maxDistanceFromWorldCenter = distanceFromWorldCenterCheckData.getMaxDistanceFromWorldCenter();
 
 		if (minDistanceFromWorldCenter == 0 && maxDistanceFromWorldCenter == 0) {
 			return true;
 		}
 
-		var distanceFromWorldCenter = chunkPos.getWorldPosition().distManhattan(BlockPos.ZERO);
-
-		var isFarEnoughFromWorldCenter = minDistanceFromWorldCenter == 0 || (distanceFromWorldCenter >= minDistanceFromWorldCenter);
-		var isCloseEnoughToWorldCenter = maxDistanceFromWorldCenter == 0 || (distanceFromWorldCenter <= maxDistanceFromWorldCenter);
+		var worldPosition = chunkPos.getWorldPosition();
+		var distanceFromWorldCenter = worldPosition.distSqr(new BlockPos(0, worldPosition.getY(), 0));
+		var isFarEnoughFromWorldCenter = minDistanceFromWorldCenter == 0 || (distanceFromWorldCenter >= minDistanceFromWorldCenter * minDistanceFromWorldCenter);
+		var isCloseEnoughToWorldCenter = maxDistanceFromWorldCenter == 0 || (distanceFromWorldCenter <= maxDistanceFromWorldCenter * maxDistanceFromWorldCenter);
 
 		return isFarEnoughFromWorldCenter && isCloseEnoughToWorldCenter;
 	}

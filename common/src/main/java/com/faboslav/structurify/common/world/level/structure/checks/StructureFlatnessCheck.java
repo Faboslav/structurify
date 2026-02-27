@@ -4,6 +4,7 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckOverview;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckSample;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -84,21 +85,14 @@ public final class StructureFlatnessCheck
 		var structureId = structureCheckData.getStructureId();
 		var structureStart = structureCheckData.getStructureStart();
 		var structureCenter = structureCheckData.getStructureCenter();
+		var structureArea = structureCheckData.getStructureArea();
 
 		Set<StructureFlatnessCheckSample> flatnessCheckSamples = new HashSet<>();
-		int structureArea = 0;
 
-		for (var structurePiece : structurePieces) {
-			BoundingBox structurePieceBoundingBox = structurePiece.getBoundingBox();
-			int spanX = structurePieceBoundingBox.getXSpan();
-			int spanZ = structurePieceBoundingBox.getZSpan();
-			structureArea += spanX * spanZ;
-		}
-
-		int flatnessCheckHeightThreshold = net.minecraft.util.Mth.clamp(
-			(int) Math.round(Math.sqrt(structureArea) * 0.33),
+		int flatnessCheckHeightThreshold = Mth.clamp(
+			(int) Math.round(Math.sqrt(structureArea) * 0.35),
 			3,
-			21
+			24
 		);
 
 		int totalFlatnessChecks = structurePieceSamples.length;

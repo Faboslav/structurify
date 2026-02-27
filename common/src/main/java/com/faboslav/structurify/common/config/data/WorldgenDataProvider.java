@@ -200,12 +200,26 @@ public final class WorldgenDataProvider
 				biomeCheckData.enable(false);
 			}
 
+			if(BiomeUtil.isSwampStructure(defaultBiomeHolders)) {
+				var flatnessCheckData = structureData.getFlatnessCheckData();
+				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);
+				flatnessCheckData.overrideGlobalFlatnessCheck(true);
+				flatnessCheckData.defaultEnable(false);
+				flatnessCheckData.enable(false);
+			}
+
 			if (StructureUtil.isUndergroundStructure(structureData.getStep())) {
 				var flatnessCheckData = structureData.getFlatnessCheckData();
 				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);
 				flatnessCheckData.overrideGlobalFlatnessCheck(true);
 				flatnessCheckData.defaultEnable(false);
 				flatnessCheckData.enable(false);
+
+				var biomeCheckData = structureData.getBiomeCheckData();
+				biomeCheckData.defaultOverrideGlobalBiomeCheck(true);
+				biomeCheckData.overrideGlobalBiomeCheck(true);
+				biomeCheckData.defaultEnable(false);
+				biomeCheckData.enable(false);
 			}
 
 			if (StructureUtil.isRawGenerationStructure(structureData.getStep())) {
