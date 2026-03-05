@@ -1,3 +1,7 @@
+## 2.0.19
+
+- Fixed load/save of structure set's "is_disabled" property
+
 ## 2.0.18
 
 - Improved min/max distance from world center check

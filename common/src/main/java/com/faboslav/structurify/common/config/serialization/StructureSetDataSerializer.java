@@ -12,6 +12,7 @@ import java.util.Map;
 public final class StructureSetDataSerializer
 {
 	public static final String NAME_PROPERTY = "name";
+	private static final String IS_DISABLED_PROPERTY = "is_disabled";
 	private static final String SALT_PROPERTY = "salt";
 	private static final String FREQUENCY_PROPERTY = "frequency";
 	private static final String OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY = "override_global_spacing_and_separation_modifier";
@@ -21,6 +22,10 @@ public final class StructureSetDataSerializer
 
 	public static void load(JsonObject structureSetJson, StructureSetData structureSetData) {
 		var structureSetName = structureSetJson.get(NAME_PROPERTY).getAsString();
+
+		if (structureSetJson.has(IS_DISABLED_PROPERTY)) {
+			structureSetData.setDisabled(structureSetJson.get(IS_DISABLED_PROPERTY).getAsBoolean());
+		}
 
 		if (structureSetJson.has(SALT_PROPERTY)) {
 			var salt = structureSetJson.get(SALT_PROPERTY).getAsInt();
@@ -96,7 +101,6 @@ public final class StructureSetDataSerializer
 	}
 
 	public static void save(JsonArray structureSetsJson, String structureSetName, StructureSetData structureSetData) {
-		var overrideGlobalSpacingAndSeparationModifier = structureSetData.overrideGlobalSpacingAndSeparationModifier();
 		var salt = structureSetData.getSalt();
 		var frequency = structureSetData.getFrequency();
 
@@ -142,9 +146,10 @@ public final class StructureSetDataSerializer
 		}
 
 		structureSet.addProperty(NAME_PROPERTY, structureSetName);
+		structureSet.addProperty(IS_DISABLED_PROPERTY, structureSetData.isDisabled());
 		structureSet.addProperty(SALT_PROPERTY, salt);
 		structureSet.addProperty(FREQUENCY_PROPERTY, frequency);
-		structureSet.addProperty(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, overrideGlobalSpacingAndSeparationModifier);
+		structureSet.addProperty(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, structureSetData.overrideGlobalSpacingAndSeparationModifier());
 		structureSet.add(STRUCTURE_WEIGHT_PROPERTY, structureWeights);
 
 		structureSetsJson.add(structureSet);
