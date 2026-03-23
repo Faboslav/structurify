@@ -7,6 +7,7 @@ import com.faboslav.structurify.common.world.level.structure.checks.debug.Struct
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -106,6 +107,11 @@ public final class StructureFlatnessCheck
 			int z = structurePieceSamples[currentFlatnessCheck][1];
 
 			int firstOceanFloorOccupiedHeight = chunkGenerator.getFirstOccupiedHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, heightAccessor, randomState);
+
+			if(currentFlatnessCheck == 0) {
+				minHeight = firstOceanFloorOccupiedHeight;
+				maxHeight = firstOceanFloorOccupiedHeight;
+			}
 
 			if (firstOceanFloorOccupiedHeight > maxHeight) {
 				maxHeight = firstOceanFloorOccupiedHeight;
