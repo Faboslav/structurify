@@ -107,5 +107,5 @@ tasks {
 }
 
 tasks.named("processResources") {
-	dependsOn(":common:${commonMod.propOrNull("minecraft_version")}:stonecutterGenerate")
+	dependsOn(":common:${commonMod.mc}:stonecutterGenerate")
 }

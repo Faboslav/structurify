@@ -1,6 +1,6 @@
 plugins {
 	id("multiloader-common")
-	id("fabric-loom")
+	id("fabric-loom-compat")
 	id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.22"
 }
 
@@ -20,20 +20,25 @@ fletchingTable {
 	}
 }
 
-loom {
-	mixin {
-		useLegacyMixinAp = false
+if (stonecutter.eval(commonMod.mc, "<=1.21.11")) {
+	loom {
+		mixin {
+			useLegacyMixinAp = false
+		}
 	}
 }
 
 dependencies {
-	minecraft(group = "com.mojang", name = "minecraft", version = commonMod.mc)
-	mappings(loom.layered {
-		officialMojangMappings()
-		commonMod.depOrNull("parchment")?.let { parchmentVersion ->
-			parchment("org.parchmentmc.data:parchment-${commonMod.mc}:$parchmentVersion@zip")
-		}
-	})
+	minecraft("com.mojang:minecraft:${commonMod.mcVersion}")
+
+	if (stonecutter.eval(commonMod.mc, "<=1.21.11")) {
+		mappings(loom.layered {
+			officialMojangMappings()
+			commonMod.depOrNull("parchment")?.let { parchmentVersion ->
+				parchment("org.parchmentmc.data:parchment-${commonMod.mc}:$parchmentVersion@zip")
+			}
+		})
+	}
 
 	compileOnly("org.spongepowered:mixin:0.8.5")
 

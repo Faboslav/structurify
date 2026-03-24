@@ -8,13 +8,18 @@ import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.dropdown.AbstractDropdownControllerElement;
 import dev.isxander.yacl3.gui.image.impl.ResourceTextureImage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+
+//? if >= 26.1 {
+/*import net.minecraft.client.gui.GuiGraphicsExtractor;
+*///?} else {
+import net.minecraft.client.gui.GuiGraphics;
+//?}
 
 /**
  * Related code is based on LibBamboo: Utility library mod with permissions from the author
@@ -33,10 +38,19 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	@Override
-	protected void drawValueText(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+	//? if >= 26.1 {
+	/*protected void extractValueText(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta)
+	*///?} else {
+	protected void drawValueText(GuiGraphics graphics, int mouseX, int mouseY, float delta)
+	 //?}
+	{
 		var oldDimension = getDimension();
 		setDimension(getDimension().withWidth(getDimension().width() - getDecorationPadding()));
+		//? if >= 26.1 {
+		/*super.extractValueText(graphics, mouseX, mouseY, delta);
+		*///?} else {
 		super.drawValueText(graphics, mouseX, mouseY, delta);
+		//?}
 		setDimension(oldDimension);
 
 		int imageX = getDimension().xLimit() - getXPadding() - getDecorationPadding() + 4;
@@ -88,8 +102,17 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	@Override
-	protected void renderDropdownEntry(GuiGraphics graphics, Dimension<Integer> entryDimension, String value) {
+	//? if >= 26.1 {
+	/*protected void extractDropdownEntry(GuiGraphicsExtractor graphics, Dimension<Integer> entryDimension, String value)
+	*///?} else {
+	protected void renderDropdownEntry(GuiGraphics graphics, Dimension<Integer> entryDimension, String value)
+	//?}
+	{
+		//? if >= 26.1 {
+		/*super.extractDropdownEntry(graphics, entryDimension, value);
+		*///?} else {
 		super.renderDropdownEntry(graphics, entryDimension, value);
+		//?}
 
 		int imageX = entryDimension.xLimit() - 1;
 		int imageY = entryDimension.y() + 4;
@@ -120,7 +143,17 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 		return Component.literal(pendingValue);
 	}
 
-	private void renderBiomeImage(String biomeName, GuiGraphics graphics, int x, int y, float delta) {
+	private void renderBiomeImage(
+		String biomeName,
+		//? if >= 26.1 {
+		/*GuiGraphicsExtractor graphics,
+		*///?} else {
+		GuiGraphics graphics,
+		//?}
+		int x,
+		int y,
+		float delta
+	) {
 		Identifier imageId;
 
 		if (biomeName.contains("#") || !biomeName.contains(":")) {
@@ -138,7 +171,6 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 				imageId = Structurify.makeId("textures/gui/config/images/biomes/unknown.png");
 			}
 		}
-
 
 		try {
 			ResourceTextureImage.createFactory(imageId, 0.0F, 0.0F, 16, 16, 16, 16).prepareImage().completeImage().render(graphics,

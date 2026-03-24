@@ -14,7 +14,7 @@ import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.world.level.WorldDataConfiguration;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
-import net.minecraft.world.level.storage.PrimaryLevelData;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.Nullable;
 
 //? if >= 1.21.11 {
@@ -45,6 +45,17 @@ public final class StructurifyRegistryManagerProvider
 		}
 
 		return registryManager.lookup(Registries.BIOME).orElse(null);
+	}
+
+	@Nullable
+	public static HolderLookup.RegistryLookup<Structure> getStructureRegistry() {
+		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+
+		if (registryManager == null) {
+			return null;
+		}
+
+		return registryManager.lookup(Registries.STRUCTURE).orElse(null);
 	}
 
 	public static void setRegistryManager(HolderLookup.Provider registryAccess) {
@@ -91,7 +102,7 @@ public final class StructurifyRegistryManagerProvider
 						.bake(registry);
 					*///?}
 
-					return new WorldLoader.DataLoadOutput<PrimaryLevelData>(null, dimensionsConfig.dimensionsRegistryAccess());
+					return new WorldLoader.DataLoadOutput<>(null, dimensionsConfig.dimensionsRegistryAccess());
 				}, WorldStem::new, Util.backgroundExecutor(), executor)
 			).get();
 

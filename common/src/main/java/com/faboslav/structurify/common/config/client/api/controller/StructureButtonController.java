@@ -1,8 +1,5 @@
 package com.faboslav.structurify.common.config.client.api.controller;
 
-import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.StructurifyClient;
-import com.faboslav.structurify.common.config.client.gui.StructureConfigScreen;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.utils.Dimension;
@@ -10,11 +7,8 @@ import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.TextScaledButtonWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.BooleanController;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import java.util.function.Function;
@@ -24,6 +18,12 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 //?}
+
+//? if >= 26.1 {
+/*import net.minecraft.client.gui.GuiGraphicsExtractor;
+*///?} else {
+import net.minecraft.client.gui.GuiGraphics;
+ //?}
 
 public class StructureButtonController extends BooleanController
 {
@@ -124,6 +124,16 @@ public class StructureButtonController extends BooleanController
 			this.configurationButton.setY(gearY);
 		}
 
+		//? if >= 21.6 {
+		/*@Override
+		public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float tickDelta) {
+			this.booleanElement.extractRenderState(graphics, mouseX, mouseY, tickDelta);
+
+			this.configurationButton.active = this.booleanElement.isActive();
+			this.configurationButton.setY(getDimension().y());
+			this.configurationButton.extractRenderState(graphics, mouseX, mouseY, tickDelta);
+		}
+		*///?} else {
 		@Override
 		public void render(GuiGraphics graphics, int mouseX, int mouseY, float tickDelta) {
 			this.booleanElement.render(graphics, mouseX, mouseY, tickDelta);
@@ -132,6 +142,7 @@ public class StructureButtonController extends BooleanController
 			this.configurationButton.setY(getDimension().y());
 			this.configurationButton.render(graphics, mouseX, mouseY, tickDelta);
 		}
+		//?}
 
 		@Override
 		public boolean canReset() {

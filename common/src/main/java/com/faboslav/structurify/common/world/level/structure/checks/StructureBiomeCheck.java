@@ -3,6 +3,7 @@ package com.faboslav.structurify.common.world.level.structure.checks;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
+import com.faboslav.structurify.common.util.ChunkPosUtil;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckOverview;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckSample;
 import net.minecraft.core.Holder;
@@ -107,7 +108,7 @@ public final class StructureBiomeCheck
 		boolean result
 	) {
 		Structurify.getConfig().getDebugData().addStructureBiomeCheckOverview(
-			ChunkPos.asLong(structureCheckData.getStructureCenter()),
+			ChunkPosUtil.getChunkPosAsLong(ChunkPosUtil.createChunkPos(structureCheckData.getStructureCenter())),
 			new StructureBiomeCheckOverview(
 				structureCheckData.getStructureId(),
 				structureCheckData.getStructureStart().getBoundingBox(),
@@ -128,7 +129,7 @@ public final class StructureBiomeCheck
 		boolean result
 	) {
 		Structurify.getConfig().getDebugData().addStructureBiomeCheckSample(
-			ChunkPos.asLong(structureCheckData.getStructureCenter()),
+			ChunkPosUtil.getChunkPosAsLong(ChunkPosUtil.createChunkPos(structureCheckData.getStructureCenter())),
 			new StructureBiomeCheckSample(
 				structureCheckData.getStructureId(),
 				x,

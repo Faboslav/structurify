@@ -2,6 +2,7 @@ package com.faboslav.structurify.common.world.level.structure.checks;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
+import com.faboslav.structurify.common.util.ChunkPosUtil;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckOverview;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckSample;
 import net.minecraft.util.Mth;
@@ -84,6 +85,7 @@ public final class StructureFlatnessCheck
 		var structureId = structureCheckData.getStructureId();
 		var structureStart = structureCheckData.getStructureStart();
 		var structureCenter = structureCheckData.getStructureCenter();
+		var structureCenterChunkPos = ChunkPosUtil.getChunkPosAsLong(ChunkPosUtil.createChunkPos(structureCenter));
 		var structureArea = structureCheckData.getStructureArea();
 
 		Set<StructureFlatnessCheckSample> flatnessCheckSamples = new HashSet<>();
@@ -114,7 +116,7 @@ public final class StructureFlatnessCheck
 			if (firstOceanFloorOccupiedHeight > maxHeight) {
 				maxHeight = firstOceanFloorOccupiedHeight;
 				if (maxHeight - minHeight > flatnessCheckHeightThreshold) {
-					Structurify.getConfig().getDebugData().addStructureFlatnessCheckInfo(ChunkPos.asLong(structureCenter), new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, flatnessCheckHeightThreshold, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false));
+					Structurify.getConfig().getDebugData().addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, flatnessCheckHeightThreshold, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false));
 					return false;
 				}
 			}
@@ -122,7 +124,7 @@ public final class StructureFlatnessCheck
 			if (firstOceanFloorOccupiedHeight < minHeight) {
 				minHeight = firstOceanFloorOccupiedHeight;
 				if (maxHeight - minHeight > flatnessCheckHeightThreshold) {
-					Structurify.getConfig().getDebugData().addStructureFlatnessCheckInfo(ChunkPos.asLong(structureCenter), new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, flatnessCheckHeightThreshold, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false));
+					Structurify.getConfig().getDebugData().addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, flatnessCheckHeightThreshold, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false));
 					return false;
 				}
 			}
@@ -142,7 +144,7 @@ public final class StructureFlatnessCheck
 						nonSolidFlatnessChecks++;
 
 						if (nonSolidFlatnessChecks >= nonSolidFlatnessChecksThreshold) {
-							Structurify.getConfig().getDebugData().addStructureFlatnessCheckInfo(ChunkPos.asLong(structureCenter), new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, flatnessCheckHeightThreshold, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false));
+							Structurify.getConfig().getDebugData().addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, flatnessCheckHeightThreshold, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false));
 							return false;
 						}
 					}
@@ -152,8 +154,8 @@ public final class StructureFlatnessCheck
 			}
 		}
 
-		flatnessCheckSamples.forEach((flatnessCheckSample) -> Structurify.getConfig().getDebugData().addStructureFlatnessCheckSample(ChunkPos.asLong(structureCenter), flatnessCheckSample));
-		Structurify.getConfig().getDebugData().addStructureFlatnessCheckInfo(ChunkPos.asLong(structureCenter), new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, flatnessCheckHeightThreshold, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, true));
+		flatnessCheckSamples.forEach((flatnessCheckSample) -> Structurify.getConfig().getDebugData().addStructureFlatnessCheckSample(structureCenterChunkPos, flatnessCheckSample));
+		Structurify.getConfig().getDebugData().addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, flatnessCheckHeightThreshold, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, true));
 
 		return true;
 	}

@@ -1,3 +1,10 @@
+## 2.0.20
+
+- Ported to 26.1
+- Added "/structurify structure list" command
+- Added "/structurify structure enable" command
+- Added "/structurify structure disable" command
+
 ## 2.0.19
 
 - Fixed load/save of structure set's "is_disabled" property

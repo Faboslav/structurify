@@ -1,10 +1,8 @@
 package com.faboslav.structurify.common.config.client.api.controller.element;
 
-import com.faboslav.structurify.common.Structurify;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.TextScaledButtonWidget;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +10,12 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+//?}
+
+//? if >= 26.1 {
+/*import net.minecraft.client.gui.GuiGraphicsExtractor;
+*///?} else {
+import net.minecraft.client.gui.GuiGraphics;
 //?}
 
 public final class DualControllerElement extends AbstractWidget
@@ -167,6 +171,18 @@ public final class DualControllerElement extends AbstractWidget
 		super.unfocus();
 	}
 
+	//? if >= 21.6 {
+	/*@Override
+	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+		firstElement.extractRenderState(graphics, mouseX, mouseY, a);
+		secondElement.extractRenderState(graphics, mouseX, mouseY, a);
+
+		if (resetButton != null) {
+			resetButton.setY(getDimension().y());
+			resetButton.extractRenderState(graphics, mouseX, mouseY, a);
+		}
+	}
+	*///?} else {
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float tickDelta) {
 		firstElement.render(graphics, mouseX, mouseY, tickDelta);
@@ -177,6 +193,7 @@ public final class DualControllerElement extends AbstractWidget
 			resetButton.render(graphics, mouseX, mouseY, tickDelta);
 		}
 	}
+	//?}
 
 	@Override
 	public NarrationPriority narrationPriority() {

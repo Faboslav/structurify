@@ -2,6 +2,7 @@ package com.faboslav.structurify.common.world.level.structure.checks;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.data.DebugData;
+import com.faboslav.structurify.common.util.ChunkPosUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -105,7 +106,7 @@ public final class StructurePieceSampler
 		Set<Long> uniqueKeys = new HashSet<>();
 		List<int[]> uniquePositions = new ArrayList<>();
 		for (int[] position : inputPositions) {
-			long key = ChunkPos.asLong(position[0], position[1]);
+			long key = ChunkPosUtil.getChunkPosAsLong( ChunkPosUtil.createChunkPos(position[0], position[1]));
 			if (uniqueKeys.add(key)) {
 				uniquePositions.add(position);
 			}

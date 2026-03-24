@@ -5,6 +5,7 @@ import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
 import com.faboslav.structurify.common.config.data.structure.OverlapCheckData;
+import com.faboslav.structurify.common.util.ChunkPosUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
@@ -171,6 +172,6 @@ public final class StructureChecker
 		structHash *= 0xc4ceb9fe1a85ec53L;
 		structHash ^= (structHash >>> 33);
 
-		return Long.rotateLeft(structHash, 23) ^ Long.rotateLeft(ChunkPos.asLong(structureCenter), 11);
+		return Long.rotateLeft(structHash, 23) ^ Long.rotateLeft(ChunkPosUtil.getChunkPosAsLong(ChunkPosUtil.createChunkPos(structureCenter.getX(), structureCenter.getZ())), 11);
 	}
 }

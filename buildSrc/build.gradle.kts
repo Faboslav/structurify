@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
 	`kotlin-dsl`
 	kotlin("jvm") version "2.2.0"
@@ -9,8 +11,12 @@ repositories {
 	maven("https://maven.kikugie.dev/snapshots")
 }
 
-dependencies {
-	fun plugin(id: String, version: String) = "$id:$id.gradle.plugin:$version"
+val rootProps = Properties().apply {
+	rootDir.parentFile.resolve("gradle.properties").inputStream().use(::load)
+}
 
-	implementation("dev.kikugie:stonecutter:0.8.3")
+val stonecutterVersion: String = rootProps.getProperty("stonecutter_version")
+
+dependencies {
+	implementation("dev.kikugie:stonecutter:$stonecutterVersion")
 }

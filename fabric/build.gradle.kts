@@ -1,30 +1,45 @@
 plugins {
-	id("fabric-loom")
-	`multiloader-loader`
+	id("fabric-loom-compat")
+	id("multiloader-loader")
 	id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.22"
 }
-
 
 stonecutter {
 	constants["terra"] = rootProject.project(stonecutter.current.project).property("deps.terra").toString() != ""
 }
 
 dependencies {
-	minecraft("com.mojang:minecraft:${commonMod.mc}")
-	mappings(loom.layered {
-		officialMojangMappings()
-		commonMod.depOrNull("parchment")?.let { parchmentVersion ->
-			parchment("org.parchmentmc.data:parchment-${commonMod.mc}:$parchmentVersion@zip")
-		}
-	})
+	minecraft("com.mojang:minecraft:${commonMod.mcVersion}")
+
+	if (stonecutter.eval(commonMod.mc, "<=1.21.11")) {
+		mappings(loom.layered {
+			officialMojangMappings()
+			commonMod.depOrNull("parchment")?.let { parchmentVersion ->
+				parchment("org.parchmentmc.data:parchment-${commonMod.mc}:$parchmentVersion@zip")
+			}
+		})
+	}
 
 	modImplementation("net.fabricmc:fabric-loader:${commonMod.dep("fabric_loader")}")
-	modApi("net.fabricmc.fabric-api:fabric-api:${commonMod.dep("fabric_api")}+${commonMod.mc}")
+
+	fun addEmbeddedFabricModule(name: String) {
+		modApi(fabricApi.module(name, "${commonMod.dep("fabric_api")}+${commonMod.mc}"))
+	}
+
+	addEmbeddedFabricModule("fabric-api-base")
+	if (stonecutter.eval(commonMod.mc, "<=1.21.8")) {
+		addEmbeddedFabricModule("fabric-resource-loader-v0")
+	} else {
+		addEmbeddedFabricModule("fabric-resource-loader-v1")
+	}
+	addEmbeddedFabricModule("fabric-rendering-v1")
+	addEmbeddedFabricModule("fabric-lifecycle-events-v1")
+	addEmbeddedFabricModule("fabric-command-api-v2")
+	//modApi("net.fabricmc.fabric-api:fabric-api:${commonMod.dep("fabric_api")}+${commonMod.mc}")
 
 	// Required dependencies
 	modImplementation("dev.isxander:yet-another-config-lib:${commonMod.dep("yacl")}-fabric")
 	modImplementation("com.terraformersmc:modmenu:${commonMod.dep("mod_menu")}")
-
 
 	// Global DataPacks
 	commonMod.depOrNull("global_datapacks")?.let { globalDatapacksVersion ->
@@ -100,9 +115,11 @@ loom {
 		}
 	}
 
-	mixin {
-		useLegacyMixinAp = true
-		defaultRefmapName = "${mod.id}.refmap.json"
+	if (stonecutter.eval(commonMod.mc, "<=1.21.11")) {
+		mixin {
+			useLegacyMixinAp = true
+			defaultRefmapName = "${mod.id}.refmap.json"
+		}
 	}
 }
 
