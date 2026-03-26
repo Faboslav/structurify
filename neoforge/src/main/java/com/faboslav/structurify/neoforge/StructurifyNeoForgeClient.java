@@ -40,16 +40,16 @@ public final class StructurifyNeoForgeClient
 	}
 
 	//? if >= 1.21.8 {
-	public static void onRenderLevelStage(RenderLevelStageEvent.AfterParticles event)
-	//?} else {
-	/*public static void onRenderLevelStage(RenderLevelStageEvent event)
-	 *///?}
+	/*public static void onRenderLevelStage(RenderLevelStageEvent.AfterParticles event)
+	*///?} else {
+	public static void onRenderLevelStage(RenderLevelStageEvent event)
+	 //?}
 	{
 		//? if < 1.21.8 {
-		/*if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
 			return;
 		}
-		*///?}
+		//?}
 
 		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), null);
 	}

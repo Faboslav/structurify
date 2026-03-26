@@ -20,10 +20,10 @@ import net.minecraft.client.input.MouseButtonEvent;
 //?}
 
 //? if >= 26.1 {
-/*import net.minecraft.client.gui.GuiGraphicsExtractor;
-*///?} else {
-import net.minecraft.client.gui.GuiGraphics;
- //?}
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+//?} else {
+/*import net.minecraft.client.gui.GuiGraphics;
+ *///?}
 
 public class StructureButtonController extends BooleanController
 {
@@ -125,7 +125,7 @@ public class StructureButtonController extends BooleanController
 		}
 
 		//? if >= 21.6 {
-		/*@Override
+		@Override
 		public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float tickDelta) {
 			this.booleanElement.extractRenderState(graphics, mouseX, mouseY, tickDelta);
 
@@ -133,8 +133,8 @@ public class StructureButtonController extends BooleanController
 			this.configurationButton.setY(getDimension().y());
 			this.configurationButton.extractRenderState(graphics, mouseX, mouseY, tickDelta);
 		}
-		*///?} else {
-		@Override
+		//?} else {
+		/*@Override
 		public void render(GuiGraphics graphics, int mouseX, int mouseY, float tickDelta) {
 			this.booleanElement.render(graphics, mouseX, mouseY, tickDelta);
 
@@ -142,7 +142,7 @@ public class StructureButtonController extends BooleanController
 			this.configurationButton.setY(getDimension().y());
 			this.configurationButton.render(graphics, mouseX, mouseY, tickDelta);
 		}
-		//?}
+		*///?}
 
 		@Override
 		public boolean canReset() {

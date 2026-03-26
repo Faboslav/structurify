@@ -10,12 +10,12 @@ import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 *///?}
 
 //? if repurposed_structures {
-import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
-//?}
+/*import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
+*///?}
 
 //? if yungs_api || repurposed_structures {
-import com.faboslav.structurify.common.platform.PlatformHooks;
-//?}
+/*import com.faboslav.structurify.common.platform.PlatformHooks;
+*///?}
 
 //? if >= 1.21.9 {
 import java.lang.reflect.Method;
@@ -39,10 +39,10 @@ public final class JigsawStructureUtil
 		*///?}
 
 		//? if repurposed_structures {
-		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return true;
 		}
-		//?}
+		*///?}
 
 		Class<?> clazz = structure.getClass();
 		Field[] fields = clazz.getDeclaredFields();
@@ -80,14 +80,14 @@ public final class JigsawStructureUtil
 		*///?}
 
 		//? if repurposed_structures {
-		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			//? if >= 1.21.10 {
 			return new JigsawStructure.MaxDistance(((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0));
 			//?} else {
-			/*return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
-			*///?}
+			/^return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
+			^///?}
 		}
-		//?}
+		*///?}
 
 		Class<?> clazz = structure.getClass();
 		Field[] fields = clazz.getDeclaredFields();
@@ -195,10 +195,10 @@ public final class JigsawStructureUtil
 		*///?}
 
 		//? if repurposed_structures {
-		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).size;
 		}
-		//?}
+		*///?}
 
 		Class<?> clazz = structure.getClass();
 		Field[] fields = clazz.getDeclaredFields();

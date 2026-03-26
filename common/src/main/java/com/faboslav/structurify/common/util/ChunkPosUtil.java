@@ -17,9 +17,9 @@ public final class ChunkPosUtil
 	public static long getChunkPosAsLong(ChunkPos chunkPos) {
 
 		//? if >= 26.1 {
-		/*return chunkPos.pack();
-		*///?} else {
-		return chunkPos.toLong();
-		//?}
+		return chunkPos.pack();
+		//?} else {
+		/*return chunkPos.toLong();
+		*///?}
 	}
 }

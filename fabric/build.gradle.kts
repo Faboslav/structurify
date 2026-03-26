@@ -9,7 +9,7 @@ stonecutter {
 }
 
 dependencies {
-	minecraft("com.mojang:minecraft:${commonMod.mcVersion}")
+	minecraft("com.mojang:minecraft:${commonMod.mc}")
 
 	if (stonecutter.eval(commonMod.mc, "<=1.21.11")) {
 		mappings(loom.layered {

@@ -13,7 +13,7 @@ mixin {
 
 legacyForge {
 	enable {
-		forgeVersion = "${mod.mc}-${commonMod.dep("forge")}"
+		forgeVersion = "${commonMod.mc}-${commonMod.dep("forge")}"
 	}
 }
 
