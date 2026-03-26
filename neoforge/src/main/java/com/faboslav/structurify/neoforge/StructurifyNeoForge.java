@@ -25,10 +25,10 @@ public final class StructurifyNeoForge
 		Structurify.init();
 
 		//? if >= 1.21.9 {
-		/*if (FMLEnvironment.getDist() == Dist.CLIENT)
-		*///?} else {
-		if (FMLEnvironment.dist == Dist.CLIENT)
-		//?}
+		if (FMLEnvironment.getDist() == Dist.CLIENT)
+		//?} else {
+		/*if (FMLEnvironment.dist == Dist.CLIENT)
+		*///?}
 		{
 			StructurifyNeoForgeClient.init(modEventBus, eventBus);
 		}
@@ -48,10 +48,10 @@ public final class StructurifyNeoForge
 		}
 
 		//? if >=1.21.3 {
-		/*var registryAccess = event.getLookupProvider();
-		*///?} else {
-		var registryAccess = event.getRegistryAccess();
-		 //?}
+		var registryAccess = event.getLookupProvider();
+		//?} else {
+		/*var registryAccess = event.getRegistryAccess();
+		 *///?}
 
 		StructurifyRegistryManagerProvider.setRegistryManager(registryAccess);
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
