@@ -39,9 +39,11 @@ public final class StructurifyNeoForgeClient
 		});
 	}
 
-	//? if >= 1.21.8 {
-	public static void onRenderLevelStage(RenderLevelStageEvent.AfterParticles event)
-	//?} else {
+	//? if >= 26.1 {
+	public static void onRenderLevelStage(RenderLevelStageEvent.AfterTranslucentParticles event)
+	//?} else if >= 1.21.8 {
+	/*public static void onRenderLevelStage(RenderLevelStageEvent.AfterParticles event)
+	*///?} else {
 	/*public static void onRenderLevelStage(RenderLevelStageEvent event)
 	 *///?}
 	{
