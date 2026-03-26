@@ -11,9 +11,6 @@ base {
 }
 
 java {
-	withSourcesJar()
-	withJavadocJar()
-
 	val javaVersion = commonProject.prop("java.version")!!.toInt()
 
 	toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
