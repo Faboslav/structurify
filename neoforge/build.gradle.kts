@@ -39,7 +39,7 @@ dependencies {
 	// Litostitched
 	commonMod.depOrNull("lithostitched_minecraft")?.let { lithostitchedMcVersion ->
 		commonMod.depOrNull("lithostitched")?.let { lithostitchedVersion ->
-			implementation(commonMod.modrinth("lithostitched", "${lithostitchedVersion}-fabric-${lithostitchedMcVersion}"))
+			implementation(commonMod.modrinth("lithostitched", "${lithostitchedVersion}-neoforge-${lithostitchedMcVersion}"))
 		}
 	}
 

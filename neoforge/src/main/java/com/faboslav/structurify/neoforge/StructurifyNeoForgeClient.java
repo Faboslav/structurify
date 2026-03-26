@@ -5,6 +5,11 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+
+//? if >= 26.1 {
+import net.minecraft.client.renderer.state.level.LevelRenderState;
+//?}
+
 //? if <1.20.6 {
 /*import net.neoforged.neoforge.client.ConfigScreenHandler;
 
@@ -40,7 +45,7 @@ public final class StructurifyNeoForgeClient
 	}
 
 	//? if >= 26.1 {
-	public static void onRenderLevelStage(RenderLevelStageEvent.AfterTranslucentParticles event)
+	public static void onRenderLevelStage(RenderLevelStageEvent.AfterTranslucentBlocks event)
 	//?} else if >= 1.21.8 {
 	/*public static void onRenderLevelStage(RenderLevelStageEvent.AfterParticles event)
 	*///?} else {
