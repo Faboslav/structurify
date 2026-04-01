@@ -66,7 +66,7 @@ public final class StructureFlatnessCheck
 
 		var structureData = structure.structurify$getStructureData();
 
-		if(structureData == null) {
+		if (structureData == null) {
 			return false;
 		}
 

@@ -6,7 +6,6 @@ import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
 import com.faboslav.structurify.common.config.data.structure.OverlapCheckData;
 import com.faboslav.structurify.common.util.ChunkPosUtil;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -40,29 +39,32 @@ public final class StructureChecker
 			return true;
 		}
 
-		BlockPos structureCenter = structureStart.getBoundingBox().getCenter();
-		long structureCheckId = generateStructureCheckId(structureId, structureCenter);
-		StructureCheckData structureCheckData = new StructureCheckData(structureCheckId, structureId, structure, structureStart);
+		long structureCheckId = generateStructureCheckId(structureId, structureStart.getChunkPos());
 		StructurifyChunkGenerator structurifyChunkGenerator = (StructurifyChunkGenerator) chunkGenerator;
 
-		boolean biomeCheckResult = structurifyChunkGenerator.structurify$getBiomeChecks().computeIfAbsent(structureCheckId, id -> checkBiomes(structureCheckData, biomeSource, randomState));
+		@Nullable Identifier finalStructureId = structureId;
+		return structurifyChunkGenerator.structurify$getStructureChecks().computeIfAbsent(structureCheckId, id -> {
+			StructureCheckData structureCheckData = new StructureCheckData(structureCheckId, finalStructureId, structure, structureStart);
 
-		if (!biomeCheckResult) {
-			return false;
-		}
-		boolean flatnessCheckResult = structurifyChunkGenerator.structurify$getFlatnessChecks().computeIfAbsent(structureCheckId, id -> checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState));
+			boolean biomeCheckResult = structurifyChunkGenerator.structurify$getBiomeChecks().computeIfAbsent(structureCheckId, id2 -> checkBiomes(structureCheckData, biomeSource, randomState));
 
-		if (!flatnessCheckResult) {
-			return false;
-		}
+			if (!biomeCheckResult) {
+				return false;
+			}
 
-		boolean overlapCheckResult = structurifyChunkGenerator.structurify$getOverlapChecks().computeIfAbsent(structureCheckId, id -> checkOverlap(structureCheckData, structurifyChunkGenerator));
+			boolean flatnessCheckResult = structurifyChunkGenerator.structurify$getFlatnessChecks().computeIfAbsent(structureCheckId, id2 -> checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState));
+			if (!flatnessCheckResult) {
+				return false;
+			}
 
-		if (!overlapCheckResult) {
-			return false;
-		}
+			boolean overlapCheckResult = structurifyChunkGenerator.structurify$getOverlapChecks().computeIfAbsent(structureCheckId, id2 -> checkOverlap(structureCheckData, structurifyChunkGenerator));
 
-		return true;
+			if (!overlapCheckResult) {
+				return false;
+			}
+
+			return true;
+		});
 	}
 
 	public static void debugCheckStructure(
@@ -78,8 +80,12 @@ public final class StructureChecker
 		}
 
 		Identifier structureId = structure.structurify$getStructureIdentifier();
-		BlockPos structureCenter = structureStart.getBoundingBox().getCenter();
-		long structureCheckId = generateStructureCheckId(structureId, structureCenter);
+
+		if(structureId == null) {
+			return;
+		}
+
+		long structureCheckId = generateStructureCheckId(structureId, structureStart.getChunkPos());
 		StructureCheckData structureCheckData = new StructureCheckData(structureCheckId, structureId, structure, structureStart);
 
 		checkBiomes(structureCheckData, biomeSource, randomState);
@@ -164,14 +170,10 @@ public final class StructureChecker
 		return true;
 	}
 
-	public static long generateStructureCheckId(Identifier structureId, BlockPos structureCenter) {
-		long structHash = structureId.hashCode();
-		structHash ^= (structHash >>> 33);
-		structHash *= 0xff51afd7ed558ccdL;
-		structHash ^= (structHash >>> 33);
-		structHash *= 0xc4ceb9fe1a85ec53L;
-		structHash ^= (structHash >>> 33);
+	public static long generateStructureCheckId(Identifier structureId, ChunkPos chunkPos) {
+		long structureHash = structureId.hashCode() & 0xffffffffL;
+		long chunkHash = ChunkPosUtil.getChunkPosAsLong(chunkPos);
 
-		return Long.rotateLeft(structHash, 23) ^ Long.rotateLeft(ChunkPosUtil.getChunkPosAsLong(ChunkPosUtil.createChunkPos(structureCenter.getX(), structureCenter.getZ())), 11);
+		return (structureHash << 32) ^ chunkHash;
 	}
 }

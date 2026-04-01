@@ -36,6 +36,9 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 	private final Map<Long, StructureSectionClaim> structurify$structureSectionClaims = new ConcurrentHashMap<>();
 
 	@Unique
+	private final Map<Long, Boolean> structurify$structureChecks = new ConcurrentHashMap<>();
+
+	@Unique
 	private final Map<Long, Boolean> structurify$flatnessChecks = new ConcurrentHashMap<>();
 
 	@Unique
@@ -47,6 +50,11 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 	@Unique
 	public Map<Long, StructureSectionClaim> structurify$getStructureSectionClaims() {
 		return this.structurify$structureSectionClaims;
+	}
+
+	@Unique
+	public Map<Long, Boolean> structurify$getStructureChecks() {
+		return this.structurify$structureChecks;
 	}
 
 	@Unique

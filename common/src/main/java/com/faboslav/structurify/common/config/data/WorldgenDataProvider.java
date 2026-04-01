@@ -244,6 +244,21 @@ public final class WorldgenDataProvider
 				}
 			}
 
+			// Towns and Towers uses "fluid_springs" step for its structures
+			if(structureId.contains("towns_and_towers")) {
+				var flatnessCheckData = structureData.getFlatnessCheckData();
+				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(false);
+				flatnessCheckData.overrideGlobalFlatnessCheck(false);
+				flatnessCheckData.defaultEnable(false);
+				flatnessCheckData.enable(false);
+
+				var biomeCheckData = structureData.getBiomeCheckData();
+				biomeCheckData.defaultOverrideGlobalBiomeCheck(false);
+				biomeCheckData.overrideGlobalBiomeCheck(false);
+				biomeCheckData.defaultEnable(false);
+				biomeCheckData.enable(false);
+			}
+
 			if(structureId.contains("aquamirae:") || (structureId.contains("minecells:") && !structureId.contains("minecells:overworld_portal"))) {
 				var overlapCheckData = structureData.getOverlapCheckData();
 				overlapCheckData.defaultExcludeFromOverlapPrevention(true);

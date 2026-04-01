@@ -8,6 +8,8 @@ public interface StructurifyChunkGenerator
 {
 	Map<Long, StructureSectionClaim> structurify$getStructureSectionClaims();
 
+	Map<Long, Boolean> structurify$getStructureChecks();
+
 	Map<Long, Boolean> structurify$getFlatnessChecks();
 
 	Map<Long, Boolean> structurify$getBiomeChecks();

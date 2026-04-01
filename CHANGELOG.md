@@ -1,3 +1,7 @@
+## 2.0.21
+
+- Fixed compatibility with "Towns and Towers"
+
 ## 2.0.20
 
 - Ported to 26.1

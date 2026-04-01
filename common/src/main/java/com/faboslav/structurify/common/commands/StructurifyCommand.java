@@ -271,8 +271,6 @@ public final class StructurifyCommand
 
 		var structureStarts = level.structureManager().startsForStructure(ChunkPosUtil.createChunkPos(commandPos), structure -> true).stream().filter(structureStart -> structureStart.getBoundingBox().inflatedBy(16).isInside(commandPos)).toList();
 
-		Structurify.getLogger().info("Found " + structureStarts.size() + " structures at " + commandPos);
-
 		if (structureStarts.isEmpty()) {
 			source.sendSuccess(() ->  Component.literal("There is no structures at ").append(getClickablePos(commandPos)).append(Component.literal(".")), !source.isPlayer());
 			return 1;
