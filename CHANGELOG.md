@@ -1,3 +1,8 @@
+## 2.0.22
+
+- Fixed actual use of structure set's "is_disabled" property (it was not used at all)
+- Added small check indicators to the structure button
+
 ## 2.0.21
 
 - Fixed compatibility with "Towns and Towers"

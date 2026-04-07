@@ -54,10 +54,13 @@ public abstract class StructureSetMixin implements StructurifyWithStructureSet
 				return this.structurify$structures;
 			}
 
-			var updatedStructures = new ArrayList<>(structures);
+			List<StructureSet.StructureSelectionEntry> updatedStructures;
 			var structureSetData = Structurify.getConfig().getStructureSetData().get(structureSetId);
 
-			if(!structureSetData.isDisabled()) {
+			if(structureSetData.isDisabled()) {
+				updatedStructures = new ArrayList<>();
+			} else {
+				updatedStructures = new ArrayList<>(structures);
 
 				for (var structureWeight : structureSetData.getStructureWeights().entrySet()) {
 					var structureId = structureWeight.getKey();

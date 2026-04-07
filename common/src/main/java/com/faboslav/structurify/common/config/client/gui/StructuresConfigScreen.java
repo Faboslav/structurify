@@ -205,8 +205,31 @@ public final class StructuresConfigScreen
 		String structureId,
 		HolderLookup.RegistryLookup<Biome> biomeRegistry
 	) {
+		var name = LanguageUtil.translateId("structure", structureId);
+		var flatnessCheck = !structureData.getFlatnessCheckData().isUsingDefaultValues() || structureData.getFlatnessCheckData().isOverridingGlobalFlatnessCheck();
+		var biomeCheck = !structureData.getBiomeCheckData().isUsingDefaultValues() || structureData.getBiomeCheckData().isOverridingGlobalBiomeCheck();
+		var overlapPreventionCheck = !structureData.getOverlapCheckData().isUsingDefaultValues() || structureData.getOverlapCheckData().isExcludedFromOverlapPrevention();
+		var distanceFromWorldCenterCheck = !structureData.getDistanceFromWorldCenterCheckData().isUsingDefaultValues() || structureData.getDistanceFromWorldCenterCheckData().isOverridingGlobalDistanceFromWorldCenter();
+
+
+		if(flatnessCheck) {
+			name.append(" \u26F0");
+		}
+
+		if(biomeCheck) {
+			name.append(" \u2663");
+		}
+
+		if(overlapPreventionCheck) {
+			name.append(" \u29C9");
+		}
+
+		if(distanceFromWorldCenterCheck) {
+			name.append(" \u2316");
+		}
+
 		var structureOptionBuilder = Option.<Boolean>createBuilder()
-			.name(LanguageUtil.translateId("structure", structureId))
+			.name(name)
 			.binding(
 				true,
 				() -> !structureData.isDisabled(),
@@ -234,6 +257,35 @@ public final class StructuresConfigScreen
 
 		structureOptionBuilder.description(v -> {
 			var descriptionBuilder = OptionDescription.createBuilder();
+			var hasChecks = flatnessCheck || biomeCheck || overlapPreventionCheck || distanceFromWorldCenterCheck;
+
+			if(hasChecks) {
+				descriptionBuilder.text(Component.translatable("gui.structurify.structures.checks_description").append(Component.literal("\n")));
+			}
+
+			if(!structureData.getFlatnessCheckData().isUsingDefaultValues() || structureData.getFlatnessCheckData().isOverridingGlobalFlatnessCheck()) {
+				descriptionBuilder.text(Component.literal("\u26F0 - ").append(Component.translatable("gui.structurify.structures.flatness_check")));
+				hasChecks = true;
+			}
+
+			if(!structureData.getBiomeCheckData().isUsingDefaultValues() || structureData.getBiomeCheckData().isOverridingGlobalBiomeCheck()) {
+				descriptionBuilder.text(Component.literal("\u2663 - ").append(Component.translatable("gui.structurify.structures.biome_check")));
+				hasChecks = true;
+			}
+
+			if(!structureData.getOverlapCheckData().isUsingDefaultValues() || structureData.getOverlapCheckData().isExcludedFromOverlapPrevention()) {
+				descriptionBuilder.text(Component.literal("\u29C9 - ").append(Component.translatable("gui.structurify.structures.overlap_check")));
+				hasChecks = true;
+			}
+
+			if(!structureData.getDistanceFromWorldCenterCheckData().isUsingDefaultValues() || structureData.getDistanceFromWorldCenterCheckData().isOverridingGlobalDistanceFromWorldCenter()) {
+				descriptionBuilder.text(Component.literal("\u2316 - ").append(Component.translatable("gui.structurify.structures.distance_from_world_center")));
+				hasChecks = true;
+			}
+
+			if(hasChecks) {
+				descriptionBuilder.text(Component.literal("\n"));
+			}
 
 			descriptionBuilder.text(Component.translatable("gui.structurify.structures.biomes_description").append(Component.literal("\n")));
 
