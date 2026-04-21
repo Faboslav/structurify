@@ -35,6 +35,7 @@ dependencies {
 	addEmbeddedFabricModule("fabric-rendering-v1")
 	addEmbeddedFabricModule("fabric-lifecycle-events-v1")
 	addEmbeddedFabricModule("fabric-command-api-v2")
+	addEmbeddedFabricModule("fabric-gametest-api-v1")
 	//modApi("net.fabricmc.fabric-api:fabric-api:${commonMod.dep("fabric_api")}+${commonMod.mc}")
 
 	// Required dependencies

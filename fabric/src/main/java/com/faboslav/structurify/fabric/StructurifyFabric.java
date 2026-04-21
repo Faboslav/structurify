@@ -34,6 +34,6 @@ public final class StructurifyFabric implements ModInitializer
 
 	private void onServerStart(MinecraftServer minecraftServer) {
 		StructurifyRegistryManagerProvider.setRegistryManager(minecraftServer.registryAccess());
-		UpdateRegistriesEvent.EVENT.invoke(new UpdateRegistriesEvent(StructurifyRegistryManagerProvider.getRegistryManager()));
+		UpdateRegistriesEvent.EVENT.invoke(new UpdateRegistriesEvent(minecraftServer.registryAccess()));
 	}
 }

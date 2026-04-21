@@ -10,6 +10,7 @@ plugins {
 val commonJava: Configuration by configurations.creating {
     isCanBeResolved = true
 }
+
 val commonResources: Configuration by configurations.creating {
     isCanBeResolved = true
 }
@@ -76,7 +77,14 @@ val generateIdeaRunConfig = tasks.register("generateIdeaRunConfig") {
 			if (current != text) {
 				runFile.parentFile.mkdirs()
 				Files.writeString(runFile.toPath(), text, StandardCharsets.UTF_8)
-				println("Updated run config: ${runFile.absolutePath}")
+
+				if(side == "Server") {
+					val eulaContent = """
+					eula=true
+					""".trimIndent()
+					val eulaFile = rootProject.file("${loader}/versions/${version}/run/eula.txt")
+					Files.writeString(eulaFile.toPath(), eulaContent, StandardCharsets.UTF_8)
+				}
 			}
 		}
 	}

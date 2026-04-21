@@ -111,9 +111,11 @@ val commonResources: Configuration by configurations.creating {
 artifacts {
 	afterEvaluate {
 		val mainSourceSet = sourceSets.main.get()
+
 		mainSourceSet.java.sourceDirectories.files.forEach {
 			add(commonJava.name, it)
 		}
+
 		mainSourceSet.resources.sourceDirectories.files.forEach {
 			add(commonResources.name, it)
 		}

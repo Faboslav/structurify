@@ -119,15 +119,15 @@ dependencies {
 		include("required", "optional", "embedded")
 	}
 	for (mod in fossilsAndArcheologyRevivalWithDeps) modImplementation(mod)
-	modImplementation(fletchingTable.modrinth("fungal-infectionspore", commonMod.mc, "forge"))
-	modImplementation(fletchingTable.modrinth("dungeons-enhanced", commonMod.mc, "forge"))
+	//modImplementation(fletchingTable.modrinth("fungal-infectionspore", commonMod.mc, "forge"))
+	//modImplementation(fletchingTable.modrinth("dungeons-enhanced", commonMod.mc, "forge"))
 	//modImplementation(fletchingTable.modrinth("legendary-monsters", commonMod.mc, "forge"))
-	modImplementation(fletchingTable.modrinth("wits", commonMod.mc, "forge"))
+	/*
 	val endersCataclysmWithDeps: List<Dependency> = fletchingTable.modrinthBundle("l_enders-cataclysm", commonMod.mc, "forge") {
 		recursive = true
 		include("required", "optional", "embedded")
 	}
-	for (mod in endersCataclysmWithDeps) modImplementation(mod)
+	for (mod in endersCataclysmWithDeps) modImplementation(mod)*/
 
 	// For debugging
 	// modImplementation(modrinth("blue-skies", "1.3.31")) { transitive = false }

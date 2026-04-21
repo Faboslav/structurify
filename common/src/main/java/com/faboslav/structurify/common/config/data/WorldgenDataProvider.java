@@ -100,13 +100,11 @@ public final class WorldgenDataProvider
 		Map<String, StructureNamespaceData> structuresNamespaces = new TreeMap<>(alphabeticallComparator);
 		structuresNamespaces.put(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER, new StructureNamespaceData());
 
-		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+		var structureRegistry = StructurifyRegistryManagerProvider.getStructureRegistry();
 
-		if (registryManager == null) {
+		if (structureRegistry == null) {
 			return structuresNamespaces;
 		}
-
-		var structureRegistry = registryManager.lookupOrThrow(Registries.STRUCTURE);
 
 		for (var structureReference : structureRegistry.listElements().toList()) {
 			String structureNamespace = structureReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.getNamespace();
@@ -120,14 +118,13 @@ public final class WorldgenDataProvider
 	}
 
 	public static Map<String, StructureData> loadStructures() {
-		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+		var structureRegistry = StructurifyRegistryManagerProvider.getStructureRegistry();
+		var biomeRegistry =StructurifyRegistryManagerProvider.getBiomeRegistry();
 
-		if (registryManager == null) {
+		if (structureRegistry == null || biomeRegistry == null) {
 			return Collections.emptyMap();
 		}
 
-		var structureRegistry = registryManager.lookupOrThrow(Registries.STRUCTURE);
-		var biomeRegistry = registryManager.lookupOrThrow(Registries.BIOME);
 		Map<String, StructureData> structures = new TreeMap<>(alphabeticallComparator);
 
 		for (var structureReference : structureRegistry.listElements().toList()) {
@@ -305,13 +302,12 @@ public final class WorldgenDataProvider
 	}
 
 	public static Map<String, StructureSetData> loadStructureSets() {
-		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+		var structureSetRegistry = StructurifyRegistryManagerProvider.getStructureSetRegistry();
 
-		if (registryManager == null) {
+		if (structureSetRegistry == null) {
 			return Collections.emptyMap();
 		}
 
-		var structureSetRegistry = registryManager.lookupOrThrow(Registries.STRUCTURE_SET);
 		Map<String, StructureSetData> structureSets = new TreeMap<>();
 
 		for (var structureSetReference : structureSetRegistry.listElements().toList()) {

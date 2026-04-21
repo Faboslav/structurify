@@ -25,6 +25,9 @@
 		],
 		"modmenu": [
 			"com.faboslav.structurify.fabric.modcompat.ModMenuCompat"
+		],
+		"fabric-gametest": [
+			"com.faboslav.structurify.fabric.tests.StructureLocateTest"
 		]
 	},
 	"mixins": [
