@@ -1,3 +1,7 @@
+## 2.0.23
+
+- Improved initial config load times by 20-50% due to custom registry loading logic
+
 ## 2.0.22
 
 - Fixed actual use of structure set's "is_disabled" property (it was not used at all)

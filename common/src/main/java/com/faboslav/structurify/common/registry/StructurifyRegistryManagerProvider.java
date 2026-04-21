@@ -1,24 +1,36 @@
 package com.faboslav.structurify.common.registry;
 
 import com.faboslav.structurify.common.Structurify;
-import com.mojang.serialization.Lifecycle;
-import net.minecraft.util.Util;
-import net.minecraft.commands.Commands;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.MappedRegistry;
+import com.mojang.serialization.Codec;
+import net.minecraft.core.*;
+import net.minecraft.resources.RegistryDataLoader;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.server.WorldLoader;
-import net.minecraft.server.WorldStem;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.repository.RepositorySource;
-import net.minecraft.world.level.WorldDataConfiguration;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.presets.WorldPresets;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import org.jetbrains.annotations.Nullable;
+import java.util.List;
 
-//? if >= 1.21.11 {
-import net.minecraft.server.permissions.PermissionSet;
+//? if >= 1.21.3 {
+import net.minecraft.server.RegistryLayer;
+import net.minecraft.tags.TagLoader;
+//?} else {
+/*import net.minecraft.core.registries.BuiltInRegistries;
+*///?}
+
+//? if >= 26.1 {
+import net.minecraft.resources.RegistryValidator;
+import net.minecraft.util.Util;
 //?}
 
 public final class StructurifyRegistryManagerProvider
@@ -77,46 +89,71 @@ public final class StructurifyRegistryManagerProvider
 			}
 
 			var resourcePackManager = new PackRepository(StructurifyResourcePackProvider.getResourcePackProviders().toArray(new RepositorySource[0]));
-			var dataPacks = new WorldLoader.PackConfig(resourcePackManager, WorldDataConfiguration.DEFAULT, false, false);
-			var serverConfig = new WorldLoader.InitConfig(dataPacks, Commands.CommandSelection.INTEGRATED, /*? if >= 1.21.11 {*/PermissionSet.ALL_PERMISSIONS/*?} else {*//*2*//*?}*/);
+			resourcePackManager.reload();
+			resourcePackManager.setSelected(resourcePackManager.getAvailableIds());
 
-			var saveLoader = Util.blockUntilDone(executor ->
-				WorldLoader.load(serverConfig, loadContextSupplierContext -> {
-					var registry = new MappedRegistry<>(Registries.LEVEL_STEM, Lifecycle.stable()).freeze();
+			try (var resourceManager = new MultiPackResourceManager(
+				PackType.SERVER_DATA,
+				resourcePackManager.openAllSelected()
+			)) {
+				List<RegistryDataLoader.RegistryData<?>> registries = List.of(
+					getRegistryDataLoader(Registries.BIOME, Biome.DIRECT_CODEC),
+					getRegistryDataLoader(Registries.CONFIGURED_CARVER, ConfiguredWorldCarver.DIRECT_CODEC),
+					getRegistryDataLoader(Registries.PROCESSOR_LIST, StructureProcessorType.DIRECT_CODEC),
+					getRegistryDataLoader(Registries.TEMPLATE_POOL, StructureTemplatePool.DIRECT_CODEC),
+					getRegistryDataLoader(Registries.CONFIGURED_FEATURE, ConfiguredFeature.DIRECT_CODEC),
+					getRegistryDataLoader(Registries.PLACED_FEATURE, PlacedFeature.DIRECT_CODEC),
+					getRegistryDataLoader(Registries.STRUCTURE, Structure.DIRECT_CODEC),
+					getRegistryDataLoader(Registries.STRUCTURE_SET, StructureSet.DIRECT_CODEC)
+				);
+				//? if >= 1.21.3 {
+				LayeredRegistryAccess<RegistryLayer> initialLayers = RegistryLayer.createRegistryAccess();
+				List<Registry.PendingTags<?>> staticLayerTags = TagLoader.loadTagsForExistingRegistries(
+					resourceManager,
+					initialLayers.getLayer(RegistryLayer.STATIC)
+				);
+				var baseRegistryAccess = TagLoader.buildUpdatedLookups(
+					initialLayers.getAccessForLoading(RegistryLayer.WORLDGEN),
+					staticLayerTags
+				);
+				//?} else {
+				/*var baseRegistryAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+				*///?}
+				//? if >= 26.1 {
+				var registryAccess = Util.blockUntilDone(executor ->
+					RegistryDataLoader.load(
+						resourceManager,
+						baseRegistryAccess,
+						registries,
+						executor
+					)
+				).get();
+				//?} else {
+				/*var registryAccess = RegistryDataLoader.load(
+					resourceManager,
+					baseRegistryAccess,
+					registries
+				);
+				*///?}
 
-					//? if >=1.21.3 {
-					var dimensionsConfig = loadContextSupplierContext
-						.datapackWorldgen()
-						.lookupOrThrow(Registries.WORLD_PRESET)
-						.getOrThrow(WorldPresets.FLAT)
-						.value()
-						.createWorldDimensions()
-						.bake(registry);
-					//?} else {
-					/*var dimensionsConfig = loadContextSupplierContext
-						.datapackWorldgen()
-						.registryOrThrow(Registries.WORLD_PRESET)
-						.getHolderOrThrow(WorldPresets.FLAT)
-						.value()
-						.createWorldDimensions()
-						.bake(registry);
-					*///?}
-
-					return new WorldLoader.DataLoadOutput<>(null, dimensionsConfig.dimensionsRegistryAccess());
-				}, WorldStem::new, Util.backgroundExecutor(), executor)
-			).get();
-
-			if (saveLoader == null || saveLoader.registries() == null) {
-				Structurify.getLogger().error("SaveLoader or CombinedDynamicRegistries is null.");
-				return;
+				setRegistryManager(registryAccess);
 			}
 
-			setRegistryManager(saveLoader.registries().compositeAccess());
 			Structurify.getLogger().info("Finished loading registry manager");
 		} catch (Exception exception) {
 			Structurify.getLogger().error("Failed to load registry manager.", exception);
 		} finally {
 			isLoading = false;
 		}
+	}
+
+	private static <T> RegistryDataLoader.RegistryData<T> getRegistryDataLoader(ResourceKey<? extends Registry<T>> key, Codec<T> codec) {
+		//? if >= 26.1 {
+		return new RegistryDataLoader.RegistryData<>(key, codec, RegistryValidator.none());
+		//?} else if >= 1.21.1 {
+		/*return new RegistryDataLoader.RegistryData<>(key, codec, false);
+		*///?} else {
+		/*return new RegistryDataLoader.RegistryData<>(key, codec);
+		*///?}
 	}
 }

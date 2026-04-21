@@ -13,7 +13,7 @@
     "LevelChunkMixin",
     "LocateCommandInvoker",
     "LocateCommandMixin",
-	  "ResourceKeyArgumentInvoker",
+	"ResourceKeyArgumentInvoker",
     "ResourcePackManagerAccessor",
     "StructureManagerMixin",
     "compat.RepurposedStructuresModifySpreadMixin",

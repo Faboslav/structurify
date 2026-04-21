@@ -137,10 +137,12 @@ legacyForge {
 	runs {
 		register("client") {
 			client()
+			ideFolderName = "Forge"
 			ideName = "Forge Client (${project.path})"
 		}
 		register("server") {
 			server()
+			ideFolderName = "Forge"
 			ideName = "Forge Server (${project.path})"
 		}
 	}
@@ -174,8 +176,4 @@ tasks {
 			)
 		}
 	}
-}
-
-if (stonecutter.current.isActive) tasks.register("buildActive") {
-	dependsOn("build")
 }

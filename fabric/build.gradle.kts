@@ -75,11 +75,12 @@ dependencies {
 	}*/
 
 	// Litostitched
+	/*
 	commonMod.depOrNull("lithostitched_minecraft")?.let { lithostitchedMcVersion ->
 		commonMod.depOrNull("lithostitched")?.let { lithostitchedVersion ->
 			modImplementation(commonMod.modrinth("lithostitched", "${lithostitchedVersion}-fabric-${lithostitchedMcVersion}"))
 		}
-	}
+	}*/
 
 	// Yungs api
 	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
@@ -106,12 +107,12 @@ loom {
 		getByName("client") {
 			client()
 			configName = "Fabric Client"
-			ideConfigGenerated(true)
+			ideConfigGenerated(false)
 		}
 		getByName("server") {
 			server()
 			configName = "Fabric Server"
-			ideConfigGenerated(true)
+			ideConfigGenerated(false)
 		}
 	}
 
@@ -121,13 +122,4 @@ loom {
 			defaultRefmapName = "${mod.id}.refmap.json"
 		}
 	}
-}
-
-for (meta in stonecutter.versions) tasks.register("runActive${meta.version}") {
-	dependsOn(":${meta.project}:runClient")
-}
-
-if (stonecutter.current.isActive) tasks.register("runActiveFabricClient") {
-	dependsOn("runClient")
-	description = "Fabric Client for ${stonecutter.current.version}"
 }
