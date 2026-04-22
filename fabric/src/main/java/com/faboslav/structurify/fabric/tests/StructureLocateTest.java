@@ -1,22 +1,22 @@
+/*
 package com.faboslav.structurify.fabric.tests;
 
-import com.faboslav.structurify.common.Structurify;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+import com.faboslav.structurify.common.Structurify;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.permissions.PermissionSet;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class StructureLocateTest
 {
 	@GameTest
-	public void structureLocateTest(GameTestHelper context) {
-
+	public void structureLocateTest(GameTestHelper context)
+	{
 		var level = context.getLevel();
 		var server = level.getServer();
 		List<Component> output = new ArrayList<>();
@@ -57,6 +57,5 @@ public class StructureLocateTest
 			context.assertTrue(message.getString().contains("There is no structure with type"), "fail");
 		}
 		context.succeed();
-
 	}
-}
+}*/

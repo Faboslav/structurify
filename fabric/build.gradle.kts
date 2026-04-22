@@ -107,13 +107,15 @@ loom {
 	runs {
 		getByName("client") {
 			client()
+			ideConfigFolder.set("Fabric")
 			configName = "Fabric Client"
-			ideConfigGenerated(false)
+			ideConfigGenerated(true)
 		}
 		getByName("server") {
 			server()
+			ideConfigFolder.set("Fabric")
 			configName = "Fabric Server"
-			ideConfigGenerated(false)
+			ideConfigGenerated(true)
 		}
 	}
 
