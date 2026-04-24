@@ -83,6 +83,7 @@ val generateIdeaRunConfig = tasks.register("generateIdeaRunConfig") {
 					eula=true
 					""".trimIndent()
 					val eulaFile = rootProject.file("${loader}/versions/${version}/run/eula.txt")
+					eulaFile.parentFile.mkdirs()
 					Files.writeString(eulaFile.toPath(), eulaContent, StandardCharsets.UTF_8)
 				}
 			}
