@@ -15,6 +15,7 @@ import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import com.faboslav.structurify.common.util.LanguageUtil;
+import com.faboslav.structurify.common.util.StructurifyComparators;
 import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
@@ -28,10 +29,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings({"unchecked"})
 public final class StructuresConfigScreen
@@ -140,24 +138,21 @@ public final class StructuresConfigScreen
 
 	private static void addStructures(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
 		var structures = WorldgenDataProvider.getStructures();
-		var structureGroups = new HashMap<String, HashMap<Identifier, StructureData>>();
+		var structureGroups = new TreeMap<String, TreeMap<Identifier, StructureData>>(StructurifyComparators.ALPHABETICALL_NAMESPACE_COMPARATOR);
 
 		for (Map.Entry<String, StructureData> entry : structures.entrySet()) {
 			String structureStringId = entry.getKey();
 			Identifier structureId = Structurify.makeNamespacedId(structureStringId);
 			String structureNamespace = structureId.getNamespace();
 			StructureData structureData = entry.getValue();
-
-			if(!structureGroups.containsKey(structureNamespace)) {
-				structureGroups.put(structureNamespace, new HashMap<>());
-			}
-
-			structureGroups.get(structureNamespace).put(structureId, structureData);
+			structureGroups
+				.computeIfAbsent(structureNamespace, namespace -> new TreeMap<>(Comparator.comparing(Identifier::getPath)))
+				.put(structureId, structureData);
 		}
 
 		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
 
-		for (Map.Entry<String, HashMap<Identifier, StructureData>> structureGroup : structureGroups.entrySet()) {
+		for (var structureGroup : structureGroups.entrySet()) {
 			String structureNamespace = structureGroup.getKey();
 			var namespaceStructures = structureGroup.getValue();
 
@@ -213,19 +208,19 @@ public final class StructuresConfigScreen
 
 
 		if(flatnessCheck) {
-			name.append(" \u26F0");
+			name.append(" " + FlatnessCheckOptions.FLATNESS_CHECK_SYMBOL);
 		}
 
 		if(biomeCheck) {
-			name.append(" \u2663");
+			name.append(" " + BiomeCheckOptions.BIOME_CHECK_SYMBOL);
 		}
 
 		if(overlapPreventionCheck) {
-			name.append(" \u29C9");
+			name.append(" " + OverlapCheckOptions.OVERLAP_CHECK_SYMBOL);
 		}
 
 		if(distanceFromWorldCenterCheck) {
-			name.append(" \u2316");
+			name.append(" " + DistanceFromWorldCenterOptions.DISTANCE_FROM_WORLD_CENTER_CHECK_SYMBOL);
 		}
 
 		var structureOptionBuilder = Option.<Boolean>createBuilder()
@@ -250,7 +245,7 @@ public final class StructuresConfigScreen
 					YACLScreen structureScreen = StructureConfigScreen.create(Structurify.getConfig(), id, screen);
 
 					configScreen.saveScreenState(screen);
-					Minecraft.getInstance().setScreen(structureScreen);
+					configScreen.switchScreen(screen, structureScreen);
 					configScreen.loadScreenState(structureScreen);
 				}).buttonTooltip("gui.structurify.structures.structure.detail_button.tooltip")
 			);
@@ -264,22 +259,22 @@ public final class StructuresConfigScreen
 			}
 
 			if(!structureData.getFlatnessCheckData().isUsingDefaultValues() || structureData.getFlatnessCheckData().isOverridingGlobalFlatnessCheck()) {
-				descriptionBuilder.text(Component.literal("\u26F0 - ").append(Component.translatable("gui.structurify.structures.flatness_check")));
+				descriptionBuilder.text(Component.literal(FlatnessCheckOptions.FLATNESS_CHECK_SYMBOL + " - ").append(Component.translatable("gui.structurify.structures.flatness_check")));
 				hasChecks = true;
 			}
 
 			if(!structureData.getBiomeCheckData().isUsingDefaultValues() || structureData.getBiomeCheckData().isOverridingGlobalBiomeCheck()) {
-				descriptionBuilder.text(Component.literal("\u2663 - ").append(Component.translatable("gui.structurify.structures.biome_check")));
+				descriptionBuilder.text(Component.literal(BiomeCheckOptions.BIOME_CHECK_SYMBOL + " - ").append(Component.translatable("gui.structurify.structures.biome_check")));
 				hasChecks = true;
 			}
 
 			if(!structureData.getOverlapCheckData().isUsingDefaultValues() || structureData.getOverlapCheckData().isExcludedFromOverlapPrevention()) {
-				descriptionBuilder.text(Component.literal("\u29C9 - ").append(Component.translatable("gui.structurify.structures.overlap_check")));
+				descriptionBuilder.text(Component.literal(OverlapCheckOptions.OVERLAP_CHECK_SYMBOL +  " - ").append(Component.translatable("gui.structurify.structures.overlap_check")));
 				hasChecks = true;
 			}
 
 			if(!structureData.getDistanceFromWorldCenterCheckData().isUsingDefaultValues() || structureData.getDistanceFromWorldCenterCheckData().isOverridingGlobalDistanceFromWorldCenter()) {
-				descriptionBuilder.text(Component.literal("\u2316 - ").append(Component.translatable("gui.structurify.structures.distance_from_world_center")));
+				descriptionBuilder.text(Component.literal(DistanceFromWorldCenterOptions.DISTANCE_FROM_WORLD_CENTER_CHECK_SYMBOL + " - ").append(Component.translatable("gui.structurify.structures.distance_from_world_center")));
 				hasChecks = true;
 			}
 

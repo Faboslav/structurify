@@ -30,6 +30,9 @@ public class OptionListWidgetMixin
 		if (currentTab instanceof YACLScreen.CategoryTab yaclScreenCategoryTab) {
 			var optionListWidget = YACLUtil.getOptionListWidget(yaclScreenCategoryTab);
 			optionListWidget.setScrollAmount(0);
+			//? if <= 1.20.1 {
+			/*((ElementListWidgetExtMixin) optionListWidget).structurify$resetSmoothScrolling();
+			*///?}
 		}
 	}
 }

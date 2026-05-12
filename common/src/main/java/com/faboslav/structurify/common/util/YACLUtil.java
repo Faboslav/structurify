@@ -22,6 +22,13 @@ public final class YACLUtil
 		return emptyLineOption;
 	}
 
+	public static LabelOption createEmptySmallLabelOption() {
+		var emptyLineOption = LabelOption.create(Component.literal(""));
+		((StructurifyOption) emptyLineOption).structurify$setName(Component.empty());
+
+		return emptyLineOption;
+	}
+
 	public static LabelOption createEmptyLabelOption(MutableComponent component) {
 		var emptyLineOption = LabelOption.create(Component.literal("\n"));
 		((StructurifyOption) emptyLineOption).structurify$setName(component);

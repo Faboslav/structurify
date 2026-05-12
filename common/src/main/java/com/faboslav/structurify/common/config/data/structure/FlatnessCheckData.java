@@ -30,6 +30,10 @@ public final class FlatnessCheckData
 		this.overrideGlobalFlatnessCheck = overrideGlobalFlatnessCheck;
 	}
 
+	public boolean defaultIsOverridingGlobalFlatnessCheck() {
+		return this.defaultOverrideGlobalFlatnessCheck;
+	}
+
 	public void defaultOverrideGlobalFlatnessCheck(boolean defaultOverrideGlobalFlatnessCheck) {
 		this.defaultOverrideGlobalFlatnessCheck = defaultOverrideGlobalFlatnessCheck;
 	}
@@ -40,6 +44,10 @@ public final class FlatnessCheckData
 
 	public void enable(boolean isEnabled) {
 		this.isEnabled = isEnabled;
+	}
+
+	public boolean defaultIsEnabled() {
+		return this.defaultIsEnabled;
 	}
 
 	public void defaultEnable(boolean defaultIsEnabled) {

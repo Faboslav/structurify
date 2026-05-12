@@ -4,6 +4,7 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.modcompat.ModChecker;
 import com.faboslav.structurify.common.modcompat.ModCompat;
 import com.faboslav.structurify.common.platform.PlatformHooks;
+import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.server.packs.repository.ServerPacksSource;
 
@@ -51,5 +52,22 @@ public final class StructurifyResourcePackProvider
 		}
 
 		return modResourcePackProviders;
+	}
+
+	public static PackRepository getResourcePackRepository() {
+		Structurify.getLogger().info("Loading resource pack repository...");
+		var resourcePackProviders = StructurifyResourcePackProvider.getResourcePackProviders();
+
+		for (var resourcePackProvider : resourcePackProviders) {
+			Structurify.getLogger().info("Loaded resource pack provider: " + resourcePackProvider.getClass().getSimpleName());
+		}
+
+		var resourcePackManager = new PackRepository(StructurifyResourcePackProvider.getResourcePackProviders().toArray(new RepositorySource[0]));
+		PlatformHooks.PLATFORM_RESOURCE_PACK_PROVIDER.loadPlatformResourcePacks(resourcePackManager);
+		resourcePackManager.reload();
+		resourcePackManager.setSelected(resourcePackManager.getAvailableIds());
+		Structurify.getLogger().info("Finished loading resource pack repository");
+
+		return resourcePackManager;
 	}
 }

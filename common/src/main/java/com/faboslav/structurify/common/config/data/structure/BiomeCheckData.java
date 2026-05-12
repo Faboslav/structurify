@@ -50,6 +50,10 @@ public final class BiomeCheckData
 		this.overrideGlobalBiomeCheck = overrideGlobalBiomeCheck;
 	}
 
+	public boolean defaultIsOverridingGlobalBiomeCheck() {
+		return this.defaultOverrideGlobalBiomeCheck;
+	}
+
 	public void defaultOverrideGlobalBiomeCheck(boolean defaultOverrideGlobalBiomeCheck) {
 		this.defaultOverrideGlobalBiomeCheck = defaultOverrideGlobalBiomeCheck;
 	}
@@ -60,6 +64,10 @@ public final class BiomeCheckData
 
 	public void enable(boolean isEnabled) {
 		this.isEnabled = isEnabled;
+	}
+
+	public boolean defaultIsEnabled() {
+		return this.defaultIsEnabled;
 	}
 
 	public void defaultEnable(boolean defaultIsEnabled) {

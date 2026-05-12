@@ -1,5 +1,13 @@
 package com.faboslav.structurify.common.config.data.structure;
 
+import com.faboslav.structurify.common.config.data.structure.jigsaw.HeightProviderData;
+import com.faboslav.structurify.common.config.data.structure.jigsaw.ProjectStartToHeightmap;
+import net.minecraft.world.level.levelgen.Heightmap;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.Optional;
+
 public final class JigsawData
 {
 	public static final int MIN_SIZE = 0;
@@ -9,46 +17,97 @@ public final class JigsawData
 	public static final int MIN_VERTICAL_MAX_DISTANCE_FROM_CENTER = 1;
 	public static final int MAX_VERTICAL_MAX_DISTANCE_FROM_CENTER = 4096;
 
-	private final int defaultSize;
-	private final int defaultHorizontalMaxDistanceFromCenter;
-	private final int defaultVerticalMaxDistanceFromCenter;
+	private final @Nullable Integer defaultSize;
+	private final @Nullable Integer defaultHorizontalMaxDistanceFromCenter;
+	private final @Nullable Integer defaultVerticalMaxDistanceFromCenter;
+	private final @Nullable HeightProviderData defaultHeightProviderData;
+	private final @Nullable ProjectStartToHeightmap defaultProjectStartToHeightmap;
 
-	private int size;
-	private int horizontalMaxDistanceFromCenter;
-	private int verticalMaxDistanceFromCenter;
+	private @Nullable Integer size;
+	private @Nullable Integer horizontalMaxDistanceFromCenter;
+	private @Nullable Integer verticalMaxDistanceFromCenter;
+	private @Nullable HeightProviderData heightProviderData;
+	private @Nullable ProjectStartToHeightmap projectStartToHeightmap;
 
-	public JigsawData(int size, int horizontalMaxDistanceFromCenter, int verticalMaxDistanceFromCenter) {
+	public JigsawData() {
+		defaultSize = null;
+		defaultHorizontalMaxDistanceFromCenter = null;
+		defaultVerticalMaxDistanceFromCenter = null;
+		defaultHeightProviderData = null;
+		defaultProjectStartToHeightmap = null;
+	}
+
+	public JigsawData(@Nullable Integer size, @Nullable Integer horizontalMaxDistanceFromCenter, @Nullable Integer verticalMaxDistanceFromCenter, @Nullable HeightProviderData heightProviderData, @Nullable ProjectStartToHeightmap projectStartToHeightmap) {
 		this.defaultSize = size;
 		this.size = size;
 		this.defaultHorizontalMaxDistanceFromCenter = horizontalMaxDistanceFromCenter;
 		this.horizontalMaxDistanceFromCenter = horizontalMaxDistanceFromCenter;
 		this.defaultVerticalMaxDistanceFromCenter = verticalMaxDistanceFromCenter;
 		this.verticalMaxDistanceFromCenter = verticalMaxDistanceFromCenter;
+		this.defaultHeightProviderData = heightProviderData;
+		this.heightProviderData = heightProviderData;
+		this.defaultProjectStartToHeightmap = projectStartToHeightmap;
+		this.projectStartToHeightmap = projectStartToHeightmap;
 	}
 
 	public boolean isUsingDefaultValues() {
-		return this.size == this.defaultSize
-			   && this.horizontalMaxDistanceFromCenter == this.defaultHorizontalMaxDistanceFromCenter
-			   && this.verticalMaxDistanceFromCenter == this.defaultVerticalMaxDistanceFromCenter;
+		return this.isUsingDefaultSize()
+			   && this.isUsingDefaultMaxDistanceFromCenter()
+			   && this.isUsingDefaultHeightProvider()
+			   && this.isUsingDefaultProjectStartToHeightmap();
 	}
 
-	public int getDefaultSize() {
+	public boolean isUsingDefaultSize() {
+		return Objects.equals(this.size, this.defaultSize);
+	}
+
+	public boolean isUsingDefaultMaxDistanceFromCenter() {
+		return Objects.equals(this.horizontalMaxDistanceFromCenter, this.defaultHorizontalMaxDistanceFromCenter) && Objects.equals(this.verticalMaxDistanceFromCenter, this.defaultVerticalMaxDistanceFromCenter);
+	}
+
+	public boolean isUsingDefaultHeightProvider() {
+		return Objects.equals(this.heightProviderData, this.defaultHeightProviderData);
+	}
+
+	public boolean isUsingDefaultProjectStartToHeightmap() {
+		return Objects.equals(this.projectStartToHeightmap, this.defaultProjectStartToHeightmap);
+	}
+
+	public boolean isUsingSize() {
+		return this.defaultSize != null && this.size != null;
+	}
+
+	public boolean isUsingMaxDistanceFromCenter() {
+		return this.defaultHorizontalMaxDistanceFromCenter != null && this.horizontalMaxDistanceFromCenter != null && this.defaultVerticalMaxDistanceFromCenter != null && this.verticalMaxDistanceFromCenter != null;
+	}
+
+	public boolean isUsingHeightProvider() {
+		return this.heightProviderData != null;
+	}
+
+	public boolean isUsingProjectStartToHeightmap() {
+		return this.projectStartToHeightmap != null;
+	}
+
+	@Nullable
+	public Integer getDefaultSize() {
 		return this.defaultSize;
 	}
 
-	public int getSize() {
+	@Nullable
+	public Integer getSize() {
 		return size;
 	}
 
-	public void setSize(int size) {
+	public void setSize(@Nullable Integer size) {
 		this.size = size;
 	}
 
-	public int getDefaultHorizontalMaxDistanceFromCenter() {
+	public @Nullable Integer getDefaultHorizontalMaxDistanceFromCenter() {
 		return this.defaultHorizontalMaxDistanceFromCenter;
 	}
 
-	public int getHorizontalMaxDistanceFromCenter() {
+	public @Nullable Integer getHorizontalMaxDistanceFromCenter() {
 		return this.horizontalMaxDistanceFromCenter;
 	}
 
@@ -56,15 +115,39 @@ public final class JigsawData
 		this.horizontalMaxDistanceFromCenter = horizontalMaxDistanceFromCenter;
 	}
 
-	public int getDefaultVerticalMaxDistanceFromCenter() {
+	public @Nullable Integer getDefaultVerticalMaxDistanceFromCenter() {
 		return this.defaultVerticalMaxDistanceFromCenter;
 	}
 
-	public int getVerticalMaxDistanceFromCenter() {
+	public @Nullable Integer getVerticalMaxDistanceFromCenter() {
 		return this.verticalMaxDistanceFromCenter;
 	}
 
 	public void setVerticalMaxDistanceFromCenter(int verticalMaxDistanceFromCenter) {
 		this.verticalMaxDistanceFromCenter = verticalMaxDistanceFromCenter;
+	}
+
+	public @Nullable HeightProviderData getDefaultHeightProviderData() {
+		return this.defaultHeightProviderData;
+	}
+
+	public @Nullable HeightProviderData getHeightProviderData() {
+		return this.heightProviderData;
+	}
+
+	public void setHeightProviderData(@Nullable HeightProviderData heightProviderData) {
+		this.heightProviderData = heightProviderData;
+	}
+
+	public @Nullable ProjectStartToHeightmap getDefaultProjectStartToHeightmap() {
+		return this.defaultProjectStartToHeightmap;
+	}
+
+	public @Nullable ProjectStartToHeightmap getProjectStartToHeightmap() {
+		return this.projectStartToHeightmap;
+	}
+
+	public void setProjectStartToHeightmap(@Nullable ProjectStartToHeightmap projectStartToHeightmap) {
+		this.projectStartToHeightmap = projectStartToHeightmap;
 	}
 }

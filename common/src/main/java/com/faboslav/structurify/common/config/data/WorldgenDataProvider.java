@@ -1,23 +1,22 @@
 package com.faboslav.structurify.common.config.data;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
-import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
-import com.faboslav.structurify.common.api.StructurifyStructureSelectionEntry;
-import com.faboslav.structurify.common.api.StructurifyWithStructureSet;
+import com.faboslav.structurify.common.api.*;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;
+import com.faboslav.structurify.common.config.data.structure.jigsaw.HeightProviderData;
+import com.faboslav.structurify.common.config.data.structure.jigsaw.ProjectStartToHeightmap;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+import com.faboslav.structurify.common.registry.StructurifyTemplatePoolProvider;
 import com.faboslav.structurify.common.util.BiomeUtil;
 import com.faboslav.structurify.common.util.JigsawStructureUtil;
 import com.faboslav.structurify.common.util.StructureUtil;
-import net.minecraft.core.Holder;
+import com.faboslav.structurify.common.util.StructurifyComparators;
+import com.google.gson.JsonObject;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -39,19 +38,7 @@ public final class WorldgenDataProvider
 	private static Map<String, StructureNamespaceData> structureNamespaceData = new TreeMap<>();
 	private static Map<String, StructureData> structureData = new TreeMap<>();
 	private static Map<String, StructureSetData> structureSetData = new TreeMap<>();
-
-	private static final Comparator<String> alphabeticallComparator = (key1, key2) -> {
-		boolean isKey1Minecraft = key1.startsWith("minecraft:");
-		boolean isKey2Minecraft = key2.startsWith("minecraft:");
-
-		if (isKey1Minecraft && !isKey2Minecraft) {
-			return -1;
-		} else if (!isKey1Minecraft && isKey2Minecraft) {
-			return 1;
-		} else {
-			return key1.compareTo(key2);
-		}
-	};
+	private static Map<String, StructureTemplatePoolData> structureTemplatePoolsData = new TreeMap<>();
 
 	public static List<String> getBiomes() {
 		return biomes;
@@ -69,11 +56,16 @@ public final class WorldgenDataProvider
 		return structureSetData;
 	}
 
+	public static Map<String, StructureTemplatePoolData> getStructureTemplatePools() {
+		return structureTemplatePoolsData;
+	}
+
 	public static void loadWorldgenData() {
 		biomes = loadBiomes();
 		structureNamespaceData = loadStructureNamespaces();
 		structureData = loadStructures();
 		structureSetData = loadStructureSets();
+		structureTemplatePoolsData = loadStructureTemplatePools();
 	}
 
 	public static List<String> loadBiomes() {
@@ -97,7 +89,7 @@ public final class WorldgenDataProvider
 	}
 
 	public static Map<String, StructureNamespaceData> loadStructureNamespaces() {
-		Map<String, StructureNamespaceData> structuresNamespaces = new TreeMap<>(alphabeticallComparator);
+		Map<String, StructureNamespaceData> structuresNamespaces = new TreeMap<>(StructurifyComparators.ALPHABETICALL_ID_COMPARATOR);
 		structuresNamespaces.put(StructureNamespaceData.GLOBAL_NAMESPACE_IDENTIFIER, new StructureNamespaceData());
 
 		var structureRegistry = StructurifyRegistryManagerProvider.getStructureRegistry();
@@ -119,17 +111,18 @@ public final class WorldgenDataProvider
 
 	public static Map<String, StructureData> loadStructures() {
 		var structureRegistry = StructurifyRegistryManagerProvider.getStructureRegistry();
-		var biomeRegistry =StructurifyRegistryManagerProvider.getBiomeRegistry();
+		var biomeRegistry = StructurifyRegistryManagerProvider.getBiomeRegistry();
 
 		if (structureRegistry == null || biomeRegistry == null) {
 			return Collections.emptyMap();
 		}
 
-		Map<String, StructureData> structures = new TreeMap<>(alphabeticallComparator);
+		Map<String, StructureData> structures = new TreeMap<>(StructurifyComparators.ALPHABETICALL_ID_COMPARATOR);
 
 		for (var structureReference : structureRegistry.listElements().toList()) {
-			var structure = structureReference.value();
-			String structureId = structureReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
+			Structure structure = structureReference.value();
+			Identifier structureIdentifier = structureReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/;
+			String structureId = structureIdentifier.toString();
 			var biomeStorage = structure.biomes().unwrap();
 			var defaultBiomes = new ArrayList<String>();
 
@@ -164,26 +157,42 @@ public final class WorldgenDataProvider
 			});
 
 			StructureData structureData = new StructureData(defaultBiomes, structure.step(), structure.terrainAdaptation());
+			JsonObject structureJson = JigsawStructureUtil.getStructureData(structure);
 
-			if (JigsawStructureUtil.isJigsawLikeStructure(structure)) {
-				int horizontalMaxDistanceFromCenter;
-				int verticalMaxDistanceFromCenter;
+			if (JigsawStructureUtil.isJigsawLikeStructure(structure, structureJson)) {
+				var maxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure, structureJson);
 
-				//? if >= 1.21.9 {
-				var maxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
-				horizontalMaxDistanceFromCenter = maxDistanceFromCenter.horizontal();
-				verticalMaxDistanceFromCenter = maxDistanceFromCenter.vertical();
-				//?} else {
-				/*horizontalMaxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
-				verticalMaxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure);
-				*///?}
-				int maxSize = JigsawStructureUtil.getSizeForStructure(structure);
-				structureData.setJigsawData(new JigsawData(maxSize, horizontalMaxDistanceFromCenter, verticalMaxDistanceFromCenter));
+				Integer horizontalMaxDistanceFromCenter = null;
+				Integer verticalMaxDistanceFromCenter = null;
+
+				if(maxDistanceFromCenter != null) {
+					//? if >= 1.21.9 {
+					horizontalMaxDistanceFromCenter = maxDistanceFromCenter.horizontal();
+					verticalMaxDistanceFromCenter = maxDistanceFromCenter.vertical();
+					//?} else {
+					/*horizontalMaxDistanceFromCenter = maxDistanceFromCenter;
+					verticalMaxDistanceFromCenter = maxDistanceFromCenter;
+					*///?}
+				}
+
+				var maxSize = JigsawStructureUtil.getSizeForStructure(structure, structureJson);
+				var heightProvider = JigsawStructureUtil.getHeightProviderForStructure(structure, structureJson);
+				var heightProviderData = HeightProviderData.fromHeightProvider(heightProvider);
+
+				var projectStartToHeightmap = JigsawStructureUtil.getProjectStartToHeightMap(structure, structureJson);
+				@Nullable ProjectStartToHeightmap projectStartToHeightmapOption;
+				if(projectStartToHeightmap == null) {
+					projectStartToHeightmapOption = null;
+				} else {
+					projectStartToHeightmapOption = ProjectStartToHeightmap.fromDataValue(projectStartToHeightmap);
+				}
+
+				structureData.setJigsawData(new JigsawData(maxSize, horizontalMaxDistanceFromCenter, verticalMaxDistanceFromCenter, heightProviderData, projectStartToHeightmapOption));
 			}
 
 			HolderSet<Biome> defaultBiomeHolders = BiomeUtil.getBiomeHolders(defaultBiomes, biomeRegistry);
 
-			if(BiomeUtil.isWaterStructure(defaultBiomeHolders)) {
+			if (BiomeUtil.isWaterStructure(defaultBiomeHolders)) {
 				var flatnessCheckData = structureData.getFlatnessCheckData();
 				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);
 				flatnessCheckData.overrideGlobalFlatnessCheck(true);
@@ -197,7 +206,7 @@ public final class WorldgenDataProvider
 				biomeCheckData.enable(false);
 			}
 
-			if(BiomeUtil.isSwampStructure(defaultBiomeHolders)) {
+			if (BiomeUtil.isSwampStructure(defaultBiomeHolders)) {
 				var flatnessCheckData = structureData.getFlatnessCheckData();
 				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);
 				flatnessCheckData.overrideGlobalFlatnessCheck(true);
@@ -225,7 +234,7 @@ public final class WorldgenDataProvider
 				overlapCheckData.excludeFromOverlapPrevention(true);
 			}
 
-			if(structureId.equals("minecraft:shipwreck_beached")) {
+			if (structureId.equals("minecraft:shipwreck_beached")) {
 				var flatnessCheckData = structureData.getFlatnessCheckData();
 				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(true);
 				flatnessCheckData.overrideGlobalFlatnessCheck(true);
@@ -233,16 +242,16 @@ public final class WorldgenDataProvider
 				flatnessCheckData.enable(false);
 			}
 
-			if(structureId.equals("nova_structures:illager_camp")) {
+			if (structureId.equals("nova_structures:illager_camp")) {
 				var biomes = structureData.getBiomes();
 
-				if(biomes.contains("minecraft:river")) {
+				if (biomes.contains("minecraft:river")) {
 					biomes.remove("minecraft:river");
 				}
 			}
 
 			// Towns and Towers uses "fluid_springs" step for its structures
-			if(structureId.contains("towns_and_towers")) {
+			if (structureId.contains("towns_and_towers")) {
 				var flatnessCheckData = structureData.getFlatnessCheckData();
 				flatnessCheckData.defaultOverrideGlobalFlatnessCheck(false);
 				flatnessCheckData.overrideGlobalFlatnessCheck(false);
@@ -256,7 +265,7 @@ public final class WorldgenDataProvider
 				biomeCheckData.enable(false);
 			}
 
-			if(structureId.contains("aquamirae:") || (structureId.contains("minecells:") && !structureId.contains("minecells:overworld_portal"))) {
+			if (structureId.contains("aquamirae:") || (structureId.contains("minecells:") && !structureId.contains("minecells:overworld_portal"))) {
 				var overlapCheckData = structureData.getOverlapCheckData();
 				overlapCheckData.defaultExcludeFromOverlapPrevention(true);
 				overlapCheckData.excludeFromOverlapPrevention(true);
@@ -274,7 +283,7 @@ public final class WorldgenDataProvider
 				biomeCheckData.defaultEnable(false);
 			}
 
-			if(
+			if (
 				structureId.equals("alexscaves:acid_pit")
 				|| structureId.equals("alexscaves:cake_cave")
 				|| structureId.equals("alexscaves:dino_bowl")
@@ -347,7 +356,7 @@ public final class WorldgenDataProvider
 				structureWeights
 			);
 
-			if(
+			if (
 				structureSetId.equals("alexscaves:acid_pit")
 				|| structureSetId.equals("alexscaves:cake_cave")
 				|| structureSetId.equals("alexscaves:dino_bowl")
@@ -364,5 +373,20 @@ public final class WorldgenDataProvider
 		}
 
 		return structureSets;
+	}
+
+	public static Map<String, StructureTemplatePoolData> loadStructureTemplatePools() {
+		var structureTemplatePoolReferences = StructurifyTemplatePoolProvider.getStructureTemplatePoolElementsWithWeight();
+		Map<String, StructureTemplatePoolData> structureTemplatePools = new TreeMap<>();
+
+		for(var structureTemplatePoolReference : structureTemplatePoolReferences.entrySet()) {
+			var structureTemplatePooId = structureTemplatePoolReference.getKey();
+			var structureTemplatePoolElements = structureTemplatePoolReference.getValue();
+			var structureTemplatePoolData = new StructureTemplatePoolData(structureTemplatePoolElements);
+
+			structureTemplatePools.put(structureTemplatePooId, structureTemplatePoolData);
+		}
+
+		return structureTemplatePools;
 	}
 }

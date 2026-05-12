@@ -2,7 +2,10 @@ package com.faboslav.structurify.common.config.client.api.controller.element;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.config.client.api.controller.BiomeStringController;
+import com.faboslav.structurify.common.platform.ModIconInfo;
+import com.faboslav.structurify.common.platform.PlatformHooks;
 import com.faboslav.structurify.common.util.LanguageUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.dropdown.AbstractDropdownControllerElement;
@@ -14,6 +17,15 @@ import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Optional;
+
+//? if >= 1.21.6 {
+import net.minecraft.client.renderer.RenderPipelines;
+//?}
+
+//? if >= 1.21.3 {
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+//?}
 
 //? if >= 26.1 {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -38,17 +50,17 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	@Override
-	//? if >= 26.1 {
+		//? if >= 26.1 {
 	protected void extractValueText(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta)
-	//?} else {
+	 //?} else {
 	/*protected void drawValueText(GuiGraphics graphics, int mouseX, int mouseY, float delta)
-	 *///?}
+	*///?}
 	{
 		var oldDimension = getDimension();
 		setDimension(getDimension().withWidth(getDimension().width() - getDecorationPadding()));
 		//? if >= 26.1 {
 		super.extractValueText(graphics, mouseX, mouseY, delta);
-		//?} else {
+		 //?} else {
 		/*super.drawValueText(graphics, mouseX, mouseY, delta);
 		*///?}
 		setDimension(oldDimension);
@@ -102,15 +114,15 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	@Override
-	//? if >= 26.1 {
+		//? if >= 26.1 {
 	protected void extractDropdownEntry(GuiGraphicsExtractor graphics, Dimension<Integer> entryDimension, String value)
-	//?} else {
+	 //?} else {
 	/*protected void renderDropdownEntry(GuiGraphics graphics, Dimension<Integer> entryDimension, String value)
 	*///?}
 	{
 		//? if >= 26.1 {
 		super.extractDropdownEntry(graphics, entryDimension, value);
-		//?} else {
+		 //?} else {
 		/*super.renderDropdownEntry(graphics, entryDimension, value);
 		*///?}
 
@@ -147,16 +159,86 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 		String biomeName,
 		//? if >= 26.1 {
 		GuiGraphicsExtractor graphics,
-		//?} else {
+		 //?} else {
 		/*GuiGraphics graphics,
 		*///?}
 		int x,
 		int y,
 		float delta
 	) {
+		Optional<Identifier> biomeIcon;
+
+		if(biomeName.contains("#c:")) {
+			biomeIcon = Optional.of(Structurify.makeNamespacedId("minecraft:textures/item/bundle.png"));
+		} else if(biomeName.contains("#minecraft:")) {
+			biomeIcon = Optional.of(Structurify.makeId("textures/gui/config/images/biomes/minecraft.png"));
+		} else if(biomeName.contains("#forge:")) {
+			biomeIcon = Optional.of(Structurify.makeId("textures/gui/config/images/biomes/forge.png"));
+		} else {
+			biomeIcon = this.tryToGetBiomeIcon(biomeName);
+		}
+
+		if (biomeIcon.isPresent()) {
+			try {
+				ResourceTextureImage.createFactory(biomeIcon.get(), 0.0F, 0.0F, 16, 16, 16, 16).prepareImage().completeImage().render(graphics,
+					x,
+					y,
+					11,
+					delta
+				);
+				return;
+			} catch (Exception e) {
+				// Ignore
+			}
+		}
+
+		var modIcon = this.tryToGetModIcon(biomeName);
+
+		if(modIcon.isPresent()) {
+			try {
+				var iconWidth = 11;
+				var iconHeight = 11;
+				var modIconId = modIcon.get().location();
+				var modIconWidth = modIcon.get().width();
+				var modIconHeight = modIcon.get().height();
+
+				//? if < 1.21.5 {
+				/*RenderSystem.setShaderTexture(0, modIconId);
+				*///?}
+
+				//? if >= 1.21.6 {
+				graphics.blit(RenderPipelines.GUI_TEXTURED, modIconId, x, y, 0.0F, 0.0F, iconWidth, iconHeight, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
+				//?} else if >= 1.21.3 {
+				/*graphics.blit(RenderType::guiTextured, modIconId, x, y, iconWidth, iconHeight, 0, 0, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
+				*///?} else {
+				/*graphics.blit(modIconId, x, y, iconWidth, iconHeight, 0.0F, 0.0F, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
+				*///?}
+				return;
+			} catch (Exception e) {
+				// Ignore
+			}
+		}
+
+		var unknownIcon = Structurify.makeId("textures/gui/config/images/biomes/unknown.png");
+
+		try {
+			ResourceTextureImage.createFactory(unknownIcon, 0.0F, 0.0F, 16, 16, 16, 16).prepareImage().completeImage().render(graphics,
+				x,
+				y,
+				11,
+				delta
+			);
+		} catch (Exception e) {
+			// Ignore
+		}
+	}
+
+	private Optional<Identifier> tryToGetBiomeIcon(String biomeName) {
 		Identifier imageId;
 
-		if (biomeName.contains("#") || !biomeName.contains(":")) {
+		if(biomeName.contains("#")) {
+			return Optional.empty();
+		} else if (!biomeName.contains(":")) {
 			imageId = Structurify.makeId("textures/gui/config/images/biomes/unknown.png");
 		} else {
 			biomeName = Structurify.makeNamespacedId(biomeName).getPath();
@@ -168,18 +250,17 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 				var resource = resourceManager.getResourceOrThrow(imageId);
 				resource.source().close();
 			} catch (FileNotFoundException e) {
-				imageId = Structurify.makeId("textures/gui/config/images/biomes/unknown.png");
+				return Optional.empty();
 			}
 		}
 
-		try {
-			ResourceTextureImage.createFactory(imageId, 0.0F, 0.0F, 16, 16, 16, 16).prepareImage().completeImage().render(graphics,
-				x,
-				y,
-				11,
-				delta
-			);
-		} catch (Exception ignored) {
-		}
+		return Optional.of(imageId);
+	}
+
+	private Optional<ModIconInfo> tryToGetModIcon(String biomeName) {
+		biomeName = biomeName.startsWith("#") ? biomeName.substring(1) : biomeName;
+		var modName = Structurify.makeNamespacedId(biomeName).getNamespace();
+
+		return PlatformHooks.PLATFORM_HELPER.getModIconInfo(modName);
 	}
 }

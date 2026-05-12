@@ -1,30 +1,57 @@
 package com.faboslav.structurify.common.mixin.structure.jigsaw;
 
+import com.faboslav.structurify.common.api.StructurifyJigsawStructure;
 import com.faboslav.structurify.common.mixin.structure.StructureMixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import java.util.Optional;
 
 @Mixin(JigsawStructure.class)
-public abstract class JigsawStructureMixin extends StructureMixin
+public abstract class JigsawStructureMixin extends StructureMixin implements StructurifyJigsawStructure
 {
 	@Unique
 	@Nullable
+	private Integer structurify$maxDepth = null;
+
+	@Unique
+	@Nullable
+	private HeightProvider structurify$startHeight = null;
+
+	@Unique
+	@Nullable
+	private Optional<Heightmap.Types> structurify$projectStartToHeightmap = null;
+
+	@Unique
+	@Nullable
 	//? if >= 1.21.9 {
-	private JigsawStructure.MaxDistance structurify$maxDistance = null;
+	private JigsawStructure.MaxDistance structurify$maxDistanceFromCenter = null;
 	//?} else {
-	/*private Integer structurify$maxDistance = null;
+	/*private Integer structurify$maxDistanceFromCenter = null;
 	*///?}
 
 	@Override
 	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
 		super.structurify$setStructureIdentifier(structureSetIdentifier);
-		this.structurify$maxDistance = null;
+		this.invalidateStructureJigsawData();
+	}
+
+	@Unique
+	@Nullable
+	public Integer structurify$getMaxDepth() {
+		return this.structurify$maxDepth;
+	}
+
+	@Unique
+	public void structurify$setMaxDepth(Integer maxDepth) {
+		this.structurify$maxDepth = maxDepth;
 	}
 
 	@ModifyExpressionValue(
@@ -35,14 +62,74 @@ public abstract class JigsawStructureMixin extends StructureMixin
 			opcode = Opcodes.GETFIELD
 		)
 	)
-	protected int structurify$findGenerationPointGetMaxDepth(int originalMaxDepth) {
-		var structureData = this.structurify$getStructureData();
+	public int structurify$findGenerationPointGetMaxDepth(int originalMaxDepth) {
+		return this.structurify$getMaxDepth(originalMaxDepth);
+	}
 
-		if (structureData == null) {
-			return originalMaxDepth;
-		}
+	@Unique
+	@Nullable
+	public HeightProvider structurify$getStartHeight() {
+		return this.structurify$startHeight;
+	}
 
-		return structureData.getJigsawData().getSize();
+	@Unique
+	public void structurify$setStartHeight(@Nullable HeightProvider startHeight) {
+		this.structurify$startHeight = startHeight;
+	}
+
+	@ModifyExpressionValue(
+		method = "findGenerationPoint",
+		at = @At(
+			value = "FIELD",
+			target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;startHeight:Lnet/minecraft/world/level/levelgen/heightproviders/HeightProvider;",
+			opcode = Opcodes.GETFIELD
+		)
+	)
+	protected HeightProvider structurify$findGenerationPointGetStartHeight(HeightProvider originalStartHeight) {
+		return this.structurify$getStartHeight(originalStartHeight);
+	}
+
+	@Unique
+	@Nullable
+	public Optional<Heightmap.Types> structurify$getProjectStartToHeightmap() {
+		return this.structurify$projectStartToHeightmap;
+	}
+
+	@Unique
+	public void structurify$setProjectStartToHeightmap(@Nullable Optional<Heightmap.Types> projectStartToHeightmap) {
+		this.structurify$projectStartToHeightmap = projectStartToHeightmap;
+	}
+
+	@ModifyExpressionValue(
+		method = "findGenerationPoint",
+		at = @At(
+			value = "FIELD",
+			target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;projectStartToHeightmap:Ljava/util/Optional;",
+			opcode = Opcodes.GETFIELD
+		)
+	)
+	protected Optional<Heightmap.Types> structurify$findGenerationPointGetProjectStartToHeightmap(Optional<Heightmap.Types> originalProjectStartToHeightmap) {
+		return this.structurify$getProjectStartToHeightmap(originalProjectStartToHeightmap);
+	}
+
+	@Unique
+	@Nullable
+	//? if >= 1.21.9 {
+	public JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter()
+	//?} else {
+	/*public Integer structurify$getMaxDistanceFromCenter()
+	*///?}
+	{
+		return this.structurify$maxDistanceFromCenter;
+	}
+
+	//? if >= 1.21.9 {
+	public void structurify$setMaxDistanceFromCenter(@Nullable JigsawStructure.MaxDistance maxDistanceFromCenter)
+	//?} else {
+	/*public void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter)
+	*///?}
+	{
+		this.structurify$maxDistanceFromCenter = maxDistanceFromCenter;
 	}
 
 	@ModifyExpressionValue(
@@ -59,27 +146,10 @@ public abstract class JigsawStructureMixin extends StructureMixin
 	)
 	//? if >= 1.21.9 {
 	protected JigsawStructure.MaxDistance structurify$findGenerationPointGetMaxDistanceFromCenter(JigsawStructure.MaxDistance originalMaxDistanceFromCenter)
-	 //?} else {
+	//?} else {
 	/*protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
 	*///?}
 	{
-		var structureData = this.structurify$getStructureData();
-
-		if (structureData == null) {
-			return originalMaxDistanceFromCenter;
-		}
-
-		if(this.structurify$maxDistance == null) {
-			//? if >= 1.21.9 {
-			this.structurify$maxDistance = new JigsawStructure.MaxDistance(
-				structureData.getJigsawData().getHorizontalMaxDistanceFromCenter(),
-				structureData.getJigsawData().getVerticalMaxDistanceFromCenter()
-			);
-			//?} else {
-			/*this.structurify$maxDistance = structureData.getJigsawData().getHorizontalMaxDistanceFromCenter();
-			 *///?}
-		}
-
-		return this.structurify$maxDistance;
+		return this.structurify$getMaxDistanceFromCenter(originalMaxDistanceFromCenter);
 	}
 }

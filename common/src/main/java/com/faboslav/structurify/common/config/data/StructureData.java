@@ -6,6 +6,7 @@ import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class StructureData implements StructureLikeData
@@ -35,7 +36,8 @@ public class StructureData implements StructureLikeData
 		this.step = step;
 		this.defaultTerrainAdaptation = terrainAdaptation;
 		this.terrainAdaptation = terrainAdaptation;
-		this.jigsawData = new JigsawData(0, 0, 0);
+		// TODO
+		this.jigsawData = new JigsawData();
 		this.distanceFromWorldCenterCheckData = new DistanceFromWorldCenterCheckData();
 		this.overlapCheckData = new OverlapCheckData();
 		this.flatnessCheckData = new FlatnessCheckData();
@@ -49,15 +51,27 @@ public class StructureData implements StructureLikeData
 		Collections.sort(biomes);
 		Collections.sort(defaultBiomes);
 
-		return this.isDisabled == IS_DISABLED_DEFAULT_VALUE
-			   && this.step == this.defaultStep
-			   && this.terrainAdaptation == this.defaultTerrainAdaptation
+		return this.isUsingDefaultIsDisabled()
+			   && isUsingDefaultStep()
+			   && isUsingDefaultTerrainAdaptation()
 			   && biomes.equals(defaultBiomes)
 			   && (!isJigsawStructure() || (isJigsawStructure() && this.getJigsawData().isUsingDefaultValues()))
 			   && this.getDistanceFromWorldCenterCheckData().isUsingDefaultValues()
 			   && this.getOverlapCheckData().isUsingDefaultValues()
 			   && this.getFlatnessCheckData().isUsingDefaultValues()
 			   && this.getBiomeCheckData().isUsingDefaultValues();
+	}
+
+	public boolean isUsingDefaultIsDisabled() {
+		return this.isDisabled == IS_DISABLED_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultStep() {
+		return this.step == this.defaultStep;
+	}
+
+	public boolean isUsingDefaultTerrainAdaptation() {
+		return this.terrainAdaptation == this.defaultTerrainAdaptation;
 	}
 
 	/**
@@ -108,7 +122,7 @@ public class StructureData implements StructureLikeData
 	}
 
 	public boolean isJigsawStructure() {
-		return this.jigsawData.getSize() != 0 && this.jigsawData.getHorizontalMaxDistanceFromCenter() != 0 && this.jigsawData.getVerticalMaxDistanceFromCenter() != 0;
+		return this.jigsawData.isUsingSize() || this.jigsawData.isUsingMaxDistanceFromCenter() || this.jigsawData.isUsingHeightProvider() || this.jigsawData.isUsingProjectStartToHeightmap();
 	}
 
 	public JigsawData getJigsawData() {

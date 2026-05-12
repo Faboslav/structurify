@@ -1,16 +1,23 @@
 package com.faboslav.structurify.common.config.client.gui;
 
+import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
+import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
 import com.faboslav.structurify.common.config.client.gui.structure.*;
 import com.faboslav.structurify.common.config.data.StructureData;
+import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.util.LanguageUtil;
+import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.gui.YACLScreen;
+import dev.isxander.yacl3.gui.controllers.ActionController;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -57,7 +64,7 @@ public final class StructureConfigScreen
 				step -> config.getStructureData().get(structureId).setStep(step)
 			).controller(opt -> EnumControllerBuilder.create(opt)
 				.enumClass(GenerationStep.Decoration.class)
-				.formatValue(step -> Component.translatable(getHumanReadableName(step.name().toLowerCase())))).build();
+				.formatValue(step -> Component.translatable(LanguageUtil.getHumanReadableName(step.name().toLowerCase())))).build();
 
 		structureSettingsGroup.option(stepOption);
 
@@ -70,12 +77,12 @@ public final class StructureConfigScreen
 				terrainAdaptation -> config.getStructureData().get(structureId).setTerrainAdaptation(terrainAdaptation)
 			).controller(opt -> EnumControllerBuilder.create(opt)
 				.enumClass(TerrainAdjustment.class)
-				.formatValue(terrainAdaptation -> Component.translatable(getHumanReadableName(terrainAdaptation.name().toLowerCase())))).build();
+				.formatValue(terrainAdaptation -> Component.translatable(LanguageUtil.getHumanReadableName(terrainAdaptation.name().toLowerCase())))).build();
 
 		structureSettingsGroup.option(terrainAdaptationOption);
 
 		if (config.getStructureData().get(structureId).isJigsawStructure()) {
-			var jigsawOptions = JigsawOptions.addJigsawOptions(structureData);
+			var jigsawOptions = JigsawOptions.addJigsawOptions(structureData, structureId);
 			structureSettingsGroup.options(jigsawOptions);
 
 			isDisabledOption.addListener((opt, currentIsDisabled) -> {
@@ -83,6 +90,35 @@ public final class StructureConfigScreen
 					jigsawOption.setAvailable(!currentIsDisabled);
 				}
 			});
+
+			var templatePools = config.getStructureTemplatePoolsDataForStructure(structureId);
+
+			if(!templatePools.isEmpty()) {
+				var templatePoolsButton = ButtonOption.createBuilder()
+					.name(Component.translatable("gui.structurify.structures.structure.open_template_pool_button.title"))
+					.text(Component.literal("\u2699").withStyle(style -> style.withBold(true)))
+					.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.open_template_pool_button.description")))
+					.action((screen, buttonOption) -> {
+						var configScreen = StructurifyClient.getConfigScreen();
+
+						if (configScreen == null) {
+							return;
+						}
+
+						screen.finishOrSave();
+
+						YACLScreen structureTemplatePoolsScreen = StructureTemplatePoolsConfigScreen.create(Structurify.getConfig(), structureId, screen);
+
+						configScreen.saveScreenState(screen);
+						Minecraft.getInstance().setScreen(structureTemplatePoolsScreen);
+						configScreen.loadScreenState(structureTemplatePoolsScreen);
+					})
+					.build();
+
+				structureSettingsGroup.option(YACLUtil.createEmptySmallLabelOption());
+				structureSettingsGroup.option(templatePoolsButton);
+				structureSettingsGroup.option(YACLUtil.createEmptySmallLabelOption());
+			}
 		}
 
 		structureCategoryBuilder.group(structureSettingsGroup.build());
@@ -129,11 +165,5 @@ public final class StructureConfigScreen
 		yacl.category(structureCategoryBuilder.build());
 
 		return (YACLScreen) yacl.build().generateScreen(parent);
-	}
-
-	private static String getHumanReadableName(String serializedName) {
-		return Arrays.stream(serializedName.split("_"))
-			.map(s -> Character.toUpperCase(s.charAt(0)) + s.substring(1))
-			.collect(Collectors.joining(" "));
 	}
 }

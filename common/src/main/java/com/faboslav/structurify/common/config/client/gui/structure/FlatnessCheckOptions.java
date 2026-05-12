@@ -18,6 +18,7 @@ import java.util.Map;
 
 public final class FlatnessCheckOptions
 {
+	public static String FLATNESS_CHECK_SYMBOL = "\u26F0";
 	public static String OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME = "override_global_flatness_check";
 	public static String FLATNESS_CHECK_IS_ENABLED_OPTION_NAME = "is_enabled";
 	public static String FLATNESS_CHECK_ALLOW_NON_SOLID_BLOCKS_OPTION_NAME = "allow_non_solid_blocks";
@@ -53,7 +54,7 @@ public final class FlatnessCheckOptions
 			title = Component.literal("„" + LanguageUtil.translateId(null, namespace).getString() + "“ ").append(title);
 		}
 
-		title = Component.literal("\n").append(title);
+		title = Component.literal("\n" + FLATNESS_CHECK_SYMBOL + " ").append(title);
 
 		builder.option(LabelOption.create(title.withStyle(style -> style.withBold(true))));
 
@@ -65,9 +66,9 @@ public final class FlatnessCheckOptions
 				.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.override_global_flatness_check.description", namespace, id)))
 				.available(isEnabledGlobally || isEnabledForNamespace)
 				.binding(
-					FlatnessCheckData.OVERRIDE_GLOBAL_FLATNESS_CHECK_DEFAULT_VALUE,
-					() -> structuresLikeData.get(id).getFlatnessCheckData().isOverridingGlobalFlatnessCheck(),
-					overrideGlobalFlatnessCheck -> structuresLikeData.get(id).getFlatnessCheckData().overrideGlobalFlatnessCheck(overrideGlobalFlatnessCheck)
+					flatnessCheckData.defaultIsOverridingGlobalFlatnessCheck(),
+					flatnessCheckData::isOverridingGlobalFlatnessCheck,
+					flatnessCheckData::overrideGlobalFlatnessCheck
 				).controller(opt -> BooleanControllerBuilder.create(opt)
 					.formatValue(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
 					.coloured(true)
@@ -85,9 +86,9 @@ public final class FlatnessCheckOptions
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.enable_flatness_check.description")))
 			.available(isGlobal || flatnessCheckData.isOverridingGlobalFlatnessCheck() || (!isEnabledGlobally && !isEnabledForNamespace))
 			.binding(
-				FlatnessCheckData.IS_ENABLED_DEFAULT_VALUE,
-				() -> structuresLikeData.get(id).getFlatnessCheckData().isEnabled(),
-				enableFlatnessCheck -> structuresLikeData.get(id).getFlatnessCheckData().enable(enableFlatnessCheck)
+				flatnessCheckData.defaultIsEnabled(),
+				flatnessCheckData::isEnabled,
+				flatnessCheckData::enable
 			)
 			.controller(opt -> BooleanControllerBuilder.create(opt)
 				.formatValue(currentIsEnabled -> {

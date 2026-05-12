@@ -39,6 +39,20 @@ public final class Structurify
 		*///?}
 	}
 
+	public static Identifier makeId(String namespace, String path) {
+		//? if >=1.21 {
+		return Identifier.tryBuild(
+			namespace,
+			path
+		);
+		//?} else {
+		/*return new Identifier(
+			namespace,
+			path
+		);
+		*///?}
+	}
+
 	public static Identifier makeNamespacedId(String id) {
 		//? if >=1.21 {
 		return Identifier.parse(

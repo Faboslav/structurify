@@ -119,6 +119,13 @@ dependencies {
 		include("required", "optional", "embedded")
 	}
 	for (mod in fossilsAndArcheologyRevivalWithDeps) modImplementation(mod)
+
+	val dungeonNowLoadingWithDeps: List<Dependency> = fletchingTable.modrinthBundle("dungeon-now-loading", commonMod.mc, "forge") {
+		recursive = true
+		include("required", "optional", "embedded")
+	}
+	for (mod in dungeonNowLoadingWithDeps) modImplementation(mod)
+
 	//modImplementation(fletchingTable.modrinth("fungal-infectionspore", commonMod.mc, "forge"))
 	//modImplementation(fletchingTable.modrinth("dungeons-enhanced", commonMod.mc, "forge"))
 	//modImplementation(fletchingTable.modrinth("legendary-monsters", commonMod.mc, "forge"))

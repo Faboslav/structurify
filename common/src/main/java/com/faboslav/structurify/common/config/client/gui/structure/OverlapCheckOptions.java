@@ -15,6 +15,8 @@ import java.util.Map;
 
 public final class OverlapCheckOptions
 {
+	public static String OVERLAP_CHECK_SYMBOL = "\u29C9";
+
 	public static void addOverlapCheckOptions(
 		OptionAddable builder,
 		StructurifyConfig config,
@@ -40,7 +42,7 @@ public final class OverlapCheckOptions
 			title = Component.literal("„" + LanguageUtil.translateId(null, namespace).getString() + "“ ").append(title);
 		}
 
-		title = Component.literal("\n").append(title);
+		title = Component.literal("\n" + OVERLAP_CHECK_SYMBOL + " ").append(title);
 
 		builder.option(LabelOption.create(title.withStyle(style -> style.withBold(true))));
 
@@ -51,7 +53,7 @@ public final class OverlapCheckOptions
 				.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.exclude_from_overlap_prevention.description", namespace, id)))
 				.available(isStructureOverlapPreventionEnabled && !isEnabledForNamespace)
 				.binding(
-					OverlapCheckData.IS_EXCLUDED_FROM_OVERLAP_PREVENTION_DEFAULT_VALUE,
+					overlapCheckData.defaultIsExcludedFromOverlapPrevention(),
 					overlapCheckData::isExcludedFromOverlapPrevention,
 					overlapCheckData::excludeFromOverlapPrevention
 				).controller(opt -> BooleanControllerBuilder.create(opt)

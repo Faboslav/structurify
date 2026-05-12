@@ -8,10 +8,10 @@ import com.faboslav.structurify.common.config.client.api.controller.builder.Stru
 import com.faboslav.structurify.common.config.client.api.option.HolderOption;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
 import com.faboslav.structurify.common.config.client.api.option.OptionPair;
-import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.config.data.WorldgenDataProvider;
 import com.faboslav.structurify.common.util.LanguageUtil;
+import com.faboslav.structurify.common.util.StructurifyComparators;
 import com.faboslav.structurify.common.util.TextUtil;
 import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.api.*;
@@ -33,238 +33,245 @@ public final class StructureSetsConfigScreen
 	public static Option<Boolean> enableGlobalSpacingAndSeparationOption = null;
 	public static Option<Double> globalSpacingAndSeparationModifierOption = null;
 
-
 	public static void createStructureSetsTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
 		var structureSetCategoryBuilder = ConfigCategory.createBuilder()
 			.name(Component.translatable("gui.structurify.structure_sets_category.title"))
 			.tooltip(Component.translatable("gui.structurify.structure_sets_category.description").append("\n\n").append(Component.translatable("gui.structurify.structure_sets.spacing.description")).append("\n\n").append(Component.translatable("gui.structurify.structure_sets.separation.description")));
 
 		addGlobalOptions(structureSetCategoryBuilder, config);
+		addStructureSets(structureSetCategoryBuilder, config);
 
+		yacl.category(structureSetCategoryBuilder.build());
+	}
+
+	private static void addStructureSets(ConfigCategory.Builder structureSetCategoryBuilder, StructurifyConfig config) {
 		var structureSets = WorldgenDataProvider.getStructureSets();
-
-		List<OptionGroup> optionGroups = new ArrayList<>();
-		// TODO rename to something better
-		OptionGroup.Builder currentGroupBuilder = null;
-		String currentNamespace = null;
+		var structureSetGroups = new TreeMap<String, TreeMap<Identifier, StructureSetData>>(StructurifyComparators.ALPHABETICALL_NAMESPACE_COMPARATOR);
 
 		for (Map.Entry<String, StructureSetData> entry : structureSets.entrySet()) {
 			String structureSetStringId = entry.getKey();
 			Identifier structureSetId = Structurify.makeNamespacedId(structureSetStringId);
-			String namespace = structureSetId.getNamespace();
+			String structureSetNamespace = structureSetId.getNamespace();
+			StructureSetData structureSetData = entry.getValue();
 
-			// Create new group for each namespace
-			if (!namespace.equals(currentNamespace)) {
-				if (currentGroupBuilder != null) {
-					optionGroups.add(currentGroupBuilder.build());
-				}
-
-				// Create new group
-				currentGroupBuilder = OptionGroup.createBuilder()
-					.name(Component.translatable("gui.structurify.structure_sets.structure_group.title", LanguageUtil.translateId(null, namespace)).withStyle(style -> style.withUnderlined(true)))
-					.description(OptionDescription.of(Component.translatable("gui.structurify.structure_sets.structure_group.description", namespace)));
-				currentNamespace = namespace;
-			}
-
-			var translatedStructureSetName = LanguageUtil.translateId("structure", structureSetStringId);
-
-			currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName.copy().withStyle(style -> style.withBold(true))).build());
-
-			var isEnabledOption = Option.<Boolean>createBuilder()
-				.name(translatedStructureSetName)
-				.binding(
-					!StructureSetData.IS_DISABLED_DEFAULT_VALUE,
-					() -> !config.getStructureSetData().get(structureSetStringId).isDisabled(),
-					isEnabled -> config.getStructureSetData().get(structureSetStringId).setDisabled(!isEnabled)
-				)
-				.controller(opt -> StructureButtonControllerBuilder.create(opt, structureSetStringId)
-					.openConfigCallback((screen, id) -> {
-						var configScreen = StructurifyClient.getConfigScreen();
-
-						if (configScreen == null) {
-							return;
-						}
-
-						screen.finishOrSave();
-
-						YACLScreen structureSetScreen = StructureSetConfigScreen.create(Structurify.getConfig(), id, screen);
-
-						configScreen.saveScreenState(screen);
-						Minecraft.getInstance().setScreen(structureSetScreen);
-						configScreen.loadScreenState(structureSetScreen);
-					})
-					.buttonTooltip("gui.structurify.structures.structure_set.config_button.tooltip")
-					.formatValue(val -> val ? Component.translatable("gui.structurify.label.enabled"):Component.translatable("gui.structurify.label.disabled"))
-					.coloured(true)
-				).build();
-
-			currentGroupBuilder.option(isEnabledOption);
-
-			var defaultSalt = config.getStructureSetData().get(structureSetStringId).getDefaultSalt();
-
-			if(defaultSalt != 0) {
-				var saltDescriptionBuilder = OptionDescription.createBuilder();
-				saltDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, "gui.structurify.structure_sets.salt.description"));
-
-				var saltOption = Option.<Integer>createBuilder()
-					.name(Component.translatable("gui.structurify.structure_sets.salt.title"))
-					.description(saltDescriptionBuilder.build())
-					.binding(
-						config.getStructureSetData().get(structureSetStringId).getDefaultSalt(),
-						() -> config.getStructureSetData().get(structureSetStringId).getSalt(),
-						salt -> config.getStructureSetData().get(structureSetStringId).setSalt(salt)
-					)
-					.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(StructureSetData.MIN_SALT, StructureSetData.MAX_SALT).formatValue((value) -> Component.literal(value.toString()))).build();
-
-				currentGroupBuilder.option(saltOption);
-			}
-
-			var frequencyDescriptionBuilder = OptionDescription.createBuilder();
-			frequencyDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, "gui.structurify.structure_sets.frequency.description"));
-
-			var defaultFrequency = config.getStructureSetData().get(structureSetStringId).getDefaultFrequency();
-
-			if(defaultFrequency != 0) {
-				var frequencyOption = Option.<Float>createBuilder()
-					.name(Component.translatable("gui.structurify.structure_sets.frequency.title"))
-					.description(frequencyDescriptionBuilder.build())
-					.binding(
-						config.getStructureSetData().get(structureSetStringId).getDefaultFrequency(),
-						() -> config.getStructureSetData().get(structureSetStringId).getFrequency(),
-						frequency -> config.getStructureSetData().get(structureSetStringId).setFrequency(frequency)
-					)
-					.controller(opt -> FloatSliderControllerBuilder.create(opt).range(StructureSetData.MIN_FREQUENCY, StructureSetData.MAX_FREQUENCY).step(0.001F).formatValue((value) -> Component.literal(String.format(Locale.ROOT, "%.3f", value)))).build();
-
-				currentGroupBuilder.option(frequencyOption);
-			}
-
-			var defaultSpacing = config.getStructureSetData().get(structureSetStringId).getDefaultSpacing();
-			var defaultSeparation = config.getStructureSetData().get(structureSetStringId).getDefaultSeparation();
-
-			if (defaultSpacing != 0 && defaultSeparation != 0) {
-				var overrideGlobalSpacingAndSeparationModifierDescriptionBuilder = OptionDescription.createBuilder();
-				overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.description", translatedStructureSetName)));
-
-				var overrideGlobalSpacingAndSeparationModifierOption = Option.<Boolean>createBuilder()
-					.name(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.title"))
-					.description(overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.build())
-					.binding(
-						config.getStructureSetData().get(structureSetStringId).getDefaultOverrideGlobalSpacingAndSeparationModifier(),
-						() -> config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier(),
-						overrideGlobalSpacingAndSeparationModifier -> config.getStructureSetData().get(structureSetStringId).setOverrideGlobalSpacingAndSeparationModifier(overrideGlobalSpacingAndSeparationModifier)
-					)
-					.controller(opt -> BooleanControllerBuilder.create(opt)
-						.formatValue(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
-						.coloured(true)
-					).available(config.enableGlobalSpacingAndSeparationModifier)
-					.build();
-
-				overrideGlobalSpacingAndSeparationModifierOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
-					boolean available = enableGlobalSpacingAndSeparationModifier;
-
-					var structureSetOption = structureSetOptions.get(structureSetStringId);
-					structureSetOption.getValue().setAvailable(available);
-				});
-
-				var spacingDescriptionBuilder = OptionDescription.createBuilder();
-				spacingDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, Component.translatable("gui.structurify.structure_sets.spacing.description")));
-
-				var spacingOption = Option.<Integer>createBuilder()
-					.name(Component.translatable("gui.structurify.structure_sets.spacing.title"))
-					.description(spacingDescriptionBuilder.build())
-					.binding(
-						config.getStructureSetData().get(structureSetStringId).getDefaultSpacing(),
-						() -> config.getStructureSetData().get(structureSetStringId).getSpacing(),
-						spacing -> config.getStructureSetData().get(structureSetStringId).setSpacing(spacing)
-					)
-					.controller(opt -> IntegerFieldControllerBuilder
-						.create(opt)
-						.formatValue(spacing -> {
-							var structureSetOption = structureSetOptions.get(structureSetStringId);
-							var overrideSpacingAndSeparationModifierDescription = structureSetOption.getKey().pendingValue();
-
-							if (enableGlobalSpacingAndSeparationOption.pendingValue() && !overrideSpacingAndSeparationModifierDescription) {
-								spacing = (int) (spacing * globalSpacingAndSeparationModifierOption.pendingValue());
-							}
-
-							return Component.literal(String.valueOf(spacing));
-						})
-						.range(0, StructureSetData.MAX_SPACING)
-					)
-					.available(!config.enableGlobalSpacingAndSeparationModifier || config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier())
-					.build();
-
-				var separationDescriptionBuilder = OptionDescription.createBuilder();
-				separationDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.separation.description"));
-				separationDescriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structure_sets.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
-
-				var separationOption = Option.<Integer>createBuilder()
-					.name(Component.translatable("gui.structurify.structure_sets.separation.title"))
-					.description(separationDescriptionBuilder.build())
-					.binding(
-						config.getStructureSetData().get(structureSetStringId).getDefaultSeparation(),
-						() -> config.getStructureSetData().get(structureSetStringId).getSeparation(),
-						separation -> config.getStructureSetData().get(structureSetStringId).setSeparation(separation)
-					)
-					.controller(opt -> IntegerFieldControllerBuilder
-						.create(opt)
-						.formatValue(separation -> {
-							var structureSetOption = structureSetOptions.get(structureSetStringId);
-							var overrideSpacingAndSeparationModifierDescription = structureSetOption.getKey().pendingValue();
-
-							if (enableGlobalSpacingAndSeparationOption.pendingValue() && !overrideSpacingAndSeparationModifierDescription) {
-								separation = (int) (separation * globalSpacingAndSeparationModifierOption.pendingValue());
-							}
-
-							return Component.literal(String.valueOf(separation));
-						})
-						.range(0, StructureSetData.MAX_SEPARATION)
-					)
-					.available(!config.enableGlobalSpacingAndSeparationModifier || config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier())
-					.build();
-
-				spacingOption.addListener((opt, spacing) -> {
-					if (spacing <= separationOption.pendingValue()) {
-						spacingOption.requestSet(separationOption.pendingValue() + 1);
-					}
-				});
-
-				separationOption.addListener((opt, separation) -> {
-					if (separation >= spacingOption.pendingValue()) {
-						separationOption.requestSet(spacingOption.pendingValue() - 1);
-					}
-				});
-
-				var spacingAndSeparationPair = new OptionPair<>(spacingOption, separationOption);
-				var spacingAndSeparationOption =
-					HolderOption.createBuilder(spacingAndSeparationPair)
-						.controller(opt -> DualControllerBuilder.create(spacingAndSeparationPair))
-						.available(!config.enableGlobalSpacingAndSeparationModifier
-								   || config.getStructureSetData().get(structureSetStringId).overrideGlobalSpacingAndSeparationModifier())
-						.build();
-
-				currentGroupBuilder.option(overrideGlobalSpacingAndSeparationModifierOption);
-				currentGroupBuilder.option(spacingAndSeparationOption);
-
-				structureSetOptions.put(structureSetStringId, new AbstractMap.SimpleEntry<>(overrideGlobalSpacingAndSeparationModifierOption, spacingAndSeparationOption));
-			}
-
-			currentGroupBuilder.option(YACLUtil.createEmptyLabelOption(translatedStructureSetName.copy()));
+			structureSetGroups
+				.computeIfAbsent(structureSetNamespace, namespace -> new TreeMap<>(Comparator.comparing(Identifier::getPath)))
+				.put(structureSetId, structureSetData);
 		}
 
-		if (currentGroupBuilder != null) {
-			OptionGroup builtGroup = currentGroupBuilder.build();
-			optionGroups.add(builtGroup);
-		}
+		for (var structureSetGroup : structureSetGroups.entrySet()) {
+			String structureSetNamespace = structureSetGroup.getKey();
+			var namespaceStructureSets = structureSetGroup.getValue();
 
-		for (OptionGroup structureOptionGroup : optionGroups) {
 			var invisibleGroup = new InvisibleOptionGroup.Builder().name(Component.literal(""));
 			invisibleGroup.option(YACLUtil.createEmptyLabelOption());
 			structureSetCategoryBuilder.group(invisibleGroup.build());
-			structureSetCategoryBuilder.group(structureOptionGroup);
+
+			OptionGroup.Builder namespaceGroupBuilder = OptionGroup.createBuilder()
+				.name(Component.translatable("gui.structurify.structure_sets.structure_group.title", LanguageUtil.translateId(null, structureSetNamespace)).withStyle(style -> style.withUnderlined(true)))
+				.description(OptionDescription.of(Component.translatable("gui.structurify.structure_sets.structure_group.description", structureSetNamespace)));
+
+			for (var namespaceStructureSet : namespaceStructureSets.entrySet()) {
+				addStructureSet(namespaceGroupBuilder, config, namespaceStructureSet.getKey().toString(), namespaceStructureSet.getValue());
+			}
+
+			structureSetCategoryBuilder.group(namespaceGroupBuilder.build());
 		}
 
-		yacl.category(structureSetCategoryBuilder.build());
+		var invisibleGroup = new InvisibleOptionGroup.Builder().name(Component.literal(""));
+		invisibleGroup.option(YACLUtil.createEmptyLabelOption());
+		structureSetCategoryBuilder.group(invisibleGroup.build());
+	}
+
+	private static void addStructureSet(
+		OptionGroup.Builder currentGroupBuilder,
+		StructurifyConfig config,
+		String structureSetStringId,
+		StructureSetData structureSetData
+	) {
+		var translatedStructureSetName = LanguageUtil.translateId("structure", structureSetStringId);
+
+		currentGroupBuilder.option(LabelOption.createBuilder().line(translatedStructureSetName.copy().withStyle(style -> style.withBold(true))).build());
+
+		var isEnabledOption = Option.<Boolean>createBuilder()
+			.name(translatedStructureSetName)
+			.binding(
+				!StructureSetData.IS_DISABLED_DEFAULT_VALUE,
+				() -> !structureSetData.isDisabled(),
+				isEnabled -> structureSetData.setDisabled(!isEnabled)
+			)
+			.controller(opt -> StructureButtonControllerBuilder.create(opt, structureSetStringId)
+				.openConfigCallback((screen, id) -> {
+					var configScreen = StructurifyClient.getConfigScreen();
+
+					if (configScreen == null) {
+						return;
+					}
+
+					screen.finishOrSave();
+
+					YACLScreen structureSetScreen = StructureSetConfigScreen.create(Structurify.getConfig(), id, screen);
+
+					configScreen.saveScreenState(screen);
+					Minecraft.getInstance().setScreen(structureSetScreen);
+					configScreen.loadScreenState(structureSetScreen);
+				})
+				.buttonTooltip("gui.structurify.structures.structure_set.config_button.tooltip")
+				.formatValue(val -> val ? Component.translatable("gui.structurify.label.enabled"):Component.translatable("gui.structurify.label.disabled"))
+				.coloured(true)
+			).build();
+
+		currentGroupBuilder.option(isEnabledOption);
+
+		var defaultSalt = structureSetData.getDefaultSalt();
+
+		if (defaultSalt != 0) {
+			var saltDescriptionBuilder = OptionDescription.createBuilder();
+			saltDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, "gui.structurify.structure_sets.salt.description"));
+
+			var saltOption = Option.<Integer>createBuilder()
+				.name(Component.translatable("gui.structurify.structure_sets.salt.title"))
+				.description(saltDescriptionBuilder.build())
+				.binding(
+					structureSetData.getDefaultSalt(),
+					structureSetData::getSalt,
+					structureSetData::setSalt
+				)
+				.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(StructureSetData.MIN_SALT, StructureSetData.MAX_SALT).formatValue((value) -> Component.literal(value.toString()))).build();
+
+			currentGroupBuilder.option(saltOption);
+		}
+
+		var frequencyDescriptionBuilder = OptionDescription.createBuilder();
+		frequencyDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, "gui.structurify.structure_sets.frequency.description"));
+
+		var defaultFrequency = structureSetData.getDefaultFrequency();
+
+		if (defaultFrequency != 0) {
+			var frequencyOption = Option.<Float>createBuilder()
+				.name(Component.translatable("gui.structurify.structure_sets.frequency.title"))
+				.description(frequencyDescriptionBuilder.build())
+				.binding(
+					structureSetData.getDefaultFrequency(),
+					structureSetData::getFrequency,
+					structureSetData::setFrequency
+				)
+				.controller(opt -> FloatSliderControllerBuilder.create(opt).range(StructureSetData.MIN_FREQUENCY, StructureSetData.MAX_FREQUENCY).step(0.001F).formatValue((value) -> Component.literal(String.format(Locale.ROOT, "%.3f", value)))).build();
+
+			currentGroupBuilder.option(frequencyOption);
+		}
+
+		var defaultSpacing = structureSetData.getDefaultSpacing();
+		var defaultSeparation = structureSetData.getDefaultSeparation();
+
+		if (defaultSpacing != 0 && defaultSeparation != 0) {
+			var overrideGlobalSpacingAndSeparationModifierDescriptionBuilder = OptionDescription.createBuilder();
+			overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.description", translatedStructureSetName)));
+
+			var overrideGlobalSpacingAndSeparationModifierOption = Option.<Boolean>createBuilder()
+				.name(Component.translatable("gui.structurify.structure_sets.override_global_spacing_and_separation_modifier.title"))
+				.description(overrideGlobalSpacingAndSeparationModifierDescriptionBuilder.build())
+				.binding(
+					structureSetData.getDefaultOverrideGlobalSpacingAndSeparationModifier(),
+					structureSetData::overrideGlobalSpacingAndSeparationModifier,
+					structureSetData::setOverrideGlobalSpacingAndSeparationModifier
+				)
+				.controller(opt -> BooleanControllerBuilder.create(opt)
+					.formatValue(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+					.coloured(true)
+				).available(config.enableGlobalSpacingAndSeparationModifier)
+				.build();
+
+			overrideGlobalSpacingAndSeparationModifierOption.addListener((opt, enableGlobalSpacingAndSeparationModifier) -> {
+				boolean available = enableGlobalSpacingAndSeparationModifier;
+
+				var structureSetOption = structureSetOptions.get(structureSetStringId);
+				structureSetOption.getValue().setAvailable(available);
+			});
+
+			var spacingDescriptionBuilder = OptionDescription.createBuilder();
+			spacingDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, Component.translatable("gui.structurify.structure_sets.spacing.description")));
+
+			var spacingOption = Option.<Integer>createBuilder()
+				.name(Component.translatable("gui.structurify.structure_sets.spacing.title"))
+				.description(spacingDescriptionBuilder.build())
+				.binding(
+					structureSetData.getDefaultSpacing(),
+					structureSetData::getSpacing,
+					structureSetData::setSpacing
+				)
+				.controller(opt -> IntegerFieldControllerBuilder
+					.create(opt)
+					.formatValue(spacing -> {
+						var structureSetOption = structureSetOptions.get(structureSetStringId);
+						var overrideSpacingAndSeparationModifierDescription = structureSetOption.getKey().pendingValue();
+
+						if (enableGlobalSpacingAndSeparationOption.pendingValue() && !overrideSpacingAndSeparationModifierDescription) {
+							spacing = (int) (spacing * globalSpacingAndSeparationModifierOption.pendingValue());
+						}
+
+						return Component.literal(String.valueOf(spacing));
+					})
+					.range(0, StructureSetData.MAX_SPACING)
+				)
+				.available(!config.enableGlobalSpacingAndSeparationModifier || structureSetData.overrideGlobalSpacingAndSeparationModifier())
+				.build();
+
+			var separationDescriptionBuilder = OptionDescription.createBuilder();
+			separationDescriptionBuilder.text(Component.translatable("gui.structurify.structure_sets.separation.description"));
+			separationDescriptionBuilder.text(Component.literal("\n\n").append(Component.translatable("gui.structurify.structure_sets.warning")).withStyle(style -> style.withColor(ChatFormatting.YELLOW)));
+
+			var separationOption = Option.<Integer>createBuilder()
+				.name(Component.translatable("gui.structurify.structure_sets.separation.title"))
+				.description(separationDescriptionBuilder.build())
+				.binding(
+					structureSetData.getDefaultSeparation(),
+					structureSetData::getSeparation,
+					structureSetData::setSeparation
+				)
+				.controller(opt -> IntegerFieldControllerBuilder
+					.create(opt)
+					.formatValue(separation -> {
+						var structureSetOption = structureSetOptions.get(structureSetStringId);
+						var overrideSpacingAndSeparationModifierDescription = structureSetOption.getKey().pendingValue();
+
+						if (enableGlobalSpacingAndSeparationOption.pendingValue() && !overrideSpacingAndSeparationModifierDescription) {
+							separation = (int) (separation * globalSpacingAndSeparationModifierOption.pendingValue());
+						}
+
+						return Component.literal(String.valueOf(separation));
+					})
+					.range(0, StructureSetData.MAX_SEPARATION)
+				)
+				.available(!config.enableGlobalSpacingAndSeparationModifier || structureSetData.overrideGlobalSpacingAndSeparationModifier())
+				.build();
+
+			spacingOption.addListener((opt, spacing) -> {
+				if (spacing <= separationOption.pendingValue()) {
+					spacingOption.requestSet(separationOption.pendingValue() + 1);
+				}
+			});
+
+			separationOption.addListener((opt, separation) -> {
+				if (separation >= spacingOption.pendingValue()) {
+					separationOption.requestSet(spacingOption.pendingValue() - 1);
+				}
+			});
+
+			var spacingAndSeparationPair = new OptionPair<>(spacingOption, separationOption);
+			var spacingAndSeparationOption =
+				HolderOption.createBuilder(spacingAndSeparationPair)
+					.controller(opt -> DualControllerBuilder.create(spacingAndSeparationPair))
+					.available(!config.enableGlobalSpacingAndSeparationModifier || structureSetData.overrideGlobalSpacingAndSeparationModifier())
+					.build();
+
+			currentGroupBuilder.option(overrideGlobalSpacingAndSeparationModifierOption);
+			currentGroupBuilder.option(spacingAndSeparationOption);
+
+			structureSetOptions.put(structureSetStringId, new AbstractMap.SimpleEntry<>(overrideGlobalSpacingAndSeparationModifierOption, spacingAndSeparationOption));
+		}
+
+		currentGroupBuilder.option(YACLUtil.createEmptyLabelOption(translatedStructureSetName.copy()));
 	}
 
 	public static void addGlobalOptions(ConfigCategory.Builder categoryBuilder, StructurifyConfig config) {

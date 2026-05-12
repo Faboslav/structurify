@@ -1,4 +1,4 @@
-package com.faboslav.structurify.common.mixin.compat;
+package com.faboslav.structurify.common.mixin.structure.placement.compat;
 
 import org.spongepowered.asm.mixin.Mixin;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
@@ -15,7 +15,6 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-
 import java.util.Optional;
 
 @Mixin(value = AdvancedRandomSpread.class)

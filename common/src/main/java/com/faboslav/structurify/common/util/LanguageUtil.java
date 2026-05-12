@@ -5,7 +5,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public final class LanguageUtil
 {
@@ -39,5 +41,11 @@ public final class LanguageUtil
 		}
 
 		return prefix + "." + identifier.replace(":", ".");
+	}
+
+	public static String getHumanReadableName(String serializedName) {
+		return Arrays.stream(serializedName.split("_"))
+			.map(s -> Character.toUpperCase(s.charAt(0)) + s.substring(1))
+			.collect(Collectors.joining(" "));
 	}
 }

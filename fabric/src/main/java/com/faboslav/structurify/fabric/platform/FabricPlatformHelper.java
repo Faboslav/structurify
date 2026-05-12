@@ -1,16 +1,37 @@
 package com.faboslav.structurify.fabric.platform;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.platform.ModIconInfo;
 import com.faboslav.structurify.common.platform.PlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 public final class FabricPlatformHelper implements PlatformHelper
 {
 	@Override
 	public boolean isModLoaded(String modId) {
 		return FabricLoader.getInstance().isModLoaded(modId);
+	}
+
+	@Override
+	public Optional<ModIconInfo> getModIconInfo(String modId) {
+		return PlatformHelper.MOD_ICON_INFO_CACHE.computeIfAbsent(modId, id -> {
+			var modContainer = FabricLoader.getInstance().getModContainer(id);
+
+			if(modContainer.isEmpty()) {
+				return Optional.empty();
+			}
+
+			var iconPath = modContainer.get().getMetadata().getIconPath(128);
+
+			if(iconPath.isEmpty()) {
+				return Optional.empty();
+			}
+
+			return getModIconInfo(id, iconPath, modContainer.get().findPath(iconPath.get()));
+		});
 	}
 
 	@Override

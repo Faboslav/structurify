@@ -1,6 +1,7 @@
 name: "Build"
 
 on:
+    workflow_dispatch:
     push:
         branches:
             - "**"
@@ -110,7 +111,7 @@ jobs:
                     wget -P run/mods "$MOD_URL"
 
             -   name: Run ${{ matrix.version }} ${{ matrix.mod_loader }} client
-                uses: 3arthqu4ke/mc-runtime-test@a099315cbed61f71bfd6c899a76ae5ab10f52adb # 4.3.1
+                uses: 3arthqu4ke/mc-runtime-test@9d9ea4af8ef6d82648051f750c49905f75d0c3bb # v4.4.0
                 with:
                     mc: ${{ matrix.version }}
                     modloader: ${{ matrix.mod_loader }}

@@ -90,7 +90,7 @@ public final class StructureDataSerializer
 		}
 
 		if (structureData.isJigsawStructure()) {
-			JigsawDataSerializer.load(structureJson, structureData.getJigsawData());
+			JigsawDataSerializer.load(structureJson, structureData.getJigsawData(), structureName);
 		}
 
 		DistanceFromWorldCenterDataSerializer.load(structureJson, structureData.getDistanceFromWorldCenterCheckData());
@@ -103,22 +103,36 @@ public final class StructureDataSerializer
 		JsonObject structure = new JsonObject();
 
 		structure.addProperty(NAME_PROPERTY, structureName);
-		structure.addProperty(IS_DISABLED_PROPERTY, structureData.isDisabled());
+
+		if(!structureData.isUsingDefaultIsDisabled()) {
+			structure.addProperty(IS_DISABLED_PROPERTY, structureData.isDisabled());
+		}
 
 		var whitelistedBiomes = new ArrayList<>(structureData.getBiomes());
 		whitelistedBiomes.removeAll(structureData.getDefaultBiomes());
-		JsonArray whitelistedBiomesJson = new JsonArray();
-		whitelistedBiomes.stream().distinct().forEach(whitelistedBiomesJson::add);
-		structure.add(WHITELISTED_BIOMES_PROPERTY, whitelistedBiomesJson);
+
+		if (!whitelistedBiomes.isEmpty()) {
+			JsonArray whitelistedBiomesJson = new JsonArray();
+			whitelistedBiomes.stream().distinct().forEach(whitelistedBiomesJson::add);
+			structure.add(WHITELISTED_BIOMES_PROPERTY, whitelistedBiomesJson);
+		}
 
 		var blacklistedBiomes = new ArrayList<>(structureData.getDefaultBiomes());
 		blacklistedBiomes.removeAll(structureData.getBiomes());
-		JsonArray blacklistedBiomesJson = new JsonArray();
-		blacklistedBiomes.stream().distinct().forEach(blacklistedBiomesJson::add);
-		structure.add(BLACKLISTED_BIOMES_PROPERTY, blacklistedBiomesJson);
 
-		structure.addProperty(STEP_PROPERTY, structureData.getStep().getSerializedName());
-		structure.addProperty(TERRAIN_ADAPTATION_PROPERTY, structureData.getTerrainAdaptation().getSerializedName());
+		if(!blacklistedBiomes.isEmpty()) {
+			JsonArray blacklistedBiomesJson = new JsonArray();
+			blacklistedBiomes.stream().distinct().forEach(blacklistedBiomesJson::add);
+			structure.add(BLACKLISTED_BIOMES_PROPERTY, blacklistedBiomesJson);
+		}
+
+		if(!structureData.isUsingDefaultStep()) {
+			structure.addProperty(STEP_PROPERTY, structureData.getStep().getSerializedName());
+		}
+
+		if(!structureData.isUsingDefaultTerrainAdaptation()) {
+			structure.addProperty(TERRAIN_ADAPTATION_PROPERTY, structureData.getTerrainAdaptation().getSerializedName());
+		}
 
 		if (structureData.isJigsawStructure()) {
 			var jigsawData = structureData.getJigsawData();

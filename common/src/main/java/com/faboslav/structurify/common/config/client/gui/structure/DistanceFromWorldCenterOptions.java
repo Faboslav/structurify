@@ -22,6 +22,7 @@ import java.util.Map;
 
 public class DistanceFromWorldCenterOptions
 {
+	public static String DISTANCE_FROM_WORLD_CENTER_CHECK_SYMBOL = "\u2316";
 	public static String OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME = "override_global_distance_from_world_center";
 	public static String DISTANCE_FROM_WORLD_CENTER_OPTION_NAME = "distance_from_world_center";
 
@@ -55,7 +56,7 @@ public class DistanceFromWorldCenterOptions
 			title = Component.literal("„" + LanguageUtil.translateId(null, namespace).getString() + "“ ").append(title);
 		}
 
-		title = Component.literal("\n").append(title);
+		title = Component.literal("\n" + DISTANCE_FROM_WORLD_CENTER_CHECK_SYMBOL + " ").append(title);
 
 		builder.option(LabelOption.create(title.withStyle(style -> style.withBold(true))));
 

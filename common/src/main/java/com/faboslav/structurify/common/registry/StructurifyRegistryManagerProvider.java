@@ -1,24 +1,27 @@
 package com.faboslav.structurify.common.registry;
 
 import com.faboslav.structurify.common.Structurify;
+import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.Lifecycle;
+import net.minecraft.commands.Commands;
 import net.minecraft.core.*;
+import net.minecraft.nbt.*;
 import net.minecraft.resources.RegistryDataLoader;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.resources.MultiPackResourceManager;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.tags.TagKey;
-import net.minecraft.tags.TagLoader;
-import net.minecraft.util.Util;
-import net.minecraft.commands.Commands;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.WorldLoader;
 import net.minecraft.server.WorldStem;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.repository.RepositorySource;
+import net.minecraft.server.packs.resources.MultiPackResourceManager;
+import net.minecraft.tags.TagLoader;
+import net.minecraft.util.Util;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.WorldDataConfiguration;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
@@ -27,14 +30,11 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //? if >= 1.21.11 {
 import net.minecraft.server.permissions.PermissionSet;
@@ -52,11 +52,27 @@ import net.minecraft.resources.RegistryValidator;
 import net.minecraft.util.Util;
 //?}
 
+//? if <= 1.21.1 {
+/*import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.tags.TagKey;
+*///?}
+
 public final class StructurifyRegistryManagerProvider
 {
 	@Nullable
 	private static HolderLookup.Provider registryManager = null;
 	private static boolean isLoading = false;
+	private static final Map<ResourceKey<? extends Registry<?>>, Codec<?>> REGISTRIES = Map.ofEntries(
+		Map.entry(Registries.BIOME, Biome.DIRECT_CODEC),
+		Map.entry(Registries.CONFIGURED_CARVER, ConfiguredWorldCarver.DIRECT_CODEC),
+		Map.entry(Registries.PROCESSOR_LIST, StructureProcessorType.DIRECT_CODEC),
+		Map.entry(Registries.TEMPLATE_POOL, StructureTemplatePool.DIRECT_CODEC),
+		Map.entry(Registries.CONFIGURED_FEATURE, ConfiguredFeature.DIRECT_CODEC),
+		Map.entry(Registries.PLACED_FEATURE, PlacedFeature.DIRECT_CODEC),
+		Map.entry(Registries.STRUCTURE, Structure.DIRECT_CODEC),
+		Map.entry(Registries.STRUCTURE_SET, StructureSet.DIRECT_CODEC)
+
+	);
 
 	@Nullable
 	public static HolderLookup.Provider getRegistryManager() {
@@ -65,6 +81,22 @@ public final class StructurifyRegistryManagerProvider
 		}
 
 		return registryManager;
+	}
+
+	@Nullable
+	public static DynamicOps<JsonElement> getSerializationContext()
+	{
+		var registryManager = getRegistryManager();
+
+		if(registryManager == null) {
+			return null;
+		}
+
+		//? if >= 1.21 {
+		return registryManager.createSerializationContext(JsonOps.INSTANCE);
+		//?} else {
+		/*return RegistryOps.create(JsonOps.INSTANCE, registryManager);
+		*///?}
 	}
 
 	@Nullable
@@ -100,11 +132,23 @@ public final class StructurifyRegistryManagerProvider
 		return registryManager.lookup(Registries.STRUCTURE_SET).orElse(null);
 	}
 
+	@Nullable
+	public static HolderLookup.RegistryLookup<StructureTemplatePool> getStructureTemplatePoolRegistry() {
+		var registryManager = StructurifyRegistryManagerProvider.getRegistryManager();
+
+		if (registryManager == null) {
+			return null;
+		}
+
+		return registryManager.lookup(Registries.TEMPLATE_POOL).orElse(null);
+	}
+
 	public static void setRegistryManager(HolderLookup.Provider registryAccess) {
 		registryManager = registryAccess;
 	}
 
-	public static void loadRegistryManager2() {
+
+	public static void loadRegistryManager() {
 		if (isLoading) {
 			return;
 		}
@@ -112,13 +156,8 @@ public final class StructurifyRegistryManagerProvider
 		isLoading = true;
 		try {
 			Structurify.getLogger().info("Loading registry manager...");
-			var resourcePackProviders = StructurifyResourcePackProvider.getResourcePackProviders();
+			var resourcePackManager = StructurifyResourcePackProvider.getResourcePackRepository();
 
-			for (var resourcePackProvider : resourcePackProviders) {
-				Structurify.getLogger().info("Registering resource pack provider: " + resourcePackProvider.getClass().getSimpleName());
-			}
-
-			var resourcePackManager = new PackRepository(StructurifyResourcePackProvider.getResourcePackProviders().toArray(new RepositorySource[0]));
 			var dataPacks = new WorldLoader.PackConfig(resourcePackManager, WorldDataConfiguration.DEFAULT, false, false);
 			var serverConfig = new WorldLoader.InitConfig(dataPacks, Commands.CommandSelection.INTEGRATED, /*? if >= 1.21.11 {*/PermissionSet.ALL_PERMISSIONS/*?} else {*//*2*//*?}*/);
 
@@ -162,38 +201,22 @@ public final class StructurifyRegistryManagerProvider
 		}
 	}
 
-	public static void loadRegistryManager() {
+	public static void loadRegistryManagerNew() {
 		if (isLoading) {
 			return;
 		}
 
 		isLoading = true;
+
 		try {
 			Structurify.getLogger().info("Loading registry manager...");
-			var resourcePackProviders = StructurifyResourcePackProvider.getResourcePackProviders();
-
-			for (var resourcePackProvider : resourcePackProviders) {
-				Structurify.getLogger().info("Registering resource pack provider: " + resourcePackProvider.getClass().getSimpleName());
-			}
-
-			var resourcePackManager = new PackRepository(StructurifyResourcePackProvider.getResourcePackProviders().toArray(new RepositorySource[0]));
-			resourcePackManager.reload();
-			resourcePackManager.setSelected(resourcePackManager.getAvailableIds());
+			var resourcePackManager = StructurifyResourcePackProvider.getResourcePackRepository();
 
 			try (var resourceManager = new MultiPackResourceManager(
 				PackType.SERVER_DATA,
 				resourcePackManager.openAllSelected()
 			)) {
-				List<RegistryDataLoader.RegistryData<?>> registries = List.of(
-					getRegistryDataLoader(Registries.BIOME, Biome.DIRECT_CODEC),
-					getRegistryDataLoader(Registries.CONFIGURED_CARVER, ConfiguredWorldCarver.DIRECT_CODEC),
-					getRegistryDataLoader(Registries.PROCESSOR_LIST, StructureProcessorType.DIRECT_CODEC),
-					getRegistryDataLoader(Registries.TEMPLATE_POOL, StructureTemplatePool.DIRECT_CODEC),
-					getRegistryDataLoader(Registries.CONFIGURED_FEATURE, ConfiguredFeature.DIRECT_CODEC),
-					getRegistryDataLoader(Registries.PLACED_FEATURE, PlacedFeature.DIRECT_CODEC),
-					getRegistryDataLoader(Registries.STRUCTURE, Structure.DIRECT_CODEC),
-					getRegistryDataLoader(Registries.STRUCTURE_SET, StructureSet.DIRECT_CODEC)
-				);
+				List<RegistryDataLoader.RegistryData<?>> registries = RegistryDataLoader.WORLDGEN_REGISTRIES;
 				//? if >= 1.21.3 {
 				LayeredRegistryAccess<RegistryLayer> initialLayers = RegistryLayer.createRegistryAccess();
 				List<Registry.PendingTags<?>> staticLayerTags = TagLoader.loadTagsForExistingRegistries(
@@ -234,7 +257,6 @@ public final class StructurifyRegistryManagerProvider
 				bindRegistryTags(resourceManager, registryAccess, Registries.STRUCTURE);
 				bindRegistryTags(resourceManager, registryAccess, Registries.STRUCTURE_SET);
 				*///?}
-
 				setRegistryManager(registryAccess);
 			}
 

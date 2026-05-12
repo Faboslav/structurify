@@ -1,6 +1,13 @@
 ## 2.0.23
 
-- Improved initial config load times by 20-50% due to custom registry loading logic
+- Added support for editing structure template pools and its element weights
+- Added "start_height" as a configurable field for jigsaw-like structures
+- Added more icons to the biome dropdown
+- Fixed load/save of structure's "size" property
+- Fixed search to actually include only proper results
+- Fixed alphabetical sorting of namespaces, structures and structure sets
+- Improved compatibility with other mods implementing custom jigsaw structures
+- Lot of other small tweaks/fixes
 
 ## 2.0.22
 

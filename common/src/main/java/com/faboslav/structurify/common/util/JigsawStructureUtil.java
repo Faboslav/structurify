@@ -2,8 +2,16 @@ package com.faboslav.structurify.common.util;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.mixin.structure.jigsaw.JigsawStructureAccessor;
+import com.faboslav.structurify.common.platform.PlatformHooks;
+import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+import org.jetbrains.annotations.Nullable;
+import java.util.Optional;
 
 //? if yungs_api {
 /*import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
@@ -17,17 +25,26 @@ import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 /*import com.faboslav.structurify.common.platform.PlatformHooks;
 *///?}
 
-//? if >= 1.21.9 {
-import java.lang.reflect.Method;
-import java.lang.reflect.RecordComponent;
-//?}
-
-import java.lang.reflect.Field;
-import java.util.Optional;
-
 public final class JigsawStructureUtil
 {
-	public static boolean isJigsawLikeStructure(Structure structure) {
+	@Nullable
+	public static JsonObject getStructureData(Structure structure) {
+		var serializationContext = StructurifyRegistryManagerProvider.getSerializationContext();
+
+		if (serializationContext == null) {
+			return null;
+		}
+
+		return Structure.DIRECT_CODEC
+			.encodeStart(serializationContext, structure)
+			.result()
+			.map(e -> (JsonElement) e)
+			.filter(JsonElement::isJsonObject)
+			.map(JsonElement::getAsJsonObject)
+			.orElse(null);
+	}
+
+	public static boolean isJigsawLikeStructure(Structure structure, JsonObject structureJson) {
 		if (structure instanceof JigsawStructure) {
 			return true;
 		}
@@ -44,34 +61,29 @@ public final class JigsawStructureUtil
 		}
 		*///?}
 
-		Class<?> clazz = structure.getClass();
-		Field[] fields = clazz.getDeclaredFields();
-
-		for (Field field : fields) {
-			if (field.getName().equals("maxDistanceFromCenter") || field.getName().equals("maxDepth") || field.getName().equals("size")) {
-				return true;
-			}
+		if (structureJson.has("max_distance_from_center") || structureJson.has("max_depth") || structureJson.has("size") || structureJson.has("start_height") || structureJson.has("project_start_to_heightmap")) {
+			return true;
 		}
 
 		return false;
 	}
 
+	@Nullable
 	//? if >= 1.21.9 {
-	public static JigsawStructure.MaxDistance getMaxDistanceFromCenterForStructure(Structure structure)
-	 //?} else {
-	/*public static int getMaxDistanceFromCenterForStructure(Structure structure)
+	public static JigsawStructure.MaxDistance getMaxDistanceFromCenterForStructure(Structure structure, JsonObject structureJson)
+	//?} else {
+	/*public static Integer getMaxDistanceFromCenterForStructure(Structure structure, JsonObject structureJson)
 	*///?}
 	{
 		if (structure instanceof JigsawStructure) {
-			return ((JigsawStructureAccessor) structure).structurify$getMaxDistanceFromCenter();
+			return ((JigsawStructureAccessor) structure).structurify$getOriginalMaxDistanceFromCenter();
 		}
 
 		// TODO lithostitched
 		/*
 		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("litostitched") && structure instanceof AlternateJigsawStructure) {
 			return new JigsawStructure.MaxDistance(((AlternateJigsawStructure) structure).config().maxDistanceFromCenter().horizontal(), ((AlternateJigsawStructure) structure).config().maxDistanceFromCenter().vertical());
-		}
-		*/
+		}*/
 
 		//? if yungs_api {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
@@ -82,110 +94,49 @@ public final class JigsawStructureUtil
 		//? if repurposed_structures {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			//? if >= 1.21.10 {
-			return new JigsawStructure.MaxDistance(((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0));
-			//?} else {
-			/^return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(0);
+			var maxDistanceFromCenter = ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(null);
+
+			if(maxDistanceFromCenter == null) {
+				return null;
+			} else {
+				return new JigsawStructure.MaxDistance(maxDistanceFromCenter);
+			}
+			 //?} else {
+			/^return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(null);
 			^///?}
 		}
 		*///?}
 
-		Class<?> clazz = structure.getClass();
-		Field[] fields = clazz.getDeclaredFields();
+		var serializationContext = StructurifyRegistryManagerProvider.getSerializationContext();
 
-		for (Field field : fields) {
-			if (field.getName().equals("maxDistanceFromCenter")) {
-				field.setAccessible(true);
-
-				//? if >= 1.21.9 {
-				try {
-					Field target = null;
-
-					for (Field f : structure.getClass().getDeclaredFields()) {
-						if (f.getName().equals("maxDistanceFromCenter")) { target = f; break; }
-					}
-
-					if (target == null) {
-						return new JigsawStructure.MaxDistance(0, 0);
-					}
-
-					target.setAccessible(true);
-					Object raw = target.get(structure);
-					Object val = (raw instanceof Optional<?> opt) ? opt.orElse(null) : raw;
-
-					if (val == null) {
-						return new JigsawStructure.MaxDistance(0, 0);
-					}
-
-					if (val instanceof Integer i) {
-						return new JigsawStructure.MaxDistance(i, i);
-					}
-
-					try {
-						Method horizontalMethod = val.getClass().getMethod("horizontal");
-						Method verticalMethod = val.getClass().getMethod("vertical");
-						int horizontal = ((Number) horizontalMethod.invoke(val)).intValue();
-						int vertical = ((Number) verticalMethod.invoke(val)).intValue();
-						return new JigsawStructure.MaxDistance(horizontal, vertical);
-					} catch (NoSuchMethodException ignore) {
-						int horizontal = 0;
-						int vertical = 0;
-
-						if (val.getClass().isRecord()) {
-							for (RecordComponent recordComponent : val.getClass().getRecordComponents()) {
-								if (recordComponent.getName().equals("horizontal")) {
-									horizontal = ((Number) recordComponent.getAccessor().invoke(val)).intValue();
-								} else if (recordComponent.getName().equals("vertical")) {
-									vertical = ((Number) recordComponent.getAccessor().invoke(val)).intValue();
-								}
-							}
-							if (horizontal != 0 || vertical != 0) {
-								return new JigsawStructure.MaxDistance(horizontal == 0 ? vertical : horizontal, vertical == 0 ? horizontal : vertical);
-							}
-						}
-
-						try {
-							Field horizontalField = val.getClass().getDeclaredField("horizontal");
-							Field verticalField = val.getClass().getDeclaredField("vertical");
-							horizontalField.setAccessible(true);
-							verticalField.setAccessible(true);
-							horizontal = ((Number) horizontalField.get(val)).intValue();
-							vertical = ((Number) verticalField.get(val)).intValue();
-
-							return new JigsawStructure.MaxDistance(horizontal, vertical);
-						} catch (NoSuchFieldException e) {
-							Structurify.getLogger().error(e.getMessage());
-						}
-					}
-				} catch (Throwable e) {
-					Structurify.getLogger().error(e.getMessage());
-				}
-				//?} else {
-				/*try {
-					if (Optional.class.isAssignableFrom(field.getType())) {
-						Optional<?> optionalValue = (Optional<?>) field.get(structure);
-						return optionalValue.map(val -> (Integer) val).orElse(0);
-					}
-
-					return field.getInt(structure);
-				} catch (IllegalAccessException | IllegalArgumentException e) {
-					Structurify.getLogger().error(e.getMessage());
-				}
-				*///?}
-
-				break;
-			}
+		if (serializationContext == null || structureJson == null || !structureJson.has("max_distance_from_center")) {
+			return null;
 		}
 
+		if (!structureJson.has("max_distance_from_center")) {
+			return null;
+		}
+
+		JsonElement maxDistanceJson = structureJson.get("max_distance_from_center");
+
 		//? if >= 1.21.9 {
-		return new JigsawStructure.MaxDistance(0, 0);
-		 //?} else {
-		/*return 0;
+		return JigsawStructure.MaxDistance.CODEC
+			.parse(serializationContext, maxDistanceJson)
+			.result()
+			.orElse(null);
+		//?} else {
+		/*if (!maxDistanceJson.isJsonPrimitive() || !maxDistanceJson.getAsJsonPrimitive().isNumber()) {
+			return null;
+		}
+
+		return maxDistanceJson.getAsInt();
 		*///?}
 	}
 
-	public static int getSizeForStructure(Structure structure) {
+	@Nullable
+	public static Integer getSizeForStructure(Structure structure, JsonObject structureJson) {
 		if (structure instanceof JigsawStructure) {
-			return ((JigsawStructureAccessor) structure).structurify$getMaxDepth();
+			return ((JigsawStructureAccessor) structure).structurify$getOriginalMaxDepth();
 		}
 
 		//? if yungs_api {
@@ -200,28 +151,90 @@ public final class JigsawStructureUtil
 		}
 		*///?}
 
-		Class<?> clazz = structure.getClass();
-		Field[] fields = clazz.getDeclaredFields();
+		var serializationContext = StructurifyRegistryManagerProvider.getSerializationContext();
 
-		for (Field field : fields) {
-			if (field.getName().equals("size") || field.getName().equals("max_depth")) {
-				field.setAccessible(true);
-
-				try {
-					if (Optional.class.isAssignableFrom(field.getType())) {
-						Optional<?> optionalValue = (Optional<?>) field.get(structure);
-						return optionalValue.map(val -> (Integer) val).orElse(0);
-					} else {
-						return field.getInt(structure);
-					}
-				} catch (IllegalAccessException | IllegalArgumentException e) {
-					Structurify.getLogger().error(e.getMessage());
-				}
-
-				break;
-			}
+		if (serializationContext == null || structureJson == null || (!structureJson.has("size") && !structureJson.has("max_depth"))) {
+			return null;
 		}
 
-		return 0;
+		JsonElement sizeJson = structureJson.get("size");
+
+		if (sizeJson != null && sizeJson.isJsonPrimitive() && sizeJson.getAsJsonPrimitive().isNumber()) {
+			return sizeJson.getAsInt();
+		}
+
+		JsonElement maxDepthJson = structureJson.get("max_depth");
+
+		if (maxDepthJson != null && maxDepthJson.isJsonPrimitive() && maxDepthJson.getAsJsonPrimitive().isNumber()) {
+			return maxDepthJson.getAsInt();
+		}
+
+		return null;
+	}
+
+	@Nullable
+	public static HeightProvider getHeightProviderForStructure(Structure structure, JsonObject structureJson) {
+		if (structure instanceof JigsawStructure) {
+			return ((JigsawStructureAccessor) structure).structurify$getOriginalStartHeight();
+		}
+
+		//? if yungs_api {
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+			return ((YungJigsawStructure) structure).startHeight;
+		}
+		*///?}
+
+		//? if repurposed_structures {
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+			return ((GenericJigsawStructure) structure).startHeight;
+		}
+		*///?}
+
+		var serializationContext = StructurifyRegistryManagerProvider.getSerializationContext();
+
+		if (serializationContext == null || structureJson == null || !structureJson.has("start_height")) {
+			return null;
+		}
+
+		JsonElement startHeightJson = structureJson.get("start_height");
+
+		if (!startHeightJson.isJsonObject()) {
+			return null;
+		}
+
+		return HeightProvider.CODEC
+			.parse(serializationContext, startHeightJson)
+			.result()
+			.orElse(null);
+	}
+
+	public static @Nullable Optional<Heightmap.Types> getProjectStartToHeightMap(Structure structure, JsonObject structureJson) {
+		if (structure instanceof JigsawStructure) {
+			return ((JigsawStructureAccessor) structure).structurify$getOriginalProjectStartToHeightmap();
+		}
+
+		//? if yungs_api {
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+			return ((YungJigsawStructure) structure).projectStartToHeightmap;
+		}
+		*///?}
+
+		//? if repurposed_structures {
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+			return ((GenericJigsawStructure) structure).projectStartToHeightmap;
+		}
+		*///?}
+
+		var serializationContext = StructurifyRegistryManagerProvider.getSerializationContext();
+
+		if (serializationContext == null || structureJson == null || !structureJson.has("project_start_to_heightmap")) {
+			return null;
+		}
+
+		JsonElement startHeightJson = structureJson.get("project_start_to_heightmap");
+
+		return Heightmap.Types.CODEC
+			.parse(serializationContext, startHeightJson)
+			.result();
 	}
 }

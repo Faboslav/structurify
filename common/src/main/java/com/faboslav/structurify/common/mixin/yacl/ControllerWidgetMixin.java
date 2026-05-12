@@ -12,6 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
+
 /**
  * Make search also work with descriptions
  */
@@ -38,8 +40,8 @@ public abstract class ControllerWidgetMixin
 			return true;
 		}
 
-		if (this.structurify$optionNameString == "" || this.structurify$optionDescriptionString == "") {
-			return true;
+		if (Objects.equals(this.structurify$optionNameString, "") || Objects.equals(this.structurify$optionDescriptionString, "")) {
+			return false;
 		}
 
 		return this.structurify$optionDescriptionString.contains(query.toLowerCase());

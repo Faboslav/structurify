@@ -18,6 +18,10 @@ public final class OverlapCheckData
 		this.isExcludedFromOverlapPrevention = isExcludedFromOverlapPrevention;
 	}
 
+	public boolean defaultIsExcludedFromOverlapPrevention() {
+		return this.defaultIsExcludedFromOverlapPrevention;
+	}
+
 	public void defaultExcludeFromOverlapPrevention(boolean defaultIsExcludedFromOverlapPrevention) {
 		this.defaultIsExcludedFromOverlapPrevention = defaultIsExcludedFromOverlapPrevention;
 	}

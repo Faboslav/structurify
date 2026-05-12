@@ -17,6 +17,7 @@ import java.util.Map;
 
 public final class BiomeCheckOptions
 {
+	public static String BIOME_CHECK_SYMBOL = "\u2663";
 	public static String OVERRIDE_GLOBAL_BIOME_CHECK_OPTION_NAME = "override_global_biome_check";
 	public static String BIOME_CHECK_IS_ENABLED_OPTION_NAME = "is_enabled";
 	public static String BIOME_CHECK_MODE_OPTION_NAME = "mode";
@@ -51,7 +52,7 @@ public final class BiomeCheckOptions
 			title = Component.literal("„" + LanguageUtil.translateId(null, namespace).getString() + "“ ").append(title);
 		}
 
-		title = Component.literal("\n").append(title);
+		title = Component.literal("\n" + BIOME_CHECK_SYMBOL + " ").append(title);
 
 		groupBuilder.option(LabelOption.create(title.withStyle(style -> style.withBold(true))));
 
@@ -63,9 +64,9 @@ public final class BiomeCheckOptions
 				.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.override_global_biome_check.description", namespace, id)))
 				.available(isEnabledGlobally || isEnabledForNamespace)
 				.binding(
-					BiomeCheckData.OVERRIDE_GLOBAL_BIOME_CHECK_DEFAULT_VALUE,
-					() -> structureLikeData.get(id).getBiomeCheckData().isOverridingGlobalBiomeCheck(),
-					overrideGlobalBiomeCheck -> structureLikeData.get(id).getBiomeCheckData().overrideGlobalBiomeCheck(overrideGlobalBiomeCheck)
+					biomeCheckData.defaultIsOverridingGlobalBiomeCheck(),
+					biomeCheckData::isOverridingGlobalBiomeCheck,
+					biomeCheckData::overrideGlobalBiomeCheck
 				).controller(opt -> BooleanControllerBuilder.create(opt)
 					.formatValue(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
 					.coloured(true)
@@ -83,7 +84,7 @@ public final class BiomeCheckOptions
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.enable_biome_check.description")))
 			.available(isGlobal || biomeCheckData.isOverridingGlobalBiomeCheck() || (!isEnabledGlobally && !isEnabledForNamespace))
 			.binding(
-				BiomeCheckData.IS_ENABLED_DEFAULT_VALUE,
+				biomeCheckData.defaultIsEnabled(),
 				biomeCheckData::isEnabled,
 				biomeCheckData::enable
 			)

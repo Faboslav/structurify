@@ -5,9 +5,11 @@ import com.faboslav.structurify.common.config.data.*;
 import com.faboslav.structurify.common.config.serialization.StructureDataSerializer;
 import com.faboslav.structurify.common.config.serialization.StructureNamespaceDataSerializer;
 import com.faboslav.structurify.common.config.serialization.StructureSetDataSerializer;
+import com.faboslav.structurify.common.config.serialization.StructureTemplatePoolDataSerializer;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.platform.PlatformHooks;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+import com.faboslav.structurify.common.registry.StructurifyTemplatePoolProvider;
 import com.google.gson.*;
 
 import java.io.IOException;
@@ -39,6 +41,7 @@ public final class StructurifyConfig
 	private Map<String, StructureNamespaceData> structureNamespaceData = new TreeMap<>();
 	private Map<String, StructureData> structureData = new TreeMap<>();
 	private Map<String, StructureSetData> structureSetData = new TreeMap<>();
+	private Map<String, StructureTemplatePoolData> structureTemplatePoolsData = new TreeMap<>();
 
 	public final static boolean ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = false;
 	public final static double GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = 1.0D;
@@ -54,6 +57,7 @@ public final class StructurifyConfig
 	private static final String STRUCTURES_PROPERTY = "structures";
 	private static final String STRUCTURE_NAMESPACES_PROPERTY = "structure_namespaces";
 	private static final String STRUCTURE_SETS_PROPERTY = "structure_sets";
+	private static final String STRUCTURE_TEMPLATE_POOLS_PROPERTY = "structure_template_pools";
 
 
 	public Map<String, StructureNamespaceData> getStructureNamespaceData() {
@@ -66,6 +70,20 @@ public final class StructurifyConfig
 
 	public Map<String, StructureSetData> getStructureSetData() {
 		return this.structureSetData;
+	}
+
+	public Map<String, StructureTemplatePoolData> getStructureTemplatePoolsData() {
+		return this.structureTemplatePoolsData;
+	}
+
+	public Map<String, StructureTemplatePoolData> getStructureTemplatePoolsDataForStructure(String structureId) {
+		Set<String> structureTemplatePools = StructurifyTemplatePoolProvider.getStructureTemplatePoolIds().get(structureId);
+		return this.structureTemplatePoolsData.entrySet().stream()
+			.filter(entry -> structureTemplatePools != null && structureTemplatePools.contains(entry.getKey()))
+			.collect(java.util.stream.Collectors.toMap(
+				Map.Entry::getKey,
+				Map.Entry::getValue
+			));
 	}
 
 	public DebugData getDebugData() {
@@ -93,6 +111,7 @@ public final class StructurifyConfig
 			this.structureNamespaceData = WorldgenDataProvider.getStructureNamespaces();
 			this.structureData = WorldgenDataProvider.getStructures();
 			this.structureSetData = WorldgenDataProvider.getStructureSets();
+			this.structureTemplatePoolsData = WorldgenDataProvider.getStructureTemplatePools();
 
 			if (!Files.exists(configPath)) {
 				return;
@@ -105,6 +124,7 @@ public final class StructurifyConfig
 			this.loadStructureNamespaces(json);
 			this.loadStructures(json);
 			this.loadStructureSets(json);
+			this.loadStructureTemplatePools(json);
 
 			Structurify.getLogger().info("Structurify config loaded");
 			this.isLoaded = true;
@@ -227,6 +247,33 @@ public final class StructurifyConfig
 		}
 	}
 
+	private void loadStructureTemplatePools(JsonObject json) {
+		if (!json.has(STRUCTURE_TEMPLATE_POOLS_PROPERTY)) {
+			return;
+		}
+
+		var structureTemplatePools = json.getAsJsonArray(STRUCTURE_TEMPLATE_POOLS_PROPERTY);
+
+		for (JsonElement structureTemplatePool : structureTemplatePools) {
+			var structureTemplatePoolJson = structureTemplatePool.getAsJsonObject();
+
+			if (!structureTemplatePoolJson.has(StructureSetDataSerializer.NAME_PROPERTY)) {
+				Structurify.getLogger().info("Found invalid structure template pool entry, skipping.");
+				continue;
+			}
+
+			var structureTemplatePoolName = structureTemplatePoolJson.get(StructureSetDataSerializer.NAME_PROPERTY).getAsString();
+
+			if (!this.structureTemplatePoolsData.containsKey(structureTemplatePoolName)) {
+				Structurify.getLogger().info("Found invalid structure template pool identifier of \"{}\", skipping.", structureTemplatePoolName);
+				continue;
+			}
+
+			var structureTemplatePoolData = this.structureTemplatePoolsData.get(structureTemplatePoolName);
+			StructureTemplatePoolDataSerializer.load(structureTemplatePoolJson, structureTemplatePoolData);
+		}
+	}
+
 	public void save() {
 		this.save(true);
 	}
@@ -256,6 +303,7 @@ public final class StructurifyConfig
 			this.saveStructureNamespacesData(json, true);
 			this.saveStructuresData(json, true);
 			this.saveStructureSetsData(json, true);
+			this.saveStructureTemplatePoolsData(json, true);
 
 			Files.createDirectories(configPath.getParent());
 			Files.createFile(configPath);
@@ -306,6 +354,7 @@ public final class StructurifyConfig
 			this.saveStructureNamespacesData(json, false);
 			this.saveStructuresData(json, false);
 			this.saveStructureSetsData(json, false);
+			this.saveStructureTemplatePoolsData(json, false);
 
 			Files.createDirectories(configDumpPath.getParent());
 			Files.createFile(configDumpPath);
@@ -373,6 +422,21 @@ public final class StructurifyConfig
 			});
 
 		json.add(STRUCTURE_SETS_PROPERTY, structureSets);
+	}
+
+	private void saveStructureTemplatePoolsData(JsonObject json, boolean saveOnlyChanged) {
+		JsonArray structureTemplatePools = new JsonArray();
+
+		this.structureTemplatePoolsData.entrySet().stream()
+			.filter(entry -> !saveOnlyChanged || !entry.getValue().isUsingDefaultValues())
+			.forEach(structureTemplatePoolDataEntry -> {
+				var structureTemplatePoolName = structureTemplatePoolDataEntry.getKey();
+				var structureTemplatePoolData = structureTemplatePoolDataEntry.getValue();
+
+				StructureTemplatePoolDataSerializer.save(structureTemplatePools, structureTemplatePoolName, structureTemplatePoolData);
+			});
+
+		json.add(STRUCTURE_TEMPLATE_POOLS_PROPERTY, structureTemplatePools);
 	}
 
 	private Path getBackupConfigPath() {
