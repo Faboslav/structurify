@@ -3,6 +3,7 @@ package com.faboslav.structurify.neoforge.platform;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.platform.ModIconInfo;
 import com.faboslav.structurify.common.platform.PlatformHelper;
+import com.faboslav.structurify.common.util.FileUtil;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import org.jetbrains.annotations.Nullable;
@@ -36,12 +37,12 @@ public final class NeoForgePlatformHelper implements PlatformHelper
 
 			//? if >= 1.21.10 {
 			try {
-				return getModIconInfo(id, iconPath, modContainer.get().getModInfo().getOwningFile().getFile().getContents().openFile(iconPath.get()));
+				return FileUtil.getModIconInfo(id, iconPath, modContainer.get().getModInfo().getOwningFile().getFile().getContents().openFile(iconPath.get()));
 			} catch (IOException e) {
 				return Optional.empty();
 			}
 			//?} else {
-			/*return getModIconInfo(id, iconPath, Optional.of(modContainer.get().getModInfo().getOwningFile().getFile().findResource(iconPath.get())));
+			/*return FileUtil.getModIconInfo(id, iconPath, Optional.of(modContainer.get().getModInfo().getOwningFile().getFile().findResource(iconPath.get())));
 			*///?}
 		});
 	}

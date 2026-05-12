@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
+import com.faboslav.structurify.common.util.FileUtil;
 
 import javax.annotation.Nullable;
 import java.nio.file.Files;
@@ -35,7 +36,7 @@ public final class ForgePlatformHelper implements PlatformHelper
 				return Optional.empty();
 			}
 
-			return getModIconInfo(id, iconPath, Optional.of(modContainer.get().getModInfo().getOwningFile().getFile().findResource(iconPath.get())));
+			return FileUtil.getModIconInfo(id, iconPath, Optional.of(modContainer.get().getModInfo().getOwningFile().getFile().findResource(iconPath.get())));
 		});
 	}
 

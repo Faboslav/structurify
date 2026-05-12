@@ -3,6 +3,7 @@ package com.faboslav.structurify.fabric.platform;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.platform.ModIconInfo;
 import com.faboslav.structurify.common.platform.PlatformHelper;
+import com.faboslav.structurify.common.util.FileUtil;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;
@@ -30,7 +31,7 @@ public final class FabricPlatformHelper implements PlatformHelper
 				return Optional.empty();
 			}
 
-			return getModIconInfo(id, iconPath, modContainer.get().findPath(iconPath.get()));
+			return FileUtil.getModIconInfo(id, iconPath, modContainer.get().findPath(iconPath.get()));
 		});
 	}
 
