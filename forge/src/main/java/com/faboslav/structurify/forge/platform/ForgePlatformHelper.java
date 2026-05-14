@@ -3,15 +3,11 @@ package com.faboslav.structurify.forge.platform;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.platform.ModIconInfo;
 import com.faboslav.structurify.common.platform.PlatformHelper;
-import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import com.faboslav.structurify.common.util.FileUtil;
 
 import javax.annotation.Nullable;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 

@@ -77,7 +77,7 @@ public final class StructurifyConfig
 	}
 
 	public Map<String, StructureTemplatePoolData> getStructureTemplatePoolsDataForStructure(String structureId) {
-		Set<String> structureTemplatePools = StructurifyTemplatePoolProvider.getStructureTemplatePoolIds().get(structureId);
+		Set<String> structureTemplatePools = StructurifyTemplatePoolProvider.getStructureTemplatePoolIdsForStructure(structureId);
 		return this.structureTemplatePoolsData.entrySet().stream()
 			.filter(entry -> structureTemplatePools != null && structureTemplatePools.contains(entry.getKey()))
 			.collect(java.util.stream.Collectors.toMap(

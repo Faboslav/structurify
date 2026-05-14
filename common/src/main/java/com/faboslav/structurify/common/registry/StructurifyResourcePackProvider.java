@@ -55,18 +55,19 @@ public final class StructurifyResourcePackProvider
 	}
 
 	public static PackRepository getResourcePackRepository() {
-		Structurify.getLogger().info("Loading resource pack repository...");
+		// TODO maybe keep the logs only for debug purposes
+		//Structurify.getLogger().info("Loading resource pack repository...");
 		var resourcePackProviders = StructurifyResourcePackProvider.getResourcePackProviders();
 
 		for (var resourcePackProvider : resourcePackProviders) {
-			Structurify.getLogger().info("Loaded resource pack provider: " + resourcePackProvider.getClass().getSimpleName());
+			//Structurify.getLogger().info("Loaded resource pack provider: " + resourcePackProvider.getClass().getSimpleName());
 		}
 
-		var resourcePackManager = new PackRepository(StructurifyResourcePackProvider.getResourcePackProviders().toArray(new RepositorySource[0]));
+		var resourcePackManager = new PackRepository(resourcePackProviders.toArray(new RepositorySource[0]));
 		PlatformHooks.PLATFORM_RESOURCE_PACK_PROVIDER.loadPlatformResourcePacks(resourcePackManager);
 		resourcePackManager.reload();
 		resourcePackManager.setSelected(resourcePackManager.getAvailableIds());
-		Structurify.getLogger().info("Finished loading resource pack repository");
+		//Structurify.getLogger().info("Finished loading resource pack repository");
 
 		return resourcePackManager;
 	}

@@ -5,12 +5,14 @@ import com.faboslav.structurify.common.mixin.structure.StructureTemplatePoolMixi
 import com.faboslav.structurify.common.mixin.structure.jigsaw.JigsawStructureAccessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.Resource;
@@ -25,35 +27,8 @@ import java.util.*;
 
 public final class StructurifyTemplatePoolProvider
 {
-	private static boolean isLoading = false;
-	private static Map<String, Map<String, Integer>> templatePoolElementWeights = Map.of();
-	private static Map<String, Set<String>> structureTemplatePoolIds = Map.of();
-
-	public static void loadStructureTemplatePools() {
-		if (isLoading) {
-			return;
-		}
-
-		isLoading = true;
-
-		try {
-			Structurify.getLogger().info("Loading structure template pools...");
-			var resourcePackRepository = StructurifyResourcePackProvider.getResourcePackRepository();
-
-			try (var resourceManager = new MultiPackResourceManager(
-				PackType.SERVER_DATA,
-				resourcePackRepository.openAllSelected()
-			)) {
-				loadStructureTemplatePools(resourceManager);
-			}
-
-			Structurify.getLogger().info("Finished loading structure template pools");
-		} catch (Exception exception) {
-			Structurify.getLogger().error("Failed to load structure template pools.", exception);
-		} finally {
-			isLoading = false;
-		}
-	}
+	private static final Map<String, Map<String, Integer>> templatePoolElementWeights = new TreeMap<>();
+	private static final Map<String, Set<String>> structureTemplatePoolIds = new TreeMap<>();
 
 	@Nullable
 	public static String getStructurePoolElementLocation(StructurePoolElement structurePoolElement) {
@@ -106,50 +81,70 @@ public final class StructurifyTemplatePoolProvider
 				structureTemplatePools.put(structureTemplatePoolId, structureTemplatePoolElementsWithWeight);
 			}
 
-			templatePoolElementWeights = structureTemplatePools;
+
+			templatePoolElementWeights.putAll(structureTemplatePools);
 		}
 
 		return templatePoolElementWeights;
 	}
 
-	public static Map<String, Set<String>> getStructureTemplatePoolIds() {
-		if (structureTemplatePoolIds.isEmpty()) {
-			loadStructureTemplatePools();
+	public static Set<String> getStructureTemplatePoolIdsForStructure(String structureId) {
+		if (!structureTemplatePoolIds.containsKey(structureId)) {
+			var resourcePackRepository = StructurifyResourcePackProvider.getResourcePackRepository();
+
+			try (var resourceManager = new MultiPackResourceManager(
+				PackType.SERVER_DATA,
+				resourcePackRepository.openAllSelected()
+			)) {
+				var structureTemplatePools = loadStructureTemplatePoolsForStructure(resourceManager, structureId);
+				structureTemplatePoolIds.put(structureId, structureTemplatePools);
+			}
 		}
 
-		return structureTemplatePoolIds;
+		return structureTemplatePoolIds.get(structureId);
 	}
 
-	private static void loadStructureTemplatePools(ResourceManager resourceManager) throws IOException {
-
+	private static Set<String> loadStructureTemplatePoolsForStructure(ResourceManager resourceManager, String structureId) {
 		var structureRegistry = StructurifyRegistryManagerProvider.getStructureRegistry();
-		if (structureRegistry == null) {
-			structureTemplatePoolIds = Map.of();
-			return;
-		}
-		Map<String, Set<String>> structureTemplatePoolIds = new HashMap<>();
-		for (var structureReference : structureRegistry.listElements().toList()) {
-			Identifier structureId = structureReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/;
-			Structure structure = structureReference.value();
-			if (!(structure instanceof JigsawStructure jigsawStructure)) {
-				continue;
-			}
-			var startPool = ((JigsawStructureAccessor) (Object) jigsawStructure).structurify$getOriginalStartPool().unwrapKey().orElse(null);
-			if (startPool == null) {
-				continue;
-			}
-			Set<Identifier> usedTemplatePools = collectStructureTemplatePools(resourceManager, startPool/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/);
-			if (!usedTemplatePools.isEmpty()) {
-				structureTemplatePoolIds.put(
-					structureId.toString(),
-					usedTemplatePools.stream()
-						.map(Identifier::toString)
-						.collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new))
-				);
-			}
-		}
-		StructurifyTemplatePoolProvider.structureTemplatePoolIds = Map.copyOf(structureTemplatePoolIds);
 
+		if (structureRegistry == null) {
+			return Set.of();
+		}
+
+		Optional<Holder.Reference<Structure>> structure = structureRegistry.get(ResourceKey.create(Registries.STRUCTURE, Structurify.makeNamespacedId(structureId)));
+
+		if(structure.isEmpty()) {
+			return Set.of();
+		}
+
+		return loadStructureTemplatePoolsForStructure(resourceManager, structure.get().value(), structureId);
+	}
+
+	private static Set<String> loadStructureTemplatePoolsForStructure(ResourceManager resourceManager, Structure structure, String structureId) {
+		if (!(structure instanceof JigsawStructure jigsawStructure)) {
+			return Set.of();
+		}
+
+		var startPool = ((JigsawStructureAccessor) (Object) jigsawStructure).structurify$getOriginalStartPool().unwrapKey().orElse(null);
+
+		if (startPool == null) {
+			return Set.of();
+		}
+
+		try {
+			Set<Identifier> structureTemplatePools = collectStructureTemplatePools(resourceManager, startPool/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/);
+
+			if(structureTemplatePools.isEmpty()) {
+				return Set.of();
+			}
+
+			return structureTemplatePools.stream()
+				.map(Identifier::toString)
+				.collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+		} catch(Exception e) {
+			// TODO log error
+			return Set.of();
+		}
 	}
 
 	private static Set<Identifier> collectStructureTemplatePools(
