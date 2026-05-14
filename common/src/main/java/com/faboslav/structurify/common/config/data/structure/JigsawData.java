@@ -44,8 +44,13 @@ public final class JigsawData
 		this.horizontalMaxDistanceFromCenter = horizontalMaxDistanceFromCenter;
 		this.defaultVerticalMaxDistanceFromCenter = verticalMaxDistanceFromCenter;
 		this.verticalMaxDistanceFromCenter = verticalMaxDistanceFromCenter;
-		this.defaultHeightProviderData = heightProviderData;
-		this.heightProviderData = heightProviderData;
+		if(heightProviderData != null) {
+			this.defaultHeightProviderData = heightProviderData.clone();
+			this.heightProviderData = heightProviderData.clone();
+		} else {
+			this.defaultHeightProviderData = null;
+			this.heightProviderData = null;
+		}
 		this.defaultProjectStartToHeightmap = projectStartToHeightmap;
 		this.projectStartToHeightmap = projectStartToHeightmap;
 	}

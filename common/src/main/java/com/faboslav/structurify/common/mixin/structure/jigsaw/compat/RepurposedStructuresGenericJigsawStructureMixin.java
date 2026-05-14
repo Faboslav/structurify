@@ -114,25 +114,6 @@ public abstract class RepurposedStructuresGenericJigsawStructureMixin extends St
 		return this.structurify$getProjectStartToHeightmap(originalProjectStartToHeightmap);
 	}
 
-	//? if >= 1.21.9 {
-	public @Nullable JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter()
-	//?} else {
-	/^public @Nullable Integer structurify$getMaxDistanceFromCenter()
-	^///?}
-	{
-		// Unused placeholder
-		return null;
-	}
-
-	//? if >= 1.21.9 {
-	public void structurify$setMaxDistanceFromCenter(@Nullable JigsawStructure.MaxDistance maxDistanceFromCenter)
-	 //?} else {
-	/^public void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter)
-	^///?}
-	{
-		// Unused placeholder
-	}
-
 	@ModifyExpressionValue(
 		method = "findGenerationPoint",
 		at = @At(

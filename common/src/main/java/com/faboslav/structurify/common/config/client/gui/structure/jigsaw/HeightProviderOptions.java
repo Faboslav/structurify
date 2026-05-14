@@ -43,7 +43,7 @@ public class HeightProviderOptions
 			.name(Component.translatable("gui.structurify.structures.structure.jigsaw.start_height.title"))
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.jigsaw.start_height.description")))
 			.binding(
-				heightProviderData.getType(),
+				defaultHeightProviderData.getType(),
 				heightProviderData::getType,
 				heightProviderData::setType
 			)
@@ -110,9 +110,6 @@ public class HeightProviderOptions
 			if (configScreen == null) {
 				return;
 			}
-
-			var previousHeightProviderType = heightProviderData.getValue();
-			var pendingHeightProviderValue = opt.pendingValue();
 
 			configScreen.currentScreen.finishOrSave();
 			heightProviderData.setType(type);

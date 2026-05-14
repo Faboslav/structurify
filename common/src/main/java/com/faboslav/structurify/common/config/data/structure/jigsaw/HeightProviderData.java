@@ -175,8 +175,50 @@ public final class HeightProviderData
 	{
 		CONSTANT,
 		UNIFORM,
-			TRAPEZOID,
+		TRAPEZOID,
 		BIASED_TO_BOTTOM,
 		VERY_BIASED_TO_BOTTOM
+	}
+
+	@Override
+	public HeightProviderData clone() {
+		return new HeightProviderData(
+			this.type,
+			this.minInclusive == null ? null : this.minInclusive.clone(),
+			this.maxInclusive == null ? null : this.maxInclusive.clone(),
+			this.value == null ? null : this.value.clone(),
+			this.plateau,
+			this.inner
+		);
+	}
+
+	@Override
+	public boolean equals(Object possibleHeightProviderData) {
+		if (this == possibleHeightProviderData) {
+			return true;
+		}
+
+		if (!(possibleHeightProviderData instanceof HeightProviderData heightProviderData)) {
+			return false;
+		}
+
+		return this.plateau == heightProviderData.plateau
+			   && this.inner == heightProviderData.inner
+			   && this.type == heightProviderData.type
+			   && java.util.Objects.equals(this.minInclusive, heightProviderData.minInclusive)
+			   && java.util.Objects.equals(this.maxInclusive, heightProviderData.maxInclusive)
+			   && java.util.Objects.equals(this.value, heightProviderData.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return java.util.Objects.hash(
+			this.type,
+			this.minInclusive,
+			this.maxInclusive,
+			this.value,
+			this.plateau,
+			this.inner
+		);
 	}
 }

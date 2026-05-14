@@ -30,13 +30,12 @@ public class StructureData implements StructureLikeData
 		GenerationStep.Decoration step,
 		TerrainAdjustment terrainAdaptation
 	) {
-		this.defaultBiomes = biomes;
-		this.biomes = biomes;
+		this.defaultBiomes = new ArrayList<>(biomes);
+		this.biomes = new ArrayList<>(biomes);
 		this.defaultStep = step;
 		this.step = step;
 		this.defaultTerrainAdaptation = terrainAdaptation;
 		this.terrainAdaptation = terrainAdaptation;
-		// TODO
 		this.jigsawData = new JigsawData();
 		this.distanceFromWorldCenterCheckData = new DistanceFromWorldCenterCheckData();
 		this.overlapCheckData = new OverlapCheckData();

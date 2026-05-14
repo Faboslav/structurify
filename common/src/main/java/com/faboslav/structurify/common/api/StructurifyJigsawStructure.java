@@ -20,8 +20,14 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 		structurify$setMaxDistanceFromCenter(null);
 	}
 
-	@Nullable Integer structurify$getMaxDepth();
-	void structurify$setMaxDepth(@Nullable Integer maxDepth);
+	@Nullable
+	default Integer structurify$getMaxDepth() {
+		return null;
+	}
+
+	default void structurify$setMaxDepth(@Nullable Integer maxDepth) {
+
+	}
 
 	default int structurify$getMaxDepth(int originalMaxDepth) {
 		if (this.structurify$getMaxDepth() == null) {
@@ -38,8 +44,13 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 		return this.structurify$getMaxDepth();
 	}
 
-	@Nullable HeightProvider structurify$getStartHeight();
-	void structurify$setStartHeight(@Nullable HeightProvider startHeight);
+	@Nullable
+	default HeightProvider structurify$getStartHeight() {
+		return null;
+	}
+
+	default void structurify$setStartHeight(@Nullable HeightProvider startHeight) {
+	}
 
 	default HeightProvider structurify$getStartHeight(HeightProvider originalStartHeight) {
 		if (this.structurify$getStartHeight() == null) {
@@ -61,8 +72,14 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 		return this.structurify$getStartHeight();
 	}
 
-	@Nullable Optional<Heightmap.Types> structurify$getProjectStartToHeightmap();
-	void structurify$setProjectStartToHeightmap(@Nullable Optional<Heightmap.Types> projectStartToHeightmap);
+	@Nullable
+	default Optional<Heightmap.Types> structurify$getProjectStartToHeightmap()
+	{
+		return null;
+	}
+
+	default void structurify$setProjectStartToHeightmap(@Nullable Optional<Heightmap.Types> projectStartToHeightmap) {
+	}
 
 	default Optional<Heightmap.Types> structurify$getProjectStartToHeightmap(Optional<Heightmap.Types> originalProjectStartToHeightmap) {
 		if (this.structurify$getProjectStartToHeightmap() == null) {
@@ -84,17 +101,23 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 		return this.structurify$getProjectStartToHeightmap();
 	}
 
+	@Nullable
 	//? if >= 1.21.9 {
-	@Nullable JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter();
+	default JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter()
 	//?} else {
-	/*@Nullable Integer structurify$getMaxDistanceFromCenter();
+	/*default Integer structurify$getMaxDistanceFromCenter()
 	*///?}
+	{
+		return null;
+	}
 
 	//? if >= 1.21.9 {
-	void structurify$setMaxDistanceFromCenter(@Nullable JigsawStructure.MaxDistance maxDistanceFromCenter);
-	 //?} else {
-	/*void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter);
+	default void structurify$setMaxDistanceFromCenter(@Nullable JigsawStructure.MaxDistance maxDistanceFromCenter)
+	//?} else {
+	/*default void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter)
 	*///?}
+	{
+	}
 
 	//? if >= 1.21.9 {
 	default JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter(JigsawStructure.MaxDistance originalMaxDistanceFromCenter)

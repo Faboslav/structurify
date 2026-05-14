@@ -3,6 +3,8 @@ package com.faboslav.structurify.common.config.data.structure.jigsaw;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public final class VerticalAnchorData
 {
 	private Type type;
@@ -108,6 +110,28 @@ public final class VerticalAnchorData
 				default -> ABSOLUTE;
 			};
 		}
+	}
 
+	@Override
+	public VerticalAnchorData clone() {
+		return new VerticalAnchorData(this.type, this.value);
+	}
+
+	@Override
+	public boolean equals(Object possibleVerticalAnchorData) {
+		if (this == possibleVerticalAnchorData) {
+			return true;
+		}
+
+		if (!(possibleVerticalAnchorData instanceof VerticalAnchorData verticalAnchorData)) {
+			return false;
+		}
+
+		return this.type == verticalAnchorData.type && Objects.equals(this.value, verticalAnchorData.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.type, this.value);
 	}
 }

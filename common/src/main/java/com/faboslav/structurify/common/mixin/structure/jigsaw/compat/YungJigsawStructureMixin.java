@@ -111,6 +111,18 @@ public abstract class YungJigsawStructureMixin extends StructureMixin implements
 		return this.structurify$getProjectStartToHeightmap(originalProjectStartToHeightmap);
 	}
 
+	@Unique
+	@Nullable
+	public Integer structurify$getMaxDistanceFromCenter()
+	{
+		return this.structurify$maxDistanceFromCenter;
+	}
+
+	public void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter)
+	{
+		this.structurify$maxDistanceFromCenter = maxDistanceFromCenter;
+	}
+
 	@ModifyExpressionValue(
 		method = "findGenerationPoint",
 		at = @At(
@@ -121,24 +133,24 @@ public abstract class YungJigsawStructureMixin extends StructureMixin implements
 	)
 	protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
 	{
-		if(this.structurify$maxDistanceFromCenter == null) {
+		if(this.structurify$getMaxDistanceFromCenter() == null) {
 			var structureData = this.structurify$getStructureData();
 
 			if (structureData == null) {
-				this.structurify$maxDistanceFromCenter = originalMaxDistanceFromCenter;
+				this.structurify$setMaxDistanceFromCenter(originalMaxDistanceFromCenter);
 			} else {
 				var verticalMaxDistanceFromCenter = structureData.getJigsawData().getVerticalMaxDistanceFromCenter();
 				var horizontalMaxDistanceFromCenter = structureData.getJigsawData().getVerticalMaxDistanceFromCenter();
 
 				if(verticalMaxDistanceFromCenter == null || horizontalMaxDistanceFromCenter == null) {
-					this.structurify$maxDistanceFromCenter = originalMaxDistanceFromCenter;
+					this.structurify$setMaxDistanceFromCenter(originalMaxDistanceFromCenter);
 				} else {
-					this.structurify$maxDistanceFromCenter = horizontalMaxDistanceFromCenter;
+					this.structurify$setMaxDistanceFromCenter(horizontalMaxDistanceFromCenter);
 				}
 			}
 		}
 
-		return this.structurify$maxDistanceFromCenter;
+		return this.structurify$getMaxDistanceFromCenter();
 	}
 }
 *///?} else {

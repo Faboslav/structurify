@@ -1,3 +1,8 @@
+## 2.0.24
+
+- Fixed crash related to Yung's API
+- Fixed load/save of structure's "start_height" property
+
 ## 2.0.23
 
 - Added support for editing structure template pools and its element weights
