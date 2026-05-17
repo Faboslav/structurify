@@ -1,3 +1,5 @@
+val IS_CI = System.getenv("CI") == "true"
+
 plugins {
 	`multiloader-loader`
 	id("net.neoforged.moddev.legacyforge")
@@ -79,65 +81,78 @@ dependencies {
 		modImplementation(commonMod.modrinth("structure-gel-api", structureGelApiVersion)) { isTransitive = false }
 	}
 
-	// Better modlist
-	val betterModListDeps: List<Dependency> = fletchingTable.modrinthBundle("better-modlist", commonMod.mc, "forge") {
-		recursive = true
-		include("required", "optional", "embedded")
-	}
-	for (mod in betterModListDeps) modImplementation(mod)
+	if(!IS_CI) {
+		// Better modlist
+		val betterModListDeps: List<Dependency> =
+			fletchingTable.modrinthBundle("better-modlist", commonMod.mc, "forge") {
+				recursive = true
+				include("required", "optional", "embedded")
+			}
+		for (mod in betterModListDeps) modImplementation(mod)
 
-	// ChoiceTheorem's Overhauled Village
-	val ctov: List<Dependency> = fletchingTable.modrinthBundle("ct-overhaul-village", commonMod.mc, "forge") {
-		recursive = true
-		include("required", "optional", "embedded")
-	}
-	for (mod in ctov) modImplementation(mod)
+		// ChoiceTheorem's Overhauled Village
+		val ctov: List<Dependency> = fletchingTable.modrinthBundle("ct-overhaul-village", commonMod.mc, "forge") {
+			recursive = true
+			include("required", "optional", "embedded")
+		}
+		for (mod in ctov) modImplementation(mod)
 
-	// Fantasy structures
-	val fantasyStructures: List<Dependency> = fletchingTable.modrinthBundle("fantasy-structures-(by-berezka)", commonMod.mc, "forge") {
-		recursive = true
-		include("required", "optional", "embedded")
-	}
-	for (mod in fantasyStructures) modImplementation(mod)
+		// Fantasy structures
+		val fantasyStructures: List<Dependency> =
+			fletchingTable.modrinthBundle("fantasy-structures-(by-berezka)", commonMod.mc, "forge") {
+				recursive = true
+				include("required", "optional", "embedded")
+			}
+		for (mod in fantasyStructures) modImplementation(mod)
 
-	// Alex Caves
-	val alexCavesWithDeps: List<Dependency> = fletchingTable.modrinthBundle("alexs-caves", commonMod.mc, "forge") {
-		recursive = true
-		include("required", "optional", "embedded")
-	}
-	for (mod in alexCavesWithDeps) modImplementation(mod)
+		// Alex Caves
+		val alexCavesWithDeps: List<Dependency> = fletchingTable.modrinthBundle("alexs-caves", commonMod.mc, "forge") {
+			recursive = true
+			include("required", "optional", "embedded")
+		}
+		for (mod in alexCavesWithDeps) modImplementation(mod)
 
-	// Aquamira
-	val aquamiraeWithDeps: List<Dependency> = fletchingTable.modrinthBundle("aquamirae", commonMod.mc, "forge") {
-		recursive = true
-		include("required", "optional", "embedded")
-	}
-	for (mod in aquamiraeWithDeps) modImplementation(mod)
+		// Aquamira
+		val aquamiraeWithDeps: List<Dependency> = fletchingTable.modrinthBundle("aquamirae", commonMod.mc, "forge") {
+			recursive = true
+			include("required", "optional", "embedded")
+		}
+		for (mod in aquamiraeWithDeps) modImplementation(mod)
 
-	val fossilsAndArcheologyRevivalWithDeps: List<Dependency> = fletchingTable.modrinthBundle("fossils-and-archeology-revival", commonMod.mc, "forge") {
-		recursive = true
-		include("required", "optional", "embedded")
-	}
-	for (mod in fossilsAndArcheologyRevivalWithDeps) modImplementation(mod)
+		val fossilsAndArcheologyRevivalWithDeps: List<Dependency> =
+			fletchingTable.modrinthBundle("fossils-and-archeology-revival", commonMod.mc, "forge") {
+				recursive = true
+				include("required", "optional", "embedded")
+			}
+		for (mod in fossilsAndArcheologyRevivalWithDeps) modImplementation(mod)
 
-	val dungeonNowLoadingWithDeps: List<Dependency> = fletchingTable.modrinthBundle("dungeon-now-loading", commonMod.mc, "forge") {
-		recursive = true
-		include("required", "optional", "embedded")
-	}
-	for (mod in dungeonNowLoadingWithDeps) modImplementation(mod)
+		val dungeonNowLoadingWithDeps: List<Dependency> =
+			fletchingTable.modrinthBundle("dungeon-now-loading", commonMod.mc, "forge") {
+				recursive = true
+				include("required", "optional", "embedded")
+			}
+		for (mod in dungeonNowLoadingWithDeps) modImplementation(mod)
 
-	//modImplementation(fletchingTable.modrinth("fungal-infectionspore", commonMod.mc, "forge"))
-	//modImplementation(fletchingTable.modrinth("dungeons-enhanced", commonMod.mc, "forge"))
-	//modImplementation(fletchingTable.modrinth("legendary-monsters", commonMod.mc, "forge"))
-	/*
-	val endersCataclysmWithDeps: List<Dependency> = fletchingTable.modrinthBundle("l_enders-cataclysm", commonMod.mc, "forge") {
-		recursive = true
-		include("required", "optional", "embedded")
-	}
-	for (mod in endersCataclysmWithDeps) modImplementation(mod)*/
+		// Explorations
+		val explorations: List<Dependency> = fletchingTable.modrinthBundle("explorations", commonMod.mc, "forge") {
+			recursive = true
+			include("required", "optional", "embedded")
+		}
+		for (mod in explorations) modImplementation(mod)
 
-	// For debugging
-	// modImplementation(modrinth("blue-skies", "1.3.31")) { transitive = false }
+		//modImplementation(fletchingTable.modrinth("fungal-infectionspore", commonMod.mc, "forge"))
+		//modImplementation(fletchingTable.modrinth("dungeons-enhanced", commonMod.mc, "forge"))
+		//modImplementation(fletchingTable.modrinth("legendary-monsters", commonMod.mc, "forge"))
+		/*
+		val endersCataclysmWithDeps: List<Dependency> = fletchingTable.modrinthBundle("l_enders-cataclysm", commonMod.mc, "forge") {
+			recursive = true
+			include("required", "optional", "embedded")
+		}
+		for (mod in endersCataclysmWithDeps) modImplementation(mod)*/
+
+		// For debugging
+		// modImplementation(modrinth("blue-skies", "1.3.31")) { transitive = false }
+	}
 }
 
 legacyForge {

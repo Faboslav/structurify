@@ -1,3 +1,8 @@
+## 2.0.25
+
+- Fixed biome loading
+- Fixed crash related to loading of modded jigsaw structures
+
 ## 2.0.24
 
 - Fixed crash related to Yung's API

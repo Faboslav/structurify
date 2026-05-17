@@ -40,24 +40,29 @@ public final class StructureDataSerializer
 			var blacklistedBiomes = new ArrayList<>(structureData.getDefaultBiomes());
 			blacklistedBiomes.removeAll(structureJson.getAsJsonArray(BIOMES_PROPERTY).asList().stream().map(JsonElement::getAsString).collect(Collectors.toCollection(ArrayList::new)));
 			blacklistedBiomes.stream().distinct().forEach(biomes::remove);
-		} else if (structureJson.has(WHITELISTED_BIOMES_PROPERTY) && structureJson.has(BLACKLISTED_BIOMES_PROPERTY)) {
-			var whitelistedBiomes = structureJson.getAsJsonArray(WHITELISTED_BIOMES_PROPERTY);
-			for (JsonElement whitelistedBiome : whitelistedBiomes) {
-				if (biomes.contains(whitelistedBiome.getAsString())) {
-					continue;
-				}
+		} else if (structureJson.has(WHITELISTED_BIOMES_PROPERTY) || structureJson.has(BLACKLISTED_BIOMES_PROPERTY)) {
+			Structurify.getLogger().info("LOADING");
+			if(structureJson.has(WHITELISTED_BIOMES_PROPERTY)) {
+				var whitelistedBiomes = structureJson.getAsJsonArray(WHITELISTED_BIOMES_PROPERTY);
+				for (JsonElement whitelistedBiome : whitelistedBiomes) {
+					if (biomes.contains(whitelistedBiome.getAsString())) {
+						continue;
+					}
 
-				biomes.add(whitelistedBiome.getAsString());
+					biomes.add(whitelistedBiome.getAsString());
+				}
 			}
 
-			var blacklistedBiomes = structureJson.getAsJsonArray(BLACKLISTED_BIOMES_PROPERTY);
+			if(structureJson.has(BLACKLISTED_BIOMES_PROPERTY)) {
+				var blacklistedBiomes = structureJson.getAsJsonArray(BLACKLISTED_BIOMES_PROPERTY);
 
-			for (JsonElement blacklistedBiome : blacklistedBiomes) {
-				if (!biomes.contains(blacklistedBiome.getAsString())) {
-					continue;
+				for (JsonElement blacklistedBiome : blacklistedBiomes) {
+					if (!biomes.contains(blacklistedBiome.getAsString())) {
+						continue;
+					}
+
+					biomes.remove(blacklistedBiome.getAsString());
 				}
-
-				biomes.remove(blacklistedBiome.getAsString());
 			}
 		}
 

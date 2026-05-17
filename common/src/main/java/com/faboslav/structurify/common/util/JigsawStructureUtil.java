@@ -6,6 +6,7 @@ import com.faboslav.structurify.common.platform.PlatformHooks;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -35,16 +36,33 @@ public final class JigsawStructureUtil
 			return null;
 		}
 
-		return Structure.DIRECT_CODEC
-			.encodeStart(serializationContext, structure)
-			.result()
-			.map(e -> (JsonElement) e)
-			.filter(JsonElement::isJsonObject)
-			.map(JsonElement::getAsJsonObject)
-			.orElse(null);
+		try {
+			return Structure.DIRECT_CODEC
+				.encodeStart(serializationContext, structure)
+				.result()
+				.filter(JsonElement::isJsonObject)
+				.map(JsonElement::getAsJsonObject)
+				.orElseThrow();
+		} catch(Exception exception) {
+			try {
+				//? if >= 1.21.1 {
+				return JigsawStructure.CODEC.codec()
+				//?} else {
+				/*return JigsawStructure.CODEC
+				*///?}
+					.encodeStart(serializationContext, (JigsawStructure) structure)
+					.result()
+					.filter(JsonElement::isJsonObject)
+					.map(JsonElement::getAsJsonObject)
+					.orElseThrow();
+			} catch (Exception ignored) {
+			}
+
+			return null;
+		}
 	}
 
-	public static boolean isJigsawLikeStructure(Structure structure, JsonObject structureJson) {
+	public static boolean isJigsawLikeStructure(Structure structure, @Nullable JsonObject structureJson) {
 		if (structure instanceof JigsawStructure) {
 			return true;
 		}
@@ -61,7 +79,7 @@ public final class JigsawStructureUtil
 		}
 		*///?}
 
-		if (structureJson.has("max_distance_from_center") || structureJson.has("max_depth") || structureJson.has("size") || structureJson.has("start_height") || structureJson.has("project_start_to_heightmap")) {
+		if (structureJson != null && (structureJson.has("max_distance_from_center") || structureJson.has("max_depth") || structureJson.has("size") || structureJson.has("start_height") || structureJson.has("project_start_to_heightmap"))) {
 			return true;
 		}
 

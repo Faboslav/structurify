@@ -157,7 +157,7 @@ public final class WorldgenDataProvider
 			});
 
 			StructureData structureData = new StructureData(defaultBiomes, structure.step(), structure.terrainAdaptation());
-			JsonObject structureJson = JigsawStructureUtil.getStructureData(structure);
+			@Nullable JsonObject structureJson = JigsawStructureUtil.getStructureData(structure);
 
 			if (JigsawStructureUtil.isJigsawLikeStructure(structure, structureJson)) {
 				var maxDistanceFromCenter = JigsawStructureUtil.getMaxDistanceFromCenterForStructure(structure, structureJson);
@@ -181,6 +181,7 @@ public final class WorldgenDataProvider
 
 				var projectStartToHeightmap = JigsawStructureUtil.getProjectStartToHeightMap(structure, structureJson);
 				@Nullable ProjectStartToHeightmap projectStartToHeightmapOption;
+
 				if(projectStartToHeightmap == null) {
 					projectStartToHeightmapOption = null;
 				} else {
