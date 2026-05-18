@@ -16,7 +16,7 @@ public final class StructurePieceSampler
 	public static List<StructurePiece> getStructurePieces(StructureStart structureStart) {
 		List<StructurePiece> structurePieces = structureStart.getPieces();
 
-		if (Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MINIMAL) {
+		if (Structurify.getConfig().getDebugData().isEnabled() && Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MINIMAL) {
 			return structurePieces;
 		}
 
@@ -32,13 +32,13 @@ public final class StructurePieceSampler
 
 		int[][] pieceSamples = getStructurePieceCorners(structurePieces);
 
-		if (Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MINIMAL) {
+		if (Structurify.getConfig().getDebugData().isEnabled() && Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MINIMAL) {
 			return pieceSamples;
 		}
 
 		pieceSamples = mergeTouchingPositions(pieceSamples);
 
-		if (Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MERGED_SAMPLES) {
+		if (Structurify.getConfig().getDebugData().isEnabled() && Structurify.getConfig().getDebugData().getSamplingMode() == DebugData.SamplingMode.MERGED_SAMPLES) {
 			return pieceSamples;
 		}
 
@@ -105,10 +105,12 @@ public final class StructurePieceSampler
 	private static int[][] mergeTouchingPositions(int[][] inputPositions) {
 		Set<Long> uniqueKeys = new HashSet<>();
 		List<int[]> uniquePositions = new ArrayList<>();
+
 		for (int[] position : inputPositions) {
-			long key = ChunkPosUtil.getChunkPosAsLong( ChunkPosUtil.createChunkPos(position[0], position[1]));
+			long key = (((long) position[0]) << 32) ^ (position[1] & 0xFFFFFFFFL);
+
 			if (uniqueKeys.add(key)) {
-				uniquePositions.add(position);
+				uniquePositions.add(new int[] { position[0], position[1] });
 			}
 		}
 
@@ -116,7 +118,9 @@ public final class StructurePieceSampler
 		boolean[] visited = new boolean[uniquePositions.size()];
 
 		for (int i = 0; i < uniquePositions.size(); i++) {
-			if (visited[i]) continue;
+			if (visited[i]) {
+				continue;
+			}
 
 			List<int[]> group = new ArrayList<>();
 			Queue<Integer> queue = new ArrayDeque<>();
@@ -129,39 +133,52 @@ public final class StructurePieceSampler
 				group.add(current);
 
 				for (int j = 0; j < uniquePositions.size(); j++) {
-					if (visited[j]) continue;
+					if (visited[j]) {
+						continue;
+					}
+
 					int[] candidate = uniquePositions.get(j);
 
-					if (Math.abs(candidate[0] - current[0]) <= 1 &&
-						Math.abs(candidate[1] - current[1]) <= 1) {
+					if (Math.abs(candidate[0] - current[0]) <= 1 && Math.abs(candidate[1] - current[1]) <= 1) {
 						visited[j] = true;
 						queue.add(j);
 					}
 				}
 			}
 
+			int minX = Integer.MAX_VALUE;
+			int minZ = Integer.MAX_VALUE;
+			int maxX = Integer.MIN_VALUE;
+			int maxZ = Integer.MIN_VALUE;
+
+			for (int[] position : group) {
+				minX = Math.min(minX, position[0]);
+				minZ = Math.min(minZ, position[1]);
+				maxX = Math.max(maxX, position[0]);
+				maxZ = Math.max(maxZ, position[1]);
+			}
+
+			int centerX = Math.floorDiv(minX + maxX, 2);
+			int centerZ = Math.floorDiv(minZ + maxZ, 2);
+
 			int[] best = group.get(0);
-			double bestDistance = Double.MAX_VALUE;
+			long bestDistance = Long.MAX_VALUE;
 
-			double avgX = group.stream().mapToInt(p -> p[0]).average().orElse(0);
-			double avgZ = group.stream().mapToInt(p -> p[1]).average().orElse(0);
+			for (int[] position : group) {
+				long dx = position[0] - centerX;
+				long dz = position[1] - centerZ;
+				long distance = dx * dx + dz * dz;
 
-			for (int[] pos : group) {
-				double dx = pos[0] - avgX;
-				double dz = pos[1] - avgZ;
-				double dist = dx * dx + dz * dz;
-
-				if (dist < bestDistance ||
-					(dist == bestDistance && (pos[0] < best[0] || (pos[0] == best[0] && pos[1] < best[1])))) {
-					best = pos;
-					bestDistance = dist;
+				if (distance < bestDistance || distance == bestDistance && (position[0] < best[0] || position[0] == best[0] && position[1] < best[1])) {
+					best = position;
+					bestDistance = distance;
 				}
 			}
 
-			mergedPositions.add(best);
+			mergedPositions.add(new int[] { best[0], best[1] });
 		}
 
-		return mergedPositions.toArray(new int[mergedPositions.size()][]);
+		return mergedPositions.toArray(new int[0][]);
 	}
 
 	private static int[][] orderStructureCornersByDistance(int[][] samples, BlockPos structureCenter) {

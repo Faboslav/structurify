@@ -14,7 +14,7 @@ public record StructureFlatnessCheckOverview(
 	int minHeight,
 	int maxHeight,
 	int flatnessCheckThreshold,
-	int nonSolidChecks,
+	int totalFlatnessChecks,
 	int failedNonSolidChecks,
 	int nonSolidFlatnessChecksThreshold,
 	boolean result
@@ -25,7 +25,7 @@ public record StructureFlatnessCheckOverview(
 		return structureId + "\n" +
 			   "Pieces: " + structurePieces.size() + " (area: " + structureArea + ")\n" +
 			   "Height threshold: " + flatnessCheckThreshold + " (min Y: " + minHeight + ", max Y: " + maxHeight + ", diff: " + (maxHeight - minHeight) +")\n" +
-			   "Non solid checks: " + nonSolidChecks + "\n" +
+			   "Total checks: " + totalFlatnessChecks + "\n" +
 			   "Failed checks: " + failedNonSolidChecks + "/" + nonSolidFlatnessChecksThreshold + "\n" +
 			   "Result: " + (result ? "success":"fail");
 	}

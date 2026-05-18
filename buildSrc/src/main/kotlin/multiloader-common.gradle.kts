@@ -91,18 +91,17 @@ repositories {
 		}
 	}
 
-	exclusiveContent {
-		forRepositories(
-			maven("https://maven.isxander.dev/releases") {
-				name = "isXander Releases"
-			},
-			maven("https://maven.isxander.dev/snapshots") {
-				name = "isXander Snapshots"
-			}
-		)
-		filter {
+	maven("https://maven.isxander.dev/releases") {
+		name = "isXander Releases"
+		content {
 			includeGroupAndSubgroups("dev.isxander")
-			includeGroupAndSubgroups("org.quiltmc.parsers")
+		}
+	}
+
+	maven("https://maven.isxander.dev/snapshots") {
+		name = "isXander Snapshots"
+		content {
+			includeGroupAndSubgroups("dev.isxander")
 		}
 	}
 
@@ -114,6 +113,7 @@ repositories {
 		}
 		filter {
 			includeGroupAndSubgroups("org.quiltmc")
+			includeGroupAndSubgroups("org.quiltmc.parsers")
 		}
 	}
 
@@ -180,6 +180,29 @@ repositories {
 		name = "Sonatype Snapshots"
 		content {
 			includeGroupByRegex(".*")
+		}
+	}
+
+	exclusiveContent {
+		forRepository {
+			maven("https://maven.blamejared.com") {
+				name = "BlameJared"
+			}
+		}
+		filter {
+			includeGroupAndSubgroups("net.darkhax")
+			includeGroupAndSubgroups("mezz.jei")
+		}
+	}
+
+	exclusiveContent {
+		forRepository {
+			maven("https://nexus.resourcefulbees.com/repository/telepathicgrunt/") {
+				name = "TelepathicGrunt"
+			}
+		}
+		filter {
+			includeGroup("com.telepathicgrunt")
 		}
 	}
 }

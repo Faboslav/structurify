@@ -2,6 +2,7 @@
 
 - Fixed biome loading
 - Fixed crash related to loading of modded jigsaw structures
+- Fixed flatness check not working correctly for very small structures
 
 ## 2.0.24
 
