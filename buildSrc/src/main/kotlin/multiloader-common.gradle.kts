@@ -19,55 +19,168 @@ java {
 }
 
 repositories {
-    mavenCentral()
-    exclusiveContent {
-        forRepository {
-            maven("https://repo.spongepowered.org/repository/maven-public") { name = "Sponge" }
-        }
-        filter { includeGroupAndSubgroups("org.spongepowered") }
-    }
+	mavenCentral()
 
-    exclusiveContent {
-        forRepositories(
-            maven("https://maven.parchmentmc.org") { name = "ParchmentMC" },
-            maven("https://maven.neoforged.net/releases") { name = "NeoForge" },
-        )
-        filter { includeGroup("org.parchmentmc.data") }
-    }
+	exclusiveContent {
+		forRepository {
+			maven("https://repo.spongepowered.org/repository/maven-public") {
+				name = "Sponge"
+			}
+		}
+		filter {
+			includeGroupAndSubgroups("org.spongepowered")
+		}
+	}
 
-	maven("https://www.cursemaven.com")
-	maven("https://api.modrinth.com/maven") {
-		name = "Modrinth"
-		content {
+	exclusiveContent {
+		forRepositories(
+			maven("https://maven.parchmentmc.org") {
+				name = "ParchmentMC"
+			},
+			maven("https://maven.neoforged.net/releases") {
+				name = "NeoForge"
+			}
+		)
+		filter {
+			includeGroup("org.parchmentmc.data")
+		}
+	}
+
+	exclusiveContent {
+		forRepository {
+			maven("https://api.modrinth.com/maven") {
+				name = "Modrinth"
+			}
+		}
+		filter {
 			includeGroup("maven.modrinth")
 		}
 	}
-	maven("https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
-	exclusiveContent {
-		forRepository { maven("https://thedarkcolour.github.io/KotlinForForge/") }
-		filter { includeGroup("thedarkcolour") }
-	}
-	maven("https://maven.isxander.dev/releases")
-	maven("https://maven.isxander.dev/snapshots")
-	maven("https://maven.quiltmc.org/repository/release")
-	maven("https://oss.sonatype.org/content/repositories/snapshots")
-	maven("https://maven.ladysnake.org/releases") { name = "Ladysnake Libs" }
-	maven("https://maven.theillusivec4.top/")
-	maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
 
-	maven("https://maven.jamieswhiteshirt.com/libs-release") {
-		content {
-			includeGroup("com.jamieswhitefshirt")
+	exclusiveContent {
+		forRepository {
+			maven("https://www.cursemaven.com") {
+				name = "CurseMaven"
+			}
+		}
+		filter {
+			includeGroup("curse.maven")
 		}
 	}
 
-	maven("https://maven.blamejared.com")
+	exclusiveContent {
+		forRepository {
+			maven("https://maven.terraformersmc.com/releases/") {
+				name = "TerraformersMC"
+			}
+		}
+		filter {
+			includeGroup("dev.emi")
+			includeGroupAndSubgroups("com.terraformersmc")
+		}
+	}
 
-	maven("https://nexus.resourcefulbees.com/repository/telepathicgrunt/")
+	exclusiveContent {
+		forRepository {
+			maven("https://thedarkcolour.github.io/KotlinForForge/") {
+				name = "KotlinForForge"
+			}
+		}
+		filter {
+			includeGroup("thedarkcolour")
+		}
+	}
 
-	maven {
-		name = "CodeMC"
-		url = uri("https://repo.codemc.org/repository/maven-public/")
+	exclusiveContent {
+		forRepositories(
+			maven("https://maven.isxander.dev/releases") {
+				name = "isXander Releases"
+			},
+			maven("https://maven.isxander.dev/snapshots") {
+				name = "isXander Snapshots"
+			}
+		)
+		filter {
+			includeGroupAndSubgroups("dev.isxander")
+			includeGroupAndSubgroups("org.quiltmc.parsers")
+		}
+	}
+
+	exclusiveContent {
+		forRepository {
+			maven("https://maven.quiltmc.org/repository/release") {
+				name = "QuiltMC"
+			}
+		}
+		filter {
+			includeGroupAndSubgroups("org.quiltmc")
+		}
+	}
+
+	exclusiveContent {
+		forRepository {
+			maven("https://maven.ladysnake.org/releases") {
+				name = "Ladysnake Libs"
+			}
+		}
+		filter {
+			includeGroup("dev.emi")
+			includeGroupAndSubgroups("org.ladysnake")
+			includeGroupAndSubgroups("io.github.ladysnake")
+			includeGroupAndSubgroups("dev.onyxstudios")
+		}
+	}
+
+	exclusiveContent {
+		forRepository {
+			maven("https://maven.theillusivec4.top/") {
+				name = "TheIllusiveC4"
+			}
+		}
+		filter {
+			includeGroupAndSubgroups("top.theillusivec4")
+		}
+	}
+
+	exclusiveContent {
+		forRepository {
+			maven("https://maven.jamieswhiteshirt.com/libs-release") {
+				name = "JamieWhiteshirt"
+			}
+		}
+		filter {
+			includeGroup("com.jamieswhiteshirt")
+		}
+	}
+
+	exclusiveContent {
+		forRepository {
+			maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") {
+				name = "DevAuth"
+			}
+		}
+		filter {
+			includeGroup("me.djtheredstoner")
+		}
+	}
+
+	exclusiveContent {
+		forRepository {
+			maven("https://maven.resourcefulbees.com/repository/maven-public/") {
+				name = "ResourcefulBees"
+			}
+		}
+		filter {
+			includeGroupAndSubgroups("com.teamresourceful")
+			includeGroupAndSubgroups("earth.terrarium")
+		}
+	}
+
+	maven("https://oss.sonatype.org/content/repositories/snapshots") {
+		name = "Sonatype Snapshots"
+		content {
+			includeGroupByRegex(".*")
+		}
 	}
 }
 
