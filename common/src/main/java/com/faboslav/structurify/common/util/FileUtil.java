@@ -16,7 +16,7 @@ public class FileUtil
 	public static Optional<ModIconInfo> getModIconInfo(String id, Optional<String> iconPath, Optional<Path> path) {
 		try(var stream = Files.newInputStream(path.orElseThrow())) {
 			return getModIconInfo(id, iconPath, stream);
-		} catch(Exception exception) {
+		} catch(Throwable exception) {
 			return Optional.empty();
 		}
 	}
@@ -36,7 +36,7 @@ public class FileUtil
 				.getTextureManager()
 				.register(textureId, texture);
 			return Optional.of(new ModIconInfo(textureId, width, height));
-		} catch(Exception exception) {
+		} catch(Throwable exception) {
 			return Optional.empty();
 		}
 	}

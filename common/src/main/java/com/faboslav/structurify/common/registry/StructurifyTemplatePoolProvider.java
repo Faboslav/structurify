@@ -141,7 +141,7 @@ public final class StructurifyTemplatePoolProvider
 			return structureTemplatePools.stream()
 				.map(Identifier::toString)
 				.collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
-		} catch(Exception e) {
+		} catch(Throwable e) {
 			// TODO log error
 			return Set.of();
 		}

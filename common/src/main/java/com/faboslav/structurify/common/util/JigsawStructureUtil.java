@@ -43,7 +43,7 @@ public final class JigsawStructureUtil
 				.filter(JsonElement::isJsonObject)
 				.map(JsonElement::getAsJsonObject)
 				.orElseThrow();
-		} catch(Exception exception) {
+		} catch(Throwable exception) {
 			try {
 				//? if >= 1.21.1 {
 				return JigsawStructure.CODEC.codec()
@@ -55,7 +55,7 @@ public final class JigsawStructureUtil
 					.filter(JsonElement::isJsonObject)
 					.map(JsonElement::getAsJsonObject)
 					.orElseThrow();
-			} catch (Exception ignored) {
+			} catch (Throwable ignored) {
 			}
 
 			return null;
