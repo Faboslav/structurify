@@ -3,6 +3,8 @@ package com.faboslav.structurify.common.config.client.gui.structure;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.data.StructureLikeData;
 import com.faboslav.structurify.common.config.data.StructureNamespaceData;
+import com.faboslav.structurify.common.config.data.StructureSetData;
+import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import com.faboslav.structurify.common.config.data.structure.FlatnessCheckData;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import dev.isxander.yacl3.api.LabelOption;
@@ -10,6 +12,8 @@ import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionAddable;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,9 +26,11 @@ public final class FlatnessCheckOptions
 	public static String OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME = "override_global_flatness_check";
 	public static String FLATNESS_CHECK_IS_ENABLED_OPTION_NAME = "is_enabled";
 	public static String FLATNESS_CHECK_ALLOW_NON_SOLID_BLOCKS_OPTION_NAME = "allow_non_solid_blocks";
+	public static String FLATNESS_CHECK_MODE_OPTION_NAME = "mode";
+	public static String FLATNESS_CHECK_MAX_HEIGHT_DIFFERENCE = "max_height_difference";
 
 	public static Map<String, Option<?>> addFlatnessCheckOptions(
-		OptionAddable builder,
+		OptionAddable groupBuilder,
 		StructurifyConfig config,
 		String id
 	) {
@@ -56,7 +62,7 @@ public final class FlatnessCheckOptions
 
 		title = Component.literal("\n" + FLATNESS_CHECK_SYMBOL + " ").append(title);
 
-		builder.option(LabelOption.create(title.withStyle(style -> style.withBold(true))));
+		groupBuilder.option(LabelOption.create(title.withStyle(style -> style.withBold(true))));
 
 		@Nullable Option<Boolean> isOverridingGlobalFlatnessCheckOption;
 
@@ -76,7 +82,7 @@ public final class FlatnessCheckOptions
 				.build();
 
 			flatnessCheckOptions.put(OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME, isOverridingGlobalFlatnessCheckOption);
-			builder.option(isOverridingGlobalFlatnessCheckOption);
+			groupBuilder.option(isOverridingGlobalFlatnessCheckOption);
 		} else {
 			isOverridingGlobalFlatnessCheckOption = null;
 		}
@@ -111,7 +117,7 @@ public final class FlatnessCheckOptions
 			.build();
 
 		flatnessCheckOptions.put(FLATNESS_CHECK_IS_ENABLED_OPTION_NAME, isEnabledOption);
-		builder.option(isEnabledOption);
+		groupBuilder.option(isEnabledOption);
 
 		var allowNonSolidBlocksOption = Option.<Boolean>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.allow_non_solid_blocks_in_flatness_check.title"))
@@ -133,7 +139,41 @@ public final class FlatnessCheckOptions
 				.coloured(true)).build();
 
 		flatnessCheckOptions.put(FLATNESS_CHECK_ALLOW_NON_SOLID_BLOCKS_OPTION_NAME, allowNonSolidBlocksOption);
-		builder.option(allowNonSolidBlocksOption);
+		groupBuilder.option(allowNonSolidBlocksOption);
+
+		var modeOption = Option.<FlatnessCheckData.FlatnessCheckMode>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.structure.flatness_check.mode.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.flatness_check.mode.description")))
+			.available(isEnabled)
+			.binding(
+				FlatnessCheckData.MODE_DEFAULT_VALUE,
+				flatnessCheckData::getMode,
+				flatnessCheckData::setMode
+			).controller(opt -> EnumControllerBuilder.create(opt)
+				.enumClass(FlatnessCheckData.FlatnessCheckMode.class)
+				.formatValue(flatnessCheckMode -> Component.translatable("gui.structurify.structures.structure.flatness_check.mode." + flatnessCheckMode.name().toLowerCase()))).build();
+
+		flatnessCheckOptions.put(FLATNESS_CHECK_MODE_OPTION_NAME, modeOption);
+		groupBuilder.option(modeOption);
+
+		var maxHeightDifferenceOption = Option.<Integer>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.structure.flatness_check.max_height_difference.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.flatness_check.max_height_difference.description")))
+			.available(isEnabled)
+			.binding(
+				FlatnessCheckData.MAX_HEIGHT_DIFFERENCE_DEFAULT_VALUE,
+				flatnessCheckData::getMaxHeightDifference,
+				flatnessCheckData::setMaxHeightDifference
+			)
+			.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(FlatnessCheckData.MIN_HEIGHT_DIFFERENCE, FlatnessCheckData.MAX_HEIGHT_DIFFERENCE).step(1)).build();
+
+		flatnessCheckOptions.put(FLATNESS_CHECK_MAX_HEIGHT_DIFFERENCE, maxHeightDifferenceOption);
+		groupBuilder.option(maxHeightDifferenceOption);
+
+		modeOption.addListener((opt, flatnessCheckMode) -> {
+			boolean isMaxHeightDifferenceAvailable = flatnessCheckMode == FlatnessCheckData.FlatnessCheckMode.MANUAL;
+			maxHeightDifferenceOption.setAvailable(isMaxHeightDifferenceAvailable);
+		});
 
 		if (isOverridingGlobalFlatnessCheckOption != null) {
 			isOverridingGlobalFlatnessCheckOption.addListener((opt, currentOverrideGlobalFlatnessCheck) -> {
@@ -154,6 +194,11 @@ public final class FlatnessCheckOptions
 			}
 
 			allowNonSolidBlocksOption.setAvailable(currentIsEnabled);
+			modeOption.setAvailable(currentIsEnabled);
+
+			if(modeOption.pendingValue() == FlatnessCheckData.FlatnessCheckMode.MANUAL) {
+				maxHeightDifferenceOption.setAvailable(currentIsEnabled);
+			}
 		});
 
 		return flatnessCheckOptions;

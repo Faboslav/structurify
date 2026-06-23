@@ -1,3 +1,14 @@
+## 2.0.27
+
+- Added flatness check mode
+- Added max height difference for manual flatness check mode
+
+## 2.0.26
+
+- Fixed biome loading
+- Fixed crash related to loading of modded jigsaw structures
+- Fixed flatness check not working correctly for very small structures
+
 ## 2.0.25
 
 - Fixed biome loading
