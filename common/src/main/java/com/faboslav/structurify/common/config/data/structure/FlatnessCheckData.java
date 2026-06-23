@@ -26,7 +26,9 @@ public final class FlatnessCheckData
 		return
 			this.overrideGlobalFlatnessCheck == this.defaultOverrideGlobalFlatnessCheck
 			&& this.isEnabled == this.defaultIsEnabled
-			&& this.allowNonSolidBlocks == ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE;
+			&& this.allowNonSolidBlocks == ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE
+			&& this.mode == MODE_DEFAULT_VALUE
+			&& this.maxHeightDifference == MAX_HEIGHT_DIFFERENCE_DEFAULT_VALUE;
 	}
 
 	public boolean isOverridingGlobalFlatnessCheck() {
