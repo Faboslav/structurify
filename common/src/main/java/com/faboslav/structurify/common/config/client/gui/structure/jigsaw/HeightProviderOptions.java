@@ -6,26 +6,18 @@ import com.faboslav.structurify.common.config.client.api.controller.builder.Dual
 import com.faboslav.structurify.common.config.client.api.option.HolderOption;
 import com.faboslav.structurify.common.config.client.api.option.OptionPair;
 import com.faboslav.structurify.common.config.client.gui.StructureConfigScreen;
-import com.faboslav.structurify.common.config.client.gui.StructureTemplatePoolsConfigScreen;
-import com.faboslav.structurify.common.config.data.StructureData;
-import com.faboslav.structurify.common.config.data.structure.DistanceFromWorldCenterCheckData;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import com.faboslav.structurify.common.config.data.structure.jigsaw.HeightProviderData;
 import com.faboslav.structurify.common.config.data.structure.jigsaw.VerticalAnchorData;
 import com.faboslav.structurify.common.util.LanguageUtil;
+import com.faboslav.structurify.common.versions.VersionedGui;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
-import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.gui.YACLScreen;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class HeightProviderOptions
 {
@@ -115,44 +107,9 @@ public class HeightProviderOptions
 			heightProviderData.setType(type);
 			YACLScreen structureScreen = StructureConfigScreen.create(Structurify.getConfig(), structureId, configScreen.previousScreen);
 
-			Minecraft.getInstance().setScreen(structureScreen);
+			VersionedGui.getGui().setScreen(structureScreen);
 			configScreen.loadScreenState(structureScreen);
 		});
-
-		/*
-		var minStructureDistanceFromWorldOption = Option.<Integer>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.min_distance_from_world_center.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.min_distance_from_world_center.description")))
-			.available(true)
-			.binding(
-				DistanceFromWorldCenterCheckData.MIN_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE,
-				heightProviderData.getMinInclusive().getType()
-				distanceFromWorldCenterData::setMinDistanceFromWorldCenter
-			)
-			.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(0, 100000)).build();
-
-		var maxStructureDistanceFromWorldOption = Option.<Integer>createBuilder()
-			.name(Component.translatable("gui.structurify.structures.structure.max_distance_from_world_center.title"))
-			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.max_distance_from_world_center.description")))
-			.available(isGlobal || distanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter() || (!isEnabledGlobally && !isEnabledForNamespace))
-			.binding(
-				DistanceFromWorldCenterCheckData.MAX_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE,
-				distanceFromWorldCenterData::getMaxDistanceFromWorldCenter,
-				distanceFromWorldCenterData::setMaxDistanceFromWorldCenter
-			)
-			.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(0, 100000)).build();
-
-		var distanceFromWorldCenterPair = new OptionPair<>(minStructureDistanceFromWorldOption, maxStructureDistanceFromWorldOption);
-
-		var distanceFromWorldCenterOption =
-			HolderOption.<Option<Integer>, Option<Integer>>createBuilder()
-				.optionPair(distanceFromWorldCenterPair)
-				.controller(opt -> DualControllerBuilder.create(distanceFromWorldCenterPair))
-				.build();
-
-		distanceFromWorldCenterOptions.put(DISTANCE_FROM_WORLD_CENTER_OPTION_NAME, distanceFromWorldCenterOption);
-
-		builder.option(distanceFromWorldCenterOption);*/
 
 		return heightProviderOptions;
 	}

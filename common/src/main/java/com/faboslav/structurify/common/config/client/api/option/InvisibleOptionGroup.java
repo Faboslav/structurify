@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.config.client.api.option;
 
-
 import com.google.common.collect.ImmutableList;
 import dev.isxander.yacl3.api.ListOption;
 import dev.isxander.yacl3.api.Option;
@@ -80,7 +79,6 @@ public final class InvisibleOptionGroup implements OptionGroup
 			this.options = new ArrayList();
 			this.collapsed = false;
 		}
-
 
 		@Override
 		public OptionGroup.Builder name(@NotNull Component component) {

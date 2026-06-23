@@ -8,6 +8,7 @@ import com.faboslav.structurify.common.mixin.yacl.CategoryTabAccessor;
 *///?}
 import com.faboslav.structurify.common.mixin.yacl.GroupSeparatorEntryAccessor;
 import com.faboslav.structurify.common.util.YACLUtil;
+import com.faboslav.structurify.common.versions.VersionedGui;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
@@ -102,7 +103,7 @@ public class StructurifyConfigScreen
 
 	public void switchScreen(YACLScreen from, YACLScreen to) {
 		this.previousScreen = from;
-		Minecraft.getInstance().setScreen(to);
+		VersionedGui.getGui().setScreen(to);
 		this.currentScreen = to;
 	}
 }

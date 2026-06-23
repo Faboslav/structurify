@@ -41,7 +41,6 @@ public final class StructureDataSerializer
 			blacklistedBiomes.removeAll(structureJson.getAsJsonArray(BIOMES_PROPERTY).asList().stream().map(JsonElement::getAsString).collect(Collectors.toCollection(ArrayList::new)));
 			blacklistedBiomes.stream().distinct().forEach(biomes::remove);
 		} else if (structureJson.has(WHITELISTED_BIOMES_PROPERTY) || structureJson.has(BLACKLISTED_BIOMES_PROPERTY)) {
-			Structurify.getLogger().info("LOADING");
 			if(structureJson.has(WHITELISTED_BIOMES_PROPERTY)) {
 				var whitelistedBiomes = structureJson.getAsJsonArray(WHITELISTED_BIOMES_PROPERTY);
 				for (JsonElement whitelistedBiome : whitelistedBiomes) {

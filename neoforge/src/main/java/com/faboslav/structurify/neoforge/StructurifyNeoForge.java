@@ -34,7 +34,11 @@ public final class StructurifyNeoForge
 		}
 
 		eventBus.addListener(StructurifyNeoForge::registerCommand);
-		eventBus.addListener(EventPriority.LOWEST, StructurifyNeoForge::onResourceManagerReload);
+		//? if >= 26.2 {
+		eventBus.addListener(EventPriority.LOWEST, StructurifyNeoForge::onServerDataLoad);
+		//?} else {
+		/*eventBus.addListener(EventPriority.LOWEST, StructurifyNeoForge::onResourceManagerReload);
+		*///?}
 		eventBus.addListener(EventPriority.LOWEST, StructurifyNeoForge::onServerAboutToStart);
 	}
 
@@ -42,7 +46,13 @@ public final class StructurifyNeoForge
 		StructurifyCommand.createCommand(event.getDispatcher(), event.getBuildContext());
 	}
 
-	private static void onResourceManagerReload(TagsUpdatedEvent event) {
+	//? if >= 26.2 {
+	private static void onServerDataLoad(TagsUpdatedEvent.ServerDataLoad event) {
+		StructurifyRegistryManagerProvider.setRegistryManager(event.getRegistries());
+		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
+	}
+	//?} else {
+	/*private static void onResourceManagerReload(TagsUpdatedEvent event) {
 		if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED) {
 			return;
 		}
@@ -50,12 +60,13 @@ public final class StructurifyNeoForge
 		//? if >=1.21.3 {
 		var registryAccess = event.getLookupProvider();
 		//?} else {
-		/*var registryAccess = event.getRegistryAccess();
-		 *///?}
+		/^var registryAccess = event.getRegistryAccess();
+		 ^///?}
 
 		StructurifyRegistryManagerProvider.setRegistryManager(registryAccess);
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 	}
+	*///?}
 
 	private static void onServerAboutToStart(ServerAboutToStartEvent event) {
 		StructurifyRegistryManagerProvider.setRegistryManager(event.getServer().registryAccess());

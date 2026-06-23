@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.config.data;
 
-import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.*;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import com.faboslav.structurify.common.config.data.structure.jigsaw.HeightProviderData;

@@ -12,20 +12,30 @@ import com.faboslav.structurify.common.world.level.structure.checks.debug.Struct
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckSample;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+
+//? if >= 1.21.11 {
+import net.minecraft.client.renderer.SubmitNodeCollector;
+//?} else {
+/*import net.minecraft.client.renderer.MultiBufferSource;
+ *///?}
 
 public final class StructurifyDebugRenderer
 {
 	public void render(
 		Minecraft minecraft,
 		PoseStack poseStack,
-		@Nullable MultiBufferSource bufferSource
+		Vec3 cameraPosition,
+		//? if >= 1.21.11 {
+		@Nullable SubmitNodeCollector submitNodeCollector
+		//?} else {
+		/*@Nullable MultiBufferSource bufferSource
+		 *///?}
 	) {
 		DebugData debugData = Structurify.getConfig().getDebugData();
 
@@ -33,67 +43,118 @@ public final class StructurifyDebugRenderer
 			return;
 		}
 
-		DebugData.DebugMode debugMode = debugData.getDebugMode();
-
-		if (bufferSource == null) {
+		//? if >= 1.21.11 {
+		if (submitNodeCollector == null) {
+			return;
+		}
+		//?} else {
+		/*if (bufferSource == null) {
 			bufferSource = minecraft.renderBuffers().bufferSource();
 		}
+		*///?}
+
+		DebugData.DebugMode debugMode = debugData.getDebugMode();
 
 		var singlePlayerServer = minecraft.getSingleplayerServer();
 		int chunkRadius = Math.max(singlePlayerServer == null ? 6 : singlePlayerServer.getPlayerList().getViewDistance(), 6);
 
-		final Camera camera = minecraft.gameRenderer.getMainCamera();
-		//? if >= 1.21.11 {
-		final var cameraPosition = camera.position();
-		//?} else {
-		/*final var cameraPosition = camera.getPosition();
-		*///?}
 		final BlockPos cameraBlockPosition = BlockPos.containing(cameraPosition);
 		final double camX = cameraPosition.x;
 		final double camY = cameraPosition.y;
 		final double camZ = cameraPosition.z;
 
 		if (debugMode == DebugData.DebugMode.FLATNESS) {
-			var structureFlatnessCheckOverviews = Structurify.getConfig().getDebugData().getStructureFlatnessCheckOverviews();
+			var structureFlatnessCheckOverviews = debugData.getStructureFlatnessCheckOverviews();
+
 			synchronized (structureFlatnessCheckOverviews) {
 				for (StructureFlatnessCheckOverview structureFlatnessCheckOverview : structureFlatnessCheckOverviews.values().stream().filter(o -> isWithinChunkRadius(cameraBlockPosition, o.structureBoundingBox().getCenter(), chunkRadius)).toList()) {
-					FlatnessCheckDebugRenderer.renderStructureFlatnessCheckOverview(structureFlatnessCheckOverview, minecraft, poseStack, bufferSource, camX, camY, camZ);
+					FlatnessCheckDebugRenderer.renderStructureFlatnessCheckOverview(
+						structureFlatnessCheckOverview,
+						minecraft,
+						poseStack,
+						//? if >= 1.21.11 {
+						submitNodeCollector,
+						//?} else {
+						/*bufferSource,
+						 *///?}
+						camX,
+						camY,
+						camZ
+					);
 				}
 			}
 
-			var structureFlatnessCheckSamples = Structurify.getConfig().getDebugData().getStructureFlatnessCheckSamples();
+			var structureFlatnessCheckSamples = debugData.getStructureFlatnessCheckSamples();
+
 			synchronized (structureFlatnessCheckSamples) {
 				for (StructureFlatnessCheckSample structureFlatnessCheckSample : structureFlatnessCheckSamples.values().stream().flatMap(Collection::stream).filter(o -> isWithinChunkRadius(cameraBlockPosition, o.x(), o.freeY(), o.z(), chunkRadius)).toList()) {
-					FlatnessCheckDebugRenderer.renderStructureFlatnessCheckSample(structureFlatnessCheckSample, poseStack, bufferSource, camX, camY, camZ);
+					FlatnessCheckDebugRenderer.renderStructureFlatnessCheckSample(
+						structureFlatnessCheckSample,
+						poseStack,
+						//? if >= 1.21.11 {
+						submitNodeCollector,
+						//?} else {
+						/*bufferSource,
+						 *///?}
+						camX,
+						camY,
+						camZ
+					);
 				}
 			}
 		} else if (debugMode == DebugData.DebugMode.BIOME) {
-			var structureBiomeCheckOverviews = Structurify.getConfig().getDebugData().getStructureBiomeCheckOverviews();
+			var structureBiomeCheckOverviews = debugData.getStructureBiomeCheckOverviews();
+
 			synchronized (structureBiomeCheckOverviews) {
 				for (StructureBiomeCheckOverview structureBiomeCheckOverview : structureBiomeCheckOverviews.values().stream().filter(o -> isWithinChunkRadius(cameraBlockPosition, o.structureBoundingBox().getCenter(), chunkRadius)).toList()) {
-					BiomeCheckDebugRenderer.renderStructureBiomeCheckOverview(structureBiomeCheckOverview, minecraft, poseStack, bufferSource, camX, camY, camZ);
+					BiomeCheckDebugRenderer.renderStructureBiomeCheckOverview(
+						structureBiomeCheckOverview,
+						minecraft,
+						poseStack,
+						//? if >= 1.21.11 {
+						submitNodeCollector,
+						//?} else {
+						/*bufferSource,
+						 *///?}
+						camX,
+						camY,
+						camZ
+					);
 				}
 			}
 
-			var structureBiomeCheckSamples = Structurify.getConfig().getDebugData().getStructureBiomeCheckSamples();
+			var structureBiomeCheckSamples = debugData.getStructureBiomeCheckSamples();
+
 			synchronized (structureBiomeCheckSamples) {
 				for (StructureBiomeCheckSample structureBiomeCheckSample : structureBiomeCheckSamples.values().stream().flatMap(Collection::stream).filter(o -> isWithinChunkRadius(cameraBlockPosition, o.x(), o.y(), o.z(), chunkRadius)).toList()) {
-					BiomeCheckDebugRenderer.renderStructureBiomeCheckSample(structureBiomeCheckSample, poseStack, bufferSource, camX, camY, camZ);
+					BiomeCheckDebugRenderer.renderStructureBiomeCheckSample(
+						structureBiomeCheckSample,
+						poseStack,
+						//? if >= 1.21.11 {
+						submitNodeCollector,
+						//?} else {
+						/*bufferSource,
+						 *///?}
+						camX,
+						camY,
+						camZ
+					);
 				}
 			}
 		} else if (debugMode == DebugData.DebugMode.OVERLAP) {
 			var level = minecraft.level;
-			if (level != null && minecraft.getSingleplayerServer() != null) {
-				var serverLevel = minecraft.getSingleplayerServer().getLevel(level.dimension());
+
+			if (level != null && singlePlayerServer != null) {
+				var serverLevel = singlePlayerServer.getLevel(level.dimension());
+
 				if (serverLevel != null) {
-					var chunkGenerator = (StructurifyChunkGenerator) serverLevel.getChunkSource().getGenerator();
+					var chunkGenerator = (StructurifyChunkGenerator)serverLevel.getChunkSource().getGenerator();
 					var structureSectionClaims = chunkGenerator.structurify$getStructureSectionClaims();
 
 					synchronized (structureSectionClaims) {
 						for (var entry : structureSectionClaims.entrySet()) {
 							var sectionKey = entry.getKey();
 							var structureSectionClaim = entry.getValue();
-
 							var sectionPos = SectionPos.of(sectionKey);
 							var pos = sectionPos.origin();
 
@@ -102,7 +163,11 @@ public final class StructurifyDebugRenderer
 									structureSectionClaim,
 									minecraft,
 									poseStack,
-									bufferSource,
+									//? if >= 1.21.11 {
+									submitNodeCollector,
+									//?} else {
+									/*bufferSource,
+									 *///?}
 									pos,
 									camX,
 									camY,
@@ -123,7 +188,6 @@ public final class StructurifyDebugRenderer
 	) {
 		int camChunkX = SectionPos.blockToSectionCoord(cameraBlockPos.getX());
 		int camChunkZ = SectionPos.blockToSectionCoord(cameraBlockPos.getZ());
-
 		int tgtChunkX = SectionPos.blockToSectionCoord(targetBlockPos.getX());
 		int tgtChunkZ = SectionPos.blockToSectionCoord(targetBlockPos.getZ());
 

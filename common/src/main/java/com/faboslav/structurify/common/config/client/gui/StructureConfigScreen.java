@@ -4,27 +4,21 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
-import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
 import com.faboslav.structurify.common.config.client.gui.structure.*;
 import com.faboslav.structurify.common.config.data.StructureData;
-import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import com.faboslav.structurify.common.util.YACLUtil;
+import com.faboslav.structurify.common.versions.VersionedGui;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import dev.isxander.yacl3.gui.YACLScreen;
-import dev.isxander.yacl3.gui.controllers.ActionController;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public final class StructureConfigScreen
 {
@@ -110,7 +104,7 @@ public final class StructureConfigScreen
 						YACLScreen structureTemplatePoolsScreen = StructureTemplatePoolsConfigScreen.create(Structurify.getConfig(), structureId, screen);
 
 						configScreen.saveScreenState(screen);
-						Minecraft.getInstance().setScreen(structureTemplatePoolsScreen);
+						VersionedGui.getGui().setScreen(structureTemplatePoolsScreen);
 						configScreen.loadScreenState(structureTemplatePoolsScreen);
 					})
 					.build();

@@ -7,6 +7,8 @@ import com.faboslav.structurify.common.mixin.level.VeryBiasedToBottomHeightAcces
 import net.minecraft.world.level.levelgen.heightproviders.*;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public final class HeightProviderData
 {
 	private static final VerticalAnchorData VALUE_DEFAULT_VALUE = new VerticalAnchorData(VerticalAnchorData.Type.ABSOLUTE, 0);
@@ -31,9 +33,9 @@ public final class HeightProviderData
 		Integer inner
 	) {
 		this.type = type;
-		this.minInclusive = minInclusive == null ? MIN_INCLUSIVE_DEFAULT_VALUE : minInclusive;
-		this.maxInclusive = maxInclusive == null ? MAX_INCLUSIVE_DEFAULT_VALUE : maxInclusive;
-		this.value = value == null ? VALUE_DEFAULT_VALUE : value;
+		this.minInclusive = minInclusive == null ? MIN_INCLUSIVE_DEFAULT_VALUE.clone() : minInclusive;
+		this.maxInclusive = maxInclusive == null ? MAX_INCLUSIVE_DEFAULT_VALUE.clone() : maxInclusive;
+		this.value = value == null ? VALUE_DEFAULT_VALUE.clone() : value;
 		this.plateau = plateau == null ? PLATEAU_DEFAULT_VALUE : plateau;
 		this.inner = inner == null ? INNER_DEFAULT_VALUE : inner;
 	}
@@ -136,7 +138,7 @@ public final class HeightProviderData
 	}
 
 	public void setMinInclusive(VerticalAnchorData minInclusive) {
-		this.minInclusive = minInclusive == null ? MIN_INCLUSIVE_DEFAULT_VALUE : minInclusive;
+		this.minInclusive = minInclusive == null ? MIN_INCLUSIVE_DEFAULT_VALUE.clone() : minInclusive;
 	}
 
 	public VerticalAnchorData getMaxInclusive() {
@@ -144,7 +146,7 @@ public final class HeightProviderData
 	}
 
 	public void setMaxInclusive(VerticalAnchorData maxInclusive) {
-		this.maxInclusive = maxInclusive == null ? MAX_INCLUSIVE_DEFAULT_VALUE : maxInclusive;
+		this.maxInclusive = maxInclusive == null ? MAX_INCLUSIVE_DEFAULT_VALUE.clone() : maxInclusive;
 	}
 
 	public VerticalAnchorData getValue() {
@@ -152,7 +154,7 @@ public final class HeightProviderData
 	}
 
 	public void setValue(VerticalAnchorData value) {
-		this.value = value == null ? VALUE_DEFAULT_VALUE : value;
+		this.value = value == null ? VALUE_DEFAULT_VALUE.clone() : value;
 	}
 
 	public Integer getPlateau() {
@@ -205,14 +207,14 @@ public final class HeightProviderData
 		return this.plateau == heightProviderData.plateau
 			   && this.inner == heightProviderData.inner
 			   && this.type == heightProviderData.type
-			   && java.util.Objects.equals(this.minInclusive, heightProviderData.minInclusive)
-			   && java.util.Objects.equals(this.maxInclusive, heightProviderData.maxInclusive)
-			   && java.util.Objects.equals(this.value, heightProviderData.value);
+			   && Objects.equals(this.minInclusive, heightProviderData.minInclusive)
+			   && Objects.equals(this.maxInclusive, heightProviderData.maxInclusive)
+			   && Objects.equals(this.value, heightProviderData.value);
 	}
 
 	@Override
 	public int hashCode() {
-		return java.util.Objects.hash(
+		return Objects.hash(
 			this.type,
 			this.minInclusive,
 			this.maxInclusive,

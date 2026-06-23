@@ -5,20 +5,21 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.MultiBufferSource;
+//? if >= 1.21.11 {
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.network.chat.Component;
+//?} else {
+/*import net.minecraft.client.renderer.MultiBufferSource;
+ *///?}
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 
 //? if >= 1.21.11 {
-import net.minecraft.util.ARGB;
-//?}
-
-//? if >= 1.21.3 {
-import net.minecraft.client.renderer.ShapeRenderer;
-import net.minecraft.world.phys.shapes.Shapes;
-//?} else {
+//?} else if >= 1.21.3 {
+/*import net.minecraft.client.renderer.ShapeRenderer;
+ *///?} else {
 /*import net.minecraft.client.renderer.LevelRenderer;
-*///?}
+ *///?}
 
 public final class RenderUtil
 {
@@ -36,12 +37,7 @@ public final class RenderUtil
 			boundingBox.maxX() + 1, boundingBox.maxY() + 1, boundingBox.maxZ() + 1
 		).move(-cameraX, -cameraY, -cameraZ);
 
-		renderLineBox(
-			poseStack,
-			vertexConsumer,
-			aabb,
-			1.0f, 1.0f, 1.0f, alpha
-		);
+		renderLineBox(poseStack, vertexConsumer, aabb, 1.0f, 1.0f, 1.0f, alpha);
 	}
 
 	public static void renderLineBox(
@@ -54,37 +50,81 @@ public final class RenderUtil
 		float alpha
 	) {
 		//? if >= 1.21.11 {
-		var shape = Shapes.create(box);
-
-		int a = (int)(alpha * 255.0f) & 0xFF;
-		int r = (int)(red   * 255.0f) & 0xFF;
-		int g = (int)(green * 255.0f) & 0xFF;
-		int b = (int)(blue  * 255.0f) & 0xFF;
-
-		int color = ARGB.color(a, r, g, b);
-
-		ShapeRenderer.renderShape(poseStack, buffer, shape, 0.0, 0.0, 0.0, color, 1.0f);
+		line(poseStack, buffer, box.minX, box.minY, box.minZ, box.maxX, box.minY, box.minZ, red, green, blue, alpha, 1.0f, 0.0f, 0.0f);
+		line(poseStack, buffer, box.minX, box.minY, box.minZ, box.minX, box.maxY, box.minZ, red, green, blue, alpha, 0.0f, 1.0f, 0.0f);
+		line(poseStack, buffer, box.minX, box.minY, box.minZ, box.minX, box.minY, box.maxZ, red, green, blue, alpha, 0.0f, 0.0f, 1.0f);
+		line(poseStack, buffer, box.maxX, box.minY, box.minZ, box.maxX, box.maxY, box.minZ, red, green, blue, alpha, 0.0f, 1.0f, 0.0f);
+		line(poseStack, buffer, box.maxX, box.minY, box.minZ, box.maxX, box.minY, box.maxZ, red, green, blue, alpha, 0.0f, 0.0f, 1.0f);
+		line(poseStack, buffer, box.minX, box.maxY, box.minZ, box.maxX, box.maxY, box.minZ, red, green, blue, alpha, 1.0f, 0.0f, 0.0f);
+		line(poseStack, buffer, box.minX, box.maxY, box.minZ, box.minX, box.maxY, box.maxZ, red, green, blue, alpha, 0.0f, 0.0f, 1.0f);
+		line(poseStack, buffer, box.minX, box.minY, box.maxZ, box.maxX, box.minY, box.maxZ, red, green, blue, alpha, 1.0f, 0.0f, 0.0f);
+		line(poseStack, buffer, box.minX, box.minY, box.maxZ, box.minX, box.maxY, box.maxZ, red, green, blue, alpha, 0.0f, 1.0f, 0.0f);
+		line(poseStack, buffer, box.maxX, box.maxY, box.minZ, box.maxX, box.maxY, box.maxZ, red, green, blue, alpha, 0.0f, 0.0f, 1.0f);
+		line(poseStack, buffer, box.maxX, box.minY, box.maxZ, box.maxX, box.maxY, box.maxZ, red, green, blue, alpha, 0.0f, 1.0f, 0.0f);
+		line(poseStack, buffer, box.minX, box.maxY, box.maxZ, box.maxX, box.maxY, box.maxZ, red, green, blue, alpha, 1.0f, 0.0f, 0.0f);
 		//?} else if >= 1.21.9 {
 		/*ShapeRenderer.renderLineBox(poseStack.last(), buffer, box, red, green, blue, alpha);
-		*///?} else if >= 1.21.3 {
+		 *///?} else if >= 1.21.3 {
 		/*ShapeRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
 		 *///?} else {
 		/*LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
 		 *///?}
 	}
 
+	//? if >= 1.21.11 {
+	private static void line(
+		PoseStack poseStack,
+		VertexConsumer buffer,
+		double x1,
+		double y1,
+		double z1,
+		double x2,
+		double y2,
+		double z2,
+		float red,
+		float green,
+		float blue,
+		float alpha,
+		float normalX,
+		float normalY,
+		float normalZ
+	) {
+		PoseStack.Pose pose = poseStack.last();
+		buffer.addVertex(pose, (float)x1, (float)y1, (float)z1).setColor(red, green, blue, alpha).setNormal(pose, normalX, normalY, normalZ).setLight(0xF000F0);
+		buffer.addVertex(pose, (float)x2, (float)y2, (float)z2).setColor(red, green, blue, alpha).setNormal(pose, normalX, normalY, normalZ).setLight(0xF000F0);
+	}
+	//?}
+
 	public static void renderLabel(
 		BoundingBox box,
 		String label,
 		Minecraft mc,
 		PoseStack poseStack,
-		MultiBufferSource buffers,
+		//? if >= 1.21.11 {
+		SubmitNodeCollector submitNodeCollector,
+		//?} else {
+		/*MultiBufferSource buffers,
+		 *///?}
 		double camX,
 		double camY,
 		double camZ
 	) {
-		renderLabel(box, label, mc, poseStack, buffers, camX, camY, camZ, false);
-		renderLabel(box, label, mc, poseStack, buffers, camX, camY, camZ, true);
+		renderLabel(box, label, mc, poseStack,
+			//? if >= 1.21.11 {
+			submitNodeCollector,
+			//?} else {
+			/*buffers,
+			 *///?}
+			camX, camY, camZ, false
+		);
+		renderLabel(box, label, mc, poseStack,
+			//? if >= 1.21.11 {
+			submitNodeCollector,
+			//?} else {
+			/*buffers,
+			 *///?}
+			camX, camY, camZ, true
+		);
 	}
 
 	private static void renderLabel(
@@ -92,7 +132,11 @@ public final class RenderUtil
 		String label,
 		Minecraft mc,
 		PoseStack poseStack,
-		MultiBufferSource buffers,
+		//? if >= 1.21.11 {
+		SubmitNodeCollector submitNodeCollector,
+		//?} else {
+		/*MultiBufferSource buffers,
+		 *///?}
 		double camX,
 		double camY,
 		double camZ,
@@ -100,19 +144,16 @@ public final class RenderUtil
 	) {
 		double centerX = (box.minX() + box.maxX() + 1) * 0.5;
 		double centerZ = (box.minZ() + box.maxZ() + 1) * 0.5;
-
 		double topY = box.maxY() + 1.0;
 		double labelY = topY + 0.25;
 
 		poseStack.pushPose();
 		poseStack.translate(centerX - camX, labelY - camY, centerZ - camZ);
-
 		poseStack.mulPose(Axis.YP.rotationDegrees(180f - (inverse ? 180f : 0f)));
 
 		float spanX = box.getXSpan();
 		float spanZ = box.getZSpan();
-		float diagXZ = (float) Math.sqrt(spanX * spanX + spanZ * spanZ);
-
+		float diagXZ = (float)Math.sqrt(spanX * spanX + spanZ * spanZ);
 		float base = 0.03f;
 		float dynamic = Math.max(1.0f, diagXZ / 24.0f);
 		float scale = Math.max(base, base * dynamic);
@@ -122,7 +163,6 @@ public final class RenderUtil
 		Font font = mc.font;
 		String[] lines = label.split("\n");
 		int lineHeight = font.lineHeight;
-
 		int totalPixelHeight = lines.length * lineHeight;
 		float yStart = -totalPixelHeight;
 
@@ -130,7 +170,21 @@ public final class RenderUtil
 			String line = lines[i];
 			int width = font.width(line);
 
-			font.drawInBatch(
+			//? if >= 1.21.11 {
+			submitNodeCollector.submitText(
+				poseStack,
+				-width / 2f,
+				yStart + i * lineHeight,
+				Component.literal(line).getVisualOrderText(),
+				false,
+				Font.DisplayMode.NORMAL,
+				0xF000F0,
+				0xFFFFFFFF,
+				0,
+				0
+			);
+			//?} else {
+			/*font.drawInBatch(
 				line,
 				-width / 2f,
 				yStart + i * lineHeight,
@@ -142,6 +196,7 @@ public final class RenderUtil
 				0,
 				0xF000F0
 			);
+			*///?}
 		}
 
 		poseStack.popPose();

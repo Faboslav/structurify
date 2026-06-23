@@ -5,7 +5,6 @@ import com.faboslav.structurify.common.config.client.api.controller.BiomeStringC
 import com.faboslav.structurify.common.platform.ModIconInfo;
 import com.faboslav.structurify.common.platform.PlatformHooks;
 import com.faboslav.structurify.common.util.LanguageUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.dropdown.AbstractDropdownControllerElement;
@@ -22,6 +21,10 @@ import java.util.Optional;
 //? if >= 1.21.6 {
 import net.minecraft.client.renderer.RenderPipelines;
 //?}
+
+//? if < 1.21.5 {
+/*import com.mojang.blaze3d.systems.RenderSystem;
+*///?}
 
 //? if >= 1.21.3 {
 import net.minecraft.client.renderer.rendertype.RenderTypes;

@@ -30,8 +30,10 @@ public final class StructurifyForgeClient
 	}
 
 	private static void onRenderLevelStage(RenderLevelStageEvent event) {
-		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) return;
+		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+			return;
+		}
 
-		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), null);
+		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), event.getCamera().getPosition(), null);
 	}
 }

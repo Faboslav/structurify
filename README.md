@@ -8,7 +8,7 @@ Structurify is a configuration mod that makes configuring everything related to 
 	<img src="https://raw.githubusercontent.com/Faboslav/structurify/master/.github/assets/images/structurify_configuration.webp">
 </p>
 
-**Currently it is possible to:**
+**Currently, it is possible to:**
 
 * **Globally disable all structures:** Easily disable all structures across your world with a single setting, simplifying your world generation process.
 * **Disable individual structures:** Disable specific structures individually, giving you precise control over which ones generate in your world.

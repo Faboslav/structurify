@@ -140,6 +140,31 @@ dependencies {
 		}
 		for (mod in explorations) modImplementation(mod)
 
+		// Graveyard
+		val graveyard: List<Dependency> = fletchingTable.modrinthBundle("the-graveyard-forge", commonMod.mc, "forge") {
+			recursive = true
+			include("required", "optional", "embedded")
+		}
+		for (mod in graveyard) modImplementation(mod)
+
+		// Goblins Tyranny
+		val goblinsTyranny: List<Dependency> = fletchingTable.modrinthBundle("goblins-tyranny", commonMod.mc, "forge") {
+			recursive = true
+			include("required", "optional", "embedded")
+		}
+		for (mod in goblinsTyranny) modImplementation(mod)
+		// Dungeons Enhanced
+		val dungeonsEnhanced: List<Dependency> = fletchingTable.modrinthBundle("dungeons-enhanced", commonMod.mc, "forge") {
+			recursive = true
+			include("required", "optional", "embedded")
+		}
+		for (mod in dungeonsEnhanced) modImplementation(mod)
+
+		val legendaryMonsters: List<Dependency> = fletchingTable.modrinthBundle("legendary-monsters", commonMod.mc, "forge") {
+			recursive = true
+			include("required", "optional", "embedded")
+		}
+		for (mod in legendaryMonsters) modImplementation(mod)
 		//modImplementation(fletchingTable.modrinth("fungal-infectionspore", commonMod.mc, "forge"))
 		//modImplementation(fletchingTable.modrinth("dungeons-enhanced", commonMod.mc, "forge"))
 		//modImplementation(fletchingTable.modrinth("legendary-monsters", commonMod.mc, "forge"))

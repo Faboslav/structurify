@@ -14,6 +14,7 @@ import com.faboslav.structurify.common.util.LanguageUtil;
 import com.faboslav.structurify.common.util.StructurifyComparators;
 import com.faboslav.structurify.common.util.TextUtil;
 import com.faboslav.structurify.common.util.YACLUtil;
+import com.faboslav.structurify.common.versions.VersionedGui;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
@@ -21,7 +22,6 @@ import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
 import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
@@ -113,7 +113,7 @@ public final class StructureSetsConfigScreen
 					YACLScreen structureSetScreen = StructureSetConfigScreen.create(Structurify.getConfig(), id, screen);
 
 					configScreen.saveScreenState(screen);
-					Minecraft.getInstance().setScreen(structureSetScreen);
+					VersionedGui.getGui().setScreen(structureSetScreen);
 					configScreen.loadScreenState(structureSetScreen);
 				})
 				.buttonTooltip("gui.structurify.structures.structure_set.config_button.tooltip")

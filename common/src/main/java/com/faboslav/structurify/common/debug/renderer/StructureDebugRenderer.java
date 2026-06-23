@@ -4,17 +4,16 @@ import com.faboslav.structurify.common.util.RenderUtil;
 import com.faboslav.structurify.common.util.StructurePieceUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+//? if >= 1.21.11 {
+import net.minecraft.client.renderer.SubmitNodeCollector;
+//?} else {
+/*import net.minecraft.client.renderer.MultiBufferSource;
+ *///?}
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 
 import java.util.List;
-
-//? if >= 1.21.11 {
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-//?} else {
-/*import net.minecraft.client.renderer.rendertype.RenderTypes;
- *///?}
 
 public class StructureDebugRenderer
 {
@@ -23,7 +22,11 @@ public class StructureDebugRenderer
 		List<StructurePiece> structurePieces,
 		Minecraft minecraft,
 		PoseStack poseStack,
-		MultiBufferSource bufferSource,
+		//? if >= 1.21.11 {
+		SubmitNodeCollector submitNodeCollector,
+		//?} else {
+		/*MultiBufferSource bufferSource,
+		 *///?}
 		double camX,
 		double camY,
 		double camZ
@@ -35,22 +38,38 @@ public class StructureDebugRenderer
 				continue;
 			}
 
-			RenderUtil.renderBoundingBox(
+			//? if >= 1.21.11 {
+			submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, vertexConsumer) -> {
+				RenderUtil.renderBoundingBox(structurePieceBoundingBox, poseStack, vertexConsumer, camX, camY, camZ, 0.2f);
+			});
+			//?} else {
+			/*RenderUtil.renderBoundingBox(
 				structurePieceBoundingBox,
-				poseStack, bufferSource.getBuffer(
-					//? if >= 1.21.11 {
-					RenderTypes.lines()
-					//?} else {
-					/*RenderTypes.lines()
-			 		*///?}
-				),
+				poseStack,
+				bufferSource.getBuffer(RenderTypes.lines()),
 				camX,
 				camY,
 				camZ,
 				0.2f
 			);
+			*///?}
+
 			String pieceName = StructurePieceUtil.getStructurePieceName(structurePiece);
-			RenderUtil.renderLabel(structurePieceBoundingBox, pieceName, minecraft, poseStack, bufferSource, camX, camY, camZ);
+
+			RenderUtil.renderLabel(
+				structurePieceBoundingBox,
+				pieceName,
+				minecraft,
+				poseStack,
+				//? if >= 1.21.11 {
+				submitNodeCollector,
+				//?} else {
+				/*bufferSource,
+				 *///?}
+				camX,
+				camY,
+				camZ
+			);
 		}
 	}
 }
