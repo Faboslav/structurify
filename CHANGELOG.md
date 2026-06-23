@@ -1,3 +1,7 @@
+## 2.0.28
+
+- Fixed crash related to modded jigsaw structures data parsing
+
 ## 2.0.27
 
 - Added flatness check mode
