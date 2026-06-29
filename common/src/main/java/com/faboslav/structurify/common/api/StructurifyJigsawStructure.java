@@ -37,7 +37,12 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 				this.structurify$setMaxDepth(originalMaxDepth);
 			} else {
 				var size = structureData.getJigsawData().getSize();
-				this.structurify$setMaxDepth(Objects.requireNonNullElse(size, originalMaxDepth));
+
+				if(size == null) {
+					this.structurify$setMaxDepth(originalMaxDepth);
+				} else {
+					this.structurify$setMaxDepth(size);
+				}
 			}
 		}
 
@@ -144,6 +149,10 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 					));
 					//?} else {
 					/*this.structurify$setMaxDistanceFromCenter(horizontalMaxDistanceFromCenter);
+
+					if(!structureData.getJigsawData().isUsingMaxDistanceFromCenter()) {
+						Structurify.getLogger().info("Custom max distance on structure " + this.structurify$getStructureIdentifier());
+					}
 					*///?}
 				}
 			}

@@ -59,6 +59,14 @@ public abstract class StructureMixin implements StructurifyStructure
 
 	@Unique
 	@Nullable
+	protected GenerationStep.Decoration structurify$structureStep = null;
+
+	@Unique
+	@Nullable
+	protected TerrainAdjustment structurify$structureTerrainAdaptation = null;
+
+	@Unique
+	@Nullable
 	protected HolderSet<Biome> structurify$structureBlacklistedBiomes = null;
 
 
@@ -68,6 +76,8 @@ public abstract class StructureMixin implements StructurifyStructure
 		this.structurify$structureNamespaceData = null;
 		this.structurify$structureData = null;
 		this.structurify$structureBiomes = null;
+		this.structurify$structureStep = null;
+		this.structurify$structureTerrainAdaptation = null;
 		this.structurify$structureBlacklistedBiomes = null;
 	}
 
@@ -184,13 +194,17 @@ public abstract class StructureMixin implements StructurifyStructure
 	private GenerationStep.Decoration structurify$step(
 		Operation<GenerationStep.Decoration> original
 	) {
-		var structureData = this.structurify$getStructureData();
+		if(structurify$structureStep == null) {
+			var structureData = this.structurify$getStructureData();
 
-		if (structureData == null) {
-			return original.call();
+			if (structureData == null) {
+				structurify$structureStep = original.call();
+			} else {
+				structurify$structureStep = structureData.getStep();
+			}
 		}
 
-		return structureData.getStep();
+		return structurify$structureStep;
 	}
 
 	@WrapMethod(
@@ -199,13 +213,17 @@ public abstract class StructureMixin implements StructurifyStructure
 	private TerrainAdjustment structurify$terrainAdaptation(
 		Operation<TerrainAdjustment> original
 	) {
-		var structureData = this.structurify$getStructureData();
+		if (structurify$structureTerrainAdaptation == null) {
+			var structureData = this.structurify$getStructureData();
 
-		if (structureData == null) {
-			return original.call();
+			if (structureData == null) {
+				this.structurify$structureTerrainAdaptation = original.call();
+			} else {
+				this.structurify$structureTerrainAdaptation = structureData.getTerrainAdaptation();
+			}
 		}
 
-		return structureData.getTerrainAdaptation();
+		return this.structurify$structureTerrainAdaptation;
 	}
 
 	@WrapMethod(
