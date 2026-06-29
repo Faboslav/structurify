@@ -82,89 +82,27 @@ dependencies {
 	}
 
 	if(!IS_CI) {
-		// Better modlist
-		val betterModListDeps: List<Dependency> =
-			fletchingTable.modrinthBundle("better-modlist", commonMod.mc, "forge") {
+		val modrinthBundles = listOf(
+			"better-modlist",
+			"ct-overhaul-village",
+			"fantasy-structures-(by-berezka)",
+			"alexs-caves",
+			"aquamirae",
+			"fossils-and-archeology-revival",
+			"dungeon-now-loading",
+			"explorations",
+			"the-graveyard-forge",
+			"goblins-tyranny",
+			"dungeons-enhanced",
+			"legendary-monsters"
+		)
+
+		for (bundle in modrinthBundles) {
+			fletchingTable.modrinthBundle(bundle, commonMod.mc, "forge") {
 				recursive = true
 				include("required", "optional", "embedded")
-			}
-		for (mod in betterModListDeps) modImplementation(mod)
-
-		// ChoiceTheorem's Overhauled Village
-		val ctov: List<Dependency> = fletchingTable.modrinthBundle("ct-overhaul-village", commonMod.mc, "forge") {
-			recursive = true
-			include("required", "optional", "embedded")
+			}.forEach(::modImplementation)
 		}
-		for (mod in ctov) modImplementation(mod)
-
-		// Fantasy structures
-		val fantasyStructures: List<Dependency> =
-			fletchingTable.modrinthBundle("fantasy-structures-(by-berezka)", commonMod.mc, "forge") {
-				recursive = true
-				include("required", "optional", "embedded")
-			}
-		for (mod in fantasyStructures) modImplementation(mod)
-
-		// Alex Caves
-		val alexCavesWithDeps: List<Dependency> = fletchingTable.modrinthBundle("alexs-caves", commonMod.mc, "forge") {
-			recursive = true
-			include("required", "optional", "embedded")
-		}
-		for (mod in alexCavesWithDeps) modImplementation(mod)
-
-		// Aquamira
-		val aquamiraeWithDeps: List<Dependency> = fletchingTable.modrinthBundle("aquamirae", commonMod.mc, "forge") {
-			recursive = true
-			include("required", "optional", "embedded")
-		}
-		for (mod in aquamiraeWithDeps) modImplementation(mod)
-
-		val fossilsAndArcheologyRevivalWithDeps: List<Dependency> =
-			fletchingTable.modrinthBundle("fossils-and-archeology-revival", commonMod.mc, "forge") {
-				recursive = true
-				include("required", "optional", "embedded")
-			}
-		for (mod in fossilsAndArcheologyRevivalWithDeps) modImplementation(mod)
-
-		val dungeonNowLoadingWithDeps: List<Dependency> =
-			fletchingTable.modrinthBundle("dungeon-now-loading", commonMod.mc, "forge") {
-				recursive = true
-				include("required", "optional", "embedded")
-			}
-		for (mod in dungeonNowLoadingWithDeps) modImplementation(mod)
-
-		// Explorations
-		val explorations: List<Dependency> = fletchingTable.modrinthBundle("explorations", commonMod.mc, "forge") {
-			recursive = true
-			include("required", "optional", "embedded")
-		}
-		for (mod in explorations) modImplementation(mod)
-
-		// Graveyard
-		val graveyard: List<Dependency> = fletchingTable.modrinthBundle("the-graveyard-forge", commonMod.mc, "forge") {
-			recursive = true
-			include("required", "optional", "embedded")
-		}
-		for (mod in graveyard) modImplementation(mod)
-
-		// Goblins Tyranny
-		val goblinsTyranny: List<Dependency> = fletchingTable.modrinthBundle("goblins-tyranny", commonMod.mc, "forge") {
-			recursive = true
-			include("required", "optional", "embedded")
-		}
-		for (mod in goblinsTyranny) modImplementation(mod)
-		// Dungeons Enhanced
-		val dungeonsEnhanced: List<Dependency> = fletchingTable.modrinthBundle("dungeons-enhanced", commonMod.mc, "forge") {
-			recursive = true
-			include("required", "optional", "embedded")
-		}
-		for (mod in dungeonsEnhanced) modImplementation(mod)
-
-		val legendaryMonsters: List<Dependency> = fletchingTable.modrinthBundle("legendary-monsters", commonMod.mc, "forge") {
-			recursive = true
-			include("required", "optional", "embedded")
-		}
-		for (mod in legendaryMonsters) modImplementation(mod)
 		//modImplementation(fletchingTable.modrinth("fungal-infectionspore", commonMod.mc, "forge"))
 		//modImplementation(fletchingTable.modrinth("dungeons-enhanced", commonMod.mc, "forge"))
 		//modImplementation(fletchingTable.modrinth("legendary-monsters", commonMod.mc, "forge"))

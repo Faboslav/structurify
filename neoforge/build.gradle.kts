@@ -61,12 +61,17 @@ dependencies {
 
 	if(!IS_CI) {
 		if (commonMod.mc == "1.21.1") {
-			val noMansLand: List<Dependency> =
-				fletchingTable.modrinthBundle("no-mans-land", commonMod.mc, "neoforge") {
+			val modrinthBundles = listOf(
+				"biolith",
+				"no-mans-land"
+			)
+
+			for (bundle in modrinthBundles) {
+				fletchingTable.modrinthBundle(bundle, commonMod.mc, "neoforge") {
 					recursive = true
 					include("required", "optional", "embedded")
-				}
-			for (mod in noMansLand) implementation(mod)
+				}.forEach(::implementation)
+			}
 		}
 	}
 }
