@@ -44,16 +44,10 @@ public class StructureData implements StructureLikeData
 	}
 
 	public boolean isUsingDefaultValues() {
-		var biomes = new ArrayList<>(this.biomes);
-		var defaultBiomes = new ArrayList<>(this.defaultBiomes);
-
-		Collections.sort(biomes);
-		Collections.sort(defaultBiomes);
-
 		return this.isUsingDefaultIsDisabled()
-			   && isUsingDefaultStep()
-			   && isUsingDefaultTerrainAdaptation()
-			   && biomes.equals(defaultBiomes)
+			   && this.isUsingDefaultStep()
+			   && this.isUsingDefaultTerrainAdaptation()
+			   && this.isUsingDefaultBiomes()
 			   && (!isJigsawStructure() || (isJigsawStructure() && this.getJigsawData().isUsingDefaultValues()))
 			   && this.getDistanceFromWorldCenterCheckData().isUsingDefaultValues()
 			   && this.getOverlapCheckData().isUsingDefaultValues()
@@ -63,6 +57,16 @@ public class StructureData implements StructureLikeData
 
 	public boolean isUsingDefaultIsDisabled() {
 		return this.isDisabled == IS_DISABLED_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultBiomes() {
+		var biomes = new ArrayList<>(this.biomes);
+		var defaultBiomes = new ArrayList<>(this.defaultBiomes);
+
+		Collections.sort(biomes);
+		Collections.sort(defaultBiomes);
+
+		return biomes.equals(defaultBiomes);
 	}
 
 	public boolean isUsingDefaultStep() {
