@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 //?}
 
-import java.util.Objects;
 import java.util.Optional;
 
 public interface StructurifyJigsawStructure extends StructurifyStructure
@@ -149,10 +148,6 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 					));
 					//?} else {
 					/*this.structurify$setMaxDistanceFromCenter(horizontalMaxDistanceFromCenter);
-
-					if(!structureData.getJigsawData().isUsingMaxDistanceFromCenter()) {
-						Structurify.getLogger().info("Custom max distance on structure " + this.structurify$getStructureIdentifier());
-					}
 					*///?}
 				}
 			}
