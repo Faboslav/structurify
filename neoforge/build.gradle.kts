@@ -63,7 +63,8 @@ dependencies {
 		if (commonMod.mc == "1.21.1") {
 			val modrinthBundles = listOf(
 				"biolith",
-				"no-mans-land"
+				"no-mans-land",
+				"yungs-better-end-island"
 			)
 
 			for (bundle in modrinthBundles) {

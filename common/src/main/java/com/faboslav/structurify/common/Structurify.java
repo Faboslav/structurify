@@ -73,7 +73,7 @@ public final class Structurify
 		Structurify.getConfig().create();
 		ModChecker.setupModCompat();
 
-		LoadConfigEvent.EVENT.addListener(StructurifyConfigSerializer::loadConfig);
+		LoadConfigEvent.EVENT.addListener(Structurify.getConfig()::load);
 		UpdateRegistriesEvent.EVENT.addListener(StructurifyRegistryUpdater::updateRegistries);
 	}
 }

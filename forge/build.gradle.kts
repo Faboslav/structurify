@@ -94,7 +94,8 @@ dependencies {
 			"the-graveyard-forge",
 			"goblins-tyranny",
 			"dungeons-enhanced",
-			"legendary-monsters"
+			"legendary-monsters",
+			"yungs-better-end-island"
 		)
 
 		for (bundle in modrinthBundles) {
