@@ -64,7 +64,9 @@ dependencies {
 			val modrinthBundles = listOf(
 				"biolith",
 				"no-mans-land",
-				"yungs-better-end-island"
+				"yungs-better-end-island",
+				"dungeons-and-taverns",
+				"dungeons-and-taverns-ancient-city-overhaul"
 			)
 
 			for (bundle in modrinthBundles) {
