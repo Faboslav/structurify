@@ -115,6 +115,7 @@ jobs:
                     name: ${{ steps.gradle-properties.outputs.MOD_NAME }} ${{ steps.gradle-properties.outputs.MOD_VERSION }}
                     version: ${{ matrix.mod_loader }}-${{ steps.gradle-properties.outputs.MOD_VERSION }}+mc${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
                     loaders: ${{ join(matrix.supported_mod_loaders, ' ') }}
+                    environment: client | server
                     game-versions: |
                         >=${{ steps.gradle-properties.outputs.MIN_MINECRAFT_VERSION }} <=${{ steps.gradle-properties.outputs.MINECRAFT_VERSION }}
                     game-version-filter: releases
