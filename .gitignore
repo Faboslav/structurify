@@ -19,5 +19,7 @@ classes/
 .settings
 *.launch
 .architectury-transformer
+.agentbridge
+.agent-work
 gradle_client_output.txt
 gradle_server_output.txt
