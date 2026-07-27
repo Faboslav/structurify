@@ -171,7 +171,7 @@ jobs:
                     wget -P run/mods "$MOD_URL"
 
             -   name: Run ${{ matrix.version }} ${{ matrix.mod_loader }} server
-                uses: headlesshq/mc-server-test@v1
+                uses: headlesshq/mc-server-test@42de00da95e997b046a43eb9beb516494e542ba9 # 1.1.1
                 with:
                     mc: ${{ matrix.version }}
                     modloader: ${{ matrix.mod_loader }}
