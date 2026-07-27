@@ -7,23 +7,22 @@ import com.faboslav.structurify.common.network.MessageHandler;
 import com.faboslav.structurify.common.network.Packet;
 import com.faboslav.structurify.common.network.base.ClientboundPacketType;
 import com.faboslav.structurify.common.network.base.PacketType;
-import com.faboslav.structurify.common.platform.PlatformHooks;
 import com.faboslav.structurify.common.versions.VersionedPlayer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.ChatFormatting;
-//? if >= 1.20.2 {
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-//?} else {
-/*import net.minecraft.network.FriendlyByteBuf;
- *///?}
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
-
+import net.minecraft.client.Minecraft;
 import java.util.UUID;
+
+//? if >= 1.20.2 {
+import net.minecraft.network.RegistryFriendlyByteBuf;
+ //?} else {
+/*import net.minecraft.network.FriendlyByteBuf;
+*///?}
 
 public record ConfigStatusToClientPacket(String config, UUID playerId) implements Packet<ConfigStatusToClientPacket>
 {
@@ -98,7 +97,7 @@ public record ConfigStatusToClientPacket(String config, UUID playerId) implement
 		}
 		//?} else {
 		/*public ConfigStatusToClientPacket decode(final FriendlyByteBuf buf) {
-			return new ConfigStatusToClientPacket(buf.readUtf());
+			return new ConfigStatusToClientPacket(buf.readUtf(), buf.readUUID());
 		}
 
 		public void encode(

@@ -11,16 +11,16 @@ import com.faboslav.structurify.common.versions.VersionedPlayer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
-//? if >= 1.20.2 {
-import net.minecraft.network.RegistryFriendlyByteBuf;
-//?} else {
-/*import net.minecraft.network.FriendlyByteBuf;
-*///?}
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
-
 import java.util.UUID;
+
+//? if >= 1.20.2 {
+import net.minecraft.network.RegistryFriendlyByteBuf;
+ //?} else {
+/*import net.minecraft.network.FriendlyByteBuf;
+*///?}
 
 public record ConfigSyncToClientPacket(String config, boolean save, UUID playerId) implements Packet<ConfigSyncToClientPacket>
 {
@@ -90,7 +90,7 @@ public record ConfigSyncToClientPacket(String config, boolean save, UUID playerI
 		}
 		//?} else {
 		/*public ConfigSyncToClientPacket decode(final FriendlyByteBuf buf) {
-			return new ConfigSyncToClientPacket(buf.readUtf(), buf.readBoolean());
+			return new ConfigSyncToClientPacket(buf.readUtf(), buf.readBoolean(), buf.readUUID());
 		}
 
 		public void encode(final ConfigSyncToClientPacket packet, final FriendlyByteBuf buf) {

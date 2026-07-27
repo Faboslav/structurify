@@ -6,6 +6,7 @@
 - Added "/structurify config sync toServer" command
 - Added "/structurify config sync fromServer" command
 - Added "/structurify config status" command
+- Added "zh-cn" translation (Thanks to NumberSir)
 
 ## 2.0.28
 
