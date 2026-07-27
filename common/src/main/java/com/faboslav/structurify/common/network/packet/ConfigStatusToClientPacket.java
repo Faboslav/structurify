@@ -18,7 +18,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
  //?} else {
 /*import net.minecraft.network.FriendlyByteBuf;
 *///?}
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -55,7 +54,7 @@ public record ConfigStatusToClientPacket(String config) implements Packet<Config
 		public Runnable handle(final ConfigStatusToClientPacket packet) {
 			return () -> {
 				JsonObject serverConfigJson;
-				LocalPlayer player = Minecraft.getInstance().player;
+				Player player = Minecraft.getInstance().player;
 
 				try {
 					serverConfigJson = GSON.fromJson(packet.config(), JsonObject.class);

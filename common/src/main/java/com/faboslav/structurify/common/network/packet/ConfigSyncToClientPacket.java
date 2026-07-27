@@ -16,7 +16,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 //?} else {
 /*import net.minecraft.network.FriendlyByteBuf;
 *///?}
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -52,7 +51,7 @@ public record ConfigSyncToClientPacket(String config, boolean save) implements P
 		@Override
 		public Runnable handle(final ConfigSyncToClientPacket packet) {
 			return () -> {
-				LocalPlayer player = Minecraft.getInstance().player;
+				Player player = Minecraft.getInstance().player;
 
 				try {
 					StructurifyConfigSerializer.load(Structurify.getConfig(), GSON.fromJson(packet.config(), JsonObject.class));
