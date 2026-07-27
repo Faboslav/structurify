@@ -57,16 +57,6 @@ public record ConfigSyncToServerPacket(String config) implements Packet<ConfigSy
 				}
 
 				VersionedPlayer.sendSystemMessage(player, Component.literal("Structurify config synced to the server."));
-
-				if (player instanceof ServerPlayer serverPlayer) {
-					MessageHandler.DEFAULT_CHANNEL.sendToAllPlayers(
-						new ConfigSyncToClientPacket(
-							GSON.toJson(StructurifyConfigSerializer.save(Structurify.getConfig())),
-							false
-						),
-						serverPlayer.level().getServer()
-					);
-				}
 			};
 		}
 

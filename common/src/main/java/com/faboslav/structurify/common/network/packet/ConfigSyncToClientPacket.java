@@ -20,7 +20,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 
-public record ConfigSyncToClientPacket(String config, boolean save) implements Packet<ConfigSyncToClientPacket>
+import java.util.UUID;
+
+public record ConfigSyncToClientPacket(String config, boolean save, UUID playerId) implements Packet<ConfigSyncToClientPacket>
 {
 	private static final Gson GSON = new Gson();
 	public static final Identifier ID = Structurify.makeId("config_sync_to_client_packet");
@@ -30,7 +32,8 @@ public record ConfigSyncToClientPacket(String config, boolean save) implements P
 		MessageHandler.DEFAULT_CHANNEL.sendToPlayer(
 			new ConfigSyncToClientPacket(
 				GSON.toJson(StructurifyConfigSerializer.save(config)),
-				save
+				save,
+				player.getUUID()
 			),
 			player
 		);
@@ -51,7 +54,7 @@ public record ConfigSyncToClientPacket(String config, boolean save) implements P
 		@Override
 		public Runnable handle(final ConfigSyncToClientPacket packet) {
 			return () -> {
-				Player player = Minecraft.getInstance().player;
+				var player = Minecraft.getInstance().level.getPlayerByUUID(packet.playerId);
 
 				try {
 					StructurifyConfigSerializer.load(Structurify.getConfig(), GSON.fromJson(packet.config(), JsonObject.class));
@@ -77,12 +80,13 @@ public record ConfigSyncToClientPacket(String config, boolean save) implements P
 
 		//? if >= 1.20.2 {
 		public ConfigSyncToClientPacket decode(final RegistryFriendlyByteBuf buf) {
-			return new ConfigSyncToClientPacket(buf.readUtf(), buf.readBoolean());
+			return new ConfigSyncToClientPacket(buf.readUtf(), buf.readBoolean(), buf.readUUID());
 		}
 
 		public void encode(final ConfigSyncToClientPacket packet, final RegistryFriendlyByteBuf buf) {
 			buf.writeUtf(packet.config());
 			buf.writeBoolean(packet.save());
+			buf.writeUUID(packet.playerId());
 		}
 		//?} else {
 		/*public ConfigSyncToClientPacket decode(final FriendlyByteBuf buf) {

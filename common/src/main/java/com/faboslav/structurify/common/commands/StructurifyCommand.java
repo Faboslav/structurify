@@ -55,6 +55,7 @@ public final class StructurifyCommand
 	public static void createCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
 		dispatcher.register(
 			Commands.literal("structurify")
+				.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 				.then(Commands.literal("dump")
 					.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 					.executes(ctx -> {
@@ -67,6 +68,7 @@ public final class StructurifyCommand
 					})
 				)
 				.then(Commands.literal("config")
+					.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_OWNER))
 					.then(Commands.literal("sync")
 						.then(Commands.literal("toServer")
 							.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_OWNER))
@@ -118,6 +120,7 @@ public final class StructurifyCommand
 					)
 				)
 				.then(Commands.literal("debug")
+					.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 					.then(Commands.literal("enable")
 						.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 						.executes(ctx -> {

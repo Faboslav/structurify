@@ -12,18 +12,20 @@ import com.faboslav.structurify.common.versions.VersionedPlayer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 //? if >= 1.20.2 {
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
- //?} else {
+//?} else {
 /*import net.minecraft.network.FriendlyByteBuf;
-*///?}
+ *///?}
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 
-public record ConfigStatusToClientPacket(String config) implements Packet<ConfigStatusToClientPacket>
+import java.util.UUID;
+
+public record ConfigStatusToClientPacket(String config, UUID playerId) implements Packet<ConfigStatusToClientPacket>
 {
 	private static final Gson GSON = new Gson();
 	public static final Identifier ID = Structurify.makeId("config_status_to_client_packet");
@@ -32,7 +34,8 @@ public record ConfigStatusToClientPacket(String config) implements Packet<Config
 	public static void sendToClient(StructurifyConfig config, Player player) {
 		MessageHandler.DEFAULT_CHANNEL.sendToPlayer(
 			new ConfigStatusToClientPacket(
-				GSON.toJson(StructurifyConfigSerializer.save(config))
+				GSON.toJson(StructurifyConfigSerializer.save(config)),
+				player.getUUID()
 			),
 			player
 		);
@@ -51,43 +54,57 @@ public record ConfigStatusToClientPacket(String config) implements Packet<Config
 		}
 
 		@Override
-		public Runnable handle(final ConfigStatusToClientPacket packet) {
+		public Runnable handle(
+			final ConfigStatusToClientPacket packet
+		) {
 			return () -> {
 				JsonObject serverConfigJson;
-				Player player = Minecraft.getInstance().player;
+				var player = Minecraft.getInstance().level.getPlayerByUUID(packet.playerId);
 
 				try {
 					serverConfigJson = GSON.fromJson(packet.config(), JsonObject.class);
 				} catch (Throwable e) {
 					Structurify.getLogger().error("Failed to read config status from server.", e);
 
-					if (player != null) {
-						VersionedPlayer.sendSystemMessage(player, Component.literal("Failed to check the Structurify config status."));
-					}
+					VersionedPlayer.sendSystemMessage(
+						player,
+						Component.literal("Failed to check the Structurify config status.")
+					);
 
 					return;
 				}
 
-				if (player != null) {
-					VersionedPlayer.sendSystemMessage(player, describeConfigStatus(Structurify.getConfig(), serverConfigJson));
-				}
+				VersionedPlayer.sendSystemMessage(
+					player,
+					describeConfigStatus(
+						Structurify.getConfig(),
+						serverConfigJson
+					)
+				);
 			};
 		}
 
 		//? if >= 1.20.2 {
 		public ConfigStatusToClientPacket decode(final RegistryFriendlyByteBuf buf) {
-			return new ConfigStatusToClientPacket(buf.readUtf());
+			return new ConfigStatusToClientPacket(buf.readUtf(), buf.readUUID());
 		}
 
-		public void encode(final ConfigStatusToClientPacket packet, final RegistryFriendlyByteBuf buf) {
+		public void encode(
+			final ConfigStatusToClientPacket packet,
+			final RegistryFriendlyByteBuf buf
+		) {
 			buf.writeUtf(packet.config());
+			buf.writeUUID(packet.playerId());
 		}
 		//?} else {
 		/*public ConfigStatusToClientPacket decode(final FriendlyByteBuf buf) {
 			return new ConfigStatusToClientPacket(buf.readUtf());
 		}
 
-		public void encode(final ConfigStatusToClientPacket packet, final FriendlyByteBuf buf) {
+		public void encode(
+			final ConfigStatusToClientPacket packet,
+			final FriendlyByteBuf buf
+		) {
 			buf.writeUtf(packet.config());
 		}
 
@@ -105,30 +122,24 @@ public record ConfigStatusToClientPacket(String config) implements Packet<Config
 		String localHash = StructurifyConfigSerializer.computeConfigHash(localConfig);
 		String serverHash = StructurifyConfigSerializer.hashConfigJson(serverConfigJson);
 
-		String localVersion = PlatformHooks.PLATFORM_HELPER.getModVersion();
-		String serverVersion = serverConfigJson.has(
-			StructurifyConfigSerializer.CONFIG_VERSION_PROPERTY
-		)
-			? serverConfigJson.get(
-			StructurifyConfigSerializer.CONFIG_VERSION_PROPERTY
-		).getAsString()
-			:"unknown";
-
 		boolean isSynchronized = localHash.equals(serverHash);
 
 		MutableComponent message = isSynchronized
 			? Component.literal("Structurify config is synchronized with the server.")
 			.withStyle(ChatFormatting.GREEN)
-			:Component.literal("Structurify config differs from the server.")
+			: Component.literal("Structurify config differs from the server.")
 			.withStyle(ChatFormatting.RED);
 
+		String localHashShort = localHash.substring(0, Math.min(16, localHash.length()));
+		String serverHashShort = serverHash.substring(0, Math.min(16, serverHash.length()));
+
 		message.append(
-			Component.literal("\nLocal version: " + localVersion)
+			Component.literal("\nLocal version: " + localHashShort)
 				.withStyle(ChatFormatting.GRAY)
 		);
 
 		message.append(
-			Component.literal("\nServer version: " + serverVersion)
+			Component.literal("\nServer version: " + serverHashShort)
 				.withStyle(ChatFormatting.GRAY)
 		);
 
