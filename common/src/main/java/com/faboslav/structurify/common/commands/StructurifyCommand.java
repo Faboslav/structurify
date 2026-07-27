@@ -6,9 +6,13 @@ import com.faboslav.structurify.common.config.data.DebugData;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.mixin.LocateCommandInvoker;
 import com.faboslav.structurify.common.mixin.ResourceKeyArgumentInvoker;
+import com.faboslav.structurify.common.network.packet.ConfigStatusToClientPacket;
+import com.faboslav.structurify.common.network.packet.ConfigSyncRequestToClientPacket;
+import com.faboslav.structurify.common.network.packet.ConfigSyncToClientPacket;
 import com.faboslav.structurify.common.util.ChunkPosUtil;
 import com.faboslav.structurify.common.util.ClickEventFactory;
 import com.faboslav.structurify.common.util.HoverEventFactory;
+import com.faboslav.structurify.common.versions.VersionedPermission;
 import com.faboslav.structurify.common.world.level.structure.checks.StructureChecker;
 import com.google.common.base.Stopwatch;
 import com.mojang.brigadier.CommandDispatcher;
@@ -17,30 +21,27 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.arguments.ResourceKeyArgument;
-import net.minecraft.commands.arguments.IdentifierArgument;
-import net.minecraft.core.SectionPos;
-import net.minecraft.network.chat.*;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.Util;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.commands.arguments.ResourceOrTagKeyArgument.Result;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.commands.LocateCommand;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Util;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import java.util.concurrent.CompletableFuture;
 
-//? if >= 1.21.11 {
-import net.minecraft.server.permissions.Permissions;
-//?}
+import java.util.concurrent.CompletableFuture;
 
 public final class StructurifyCommand
 {
@@ -54,12 +55,8 @@ public final class StructurifyCommand
 	public static void createCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
 		dispatcher.register(
 			Commands.literal("structurify")
-				//? if >= 1.21.11 {
-				.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
-				//?} else {
-				/*.requires(source -> source.hasPermission(2))
-				 *///?}
 				.then(Commands.literal("dump")
+					.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 					.executes(ctx -> {
 						Structurify.getConfig().dump();
 						ctx.getSource().sendSuccess(
@@ -69,7 +66,24 @@ public final class StructurifyCommand
 						return 1;
 					})
 				)
+				.then(Commands.literal("config")
+					.then(Commands.literal("sync")
+						.then(Commands.literal("toServer")
+							.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_OWNER))
+							.executes(ctx -> syncConfigToServer(ctx.getSource()))
+						)
+						.then(Commands.literal("fromServer")
+							.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_OWNER))
+							.executes(ctx -> syncConfigFromServer(ctx.getSource()))
+						)
+					)
+					.then(Commands.literal("status")
+						.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_OWNER))
+						.executes(ctx -> checkConfigStatus(ctx.getSource()))
+					)
+				)
 				.then(Commands.literal("locate")
+					.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 					.then(Commands.literal("structure")
 						.then(Commands.argument("structure", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.STRUCTURE))
 							.executes(
@@ -81,18 +95,14 @@ public final class StructurifyCommand
 					)
 				)
 				.then(Commands.literal("structure")
-					//? if >= 1.21.11 {
-					.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
-					//?} else {
-					/*.requires(source -> source.hasPermission(2))
-					 *///?}
+					.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 					.then(Commands.literal("list")
 						.executes(ctx -> getStructureList(ctx.getSource())))
 					.then(Commands.literal("enable")
 						.then(Commands.argument("structure", ResourceKeyArgument.key(Registries.STRUCTURE))
 							.executes(
 								commandContext -> changeStructure(
-									commandContext.getSource(), ResourceKeyArgumentInvoker.structurify$invokegetRegistryKey(commandContext, "structure", Registries.STRUCTURE, LocateCommandInvoker.structurify$getStructureInvalidError()), true
+									commandContext.getSource(), ResourceKeyArgumentInvoker.structurify$invokegetRegistryKey(commandContext, "structure", Registries.STRUCTURE, LocateCommandInvoker.structurify$getStructureInvalidError()), false
 								)
 							)
 						)
@@ -109,11 +119,7 @@ public final class StructurifyCommand
 				)
 				.then(Commands.literal("debug")
 					.then(Commands.literal("enable")
-						//? if >= 1.21.11 {
-						.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
-						//?} else {
-						/*.requires(source -> source.hasPermission(2))
-						 *///?}
+						.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 						.executes(ctx -> {
 							Structurify.getConfig().getDebugData().setEnabled(true);
 							Structurify.getConfig().getDebugData().setDebugMode(DebugData.DebugMode.FLATNESS);
@@ -129,11 +135,7 @@ public final class StructurifyCommand
 						})
 					)
 					.then(Commands.literal("disable")
-						//? if >= 1.21.11 {
-						.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
-						//?} else {
-						/*.requires(source -> source.hasPermission(2))
-						 *///?}
+						.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 						.executes(ctx -> {
 							Structurify.getConfig().getDebugData().setEnabled(false);
 							Structurify.getConfig().getDebugData().setDebugMode(DebugData.DebugMode.NONE);
@@ -150,11 +152,7 @@ public final class StructurifyCommand
 					.then(Commands.literal("debug_mode")
 						.then(Commands.argument("debugMode", StringArgumentType.word())
 							.suggests(DEBUG_MODE_SUGGESTIONS)
-							//? if >= 1.21.11 {
-							.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
-							//?} else {
-							/*.requires(source -> source.hasPermission(2))
-							 *///?}
+							.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 							.executes(ctx -> {
 								var raw = StringArgumentType.getString(ctx, "debugMode");
 
@@ -182,11 +180,7 @@ public final class StructurifyCommand
 					.then(Commands.literal("sampling_mode")
 						.then(Commands.argument("samplingMode", StringArgumentType.word())
 							.suggests(SAMPLING_MODE_SUGGESTIONS)
-							//? if >= 1.21.11 {
-							.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
-							//?} else {
-							/*.requires(source -> source.hasPermission(2))
-							 *///?}
+							.requires(source -> VersionedPermission.hasPermissions(source, VersionedPermission.PERMISSION_GAMEMASTER))
 							.executes(ctx -> {
 								var raw = StringArgumentType.getString(ctx, "samplingMode");
 
@@ -220,6 +214,50 @@ public final class StructurifyCommand
 					)
 				)
 		);
+	}
+
+	private static int syncConfigToServer(CommandSourceStack source) {
+		var player = source.getPlayer();
+
+		if (player == null) {
+			source.sendFailure(Component.literal("This command can only be executed by a player."));
+			return 0;
+		}
+
+		ConfigSyncRequestToClientPacket.sendToClient(player);
+
+		source.sendSuccess(
+			() -> Component.literal("Syncing your local Structurify config to server..."),
+			false
+		);
+
+		return 1;
+	}
+
+	private static int syncConfigFromServer(CommandSourceStack source) {
+		var player = source.getPlayer();
+
+		if (player == null) {
+			source.sendFailure(Component.literal("This command can only be executed by a player."));
+			return 0;
+		}
+
+		ConfigSyncToClientPacket.sendToClient(Structurify.getConfig(), player, true);
+
+		return 1;
+	}
+
+	private static int checkConfigStatus(CommandSourceStack source) {
+		var player = source.getPlayer();
+
+		if (player == null) {
+			source.sendFailure(Component.literal("This command can only be executed by a player."));
+			return 0;
+		}
+
+		ConfigStatusToClientPacket.sendToClient(Structurify.getConfig(), player);
+
+		return 1;
 	}
 
 	private static void reloadStructureChecks(CommandContext<CommandSourceStack> ctx) {
@@ -272,7 +310,7 @@ public final class StructurifyCommand
 		var structureStarts = level.structureManager().startsForStructure(ChunkPosUtil.createChunkPos(commandPos), structure -> true).stream().filter(structureStart -> structureStart.getBoundingBox().inflatedBy(16).isInside(commandPos)).toList();
 
 		if (structureStarts.isEmpty()) {
-			source.sendSuccess(() ->  Component.literal("There is no structures at ").append(getClickablePos(commandPos)).append(Component.literal(".")), !source.isPlayer());
+			source.sendSuccess(() -> Component.literal("There is no structures at ").append(getClickablePos(commandPos)).append(Component.literal(".")), !source.isPlayer());
 			return 1;
 		}
 
@@ -282,7 +320,7 @@ public final class StructurifyCommand
 			var structure = structureStart.getStructure();
 			var structureId = structureRegistry.getKey(structure);
 
-			if(structureId == null) {
+			if (structureId == null) {
 				continue;
 			}
 
@@ -303,27 +341,27 @@ public final class StructurifyCommand
 		var structureId = structure/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 		var config = Structurify.getConfig();
 
-		if(!config.getStructureData().containsKey(structureId)) {
+		if (!config.getStructureData().containsKey(structureId)) {
 			return 1;
 		}
 
 		StructureData structureData = config.getStructureData().get(structureId);
 
-		if(structureData.isDisabled() == isDisabled) {
-			source.sendSuccess(() -> Component.literal("Structure " + structureId + " is already " + (isDisabled ? "disabled" : "enabled") +"."), !source.isPlayer());
+		if (structureData.isDisabled() == isDisabled) {
+			source.sendSuccess(() -> Component.literal("Structure " + structureId + " is already " + (isDisabled ? "disabled":"enabled") + "."), !source.isPlayer());
 			return 1;
 		}
 
 		structureData.setDisabled(isDisabled);
 		config.save();
 
-		source.sendSuccess(() -> Component.literal("Structure " + structureId + " " + (isDisabled ? "disabled" : "enabled") +"."), !source.isPlayer());
+		source.sendSuccess(() -> Component.literal("Structure " + structureId + " " + (isDisabled ? "disabled":"enabled") + "."), !source.isPlayer());
 		return 1;
 	}
 
 	private static Component getClickableStructure(Identifier structureId) {
-		if(Structurify.getConfig().getStructureData().containsKey(structureId.toString())) {
-			if(Structurify.getConfig().getStructureData().get(structureId.toString()).isDisabled()) {
+		if (Structurify.getConfig().getStructureData().containsKey(structureId.toString())) {
+			if (Structurify.getConfig().getStructureData().get(structureId.toString()).isDisabled()) {
 				return Component.literal(structureId.toString()).withStyle((style) -> style.withColor(ChatFormatting.RED).withClickEvent(ClickEventFactory.createRunCommand("/structurify structure enable " + structureId)).withHoverEvent(HoverEventFactory.createShowText(Component.literal("Click to enable \"" + structureId + "\" structure generation"))));
 			}
 

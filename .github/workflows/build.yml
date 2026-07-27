@@ -111,7 +111,7 @@ jobs:
                     wget -P run/mods "$MOD_URL"
 
             -   name: Run ${{ matrix.version }} ${{ matrix.mod_loader }} client
-                uses: 3arthqu4ke/mc-runtime-test@0fd9b2d3e1b192efa0d517870635c707cfe8a718 # v4.5.0
+                uses: headlesshq/mc-runtime-test@v4
                 with:
                     mc: ${{ matrix.version }}
                     modloader: ${{ matrix.mod_loader }}
@@ -171,7 +171,7 @@ jobs:
                     wget -P run/mods "$MOD_URL"
 
             -   name: Run ${{ matrix.version }} ${{ matrix.mod_loader }} server
-                uses: headlesshq/mc-server-test@42de00da95e997b046a43eb9beb516494e542ba9 # 1.1.1
+                uses: headlesshq/mc-server-test@v1
                 with:
                     mc: ${{ matrix.version }}
                     modloader: ${{ matrix.mod_loader }}

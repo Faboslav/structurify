@@ -180,6 +180,7 @@ public final class StructurifyConfig
 
 		try {
 			if (Files.exists(configPath)) {
+				Structurify.getLogger().info("Creating Structurify backup config...");
 				Path backupConfigPath = this.getBackupConfigPath();
 
 				if (!Files.exists(BACKUP_CONFIG_DIR) || !Files.isDirectory(BACKUP_CONFIG_DIR)) {
@@ -190,6 +191,8 @@ public final class StructurifyConfig
 					Files.move(configPath, backupConfigPath);
 					pruneBackupConfigFiles(5);
 				}
+
+				Structurify.getLogger().info("Structurify backup config created");
 			}
 
 			JsonObject json = StructurifyConfigSerializer.save(this);

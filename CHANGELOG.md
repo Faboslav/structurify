@@ -1,3 +1,12 @@
+## 2.0.29
+
+- Improved performance by disabling collection of debug data when debug is not enabled
+- Improved performance by reordering the checks (overlap first, biome second, flatness third)
+- Improved performance of checks by caching worldgen height sampling values
+- Added "/structurify config sync toServer" command
+- Added "/structurify config sync fromServer" command
+- Added "/structurify config status" command
+
 ## 2.0.28
 
 - Fixed crash related to modded jigsaw structures data parsing

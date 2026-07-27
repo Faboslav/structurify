@@ -21,22 +21,7 @@ dependencies {
 	}
 
 	modImplementation("net.fabricmc:fabric-loader:${commonMod.dep("fabric_loader")}")
-
-	fun addEmbeddedFabricModule(name: String) {
-		modApi(fabricApi.module(name, "${commonMod.dep("fabric_api")}+${commonMod.mc}"))
-	}
-
-	addEmbeddedFabricModule("fabric-api-base")
-	if (stonecutter.eval(commonMod.mc, "<=1.21.8")) {
-		addEmbeddedFabricModule("fabric-resource-loader-v0")
-	} else {
-		addEmbeddedFabricModule("fabric-resource-loader-v1")
-	}
-	addEmbeddedFabricModule("fabric-rendering-v1")
-	addEmbeddedFabricModule("fabric-lifecycle-events-v1")
-	addEmbeddedFabricModule("fabric-command-api-v2")
-	addEmbeddedFabricModule("fabric-gametest-api-v1")
-	//modApi("net.fabricmc.fabric-api:fabric-api:${commonMod.dep("fabric_api")}+${commonMod.mc}")
+	modApi("net.fabricmc.fabric-api:fabric-api:${commonMod.dep("fabric_api")}+${commonMod.mc}")
 
 	// Required dependencies
 	modImplementation("dev.isxander:yet-another-config-lib:${commonMod.dep("yacl")}-fabric")

@@ -6,7 +6,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 
-
 //? if >= 26.1 {
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
@@ -27,9 +26,9 @@ public final class StructurifyFabricClient implements ClientModInitializer
 
 		//? if >= 26.1 {
 		LevelRenderEvents.BEFORE_GIZMOS.register(StructurifyFabricClient::onRenderLevelStage);
-		//?} else {
+		 //?} else {
 		/*WorldRenderEvents.AFTER_ENTITIES.register(StructurifyFabricClient::onRenderLevelStage);
-		 *///?}
+		*///?}
 	}
 
 	//? if >= 26.1 {

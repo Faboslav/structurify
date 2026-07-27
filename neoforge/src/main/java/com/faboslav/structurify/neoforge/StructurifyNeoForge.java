@@ -5,6 +5,7 @@ import com.faboslav.structurify.common.commands.StructurifyCommand;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
+import com.faboslav.structurify.neoforge.platform.NeoForgePlatformNetwork;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -15,6 +16,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @Mod(Structurify.MOD_ID)
 public final class StructurifyNeoForge
@@ -33,6 +35,8 @@ public final class StructurifyNeoForge
 			StructurifyNeoForgeClient.init(modEventBus, eventBus);
 		}
 
+		modEventBus.addListener(StructurifyNeoForge::onRegisterPayloadHandlers);
+
 		eventBus.addListener(StructurifyNeoForge::registerCommand);
 		//? if >= 26.2 {
 		eventBus.addListener(EventPriority.LOWEST, StructurifyNeoForge::onServerDataLoad);
@@ -42,17 +46,21 @@ public final class StructurifyNeoForge
 		eventBus.addListener(EventPriority.LOWEST, StructurifyNeoForge::onServerAboutToStart);
 	}
 
-	private static void registerCommand(RegisterCommandsEvent event) {
+	private static void onRegisterPayloadHandlers(final RegisterPayloadHandlersEvent event) {
+		NeoForgePlatformNetwork.onRegisterPayloadHandlers(event);
+	}
+
+	private static void registerCommand(final RegisterCommandsEvent event) {
 		StructurifyCommand.createCommand(event.getDispatcher(), event.getBuildContext());
 	}
 
 	//? if >= 26.2 {
-	private static void onServerDataLoad(TagsUpdatedEvent.ServerDataLoad event) {
+	private static void onServerDataLoad(final TagsUpdatedEvent.ServerDataLoad event) {
 		StructurifyRegistryManagerProvider.setRegistryManager(event.getRegistries());
 		LoadConfigEvent.EVENT.invoke(new LoadConfigEvent());
 	}
 	//?} else {
-	/*private static void onResourceManagerReload(TagsUpdatedEvent event) {
+	/*private static void onResourceManagerReload(final TagsUpdatedEvent event) {
 		if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED) {
 			return;
 		}
@@ -68,7 +76,7 @@ public final class StructurifyNeoForge
 	}
 	*///?}
 
-	private static void onServerAboutToStart(ServerAboutToStartEvent event) {
+	private static void onServerAboutToStart(final ServerAboutToStartEvent event) {
 		StructurifyRegistryManagerProvider.setRegistryManager(event.getServer().registryAccess());
 		UpdateRegistriesEvent.EVENT.invoke(new UpdateRegistriesEvent(event.getServer().registryAccess()));
 	}

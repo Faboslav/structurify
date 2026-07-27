@@ -1,10 +1,10 @@
 package com.faboslav.structurify.common;
 
 import com.faboslav.structurify.common.config.StructurifyConfig;
-import com.faboslav.structurify.common.config.StructurifyConfigSerializer;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.modcompat.ModChecker;
+import com.faboslav.structurify.common.network.MessageHandler;
 import com.faboslav.structurify.common.registry.StructurifyRegistryUpdater;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
@@ -72,6 +72,7 @@ public final class Structurify
 	public static void init() {
 		Structurify.getConfig().create();
 		ModChecker.setupModCompat();
+		MessageHandler.init();
 
 		LoadConfigEvent.EVENT.addListener(Structurify.getConfig()::load);
 		UpdateRegistriesEvent.EVENT.addListener(StructurifyRegistryUpdater::updateRegistries);

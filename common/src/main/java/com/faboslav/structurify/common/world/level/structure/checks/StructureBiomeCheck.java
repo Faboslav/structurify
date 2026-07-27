@@ -2,10 +2,12 @@ package com.faboslav.structurify.common.world.level.structure.checks;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
+import com.faboslav.structurify.common.config.data.DebugData;
 import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import com.faboslav.structurify.common.util.ChunkPosUtil;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckOverview;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckSample;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.QuartPos;
@@ -73,6 +75,9 @@ public final class StructureBiomeCheck
 		int sampleQuartY = QuartPos.fromBlock(blockY);
 		var sampler = randomState.sampler();
 
+		DebugData debugData = Structurify.getConfig().getDebugData();
+		boolean isDebugEnabled = debugData.isEnabled();
+
 		for (int[] pos : structureCheckData.getStructurePieceSamples()) {
 			int blockX = pos[0];
 			int blockZ = pos[1];
@@ -84,22 +89,33 @@ public final class StructureBiomeCheck
 
 			if (mode == BiomeCheckData.BiomeCheckMode.STRICT) {
 				if (allowedBiomes != null && !allowedBiomes.contains(biome)) {
-					debugAddStructureBiomeCheckSample(structureCheckData, blockX, blockY, blockZ, biome, false);
-					debugAddStructureBiomeCheckOverview(structureCheckData, false);
+
+					if(isDebugEnabled) {
+						debugAddStructureBiomeCheckSample(structureCheckData, blockX, blockY, blockZ, biome, false);
+						debugAddStructureBiomeCheckOverview(structureCheckData, false);
+					}
+
 					return false;
 				}
 			} else if (mode == BiomeCheckData.BiomeCheckMode.BLACKLIST) {
 				if (blacklistedBiomes != null && blacklistedBiomes.contains(biome)) {
-					debugAddStructureBiomeCheckSample(structureCheckData, blockX, blockY, blockZ, biome, false);
-					debugAddStructureBiomeCheckOverview(structureCheckData, false);
+					if(isDebugEnabled) {
+						debugAddStructureBiomeCheckSample(structureCheckData, blockX, blockY, blockZ, biome, false);
+						debugAddStructureBiomeCheckOverview(structureCheckData, false);
+					}
 					return false;
 				}
 			}
 
-			debugAddStructureBiomeCheckSample(structureCheckData, blockX, blockY, blockZ, biome, true);
+			if(isDebugEnabled) {
+				debugAddStructureBiomeCheckSample(structureCheckData, blockX, blockY, blockZ, biome, true);
+			}
 		}
 
-		debugAddStructureBiomeCheckOverview(structureCheckData, true);
+		if(isDebugEnabled) {
+			debugAddStructureBiomeCheckOverview(structureCheckData, true);
+		}
+
 		return true;
 	}
 

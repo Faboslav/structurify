@@ -46,6 +46,12 @@ public final class StructureChecker
 		return structurifyChunkGenerator.structurify$getStructureChecks().computeIfAbsent(structureCheckId, id -> {
 			StructureCheckData structureCheckData = new StructureCheckData(structureCheckId, finalStructureId, structure, structureStart);
 
+			boolean overlapCheckResult = structurifyChunkGenerator.structurify$getOverlapChecks().computeIfAbsent(structureCheckId, id2 -> checkOverlap(structureCheckData, structurifyChunkGenerator));
+
+			if (!overlapCheckResult) {
+				return false;
+			}
+
 			boolean biomeCheckResult = structurifyChunkGenerator.structurify$getBiomeChecks().computeIfAbsent(structureCheckId, id2 -> checkBiomes(structureCheckData, biomeSource, randomState));
 
 			if (!biomeCheckResult) {
@@ -54,12 +60,6 @@ public final class StructureChecker
 
 			boolean flatnessCheckResult = structurifyChunkGenerator.structurify$getFlatnessChecks().computeIfAbsent(structureCheckId, id2 -> checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState));
 			if (!flatnessCheckResult) {
-				return false;
-			}
-
-			boolean overlapCheckResult = structurifyChunkGenerator.structurify$getOverlapChecks().computeIfAbsent(structureCheckId, id2 -> checkOverlap(structureCheckData, structurifyChunkGenerator));
-
-			if (!overlapCheckResult) {
 				return false;
 			}
 

@@ -8,10 +8,12 @@ import com.faboslav.structurify.common.config.serialization.StructureNamespaceDa
 import com.faboslav.structurify.common.config.serialization.StructureSetDataSerializer;
 import com.faboslav.structurify.common.config.serialization.StructureTemplatePoolDataSerializer;
 import com.faboslav.structurify.common.platform.PlatformHooks;
+import com.google.common.hash.Hashing;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
@@ -179,6 +181,17 @@ public final class StructurifyConfigSerializer
 		}
 	}
 
+	public static String computeConfigHash(StructurifyConfig config) {
+		return hashConfigJson(save(config, true));
+	}
+
+	public static String hashConfigJson(JsonObject json) {
+		JsonObject copy = json.deepCopy();
+		copy.remove(CONFIG_VERSION_PROPERTY);
+		copy.remove(CONFIG_DATETIME_PROPERTY);
+		return Hashing.sha256().hashString(copy.toString(), StandardCharsets.UTF_8).toString();
+	}
+
 	public static JsonObject save(StructurifyConfig config) {
 		return save(config, true);
 	}
@@ -208,7 +221,11 @@ public final class StructurifyConfigSerializer
 		json.add(GENERAL_PROPERTY, general);
 	}
 
-	private static void saveStructureNamespacesData(StructurifyConfig config, JsonObject json, boolean saveOnlyChanged) {
+	private static void saveStructureNamespacesData(
+		StructurifyConfig config,
+		JsonObject json,
+		boolean saveOnlyChanged
+	) {
 		JsonArray structureNamespaces = new JsonArray();
 
 		config.getStructureNamespaceData().entrySet().stream()
@@ -255,7 +272,11 @@ public final class StructurifyConfigSerializer
 		json.add(STRUCTURE_SETS_PROPERTY, structureSets);
 	}
 
-	private static void saveStructureTemplatePoolsData(StructurifyConfig config, JsonObject json, boolean saveOnlyChanged) {
+	private static void saveStructureTemplatePoolsData(
+		StructurifyConfig config,
+		JsonObject json,
+		boolean saveOnlyChanged
+	) {
 		JsonArray structureTemplatePools = new JsonArray();
 
 		config.getStructureTemplatePoolsData().entrySet().stream()
