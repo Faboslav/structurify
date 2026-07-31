@@ -39,6 +39,10 @@ public final class StructureChecker
 			return true;
 		}
 
+		if(structureStart.getPieces().isEmpty()) {
+			return false;
+		}
+
 		long structureCheckId = generateStructureCheckId(structureId, structureStart.getChunkPos());
 		StructurifyChunkGenerator structurifyChunkGenerator = (StructurifyChunkGenerator) chunkGenerator;
 
@@ -98,30 +102,34 @@ public final class StructureChecker
 		BiomeSource biomeSource,
 		RandomState randomState
 	) {
-		var structure = structureCheckData.getStructure();
-		BiomeCheckData biomeCheckData = StructureBiomeCheck.getBiomeCheckData(structureCheckData);
+		try {
+			var structure = structureCheckData.getStructure();
+			BiomeCheckData biomeCheckData = StructureBiomeCheck.getBiomeCheckData(structureCheckData);
 
-		if (biomeCheckData == null || !biomeCheckData.isEnabled()) {
+			if (biomeCheckData == null || !biomeCheckData.isEnabled()) {
+				return true;
+			}
+
+			if (biomeSource instanceof CheckerboardColumnBiomeSource) {
+				return true;
+			}
+
+			var structureData = structure.structurify$getStructureData();
+
+			if(structureData == null) {
+				return true;
+			}
+
+			var biomeCheckResult = StructureBiomeCheck.checkBiomes(structureCheckData, biomeCheckData, biomeSource, randomState);
+
+			if(!biomeCheckResult) {
+				return false;
+			}
+
+			return true;
+		} catch (Throwable e) {
 			return true;
 		}
-
-		if (biomeSource instanceof CheckerboardColumnBiomeSource) {
-			return true;
-		}
-
-		var structureData = structure.structurify$getStructureData();
-
-		if(structureData == null) {
-			return true;
-		}
-
-		var biomeCheckResult = StructureBiomeCheck.checkBiomes(structureCheckData, biomeCheckData, biomeSource, randomState);
-
-		if(!biomeCheckResult) {
-			return false;
-		}
-
-		return true;
 	}
 
 	private static boolean checkFlatness(
@@ -130,44 +138,52 @@ public final class StructureChecker
 		LevelHeightAccessor heightAccessor,
 		RandomState randomState
 	) {
-		FlatnessCheckData flatnessCheckData = StructureFlatnessCheck.getFlatnessCheckData(structureCheckData);
+		try {
+			FlatnessCheckData flatnessCheckData = StructureFlatnessCheck.getFlatnessCheckData(structureCheckData);
 
-		if(!StructureFlatnessCheck.canDoFlatnessCheck(structureCheckData, flatnessCheckData)) {
+			if(!StructureFlatnessCheck.canDoFlatnessCheck(structureCheckData, flatnessCheckData)) {
+				return true;
+			}
+
+			boolean flatnessCheckResult = StructureFlatnessCheck.checkFlatness(
+				structureCheckData,
+				flatnessCheckData,
+				chunkGenerator,
+				heightAccessor,
+				randomState
+			);
+
+			if(!flatnessCheckResult) {
+				return false;
+			}
+
+			return true;
+		} catch (Throwable e) {
 			return true;
 		}
-
-		boolean flatnessCheckResult = StructureFlatnessCheck.checkFlatness(
-			structureCheckData,
-			flatnessCheckData,
-			chunkGenerator,
-			heightAccessor,
-			randomState
-		);
-
-		if(!flatnessCheckResult) {
-			return false;
-		}
-
-		return true;
 	}
 
 	private static boolean checkOverlap(
 		StructureCheckData structureCheckData,
 		StructurifyChunkGenerator chunkGenerator
 	) {
-		OverlapCheckData overlapCheckData = StructureOverlapCheck.getOverlapCheckData(structureCheckData);
+		try {
+			OverlapCheckData overlapCheckData = StructureOverlapCheck.getOverlapCheckData(structureCheckData);
 
-		if(!StructureOverlapCheck.canDoOverlapCheck(structureCheckData, overlapCheckData)) {
+			if (!StructureOverlapCheck.canDoOverlapCheck(structureCheckData, overlapCheckData)) {
+				return true;
+			}
+
+			boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, overlapCheckData, chunkGenerator);
+
+			if (overlapCheckResult) {
+				return false;
+			}
+
+			return true;
+		} catch (Throwable e) {
 			return true;
 		}
-
-		boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, overlapCheckData, chunkGenerator);
-
-		if (overlapCheckResult) {
-			return false;
-		}
-
-		return true;
 	}
 
 	public static long generateStructureCheckId(Identifier structureId, ChunkPos chunkPos) {

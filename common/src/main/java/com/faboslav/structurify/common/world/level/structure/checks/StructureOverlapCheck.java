@@ -76,7 +76,7 @@ public final class StructureOverlapCheck
 		StructureStart start = structureCheckData.getStructureStart();
 		long[] structureCells = getStructurePiecesSections(start);
 
-		long structureCenter = start.getBoundingBox().getCenter().asLong();
+		long structureCenter = structureCheckData.getStructureCenter().asLong();
 
 		boolean overlapCheckResult = !claimStructureSections(
 			structurifyChunkGenerator,

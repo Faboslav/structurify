@@ -65,14 +65,6 @@ public final class DebugData
 		}
 	}
 
-	public void removeStructureFlatnessCheckSamples(Long structureKey) {
-		if (!Structurify.getConfig().getDebugData().isEnabled()) {
-			return;
-		}
-
-		this.structureFlatnessCheckSamples.remove(structureKey);
-	}
-
 	public void clearStructureFlatnessCheckSamples() {
 		if (!Structurify.getConfig().getDebugData().isEnabled()) {
 			return;

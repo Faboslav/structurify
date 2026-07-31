@@ -1,3 +1,7 @@
+## 2.0.30
+
+- Fixed compatibility with "The Twilight Forest"
+
 ## 2.0.29
 
 - Improved performance by disabling collection of debug data when debug is not enabled

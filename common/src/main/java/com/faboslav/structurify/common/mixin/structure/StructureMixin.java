@@ -69,7 +69,6 @@ public abstract class StructureMixin implements StructurifyStructure
 	@Nullable
 	protected HolderSet<Biome> structurify$structureBlacklistedBiomes = null;
 
-
 	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
 		this.structurify$structureIdentifier = structureSetIdentifier;
 		this.structurify$globalStructureNamespaceData = null;

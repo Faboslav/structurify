@@ -265,7 +265,7 @@ public final class WorldgenDataProvider
 				biomeCheckData.enable(false);
 			}
 
-			if (structureId.contains("aquamirae:") || (structureId.contains("minecells:") && !structureId.contains("minecells:overworld_portal"))) {
+			if (structureId.contains("aquamirae:") || (structureId.contains("minecells:") && !structureId.contains("minecells:overworld_portal")) || structureId.contains("twilightforest:")) {
 				var overlapCheckData = structureData.getOverlapCheckData();
 				overlapCheckData.defaultExcludeFromOverlapPrevention(true);
 				overlapCheckData.excludeFromOverlapPrevention(true);
