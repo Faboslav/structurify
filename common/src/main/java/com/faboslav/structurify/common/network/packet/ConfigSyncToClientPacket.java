@@ -96,6 +96,7 @@ public record ConfigSyncToClientPacket(String config, boolean save, UUID playerI
 		public void encode(final ConfigSyncToClientPacket packet, final FriendlyByteBuf buf) {
 			buf.writeUtf(packet.config());
 			buf.writeBoolean(packet.save());
+			buf.writeUUID(packet.playerId());
 		}
 
 		@Override

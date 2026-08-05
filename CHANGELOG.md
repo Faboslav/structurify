@@ -1,3 +1,7 @@
+## 2.0.31
+
+- Fixed config packet sync logic
+
 ## 2.0.30
 
 - Fixed compatibility with "The Twilight Forest"
