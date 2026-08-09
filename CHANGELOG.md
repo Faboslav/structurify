@@ -1,3 +1,7 @@
+## 2.0.32
+
+- Fixed reset of the biome list
+
 ## 2.0.31
 
 - Fixed config packet sync logic

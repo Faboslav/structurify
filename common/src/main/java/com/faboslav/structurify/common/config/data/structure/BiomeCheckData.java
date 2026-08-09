@@ -23,7 +23,7 @@ public final class BiomeCheckData
 	private boolean isEnabled = IS_ENABLED_DEFAULT_VALUE;
 	private boolean defaultIsEnabled = IS_ENABLED_DEFAULT_VALUE;
 	private BiomeCheckMode mode = MODE_DEFAULT_VALUE;
-	private List<String> blacklistedBiomes = BLACKLISTED_BIOMES_DEFAULT_VALUE;
+	private List<String> blacklistedBiomes = new ArrayList<>(BLACKLISTED_BIOMES_DEFAULT_VALUE);
 
 	public BiomeCheckData() {
 	}
@@ -83,11 +83,11 @@ public final class BiomeCheckData
 	}
 
 	public List<String> getBlacklistedBiomes() {
-		return this.blacklistedBiomes;
+		return Collections.unmodifiableList(this.blacklistedBiomes);
 	}
 
 	public void setBlacklistedBiomes(List<String> blacklistedBiomes) {
-		this.blacklistedBiomes = blacklistedBiomes;
+		this.blacklistedBiomes = new ArrayList<>(blacklistedBiomes);
 	}
 
 	public enum BiomeCheckMode

@@ -12,6 +12,7 @@ import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,7 +132,7 @@ public final class BiomeCheckOptions
 			.collapsed(false)
 			.insertEntriesAtEnd(false)
 			.binding(
-				BiomeCheckData.BLACKLISTED_BIOMES_DEFAULT_VALUE,
+				new ArrayList<>(BiomeCheckData.BLACKLISTED_BIOMES_DEFAULT_VALUE),
 				structureLikeData.get(id).getBiomeCheckData()::getBlacklistedBiomes,
 				structureLikeData.get(id).getBiomeCheckData()::setBlacklistedBiomes
 			)

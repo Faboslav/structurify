@@ -243,10 +243,12 @@ public final class WorldgenDataProvider
 			}
 
 			if (structureId.equals("nova_structures:illager_camp")) {
-				var biomes = structureData.getBiomes();
+				var biomes = new ArrayList<>(structureData.getBiomes());
 
 				if (biomes.contains("minecraft:river")) {
 					biomes.remove("minecraft:river");
+					// TODO set default biomes?
+					structureData.setBiomes(biomes);
 				}
 			}
 

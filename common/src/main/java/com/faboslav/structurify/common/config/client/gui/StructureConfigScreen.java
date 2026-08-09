@@ -20,6 +20,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 
+import java.util.ArrayList;
+
 public final class StructureConfigScreen
 {
 	public static YACLScreen create(StructurifyConfig config, String structureId, Screen parent) {
@@ -122,7 +124,7 @@ public final class StructureConfigScreen
 			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.biomes.description", translatedStructureName)))
 			.insertEntriesAtEnd(false)
 			.binding(
-				config.getStructureData().get(structureId).getDefaultBiomes(),
+				new ArrayList<>(config.getStructureData().get(structureId).getDefaultBiomes()),
 				() -> config.getStructureData().get(structureId).getBiomes(),
 				biomes -> config.getStructureData().get(structureId).setBiomes(biomes)
 			)

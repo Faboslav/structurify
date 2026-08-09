@@ -89,15 +89,15 @@ public class StructureData implements StructureLikeData
 	}
 
 	public List<String> getDefaultBiomes() {
-		return this.defaultBiomes;
+		return Collections.unmodifiableList(this.defaultBiomes);
 	}
 
 	public List<String> getBiomes() {
-		return this.biomes;
+		return Collections.unmodifiableList(this.biomes);
 	}
 
 	public void setBiomes(List<String> biomes) {
-		this.biomes = biomes;
+		this.biomes = new ArrayList<>(biomes);
 	}
 
 	public GenerationStep.Decoration getDefaultStep() {

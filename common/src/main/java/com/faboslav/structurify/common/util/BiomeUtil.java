@@ -176,10 +176,12 @@ public final class BiomeUtil
 		List<String> biomeIds,
 		HolderLookup.RegistryLookup<Biome> biomeRegistry
 	) {
+		List<String> resolvedBiomeIds = new ArrayList<>(biomeIds);
+
 		for (ModCompat modCompat : ModChecker.BIOME_REPLACER_COMPATS) {
 			try {
-				var replacedBiomeIds = modCompat.getReplacedBiomes(biomeIds);
-				biomeIds.addAll(replacedBiomeIds);
+				var replacedBiomeIds = modCompat.getReplacedBiomes(resolvedBiomeIds);
+				resolvedBiomeIds.addAll(replacedBiomeIds);
 			} catch (Throwable e) {
 				Structurify.getLogger().error("Failed to get replaced biomes from mod compat");
 				e.printStackTrace();
@@ -188,7 +190,7 @@ public final class BiomeUtil
 
 		ArrayList<Holder<Biome>> biomeHolders = new ArrayList<>();
 
-		for (var biomeId : biomeIds) {
+		for (var biomeId : resolvedBiomeIds) {
 			if (biomeId.contains("#")) {
 				var biomeTagKey = TagKey.create(Registries.BIOME, Structurify.makeNamespacedId(biomeId.replace("#", "")));
 				var biomeTagHolder = biomeRegistry.get(biomeTagKey).orElse(null);
