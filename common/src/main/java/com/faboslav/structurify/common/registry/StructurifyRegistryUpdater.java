@@ -7,9 +7,7 @@ import com.faboslav.structurify.common.api.StructurifyTemplatePool;
 import com.faboslav.structurify.common.api.StructurifyWithStructureSet;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
-import com.faboslav.structurify.common.mixin.structure.StructureTemplatePoolMixin;
 import com.mojang.datafixers.util.Pair;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -102,65 +100,58 @@ public final class StructurifyRegistryUpdater
 			var structureTemplatePool = structureTemplatePoolReference.value();
 			var structureTemplatePoolRegistryKey = structureTemplatePoolReference.key();
 			String structureTemplatePoolId = structureTemplatePoolRegistryKey/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
-			StructureTemplatePoolMixin structurifyTemplatePool = ((StructureTemplatePoolMixin) structureTemplatePool);
+			StructurifyTemplatePool structurifyTemplatePool = ((StructurifyTemplatePool) structureTemplatePool);
+			structurifyTemplatePool.structurify$setStructureTemplatePoolId(structureTemplatePoolId);
 
-			var structureTemplatePoolData = Structurify.getConfig().getStructureTemplatePoolsData().getOrDefault(structureTemplatePoolId, null); //StructurifyTemplatePoolProvider.getTemplatePoolElementWeights().get(structureTemplatePoolId);
-
-			if (structureTemplatePoolData == null || structureTemplatePoolData.getStructureTemplatePoolElementWeights().isEmpty() || structureTemplatePoolData.isUsingDefaultValues()) {
-				continue;
-			}
-
-			List<Pair<StructurePoolElement, Integer>> originalRawTemplates = List.copyOf(structurifyTemplatePool.getRawTemplates());
-			ObjectArrayList<StructurePoolElement> originalTemplates = new ObjectArrayList<>(structurifyTemplatePool.getTemplates());
-			int originalMaxSize = structurifyTemplatePool.getMaxSize();
+			var structureTemplatePoolData = Structurify.getConfig().getStructureTemplatePoolsData().getOrDefault(structureTemplatePoolId, null);
+			List<Pair<StructurePoolElement, Integer>> originalRawTemplates = structurifyTemplatePool.structurify$getOriginalRawTemplates();
 			List<Pair<StructurePoolElement, Integer>> rawTemplates = new ArrayList<>();
 
 			try {
-				for (Pair<StructurePoolElement, Integer> originalRawTemplate : originalRawTemplates) {
-					StructurePoolElement structurePoolElement = originalRawTemplate.getFirst();
-					var structurePoolElementWeight = originalRawTemplate.getSecond();
-					var structureTemplatePoolElementId = StructurifyTemplatePoolProvider.getStructurePoolElementLocation(structurePoolElement);
+				if (
+					structureTemplatePoolData == null
+					|| structureTemplatePoolData.getStructureTemplatePoolElementWeights().isEmpty()
+					|| structureTemplatePoolData.isUsingDefaultValues()
+				) {
+					rawTemplates.addAll(originalRawTemplates);
+				} else {
+					for (Pair<StructurePoolElement, Integer> originalRawTemplate : originalRawTemplates) {
+						StructurePoolElement structurePoolElement = originalRawTemplate.getFirst();
+						var structurePoolElementWeight = originalRawTemplate.getSecond();
+						var structureTemplatePoolElementId = StructurifyTemplatePoolProvider.getStructurePoolElementLocation(structurePoolElement);
 
-					if (structureTemplatePoolElementId == null) {
-						rawTemplates.add(Pair.of(structurePoolElement, structurePoolElementWeight));
-						continue;
+						if (structureTemplatePoolElementId == null) {
+							rawTemplates.add(originalRawTemplate);
+							continue;
+						}
+
+						var modifiedStructurePoolElementWeight = structureTemplatePoolData.getStructureTemplatePoolElementWeights().getOrDefault(structureTemplatePoolElementId, null);
+
+						if(modifiedStructurePoolElementWeight != null && modifiedStructurePoolElementWeight.equals(0)) {
+							continue;
+						}
+
+						if (modifiedStructurePoolElementWeight == null || modifiedStructurePoolElementWeight.equals(structurePoolElementWeight)) {
+							rawTemplates.add(originalRawTemplate);
+							continue;
+						}
+
+						rawTemplates.add(Pair.of(structurePoolElement, modifiedStructurePoolElementWeight));
 					}
 
-					var modifiedStructurePoolElementWeight = structureTemplatePoolData.getStructureTemplatePoolElementWeights().getOrDefault(structureTemplatePoolElementId, null);
-
-					if(modifiedStructurePoolElementWeight != null && modifiedStructurePoolElementWeight.equals(0)) {
-						continue;
-					}
-
-					if (modifiedStructurePoolElementWeight == null || modifiedStructurePoolElementWeight.equals(structurePoolElementWeight)) {
-						rawTemplates.add(Pair.of(structurePoolElement, structurePoolElementWeight));
-						continue;
-					}
-
-					rawTemplates.add(Pair.of(structurePoolElement, modifiedStructurePoolElementWeight));
-				}
-
-				if(rawTemplates.isEmpty()) {
-					rawTemplates.add(Pair.of(EmptyPoolElement.INSTANCE, 1));
-				}
-
-				ObjectArrayList<StructurePoolElement> templates = new ObjectArrayList<>();
-
-				for(Pair<StructurePoolElement, Integer> rawTemplate : rawTemplates) {
-					StructurePoolElement element = rawTemplate.getFirst();
-
-					for(int i = 0; i < rawTemplate.getSecond(); ++i) {
-						templates.add(element);
+					if(rawTemplates.isEmpty()) {
+						rawTemplates.add(Pair.of(EmptyPoolElement.INSTANCE, 1));
 					}
 				}
 
-				structurifyTemplatePool.setRawTemplates(rawTemplates);
-				structurifyTemplatePool.setTemplates(templates);
-				structurifyTemplatePool.setMaxSize(Integer.MIN_VALUE);
+				if(rawTemplates.equals(structurifyTemplatePool.structurify$getRawTemplates())) {
+					continue;
+				}
+
+				structurifyTemplatePool.structurify$setRawTemplates(rawTemplates);
 			} catch (Exception e) {
-				structurifyTemplatePool.setRawTemplates(originalRawTemplates);
-				structurifyTemplatePool.setTemplates(originalTemplates);
-				structurifyTemplatePool.setMaxSize(originalMaxSize);
+				Structurify.getLogger().error("Failed to update structure template pool {}", structureTemplatePoolId, e);
+				structurifyTemplatePool.structurify$setRawTemplates(originalRawTemplates);
 			}
 		}
 
