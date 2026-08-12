@@ -4,6 +4,7 @@ import com.faboslav.structurify.common.api.*;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import com.faboslav.structurify.common.config.data.structure.jigsaw.HeightProviderData;
 import com.faboslav.structurify.common.config.data.structure.jigsaw.ProjectStartToHeightmap;
+import com.faboslav.structurify.common.mixin.structure.StructureSetMixin;
 import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvider;
 import com.faboslav.structurify.common.registry.StructurifyTemplatePoolProvider;
 import com.faboslav.structurify.common.util.BiomeUtil;
@@ -119,10 +120,11 @@ public final class WorldgenDataProvider
 		Map<String, StructureData> structures = new TreeMap<>(StructurifyComparators.ALPHABETICALL_ID_COMPARATOR);
 
 		for (var structureReference : structureRegistry.listElements().toList()) {
-			Structure structure = structureReference.value();
+			var structure = structureReference.value();
+			var structurifyStructure = (StructurifyStructure) structure;
 			Identifier structureIdentifier = structureReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/;
 			String structureId = structureIdentifier.toString();
-			var biomeStorage = structure.biomes().unwrap();
+			var biomeStorage = structurifyStructure.structurify$getOriginalBiomes().unwrap();
 			var defaultBiomes = new ArrayList<String>();
 
 			biomeStorage.mapLeft(biomeTagKey -> {
@@ -155,7 +157,7 @@ public final class WorldgenDataProvider
 				return null;
 			});
 
-			StructureData structureData = new StructureData(defaultBiomes, structure.step(), structure.terrainAdaptation());
+			StructureData structureData = new StructureData(defaultBiomes, structurifyStructure.structurify$getOriginalStep(), structurifyStructure.structurify$getOriginalTerrainAdaptation());
 			@Nullable JsonObject structureJson = JigsawStructureUtil.getStructureData(structure);
 
 			if (JigsawStructureUtil.isJigsawLikeStructure(structure, structureJson)) {
@@ -323,6 +325,7 @@ public final class WorldgenDataProvider
 
 		for (var structureSetReference : structureSetRegistry.listElements().toList()) {
 			var structureSet = structureSetReference.value();
+			var structurifyStructureSet = (StructurifyStructureSet) (Object) structureSetReference.value();
 			String structureSetId = structureSetReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 			((StructurifyWithStructureSet) (Object) structureSet).structurify$setStructureSetId(structureSetId);
 
@@ -344,7 +347,7 @@ public final class WorldgenDataProvider
 
 			var structureWeights = new HashMap<String, Integer>();
 
-			for (var structureSelectionEntry : structureSet.structures()) {
+			for (var structureSelectionEntry : structurifyStructureSet.structurify$getOriginalStructures()) {
 				StructurifyStructureSelectionEntry structurifyStructureSelectionEntry = ((StructurifyStructureSelectionEntry) (Object) structureSelectionEntry);
 				var structureId = structureSelectionEntry.structure().unwrapKey().get()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 				structureWeights.put(structureId, structurifyStructureSelectionEntry.structurify$getOriginalWeight());

@@ -1,12 +1,15 @@
 package com.faboslav.structurify.common.mixin.structure;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.api.StructurifyStructureSet;
 import com.faboslav.structurify.common.api.StructurifyWithStructureSet;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
@@ -14,8 +17,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Mixin(StructureSet.class)
-public abstract class StructureSetMixin implements StructurifyWithStructureSet
+public abstract class StructureSetMixin implements StructurifyWithStructureSet, StructurifyStructureSet
 {
+	@Shadow
+	@Final
+	private List<StructureSet.StructureSelectionEntry> structures;
+
 	@Unique
 	@Nullable
 	public List<StructureSet.StructureSelectionEntry> structurify$originalStructures = null;
@@ -27,6 +34,10 @@ public abstract class StructureSetMixin implements StructurifyWithStructureSet
 	@Unique
 	@Nullable
 	private String structurify$structureSetId = null;
+
+	public List<StructureSet.StructureSelectionEntry> structurify$getOriginalStructures() {
+		return this.structures;
+	}
 
 	public void structurify$setStructureSetId(String structureSetId) {
 		this.structurify$structureSetId = structureSetId;

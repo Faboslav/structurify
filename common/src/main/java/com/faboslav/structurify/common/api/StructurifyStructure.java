@@ -5,10 +5,18 @@ import com.faboslav.structurify.common.config.data.StructureNamespaceData;
 import net.minecraft.core.HolderSet;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import org.jetbrains.annotations.Nullable;
 
 public interface StructurifyStructure
 {
+	HolderSet<Biome> structurify$getOriginalBiomes();
+
+	GenerationStep.Decoration structurify$getOriginalStep();
+
+	TerrainAdjustment structurify$getOriginalTerrainAdaptation();
+
 	void structurify$setStructureIdentifier(@Nullable Identifier structureSetIdentifier);
 
 	@Nullable

@@ -24,7 +24,9 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.function.Predicate;
@@ -37,6 +39,10 @@ import net.minecraft.world.level.Level;
 @Mixin(Structure.class)
 public abstract class StructureMixin implements StructurifyStructure
 {
+	@Shadow
+	@Final
+	protected Structure.StructureSettings settings;
+
 	@Unique
 	@Nullable
 	public Identifier structurify$structureIdentifier = null;
@@ -68,6 +74,18 @@ public abstract class StructureMixin implements StructurifyStructure
 	@Unique
 	@Nullable
 	protected HolderSet<Biome> structurify$structureBlacklistedBiomes = null;
+
+	public HolderSet<Biome> structurify$getOriginalBiomes() {
+		return this.settings.biomes();
+	}
+
+	public GenerationStep.Decoration structurify$getOriginalStep() {
+		return this.settings.step();
+	}
+
+	public TerrainAdjustment structurify$getOriginalTerrainAdaptation() {
+		return this.settings.terrainAdaptation();
+	}
 
 	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
 		this.structurify$structureIdentifier = structureSetIdentifier;

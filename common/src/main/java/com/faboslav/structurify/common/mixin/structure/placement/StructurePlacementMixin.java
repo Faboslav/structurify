@@ -41,16 +41,16 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		return this.salt;
 	}
 
-	public float structurify$getOriginalFrequency() {
-		return this.frequency;
-	}
-
 	@ModifyReturnValue(
 		method = "salt",
 		at = @At("RETURN")
 	)
 	protected int structurify$getSalt(int originalSalt) {
 		return RandomSpreadUtil.getModifiedSalt(this.structurify$getStructureSetId(), originalSalt);
+	}
+
+	public float structurify$getOriginalFrequency() {
+		return this.frequency;
 	}
 
 	@ModifyReturnValue(
