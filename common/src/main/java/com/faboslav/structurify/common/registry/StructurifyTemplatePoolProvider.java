@@ -1,7 +1,7 @@
 package com.faboslav.structurify.common.registry;
 
 import com.faboslav.structurify.common.Structurify;
-import com.faboslav.structurify.common.api.StructurifyTemplatePool;
+import com.faboslav.structurify.common.mixin.structure.StructureTemplatePoolMixin;
 import com.faboslav.structurify.common.mixin.structure.jigsaw.JigsawStructureAccessor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -61,7 +61,7 @@ public final class StructurifyTemplatePoolProvider
 			for (var structureTemplatePoolReference : structureTemplatePoolRegistry.listElements().toList()) {
 				var structureTemplatePoolId = structureTemplatePoolReference.key()/*? if >= 1.21.11 {*/.identifier()/*?} else {*//*.location()*//*?}*/.toString();
 				var structureTemplatePool = structureTemplatePoolReference.value();
-				var structureTemplatePoolElements = ((StructurifyTemplatePool) structureTemplatePool).structurify$getOriginalRawTemplates();
+				var structureTemplatePoolElements = ((StructureTemplatePoolMixin) structureTemplatePool).getRawTemplates();
 
 				Map<String, Integer> structureTemplatePoolElementsWithWeight = new HashMap<>();
 

@@ -41,7 +41,11 @@ public abstract class StructureMixin implements StructurifyStructure
 {
 	@Shadow
 	@Final
+	//? if >= 1.21.5 {
 	protected Structure.StructureSettings settings;
+	//?} else {
+	/*private Structure.StructureSettings settings;
+	*///?}
 
 	@Unique
 	@Nullable

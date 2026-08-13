@@ -1,6 +1,7 @@
 ## 2.0.33
 
-- TBD
+- Fixed part of the config resetting
+- Fixed config values not being saved
 
 ## 2.0.32
 
