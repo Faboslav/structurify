@@ -16,6 +16,7 @@
 		"ResourceKeyArgumentInvoker",
 		"ResourcePackManagerAccessor",
 		"StructureManagerMixin",
+		"WorldOptionsMixin",
 		"level.BiasedToBottomHeightAccessor",
 		"level.TrapezoidHeightAccessor",
 		"level.UniformHeightAccessor",
