@@ -52,7 +52,7 @@ public final class StructureTemplatePoolDataSerializer
 			var structureTemplatePoolElementName = structureTemplatePoolElementWeightEntry.getKey();
 			var defaultStructurePoolElementWeight = structureTemplatePoolData.getDefaultStructureTemplatePoolElementWeights().get(structureTemplatePoolElementName);
 			var structureTemplatePoolElementWeight = structureTemplatePoolElementWeightEntry.getValue();
-			
+
 			if(defaultStructurePoolElementWeight == null || defaultStructurePoolElementWeight.equals(structureTemplatePoolElementWeight)) {
 				continue;
 			}
