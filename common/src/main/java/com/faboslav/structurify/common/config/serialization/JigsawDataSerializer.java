@@ -67,24 +67,24 @@ public final class JigsawDataSerializer
 		}
 	}
 
-	public static void save(JsonObject structureJson, JigsawData jigsawData) {
+	public static void save(JsonObject structureJson, JigsawData jigsawData, boolean saveOnlyChanged) {
 		var size = jigsawData.getSize();
 
-		if(size != null && !jigsawData.isUsingDefaultSize()) {
+		if(size != null && (!jigsawData.isUsingDefaultSize() || !saveOnlyChanged)) {
 			structureJson.addProperty(SIZE_PROPERTY, jigsawData.getSize());
 		}
 
 		var horizontalMaxDistanceFromCenter = jigsawData.getHorizontalMaxDistanceFromCenter();
 		var verticalMaxDistanceFromCenter = jigsawData.getVerticalMaxDistanceFromCenter();
 
-		if(horizontalMaxDistanceFromCenter != null && verticalMaxDistanceFromCenter != null && !jigsawData.isUsingDefaultMaxDistanceFromCenter()) {
+		if(horizontalMaxDistanceFromCenter != null && verticalMaxDistanceFromCenter != null && (!jigsawData.isUsingDefaultMaxDistanceFromCenter() || !saveOnlyChanged)) {
 			structureJson.addProperty(MAX_HORIZONTAL_DISTANCE_FROM_CENTER_PROPERTY, horizontalMaxDistanceFromCenter);
 			structureJson.addProperty(MAX_VERTICAL_DISTANCE_FROM_CENTER_PROPERTY, verticalMaxDistanceFromCenter);
 		}
 
 		var heightProviderData = jigsawData.getHeightProviderData();
 
-		if(heightProviderData != null && !jigsawData.isUsingDefaultHeightProvider()) {
+		if(heightProviderData != null && (!jigsawData.isUsingDefaultHeightProvider() || !saveOnlyChanged)) {
 			var heightProvider = heightProviderData.toHeightProvider();
 
 			var heightProviderJson = HeightProvider.CODEC
@@ -96,7 +96,7 @@ public final class JigsawDataSerializer
 
 		var projectStartToHeightmap = jigsawData.getProjectStartToHeightmap();
 
-		if (projectStartToHeightmap != null && !jigsawData.isUsingDefaultProjectStartToHeightmap()) {
+		if (projectStartToHeightmap != null && (!jigsawData.isUsingDefaultProjectStartToHeightmap() || !saveOnlyChanged)) {
 			var projectStartToHeightmapValue = projectStartToHeightmap.toDataValue();
 
 			if (projectStartToHeightmapValue.isPresent()) {

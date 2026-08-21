@@ -43,13 +43,41 @@ public final class StructureSetData
 	}
 
 	public boolean isUsingDefaultValues() {
-		return this.isDisabled == IS_DISABLED_DEFAULT_VALUE
-			   && this.overrideGlobalSpacingAndSeparationModifier == this.defaultOverrideGlobalSpacingAndSeparationModifier
-			   && this.salt == this.defaultSalt
-			   && this.frequency == this.defaultFrequency
-			   && this.spacing == this.defaultSpacing
-			   && this.separation == this.defaultSeparation
-			   && this.structureWeights.equals(this.defaultStructureWeights);
+		return this.isUsingDefaultIsDisabled()
+		       && this.isUsingDefaultOverrideGlobalSpacingAndSeparationModifier()
+		       && this.isUsingDefaultSalt()
+		       && this.isUsingDefaultFrequency()
+		       && this.isUsingDefaultSpacing()
+		       && this.isUsingDefaultSeparation()
+		       && this.isUsingDefaultStructureWeights();
+	}
+
+	public boolean isUsingDefaultIsDisabled() {
+		return this.isDisabled == IS_DISABLED_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultOverrideGlobalSpacingAndSeparationModifier() {
+		return this.overrideGlobalSpacingAndSeparationModifier == this.defaultOverrideGlobalSpacingAndSeparationModifier;
+	}
+
+	public boolean isUsingDefaultSalt() {
+		return this.salt == this.defaultSalt;
+	}
+
+	public boolean isUsingDefaultFrequency() {
+		return this.frequency == this.defaultFrequency;
+	}
+
+	public boolean isUsingDefaultSpacing() {
+		return this.spacing == this.defaultSpacing;
+	}
+
+	public boolean isUsingDefaultSeparation() {
+		return this.separation == this.defaultSeparation;
+	}
+
+	public boolean isUsingDefaultStructureWeights() {
+		return this.structureWeights.equals(this.defaultStructureWeights);
 	}
 
 	public boolean isDisabled() {

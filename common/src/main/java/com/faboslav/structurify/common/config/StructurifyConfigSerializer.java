@@ -243,7 +243,7 @@ public final class StructurifyConfigSerializer
 		config.getStructureData().entrySet().stream()
 			.filter(entry -> !saveOnlyChanged || !entry.getValue().isUsingDefaultValues())
 			.forEach(structureDataEntry -> {
-				StructureDataSerializer.save(structures, structureDataEntry.getKey(), structureDataEntry.getValue());
+				StructureDataSerializer.save(structures, structureDataEntry.getKey(), structureDataEntry.getValue(), saveOnlyChanged);
 			});
 
 		json.add(STRUCTURES_PROPERTY, structures);
@@ -266,7 +266,7 @@ public final class StructurifyConfigSerializer
 					structureSetSalts.put(structureSetData.getSalt(), structureSetName);
 				}
 
-				StructureSetDataSerializer.save(structureSets, structureSetName, structureSetData);
+				StructureSetDataSerializer.save(structureSets, structureSetName, structureSetData, saveOnlyChanged);
 			});
 
 		json.add(STRUCTURE_SETS_PROPERTY, structureSets);

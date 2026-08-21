@@ -100,11 +100,13 @@ public final class StructureSetDataSerializer
 		}
 	}
 
-	public static void save(JsonArray structureSetsJson, String structureSetName, StructureSetData structureSetData) {
+	public static void save(JsonArray structureSetsJson, String structureSetName, StructureSetData structureSetData, boolean saveOnlyChanged) {
 		var salt = structureSetData.getSalt();
 		var frequency = structureSetData.getFrequency();
 
 		JsonObject structureSet = new JsonObject();
+
+		structureSet.addProperty(NAME_PROPERTY, structureSetName);
 
 		if ((salt < StructureSetData.MIN_SALT || salt > StructureSetData.MAX_SALT) && salt != structureSetData.getDefaultSalt()) {
 			Structurify.getLogger().warn("Salt value for structure set {} is currently {}, which is invalid, value will be automatically corrected to {}.", structureSetName, salt, structureSetData.getDefaultSalt());
@@ -135,22 +137,40 @@ public final class StructureSetDataSerializer
 				separation = 0;
 			}
 
-			structureSet.addProperty(SPACING_PROPERTY, spacing);
-			structureSet.addProperty(SEPARATION_PROPERTY, separation);
+			if(!structureSetData.isUsingDefaultSpacing() || !saveOnlyChanged) {
+				structureSet.addProperty(SPACING_PROPERTY, spacing);
+			}
+
+			if(!structureSetData.isUsingDefaultSeparation() || !saveOnlyChanged) {
+				structureSet.addProperty(SEPARATION_PROPERTY, separation);
+			}
 		}
 
-		JsonObject structureWeights = new JsonObject();
-
-		for(var structureWeightEntry : structureSetData.getStructureWeights().entrySet()) {
-			structureWeights.addProperty(structureWeightEntry.getKey(), structureWeightEntry.getValue());
+		if(!structureSetData.isUsingDefaultIsDisabled() || !saveOnlyChanged) {
+			structureSet.addProperty(IS_DISABLED_PROPERTY, structureSetData.isDisabled());
 		}
 
-		structureSet.addProperty(NAME_PROPERTY, structureSetName);
-		structureSet.addProperty(IS_DISABLED_PROPERTY, structureSetData.isDisabled());
-		structureSet.addProperty(SALT_PROPERTY, salt);
-		structureSet.addProperty(FREQUENCY_PROPERTY, frequency);
-		structureSet.addProperty(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, structureSetData.overrideGlobalSpacingAndSeparationModifier());
-		structureSet.add(STRUCTURE_WEIGHT_PROPERTY, structureWeights);
+		if(!structureSetData.isUsingDefaultSalt() || !saveOnlyChanged) {
+			structureSet.addProperty(SALT_PROPERTY, salt);
+		}
+
+		if(!structureSetData.isUsingDefaultFrequency() || !saveOnlyChanged) {
+			structureSet.addProperty(FREQUENCY_PROPERTY, frequency);
+		}
+
+		if(!structureSetData.isUsingDefaultOverrideGlobalSpacingAndSeparationModifier() || !saveOnlyChanged) {
+			structureSet.addProperty(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, structureSetData.overrideGlobalSpacingAndSeparationModifier());
+		}
+
+		if(!structureSetData.isUsingDefaultStructureWeights() || !saveOnlyChanged) {
+			JsonObject structureWeights = new JsonObject();
+
+			for (var structureWeightEntry : structureSetData.getStructureWeights().entrySet()) {
+				structureWeights.addProperty(structureWeightEntry.getKey(), structureWeightEntry.getValue());
+			}
+
+			structureSet.add(STRUCTURE_WEIGHT_PROPERTY, structureWeights);
+		}
 
 		structureSetsJson.add(structureSet);
 	}

@@ -103,7 +103,7 @@ public final class StructureDataSerializer
 		BiomeCheckDataSerializer.load(structureJson, structureData.getBiomeCheckData());
 	}
 
-	public static void save(JsonArray structuresJson, String structureName, StructureData structureData) {
+	public static void save(JsonArray structuresJson, String structureName, StructureData structureData, boolean saveOnlyChanged) {
 		JsonObject structure = new JsonObject();
 
 		structure.addProperty(NAME_PROPERTY, structureName);
@@ -113,9 +113,15 @@ public final class StructureDataSerializer
 		}
 
 		var whitelistedBiomes = new ArrayList<>(structureData.getBiomes());
-		whitelistedBiomes.removeAll(structureData.getDefaultBiomes());
+		var defaultBiomes = structureData.getDefaultBiomes();
 
-		if (!whitelistedBiomes.isEmpty()) {
+		if(!saveOnlyChanged) {
+			whitelistedBiomes.addAll(defaultBiomes);
+		} else {
+			whitelistedBiomes.removeAll(defaultBiomes);
+		}
+
+		if (!whitelistedBiomes.isEmpty() || !saveOnlyChanged) {
 			JsonArray whitelistedBiomesJson = new JsonArray();
 			whitelistedBiomes.stream().distinct().forEach(whitelistedBiomesJson::add);
 			structure.add(WHITELISTED_BIOMES_PROPERTY, whitelistedBiomesJson);
@@ -124,45 +130,45 @@ public final class StructureDataSerializer
 		var blacklistedBiomes = new ArrayList<>(structureData.getDefaultBiomes());
 		blacklistedBiomes.removeAll(structureData.getBiomes());
 
-		if(!blacklistedBiomes.isEmpty()) {
+		if(!blacklistedBiomes.isEmpty() || !saveOnlyChanged) {
 			JsonArray blacklistedBiomesJson = new JsonArray();
 			blacklistedBiomes.stream().distinct().forEach(blacklistedBiomesJson::add);
 			structure.add(BLACKLISTED_BIOMES_PROPERTY, blacklistedBiomesJson);
 		}
 
-		if(!structureData.isUsingDefaultStep()) {
+		if(!structureData.isUsingDefaultStep() || !saveOnlyChanged) {
 			structure.addProperty(STEP_PROPERTY, structureData.getStep().getSerializedName());
 		}
 
-		if(!structureData.isUsingDefaultTerrainAdaptation()) {
+		if(!structureData.isUsingDefaultTerrainAdaptation() || !saveOnlyChanged) {
 			structure.addProperty(TERRAIN_ADAPTATION_PROPERTY, structureData.getTerrainAdaptation().getSerializedName());
 		}
 
 		if (structureData.isJigsawStructure()) {
 			var jigsawData = structureData.getJigsawData();
 
-			if (!jigsawData.isUsingDefaultValues()) {
-				JigsawDataSerializer.save(structure, jigsawData);
+			if (!jigsawData.isUsingDefaultValues() || !saveOnlyChanged) {
+				JigsawDataSerializer.save(structure, jigsawData, saveOnlyChanged);
 			}
 		}
 
 		var distanceFromWorldCenterData = structureData.getDistanceFromWorldCenterCheckData();
-		if (!distanceFromWorldCenterData.isUsingDefaultValues()) {
+		if (!distanceFromWorldCenterData.isUsingDefaultValues() || !saveOnlyChanged) {
 			DistanceFromWorldCenterDataSerializer.save(structure, distanceFromWorldCenterData);
 		}
 
 		var overlapCheckData = structureData.getOverlapCheckData();
-		if(!overlapCheckData.isUsingDefaultValues()) {
+		if(!overlapCheckData.isUsingDefaultValues() || !saveOnlyChanged) {
 			OverlapCheckDataSerializer.save(structure, overlapCheckData);
 		}
 
 		var flatnessCheckData = structureData.getFlatnessCheckData();
-		if (!flatnessCheckData.isUsingDefaultValues()) {
+		if (!flatnessCheckData.isUsingDefaultValues() || !saveOnlyChanged) {
 			FlatnessCheckDataSerializer.save(structure, flatnessCheckData);
 		}
 
 		var biomeCheckData = structureData.getBiomeCheckData();
-		if (!biomeCheckData.isUsingDefaultValues()) {
+		if (!biomeCheckData.isUsingDefaultValues() || !saveOnlyChanged) {
 			BiomeCheckDataSerializer.save(structure, biomeCheckData);
 		}
 
