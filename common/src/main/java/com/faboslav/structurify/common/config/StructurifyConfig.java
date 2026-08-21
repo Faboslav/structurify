@@ -131,7 +131,7 @@ public final class StructurifyConfig
 				.map(Map.Entry::getKey)
 				.toList();
 
-			List<String> changedStructureNamespaces = Structurify.getConfig().getStructureData().entrySet()
+			List<String> changedStructureNamespaces = Structurify.getConfig().getStructureNamespaceData().entrySet()
 				.stream()
 				.filter(entry -> !entry.getValue().isUsingDefaultValues())
 				.map(Map.Entry::getKey)
