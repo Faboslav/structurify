@@ -90,10 +90,6 @@ public final class StructureConfigScreen
 					.action((screen, buttonOption) -> {
 						var configScreen = StructurifyClient.getConfigScreen();
 
-						if (configScreen == null) {
-							return;
-						}
-
 						configScreen.savePendingChanges(screen);
 
 						YACLScreen structureTemplatePoolsScreen = StructureTemplatePoolsConfigScreen.create(Structurify.getConfig(), structureId, screen);

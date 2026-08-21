@@ -3,7 +3,6 @@ package com.faboslav.structurify.common;
 import com.faboslav.structurify.common.config.client.gui.StructurifyConfigScreen;
 import com.faboslav.structurify.common.debug.StructurifyDebugRenderer;
 import net.minecraft.client.gui.screens.Screen;
-import org.jetbrains.annotations.Nullable;
 
 public final class StructurifyClient
 {

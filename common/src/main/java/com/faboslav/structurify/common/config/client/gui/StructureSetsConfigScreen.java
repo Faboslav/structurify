@@ -107,10 +107,6 @@ public final class StructureSetsConfigScreen
 				.openConfigCallback((screen, id) -> {
 					var configScreen = StructurifyClient.getConfigScreen();
 
-					if (configScreen == null) {
-						return;
-					}
-
 					configScreen.savePendingChanges(screen);
 
 					YACLScreen structureSetScreen = StructureSetConfigScreen.create(Structurify.getConfig(), id, screen);
