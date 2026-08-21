@@ -18,11 +18,11 @@ import java.util.Map;
 
 public final class BiomeCheckOptions
 {
-	public static String BIOME_CHECK_SYMBOL = "\u2663";
-	public static String OVERRIDE_GLOBAL_BIOME_CHECK_OPTION_NAME = "override_global_biome_check";
-	public static String BIOME_CHECK_IS_ENABLED_OPTION_NAME = "is_enabled";
-	public static String BIOME_CHECK_MODE_OPTION_NAME = "mode";
-	public static String BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME = "blacklisted_biomes";
+	public static final String BIOME_CHECK_SYMBOL = "\u2663";
+	public static final String OVERRIDE_GLOBAL_BIOME_CHECK_OPTION_NAME = "override_global_biome_check";
+	public static final String BIOME_CHECK_IS_ENABLED_OPTION_NAME = "is_enabled";
+	public static final String BIOME_CHECK_MODE_OPTION_NAME = "mode";
+	public static final String BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME = "blacklisted_biomes";
 
 	public static Map<String, Option<?>> addBiomeCheckOptions(
 		OptionGroup.Builder groupBuilder,

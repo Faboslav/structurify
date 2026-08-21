@@ -7,7 +7,7 @@ import com.faboslav.structurify.common.config.data.structure.OverlapCheckData;
 
 public final class StructureNamespaceData implements StructureLikeData
 {
-	public static String GLOBAL_NAMESPACE_IDENTIFIER = "global";
+	public static final String GLOBAL_NAMESPACE_IDENTIFIER = "global";
 	private boolean isDisabled = IS_DISABLED_DEFAULT_VALUE;
 	private DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckData;
 	private OverlapCheckData overlapCheckData;

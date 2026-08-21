@@ -99,10 +99,6 @@ public class HeightProviderOptions
 		heightProviderTypeOption.addListener((opt, type) -> {
 			var configScreen = StructurifyClient.getConfigScreen();
 
-			if (configScreen == null) {
-				return;
-			}
-
 			configScreen.currentScreen.finishOrSave();
 			heightProviderData.setType(type);
 			YACLScreen structureScreen = StructureConfigScreen.create(Structurify.getConfig(), structureId, configScreen.previousScreen);

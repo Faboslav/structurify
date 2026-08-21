@@ -22,12 +22,12 @@ import java.util.Map;
 
 public final class FlatnessCheckOptions
 {
-	public static String FLATNESS_CHECK_SYMBOL = "\u26F0";
-	public static String OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME = "override_global_flatness_check";
-	public static String FLATNESS_CHECK_IS_ENABLED_OPTION_NAME = "is_enabled";
-	public static String FLATNESS_CHECK_ALLOW_NON_SOLID_BLOCKS_OPTION_NAME = "allow_non_solid_blocks";
-	public static String FLATNESS_CHECK_MODE_OPTION_NAME = "mode";
-	public static String FLATNESS_CHECK_MAX_HEIGHT_DIFFERENCE = "max_height_difference";
+	public static final String FLATNESS_CHECK_SYMBOL = "\u26F0";
+	public static final String OVERRIDE_GLOBAL_FLATNESS_CHECK_OPTION_NAME = "override_global_flatness_check";
+	public static final String FLATNESS_CHECK_IS_ENABLED_OPTION_NAME = "is_enabled";
+	public static final String FLATNESS_CHECK_ALLOW_NON_SOLID_BLOCKS_OPTION_NAME = "allow_non_solid_blocks";
+	public static final String FLATNESS_CHECK_MODE_OPTION_NAME = "mode";
+	public static final String FLATNESS_CHECK_MAX_HEIGHT_DIFFERENCE = "max_height_difference";
 
 	public static Map<String, Option<?>> addFlatnessCheckOptions(
 		OptionAddable groupBuilder,

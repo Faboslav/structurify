@@ -15,7 +15,7 @@ import java.util.Map;
 
 public final class OverlapCheckOptions
 {
-	public static String OVERLAP_CHECK_SYMBOL = "\u29C9";
+	public static final String OVERLAP_CHECK_SYMBOL = "\u29C9";
 
 	public static void addOverlapCheckOptions(
 		OptionAddable builder,

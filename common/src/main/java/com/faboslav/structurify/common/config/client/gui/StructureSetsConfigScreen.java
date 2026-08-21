@@ -29,7 +29,7 @@ import java.util.*;
 
 public final class StructureSetsConfigScreen
 {
-	public static Map<String, AbstractMap.SimpleEntry<Option<Boolean>, Option<OptionPair<Option<Integer>, Option<Integer>>>>> structureSetOptions = new HashMap<>();
+	public static final Map<String, AbstractMap.SimpleEntry<Option<Boolean>, Option<OptionPair<Option<Integer>, Option<Integer>>>>> structureSetOptions = new HashMap<>();
 	public static Option<Boolean> enableGlobalSpacingAndSeparationOption = null;
 	public static Option<Double> globalSpacingAndSeparationModifierOption = null;
 

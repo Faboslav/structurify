@@ -37,7 +37,7 @@ public final class JigsawDataSerializer
 
 		if (structureJson.has(START_HEIGHT_PROPERTY)) {
 			var heightProvider = HeightProvider.CODEC
-				.parse(JsonOps.INSTANCE, structureJson.get("start_height"))
+				.parse(JsonOps.INSTANCE, structureJson.get(START_HEIGHT_PROPERTY))
 				.result()
 				.orElse(null);
 
