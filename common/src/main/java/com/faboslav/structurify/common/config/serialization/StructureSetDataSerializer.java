@@ -134,7 +134,7 @@ public final class StructureSetDataSerializer
 
 			if (spacing < 1) {
 				Structurify.getLogger().warn("Spacing value for structure set {} is currently {}, which is lower than minimum value of zero, value will be automatically corrected to 0.", structureSetName, spacing);
-				separation = 0;
+				spacing = 1;
 			}
 
 			if(!structureSetData.isUsingDefaultSpacing() || !saveOnlyChanged) {
