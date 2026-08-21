@@ -16,9 +16,10 @@ public final class BiomeStringController extends AbstractDropdownController<Stri
 {
 	private final List<String> allowedValues;
 
-	public BiomeStringController(Option<String> option) {
-		super(option, WorldgenDataProvider.getBiomes(), false, false);
-		this.allowedValues = WorldgenDataProvider.getBiomes();
+	public BiomeStringController(Option<String> option, boolean allowEmpty) {
+		super(option, WorldgenDataProvider.getBiomes().stream().toList(), allowEmpty, false);
+
+		this.allowedValues = WorldgenDataProvider.getBiomes().stream().toList();
 	}
 
 	@Override
@@ -67,6 +68,10 @@ public final class BiomeStringController extends AbstractDropdownController<Stri
 
 	@Override
 	public Component formatValue() {
+		if (getString().isEmpty()) {
+			return Component.translatable("gui.featurify.label.none");
+		}
+
 		return LanguageUtil.translateId("biome", getString()).append((" (" + getString() + ") "));
 	}
 

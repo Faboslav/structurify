@@ -7,16 +7,23 @@ import dev.isxander.yacl3.impl.controller.AbstractControllerBuilderImpl;
 
 public final class BiomeStringControllerBuilder extends AbstractControllerBuilderImpl<String>
 {
+	private boolean allowEmpty = false;
+
 	private BiomeStringControllerBuilder(Option<String> option) {
 		super(option);
 	}
 
 	@Override
 	public Controller<String> build() {
-		return new BiomeStringController(option);
+		return new BiomeStringController(option, this.allowEmpty);
 	}
 
 	public static BiomeStringControllerBuilder create(Option<String> option) {
 		return new BiomeStringControllerBuilder(option);
+	}
+
+	public BiomeStringControllerBuilder allowEmpty() {
+		this.allowEmpty = true;
+		return this;
 	}
 }

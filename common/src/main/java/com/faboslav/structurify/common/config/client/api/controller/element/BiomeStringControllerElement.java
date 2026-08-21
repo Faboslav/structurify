@@ -16,6 +16,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 //? if >= 1.21.6 {
@@ -24,7 +25,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 
 //? if < 1.21.5 {
 /*import com.mojang.blaze3d.systems.RenderSystem;
-*///?}
+ *///?}
 
 //? if >= 1.21.3 {
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -32,9 +33,9 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 
 //? if >= 26.1 {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-//?} else {
+	//?} else {
 /*import net.minecraft.client.gui.GuiGraphics;
-*///?}
+ *///?}
 
 /**
  * Related code is based on LibBamboo: Utility library mod with permissions from the author
@@ -55,17 +56,17 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	@Override
 		//? if >= 26.1 {
 	protected void extractValueText(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta)
-	 //?} else {
-	/*protected void drawValueText(GuiGraphics graphics, int mouseX, int mouseY, float delta)
-	*///?}
+		//?} else {
+		/*protected void drawValueText(GuiGraphics graphics, int mouseX, int mouseY, float delta)
+		 *///?}
 	{
 		var oldDimension = getDimension();
 		setDimension(getDimension().withWidth(getDimension().width() - getDecorationPadding()));
 		//? if >= 26.1 {
 		super.extractValueText(graphics, mouseX, mouseY, delta);
-		 //?} else {
+		//?} else {
 		/*super.drawValueText(graphics, mouseX, mouseY, delta);
-		*///?}
+		 *///?}
 		setDimension(oldDimension);
 
 		int imageX = getDimension().xLimit() - getXPadding() - getDecorationPadding() + 4;
@@ -88,7 +89,30 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	@Override
+	public void ensureValidValue() {
+		if (dropdownWidget != null && matchingValues != null && !matchingValues.isEmpty()) {
+			var selectedIndex = dropdownWidget.selectedIndex();
+
+			if (selectedIndex >= 0 && selectedIndex < matchingValues.size()) {
+				inputField = matchingValues.get(selectedIndex);
+				caretPos = getDefaultCaretPos();
+				selectionLength = 0;
+				return;
+			}
+		}
+
+		super.ensureValidValue();
+	}
+
+	@Override
 	public boolean matchingValue(String value) {
+		if (value.isBlank()) {
+			var slugifiedValue = inputField.toLowerCase().replace(" ", "_");
+			var slugifiedNone = Component.translatable("gui.featurify.label.none").getString().toLowerCase().replace(" ", "_");
+
+			return slugifiedNone.contains(slugifiedValue) || super.matchingValue(value);
+		}
+
 		var slugifiedValue = inputField.toLowerCase().replace(" ", "_");
 		var slugifiedBiome = value.toLowerCase().replace(" ", "_");
 		var slugifiedTranslatedBiome = LanguageUtil.translateId("biome", value).getString().toLowerCase().replace(" ", "_");
@@ -97,7 +121,21 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	}
 
 	public Component getTranslatedBiome(String biome) {
+		if(biome.isBlank() && this.biomeStringController.allowEmptyValue) {
+			return Component.translatable("gui.featurify.label.none");
+		}
+
 		return LanguageUtil.translateId("biome", biome).append((" (" + biome + ") "));
+	}
+
+	@Override
+	public void setFocused(boolean focused) {
+		super.setFocused(focused);
+
+		if (focused && !this.dropdownVisible) {
+			this.matchingValues = this.computeMatchingValues();
+			this.createDropdownWidget();
+		}
 	}
 
 	@Override
@@ -119,15 +157,15 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	@Override
 		//? if >= 26.1 {
 	protected void extractDropdownEntry(GuiGraphicsExtractor graphics, Dimension<Integer> entryDimension, String value)
-	 //?} else {
-	/*protected void renderDropdownEntry(GuiGraphics graphics, Dimension<Integer> entryDimension, String value)
-	*///?}
+		//?} else {
+		/*protected void renderDropdownEntry(GuiGraphics graphics, Dimension<Integer> entryDimension, String value)
+		 *///?}
 	{
 		//? if >= 26.1 {
 		super.extractDropdownEntry(graphics, entryDimension, value);
-		 //?} else {
+		//?} else {
 		/*super.renderDropdownEntry(graphics, entryDimension, value);
-		*///?}
+		 *///?}
 
 		int imageX = entryDimension.xLimit() - 1;
 		int imageY = entryDimension.y() + 4;
@@ -141,7 +179,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 
 	@Override
 	protected Component getValueText() {
-		if (inputField.isEmpty() || biomeStringController == null) {
+		if (biomeStringController == null) {
 			return super.getValueText();
 		}
 
@@ -151,8 +189,12 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 
 		var pendingValue = this.biomeStringController.option().pendingValue();
 
+		if (pendingValue.isEmpty() && this.biomeStringController.allowEmptyValue) {
+			return Component.translatable("gui.featurify.label.none");
+		}
+
 		if (pendingValue.contains(":")) {
-			return this.getTranslatedBiome(this.biomeStringController.option().pendingValue());
+			return this.getTranslatedBiome(pendingValue);
 		}
 
 		return Component.literal(pendingValue);
@@ -162,9 +204,9 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 		String biomeName,
 		//? if >= 26.1 {
 		GuiGraphicsExtractor graphics,
-		 //?} else {
+		//?} else {
 		/*GuiGraphics graphics,
-		*///?}
+		 *///?}
 		int x,
 		int y,
 		float delta
@@ -183,12 +225,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 
 		if (biomeIcon.isPresent()) {
 			try {
-				ResourceTextureImage.createFactory(biomeIcon.get(), 0.0F, 0.0F, 16, 16, 16, 16).prepareImage().completeImage().render(graphics,
-					x,
-					y,
-					11,
-					delta
-				);
+				ResourceTextureImage.createFactory(biomeIcon.get(), 0.0F, 0.0F, 16, 16, 16, 16).prepareImage().completeImage().render(graphics, x, y, 11, delta);
 				return;
 			} catch (Exception e) {
 				// Ignore
@@ -207,15 +244,15 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 
 				//? if < 1.21.5 {
 				/*RenderSystem.setShaderTexture(0, modIconId);
-				*///?}
+				 *///?}
 
 				//? if >= 1.21.6 {
 				graphics.blit(RenderPipelines.GUI_TEXTURED, modIconId, x, y, 0.0F, 0.0F, iconWidth, iconHeight, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
 				//?} else if >= 1.21.3 {
 				/*graphics.blit(RenderType::guiTextured, modIconId, x, y, iconWidth, iconHeight, 0, 0, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
-				*///?} else {
+				 *///?} else {
 				/*graphics.blit(modIconId, x, y, iconWidth, iconHeight, 0.0F, 0.0F, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
-				*///?}
+				 *///?}
 				return;
 			} catch (Exception e) {
 				// Ignore
