@@ -80,12 +80,6 @@ public final class StructureConfigScreen
 			var jigsawOptions = JigsawOptions.addJigsawOptions(structureData, structureId);
 			structureSettingsGroup.options(jigsawOptions);
 
-			isDisabledOption.addListener((opt, currentIsDisabled) -> {
-				for (var jigsawOption : jigsawOptions) {
-					jigsawOption.setAvailable(!currentIsDisabled);
-				}
-			});
-
 			var templatePools = config.getStructureTemplatePoolsDataForStructure(structureId);
 
 			if(!templatePools.isEmpty()) {
@@ -147,13 +141,6 @@ public final class StructureConfigScreen
 		structureCategoryBuilder.group(biomesOptionsGroup.build());
 		var blacklistedBiomesOption = biomeCheckOptions.get(BiomeCheckOptions.BIOME_CHECK_BLACKLISTED_BIOMES_OPTION_NAME);
 		structureCategoryBuilder.group((OptionGroup) blacklistedBiomesOption);
-
-		/*
-		isDisabledOption.addListener((opt, currentIsDisabled) -> {
-			for(var biomeCheckOption : biomeCheckOptions) {
-				biomeCheckOption.setAvailable(!currentIsDisabled);
-			}
-		});*/
 
 		yacl.category(structureCategoryBuilder.build());
 
