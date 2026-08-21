@@ -119,8 +119,11 @@ jobs:
                     mc-runtime-test: ${{ matrix.mod_loader_alias }}
                     java: ${{ steps.gradle-properties.outputs.JAVA_VERSION }}
                     fabric-api: ${{ steps.gradle-properties.outputs.DEPS_FABRIC_API }}
+                    # Game tests only run on the latest version, the positions they expect are
+                    # verified against it, and mc-runtime-test cannot discover tests on Forge and NeoForge yet
+                    fabric-gametest-api: ${{ matrix.mod_loader == 'fabric' && matrix.version == '26.2' && steps.gradle-properties.outputs.DEPS_FABRIC_GAMETEST_API || 'none' }}
                     xvfb: false
-                    headlessmc-command: -lwjgl --retries 3 --jvm -Djava.awt.headless=true
+                    headlessmc-command: ${{ matrix.mod_loader == 'fabric' && matrix.version == '26.2' && '-lwjgl --retries 3 --jvm "-Djava.awt.headless=true -Dfabric-api.gametest=true -DMcRuntimeGameTestMinExpectedGameTests=1"' || '-lwjgl --retries 3 --jvm -Djava.awt.headless=true' }}
                     cache-mc: true
 
     run-server:
