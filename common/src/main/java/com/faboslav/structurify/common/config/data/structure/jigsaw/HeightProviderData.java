@@ -64,7 +64,7 @@ public final class HeightProviderData
 			);
 		};
 	}
-	
+
 	@Nullable
 	public static HeightProviderData fromHeightProvider(@Nullable HeightProvider provider) {
 		if (provider == null) {

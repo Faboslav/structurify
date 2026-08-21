@@ -33,6 +33,7 @@ public final class StructureSetsConfigScreen
 	public static Option<Double> globalSpacingAndSeparationModifierOption = null;
 
 	public static void createStructureSetsTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
+		structureSetOptions.clear();
 		enableGlobalSpacingAndSeparationOption = null;
 		globalSpacingAndSeparationModifierOption = null;
 
