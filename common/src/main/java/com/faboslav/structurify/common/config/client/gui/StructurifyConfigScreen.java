@@ -23,8 +23,6 @@ import java.util.Map;
 public class StructurifyConfigScreen
 {
 	public Map<String, StructurifyConfigScreenState> screenStates = new HashMap<>();
-	public YACLScreen previousScreen = null;
-	public YACLScreen currentScreen = null;
 
 	public Screen generateScreen(Screen parent) {
 		var config = Structurify.getConfig();
@@ -101,9 +99,27 @@ public class StructurifyConfigScreen
 		}
 	}
 
+
+	@Nullable
+	public YACLScreen getOpenedScreen() {
+		if (VersionedGui.getScreen() instanceof YACLScreen yaclScreen) {
+			return yaclScreen;
+		}
+
+		return null;
+	}
+
+	public void savePendingChanges(@Nullable YACLScreen screen) {
+		if (screen == null || !screen.pendingChanges()) {
+			return;
+		}
+
+		screen.finishOrSave();
+	}
+
 	public void switchScreen(YACLScreen from, YACLScreen to) {
-		this.previousScreen = from;
+		this.saveScreenState(from);
 		VersionedGui.getGui().setScreen(to);
-		this.currentScreen = to;
+		this.loadScreenState(to);
 	}
 }

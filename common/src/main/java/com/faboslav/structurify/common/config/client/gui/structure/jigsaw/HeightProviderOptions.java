@@ -9,8 +9,8 @@ import com.faboslav.structurify.common.config.client.gui.StructureConfigScreen;
 import com.faboslav.structurify.common.config.data.structure.JigsawData;
 import com.faboslav.structurify.common.config.data.structure.jigsaw.HeightProviderData;
 import com.faboslav.structurify.common.config.data.structure.jigsaw.VerticalAnchorData;
+import com.faboslav.structurify.common.mixin.yacl.YACLScreenAccessor;
 import com.faboslav.structurify.common.util.LanguageUtil;
-import com.faboslav.structurify.common.versions.VersionedGui;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
@@ -98,13 +98,18 @@ public class HeightProviderOptions
 
 		heightProviderTypeOption.addListener((opt, type) -> {
 			var configScreen = StructurifyClient.getConfigScreen();
+			var openedScreen = configScreen.getOpenedScreen();
 
-			configScreen.currentScreen.finishOrSave();
+			if (openedScreen == null) {
+				return;
+			}
+
+			configScreen.savePendingChanges(openedScreen);
 			heightProviderData.setType(type);
-			YACLScreen structureScreen = StructureConfigScreen.create(Structurify.getConfig(), structureId, configScreen.previousScreen);
 
-			VersionedGui.getGui().setScreen(structureScreen);
-			configScreen.loadScreenState(structureScreen);
+			YACLScreen structureScreen = StructureConfigScreen.create(Structurify.getConfig(), structureId, ((YACLScreenAccessor) openedScreen).getParent());
+
+			configScreen.switchScreen(openedScreen, structureScreen);
 		});
 
 		return heightProviderOptions;

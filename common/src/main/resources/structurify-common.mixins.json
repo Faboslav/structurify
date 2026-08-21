@@ -43,6 +43,7 @@
 		"yacl.LabelControllerElementMixin",
 		"yacl.OptionImplMixin",
 		"yacl.OptionListWidgetMixin",
+		"yacl.YACLScreenAccessor",
 		"yacl.YACLScreenMixin"
 	]
 }

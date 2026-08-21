@@ -9,7 +9,6 @@ import com.faboslav.structurify.common.config.client.gui.structure.*;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.util.LanguageUtil;
 import com.faboslav.structurify.common.util.YACLUtil;
-import com.faboslav.structurify.common.versions.VersionedGui;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
@@ -101,13 +100,11 @@ public final class StructureConfigScreen
 							return;
 						}
 
-						screen.finishOrSave();
+						configScreen.savePendingChanges(screen);
 
 						YACLScreen structureTemplatePoolsScreen = StructureTemplatePoolsConfigScreen.create(Structurify.getConfig(), structureId, screen);
 
-						configScreen.saveScreenState(screen);
-						VersionedGui.getGui().setScreen(structureTemplatePoolsScreen);
-						configScreen.loadScreenState(structureTemplatePoolsScreen);
+						configScreen.switchScreen(screen, structureTemplatePoolsScreen);
 					})
 					.build();
 

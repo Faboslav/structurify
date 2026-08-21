@@ -45,6 +45,16 @@ public final class StructuresConfigScreen
 	private final static List<Option<Boolean>> enableBiomeCheckOptions = new ArrayList<>();
 
 	public static void createStructuresTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
+		structureOptions.clear();
+		globalDistanceFromWorldCenterOption = null;
+		enableGlobalFlatnessCheckOption = null;
+		enableGlobalBiomeCheckOption = null;
+		overrideDistanceFromWorldCenterOptions.clear();
+		overrideFlatnessCheckOptions.clear();
+		overrideBiomeCheckOptions.clear();
+		enableFlatnessCheckOptions.clear();
+		enableBiomeCheckOptions.clear();
+
 		var structureCategoryBuilder = ConfigCategory.createBuilder()
 			.name(Component.translatable("gui.structurify.structures_category.title"))
 			.tooltip(Component.translatable("gui.structurify.structures_category.description"));
@@ -240,13 +250,11 @@ public final class StructuresConfigScreen
 						return;
 					}
 
-					screen.finishOrSave();
+					configScreen.savePendingChanges(screen);
 
 					YACLScreen structureScreen = StructureConfigScreen.create(Structurify.getConfig(), id, screen);
 
-					configScreen.saveScreenState(screen);
 					configScreen.switchScreen(screen, structureScreen);
-					configScreen.loadScreenState(structureScreen);
 				}).buttonTooltip("gui.structurify.structures.structure.detail_button.tooltip")
 			);
 

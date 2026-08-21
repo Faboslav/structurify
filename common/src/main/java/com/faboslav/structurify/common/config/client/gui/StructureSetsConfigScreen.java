@@ -14,7 +14,6 @@ import com.faboslav.structurify.common.util.LanguageUtil;
 import com.faboslav.structurify.common.util.StructurifyComparators;
 import com.faboslav.structurify.common.util.TextUtil;
 import com.faboslav.structurify.common.util.YACLUtil;
-import com.faboslav.structurify.common.versions.VersionedGui;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
@@ -34,6 +33,9 @@ public final class StructureSetsConfigScreen
 	public static Option<Double> globalSpacingAndSeparationModifierOption = null;
 
 	public static void createStructureSetsTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
+		enableGlobalSpacingAndSeparationOption = null;
+		globalSpacingAndSeparationModifierOption = null;
+
 		var structureSetCategoryBuilder = ConfigCategory.createBuilder()
 			.name(Component.translatable("gui.structurify.structure_sets_category.title"))
 			.tooltip(Component.translatable("gui.structurify.structure_sets_category.description").append("\n\n").append(Component.translatable("gui.structurify.structure_sets.spacing.description")).append("\n\n").append(Component.translatable("gui.structurify.structure_sets.separation.description")));
@@ -108,13 +110,11 @@ public final class StructureSetsConfigScreen
 						return;
 					}
 
-					screen.finishOrSave();
+					configScreen.savePendingChanges(screen);
 
 					YACLScreen structureSetScreen = StructureSetConfigScreen.create(Structurify.getConfig(), id, screen);
 
-					configScreen.saveScreenState(screen);
-					VersionedGui.getGui().setScreen(structureSetScreen);
-					configScreen.loadScreenState(structureSetScreen);
+					configScreen.switchScreen(screen, structureSetScreen);
 				})
 				.buttonTooltip("gui.structurify.structures.structure_set.config_button.tooltip")
 				.formatValue(val -> val ? Component.translatable("gui.structurify.label.enabled"):Component.translatable("gui.structurify.label.disabled"))
