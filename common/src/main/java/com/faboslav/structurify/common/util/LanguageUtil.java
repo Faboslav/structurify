@@ -45,6 +45,7 @@ public final class LanguageUtil
 
 	public static String getHumanReadableName(String serializedName) {
 		return Arrays.stream(serializedName.split("_"))
+			.filter(s -> !s.isEmpty())
 			.map(s -> Character.toUpperCase(s.charAt(0)) + s.substring(1))
 			.collect(Collectors.joining(" "));
 	}

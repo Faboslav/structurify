@@ -265,14 +265,9 @@ public final class StructurifyConfig
 		Structurify.getLogger().info("Dumping Structurify config...");
 
 		try {
-			if (Files.exists(configDumpPath)) {
-				Files.delete(configDumpPath);
-			}
-
 			JsonObject json = StructurifyConfigSerializer.save(this, false);
 
 			Files.createDirectories(configDumpPath.getParent());
-			Files.createFile(configDumpPath);
 			Files.writeString(configDumpPath, gson.toJson(json));
 
 			Structurify.getLogger().info("Structurify config successfully dumped");

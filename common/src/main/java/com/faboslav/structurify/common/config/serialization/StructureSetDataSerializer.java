@@ -6,6 +6,7 @@ import com.faboslav.structurify.common.config.data.StructureSetData;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.util.Mth;
 
 import java.util.Map;
 
@@ -95,9 +96,10 @@ public final class StructureSetDataSerializer
 
 				int weight = structureWeight.getAsInt();
 
-				if (weight < StructureSetData.MIN_STRUCTURE_WEIGHT) {
-					Structurify.getLogger().info("Structure weight value for structure set {} is currently {}, which is lower than minimum value of {}, value will be automatically corrected to 1.", structureSetName, weight, StructureSetData.MIN_STRUCTURE_WEIGHT);
-					weight = 1;
+				if (weight < StructureSetData.MIN_STRUCTURE_WEIGHT || weight > StructureSetData.MAX_STRUCTURE_WEIGHT) {
+					int correctedWeight = Mth.clamp(weight, StructureSetData.MIN_STRUCTURE_WEIGHT, StructureSetData.MAX_STRUCTURE_WEIGHT);
+					Structurify.getLogger().info("Structure weight value of {} for structure set {} is currently {}, which is outside of the range of {} to {}, value will be automatically corrected to {}.", structureId, structureSetName, weight, StructureSetData.MIN_STRUCTURE_WEIGHT, StructureSetData.MAX_STRUCTURE_WEIGHT, correctedWeight);
+					weight = correctedWeight;
 				}
 
 				structureSetData.getStructureWeights().put(structureId, weight);

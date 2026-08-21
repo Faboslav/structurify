@@ -5,6 +5,7 @@ import com.faboslav.structurify.common.config.data.StructureTemplatePoolData;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.util.Mth;
 
 import java.util.Map;
 
@@ -34,9 +35,10 @@ public final class StructureTemplatePoolDataSerializer
 
 				int weight = structureTemplatePoolElementWeight.getAsInt();
 
-				if (weight < StructureTemplatePoolData.MIN_STRUCTURE_TEMPLATE_POOL_ELEMENT_WEIGHT) {
-					Structurify.getLogger().info("Structure weight value for structure set {} is currently {}, which is lower than minimum value of {}, value will be automatically corrected to 1.", structureTemplatePoolName, weight, StructureTemplatePoolData.MIN_STRUCTURE_TEMPLATE_POOL_ELEMENT_WEIGHT);
-					weight = 1;
+				if (weight < StructureTemplatePoolData.MIN_STRUCTURE_TEMPLATE_POOL_ELEMENT_WEIGHT || weight > StructureTemplatePoolData.MAX_STRUCTURE_TEMPLATE_POOL_ELEMENT_WEIGHT) {
+					int correctedWeight = Mth.clamp(weight, StructureTemplatePoolData.MIN_STRUCTURE_TEMPLATE_POOL_ELEMENT_WEIGHT, StructureTemplatePoolData.MAX_STRUCTURE_TEMPLATE_POOL_ELEMENT_WEIGHT);
+					Structurify.getLogger().info("Element weight value of {} for structure template pool {} is currently {}, which is outside of the range of {} to {}, value will be automatically corrected to {}.", structureTemplatePoolElementId, structureTemplatePoolName, weight, StructureTemplatePoolData.MIN_STRUCTURE_TEMPLATE_POOL_ELEMENT_WEIGHT, StructureTemplatePoolData.MAX_STRUCTURE_TEMPLATE_POOL_ELEMENT_WEIGHT, correctedWeight);
+					weight = correctedWeight;
 				}
 
 				structureTemplatePoolData.getStructureTemplatePoolElementWeights().put(structureTemplatePoolElementId, weight);
