@@ -10,7 +10,10 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.levelgen.structure.Structure;
+
+//? if >= 1.21.5 {
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
+//?}
 
 public final class StructureLocateTest
 {
@@ -19,7 +22,9 @@ public final class StructureLocateTest
 	private static final int EXPECTED_VILLAGE_X = -1792;
 	private static final int EXPECTED_VILLAGE_Z = -2016;
 
+	//? if >= 1.21.5 {
 	@GameTest
+	//?}
 	public void locatePlainsVillageStructure(GameTestHelper helper) {
 		//? if >= 26.2 {
 		ServerLevel level = helper.getLevel();
@@ -54,8 +59,10 @@ public final class StructureLocateTest
 
 		helper.succeed();
 	}
-
+	
+	//? if >= 26.2 {
 	private static void assertTrue(GameTestHelper helper, boolean condition, String message) {
 		helper.assertTrue(condition, message);
 	}
+	//?}
 }
