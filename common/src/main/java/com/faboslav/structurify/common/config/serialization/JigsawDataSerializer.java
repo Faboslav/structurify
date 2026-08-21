@@ -40,9 +40,11 @@ public final class JigsawDataSerializer
 				.parse(JsonOps.INSTANCE, structureJson.get(START_HEIGHT_PROPERTY))
 				.result()
 				.orElse(null);
+			var heightProviderData = heightProvider == null ? null : HeightProviderData.fromHeightProvider(heightProvider);
 
-			if(heightProvider != null) {
-				var heightProviderData = HeightProviderData.fromHeightProvider(heightProvider);
+			if (heightProviderData == null) {
+				Structurify.getLogger().info("Start height value for structure {} is currently {}, which is invalid or unsupported, the original start height will be kept.", structureName, structureJson.get(START_HEIGHT_PROPERTY));
+			} else {
 				jigsawData.setHeightProviderData(heightProviderData);
 			}
 		}
@@ -67,7 +69,7 @@ public final class JigsawDataSerializer
 		}
 	}
 
-	public static void save(JsonObject structureJson, JigsawData jigsawData, boolean saveOnlyChanged) {
+	public static void save(JsonObject structureJson, JigsawData jigsawData, String structureName, boolean saveOnlyChanged) {
 		var size = jigsawData.getSize();
 
 		if(size != null && (!jigsawData.isUsingDefaultSize() || !saveOnlyChanged)) {
@@ -91,7 +93,11 @@ public final class JigsawDataSerializer
 				.encodeStart(JsonOps.INSTANCE, heightProvider)
 				.result().orElse(null);
 
-			structureJson.add(START_HEIGHT_PROPERTY, heightProviderJson);
+			if (heightProviderJson == null) {
+				Structurify.getLogger().warn("Start height value of structure {} could not be serialized and will not be saved.", structureName);
+			} else {
+				structureJson.add(START_HEIGHT_PROPERTY, heightProviderJson);
+			}
 		}
 
 		var projectStartToHeightmap = jigsawData.getProjectStartToHeightmap();

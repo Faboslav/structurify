@@ -64,58 +64,94 @@ public final class HeightProviderData
 			);
 		};
 	}
-
+	
 	@Nullable
 	public static HeightProviderData fromHeightProvider(@Nullable HeightProvider provider) {
-		if (provider instanceof ConstantHeight constantHeight) {
+		if (provider == null) {
+			return null;
+		}
+
+		var providerClass = provider.getClass();
+
+		if (providerClass == ConstantHeight.class) {
+			var value = VerticalAnchorData.fromAnchor(((ConstantHeight) provider).getValue());
+
+			if (value == null) {
+				return null;
+			}
+
 			return new HeightProviderData(
 				Type.CONSTANT,
 				null,
 				null,
-				VerticalAnchorData.fromAnchor(constantHeight.getValue()),
+				value,
 				null,
 				null
 			);
-		} else if (provider instanceof UniformHeight uniformHeight) {
-			var accessor = (UniformHeightAccessor) uniformHeight;
+		} else if (providerClass == UniformHeight.class) {
+			var accessor = (UniformHeightAccessor) provider;
+			var minInclusive = VerticalAnchorData.fromAnchor(accessor.getMinInclusive());
+			var maxInclusive = VerticalAnchorData.fromAnchor(accessor.getMaxInclusive());
+
+			if (minInclusive == null || maxInclusive == null) {
+				return null;
+			}
 
 			return new HeightProviderData(
 				Type.UNIFORM,
-				VerticalAnchorData.fromAnchor(accessor.getMinInclusive()),
-				VerticalAnchorData.fromAnchor(accessor.getMaxInclusive()),
+				minInclusive,
+				maxInclusive,
 				null,
 				null,
 				null
 			);
-		} else if (provider instanceof TrapezoidHeight trapezoidHeight) {
-			var accessor = (TrapezoidHeightAccessor) trapezoidHeight;
+		} else if (providerClass == TrapezoidHeight.class) {
+			var accessor = (TrapezoidHeightAccessor) provider;
+			var minInclusive = VerticalAnchorData.fromAnchor(accessor.getMinInclusive());
+			var maxInclusive = VerticalAnchorData.fromAnchor(accessor.getMaxInclusive());
+
+			if (minInclusive == null || maxInclusive == null) {
+				return null;
+			}
 
 			return new HeightProviderData(
 				Type.TRAPEZOID,
-				VerticalAnchorData.fromAnchor(accessor.getMinInclusive()),
-				VerticalAnchorData.fromAnchor(accessor.getMaxInclusive()),
+				minInclusive,
+				maxInclusive,
 				null,
 				accessor.getPlateau(),
 				null
 			);
-		} else if (provider instanceof BiasedToBottomHeight biasedToBottomHeight) {
-			var accessor = (BiasedToBottomHeightAccessor) biasedToBottomHeight;
+		} else if (providerClass == BiasedToBottomHeight.class) {
+			var accessor = (BiasedToBottomHeightAccessor) provider;
+			var minInclusive = VerticalAnchorData.fromAnchor(accessor.getMinInclusive());
+			var maxInclusive = VerticalAnchorData.fromAnchor(accessor.getMaxInclusive());
+
+			if (minInclusive == null || maxInclusive == null) {
+				return null;
+			}
 
 			return new HeightProviderData(
 				Type.BIASED_TO_BOTTOM,
-				VerticalAnchorData.fromAnchor(accessor.getMinInclusive()),
-				VerticalAnchorData.fromAnchor(accessor.getMaxInclusive()),
+				minInclusive,
+				maxInclusive,
 				null,
 				null,
 				accessor.getInner()
 			);
-		} else if (provider instanceof VeryBiasedToBottomHeight veryBiasedToBottomHeight) {
-			var accessor = (VeryBiasedToBottomHeightAccessor) veryBiasedToBottomHeight;
+		} else if (providerClass == VeryBiasedToBottomHeight.class) {
+			var accessor = (VeryBiasedToBottomHeightAccessor) provider;
+			var minInclusive = VerticalAnchorData.fromAnchor(accessor.getMinInclusive());
+			var maxInclusive = VerticalAnchorData.fromAnchor(accessor.getMaxInclusive());
+
+			if (minInclusive == null || maxInclusive == null) {
+				return null;
+			}
 
 			return new HeightProviderData(
 				Type.VERY_BIASED_TO_BOTTOM,
-				VerticalAnchorData.fromAnchor(accessor.getMinInclusive()),
-				VerticalAnchorData.fromAnchor(accessor.getMaxInclusive()),
+				minInclusive,
+				maxInclusive,
 				null,
 				null,
 				accessor.getInner()

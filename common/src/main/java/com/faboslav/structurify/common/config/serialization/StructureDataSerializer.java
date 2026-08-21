@@ -148,7 +148,7 @@ public final class StructureDataSerializer
 			var jigsawData = structureData.getJigsawData();
 
 			if (!jigsawData.isUsingDefaultValues() || !saveOnlyChanged) {
-				JigsawDataSerializer.save(structure, jigsawData, saveOnlyChanged);
+				JigsawDataSerializer.save(structure, jigsawData, structureName, saveOnlyChanged);
 			}
 		}
 
