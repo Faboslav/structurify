@@ -1,3 +1,7 @@
+## 2.0.34
+
+- Updated "/structurify dump" command to dump all the biomes
+
 ## 2.0.33
 
 - Fixed part of the config resetting
