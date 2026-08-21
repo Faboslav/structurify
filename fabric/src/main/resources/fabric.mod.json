@@ -27,7 +27,7 @@
 			"com.faboslav.structurify.fabric.modcompat.ModMenuCompat"
 		],
 		"fabric-gametest": [
-			"com.faboslav.structurify.fabric.tests.parity.StructureLocateTest"
+			"com.faboslav.structurify.fabric.tests.StructureLocateTest"
 		]
 	},
 	"mixins": [
