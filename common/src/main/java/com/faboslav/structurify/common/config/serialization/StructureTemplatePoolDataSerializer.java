@@ -23,6 +23,11 @@ public final class StructureTemplatePoolDataSerializer
 				String structureTemplatePoolElementId = structureTemplatePoolElementWeightEntry.getKey();
 				JsonElement structureTemplatePoolElementWeight = structureTemplatePoolElementWeightEntry.getValue();
 
+				if (!structureTemplatePoolData.getDefaultStructureTemplatePoolElementWeights().containsKey(structureTemplatePoolElementId)) {
+					Structurify.getLogger().info("Found invalid structure template pool element identifier of \"{}\" in the weights of the {} structure template pool, skipping.", structureTemplatePoolElementId, structureTemplatePoolName);
+					continue;
+				}
+
 				if (!structureTemplatePoolElementWeight.isJsonPrimitive() || !structureTemplatePoolElementWeight.getAsJsonPrimitive().isNumber()) {
 					continue;
 				}
@@ -47,8 +52,8 @@ public final class StructureTemplatePoolDataSerializer
 			var structureTemplatePoolElementName = structureTemplatePoolElementWeightEntry.getKey();
 			var defaultStructurePoolElementWeight = structureTemplatePoolData.getDefaultStructureTemplatePoolElementWeights().get(structureTemplatePoolElementName);
 			var structureTemplatePoolElementWeight = structureTemplatePoolElementWeightEntry.getValue();
-
-			if(defaultStructurePoolElementWeight.equals(structureTemplatePoolElementWeight)) {
+			
+			if(defaultStructurePoolElementWeight == null || defaultStructurePoolElementWeight.equals(structureTemplatePoolElementWeight)) {
 				continue;
 			}
 

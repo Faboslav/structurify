@@ -84,6 +84,11 @@ public final class StructureSetDataSerializer
 				String structureId = structureWeightEntry.getKey();
 				JsonElement structureWeight = structureWeightEntry.getValue();
 
+				if (!structureSetData.getDefaultStructureWeights().containsKey(structureId)) {
+					Structurify.getLogger().info("Found invalid structure identifier of \"{}\" in the weights of the {} structure set, skipping.", structureId, structureSetName);
+					continue;
+				}
+
 				if (!structureWeight.isJsonPrimitive() || !structureWeight.getAsJsonPrimitive().isNumber()) {
 					continue;
 				}
