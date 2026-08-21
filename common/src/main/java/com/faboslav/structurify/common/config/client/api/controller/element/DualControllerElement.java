@@ -42,7 +42,10 @@ public final class DualControllerElement extends AbstractWidget
 	public void mouseMoved(double mouseX, double mouseY) {
 		firstElement.mouseMoved(mouseX, mouseY);
 		secondElement.mouseMoved(mouseX, mouseY);
-		resetButton.mouseMoved(mouseX, mouseY);
+
+		if (resetButton != null) {
+			resetButton.mouseMoved(mouseX, mouseY);
+		}
 	}
 
 	//? if >=1.21.9 {
@@ -61,32 +64,32 @@ public final class DualControllerElement extends AbstractWidget
 			return true;
 		}
 
-		return resetButton.mouseClicked(mouseButtonEvent, doubleClick);
+		return resetButton != null && resetButton.mouseClicked(mouseButtonEvent, doubleClick);
 	}
 
 	@Override
 	public boolean mouseReleased(MouseButtonEvent mouseButtonEvent) {
-		return firstElement.mouseReleased(mouseButtonEvent) || secondElement.mouseReleased(mouseButtonEvent) || resetButton.mouseReleased(mouseButtonEvent);
+		return firstElement.mouseReleased(mouseButtonEvent) || secondElement.mouseReleased(mouseButtonEvent) || (resetButton != null && resetButton.mouseReleased(mouseButtonEvent));
 	}
 
 	@Override
 	public boolean mouseDragged(MouseButtonEvent mouseButtonEvent, double dx, double dy) {
-		return firstElement.mouseDragged(mouseButtonEvent, dx, dy) || secondElement.mouseDragged(mouseButtonEvent, dx, dy) || resetButton.mouseDragged(mouseButtonEvent, dx, dy);
+		return firstElement.mouseDragged(mouseButtonEvent, dx, dy) || secondElement.mouseDragged(mouseButtonEvent, dx, dy) || (resetButton != null && resetButton.mouseDragged(mouseButtonEvent, dx, dy));
 	}
 
 	@Override
 	public boolean keyPressed(KeyEvent keyEvent) {
-		return firstElement.keyPressed(keyEvent) || secondElement.keyPressed(keyEvent) || resetButton.keyPressed(keyEvent);
+		return firstElement.keyPressed(keyEvent) || secondElement.keyPressed(keyEvent);
 	}
 
 	@Override
 	public boolean keyReleased(KeyEvent keyEvent) {
-		return firstElement.keyReleased(keyEvent) || secondElement.keyReleased(keyEvent) || resetButton.keyReleased(keyEvent);
+		return firstElement.keyReleased(keyEvent) || secondElement.keyReleased(keyEvent);
 	}
 
 	@Override
 	public boolean charTyped(CharacterEvent characterEvent) {
-		return firstElement.charTyped(characterEvent) || secondElement.charTyped(characterEvent) || secondElement.charTyped(characterEvent);
+		return firstElement.charTyped(characterEvent) || secondElement.charTyped(characterEvent);
 	}
 	//?} else {
 	/*@Override
@@ -104,12 +107,12 @@ public final class DualControllerElement extends AbstractWidget
 			return true;
 		}
 
-		return resetButton.mouseClicked(mouseX, mouseY, button);
+		return resetButton != null && resetButton.mouseClicked(mouseX, mouseY, button);
 	}
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		return firstElement.mouseReleased(mouseX, mouseY, button) || secondElement.mouseReleased(mouseX, mouseY, button) || resetButton.mouseReleased(mouseX, mouseY, button);
+		return firstElement.mouseReleased(mouseX, mouseY, button) || secondElement.mouseReleased(mouseX, mouseY, button) || (resetButton != null && resetButton.mouseReleased(mouseX, mouseY, button));
 	}
 
 	@Override
@@ -158,7 +161,7 @@ public final class DualControllerElement extends AbstractWidget
 		secondElement.setDimension(secondElementDimension);
 
 		if (resetButton != null) {
-			resetButton.setY(getDimension().y());
+			resetButton.setY(dim.y());
 		}
 
 		super.setDimension(dim);
@@ -203,7 +206,7 @@ public final class DualControllerElement extends AbstractWidget
 	@Override
 	public boolean matchesSearch(String query) {
 		boolean matchesSearchInFirstElement = firstElement.matchesSearch(query);
-		boolean matchesSearchInSecondElement = firstElement.matchesSearch(query);
+		boolean matchesSearchInSecondElement = secondElement.matchesSearch(query);
 
 		return matchesSearchInFirstElement || matchesSearchInSecondElement;
 	}

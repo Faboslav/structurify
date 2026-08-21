@@ -35,13 +35,22 @@ public record DualController<K extends Option<?>, V extends Option<?>>(OptionPai
 			firstOptionWidget.setDimension(firstOptionWidget.getDimension().expanded(-10, 0));
 			secondOptionWidget.setDimension(secondOptionWidget.getDimension().expanded(-10, 0));
 
-			resetButtonWidget = new TextScaledButtonWidget(screen, secondOptionWidget.getDimension().xLimit() - 10, 0, 20, 20, 2f, Component.literal("\u21BB"), button -> {
+			var resetButton = new TextScaledButtonWidget(screen, secondOptionWidget.getDimension().xLimit() - 10, 0, 20, 20, 2f, Component.literal("\u21BB"), button -> {
 				this.optionPair.firstOption().requestSetDefault();
 				this.optionPair.secondOption().requestSetDefault();
 			});
-			this.optionPair.firstOption().addListener((opt, val) -> resetButtonWidget.active = !opt.isPendingValueDefault() && opt.available());
-			this.optionPair.secondOption().addListener((opt, val) -> resetButtonWidget.active = !opt.isPendingValueDefault() && opt.available());
-			resetButtonWidget.active = !this.optionPair.firstOption().isPendingValueDefault() && this.optionPair.firstOption().available() && !this.optionPair.secondOption().isPendingValueDefault() && this.optionPair.secondOption().available();
+
+			Runnable updateResetButtonState = () -> {
+				boolean isModified = !this.optionPair.firstOption().isPendingValueDefault() || !this.optionPair.secondOption().isPendingValueDefault();
+				boolean isAvailable = this.optionPair.firstOption().available() && this.optionPair.secondOption().available();
+				resetButton.active = isModified && isAvailable;
+			};
+
+			this.optionPair.firstOption().addListener((opt, val) -> updateResetButtonState.run());
+			this.optionPair.secondOption().addListener((opt, val) -> updateResetButtonState.run());
+			updateResetButtonState.run();
+
+			resetButtonWidget = resetButton;
 		} else {
 			resetButtonWidget = null;
 		}
