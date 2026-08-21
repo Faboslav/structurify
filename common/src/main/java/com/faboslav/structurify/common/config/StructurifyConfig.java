@@ -33,8 +33,8 @@ public final class StructurifyConfig
 	public final Path configDumpPath = Path.of("config", Structurify.MOD_ID + "_dump.json");
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-	public boolean disableAllStructures = false;
-	public boolean preventStructureOverlap = false;
+	public boolean disableAllStructures = DISABLE_ALL_STRUCTURES_DEFAULT_VALUE;
+	public boolean preventStructureOverlap = PREVENT_STRUCTURE_OVERLAP_DEFAULT_VALUE;
 	public boolean enableGlobalSpacingAndSeparationModifier = ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	public double globalSpacingAndSeparationModifier = GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 
@@ -44,6 +44,8 @@ public final class StructurifyConfig
 	private Map<String, StructureSetData> structureSetData = new TreeMap<>();
 	private Map<String, StructureTemplatePoolData> structureTemplatePoolsData = new TreeMap<>();
 
+	public final static boolean DISABLE_ALL_STRUCTURES_DEFAULT_VALUE = false;
+	public final static boolean PREVENT_STRUCTURE_OVERLAP_DEFAULT_VALUE = false;
 	public final static boolean ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = false;
 	public final static double GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = 1.0D;
 
@@ -166,6 +168,35 @@ public final class StructurifyConfig
 		} catch (Exception e) {
 			Structurify.getLogger().error("Failed to load Structurify config");
 			e.printStackTrace();
+		} finally {
+			this.isLoading = false;
+		}
+	}
+
+	public void loadFromJson(JsonObject json) {
+		if (this.isLoading) {
+			return;
+		}
+
+		try {
+			Structurify.getLogger().info("Loading received Structurify config...");
+			this.isLoading = true;
+
+			WorldgenDataProvider.loadWorldgenData();
+			this.structureNamespaceData = WorldgenDataProvider.getStructureNamespaces();
+			this.structureData = WorldgenDataProvider.getStructures();
+			this.structureSetData = WorldgenDataProvider.getStructureSets();
+			this.structureTemplatePoolsData = WorldgenDataProvider.getStructureTemplatePools();
+
+			this.disableAllStructures = DISABLE_ALL_STRUCTURES_DEFAULT_VALUE;
+			this.preventStructureOverlap = PREVENT_STRUCTURE_OVERLAP_DEFAULT_VALUE;
+			this.enableGlobalSpacingAndSeparationModifier = ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
+			this.globalSpacingAndSeparationModifier = GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
+
+			StructurifyConfigSerializer.load(this, json);
+
+			Structurify.getLogger().info("Received Structurify config loaded");
+			this.isLoaded = true;
 		} finally {
 			this.isLoading = false;
 		}

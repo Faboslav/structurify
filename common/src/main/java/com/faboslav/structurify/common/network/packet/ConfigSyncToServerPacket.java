@@ -48,7 +48,7 @@ public record ConfigSyncToServerPacket(String config) implements Packet<ConfigSy
 		public Consumer<Player> handle(final ConfigSyncToServerPacket packet) {
 			return (player) -> {
 				try {
-					StructurifyConfigSerializer.load(Structurify.getConfig(), GSON.fromJson(packet.config(), JsonObject.class));
+					Structurify.getConfig().loadFromJson(GSON.fromJson(packet.config(), JsonObject.class));
 					Structurify.getConfig().save();
 				} catch (Throwable e) {
 					Structurify.getLogger().error("Failed to load config to server.", e);

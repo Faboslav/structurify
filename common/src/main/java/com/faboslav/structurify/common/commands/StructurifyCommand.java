@@ -245,7 +245,7 @@ public final class StructurifyCommand
 			return 0;
 		}
 
-		ConfigSyncToClientPacket.sendToClient(Structurify.getConfig(), player, true);
+		ConfigSyncToClientPacket.sendToClient(Structurify.getConfig(), player);
 
 		return 1;
 	}

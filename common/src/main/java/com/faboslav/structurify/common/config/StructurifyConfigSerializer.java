@@ -33,15 +33,12 @@ public final class StructurifyConfigSerializer
 	public static final String STRUCTURE_TEMPLATE_POOLS_PROPERTY = "structure_template_pools";
 
 	public static void load(StructurifyConfig config, JsonObject json) {
-		Structurify.getConfig().load();
-
 		loadGeneral(config, json);
 		loadStructureNamespaces(config, json);
 		loadStructures(config, json);
 		loadStructureSets(config, json);
 		loadStructureTemplatePools(config, json);
 	}
-
 
 	private static void loadGeneral(StructurifyConfig config, JsonObject json) {
 		if (!json.has(GENERAL_PROPERTY)) {
