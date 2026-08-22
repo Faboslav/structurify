@@ -89,19 +89,19 @@ public final class StructurifyTemplatePoolProvider
 	}
 
 	public static Set<String> getStructureTemplatePoolIdsForStructure(String structureId) {
-		if (!structureTemplatePoolIds.containsKey(structureId)) {
-			var resourcePackRepository = StructurifyResourcePackProvider.getResourcePackRepository();
+		return structureTemplatePoolIds.computeIfAbsent(structureId, id -> {
+			try {
+				var resourcePackRepository = StructurifyResourcePackProvider.getResourcePackRepository();
 
-			try (var resourceManager = new MultiPackResourceManager(
-				PackType.SERVER_DATA,
-				resourcePackRepository.openAllSelected()
-			)) {
-				var structureTemplatePools = loadStructureTemplatePoolsForStructure(resourceManager, structureId);
-				structureTemplatePoolIds.put(structureId, structureTemplatePools);
+				try (var resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA, resourcePackRepository.openAllSelected())) {
+					return loadStructureTemplatePoolsForStructure(resourceManager, id);
+				}
+			} catch (Throwable e) {
+				Structurify.getLogger().error("Failed to load template pools for the \"{}\" structure", id, e);
+
+				return Set.of();
 			}
-		}
-
-		return structureTemplatePoolIds.get(structureId);
+		});
 	}
 
 	private static Set<String> loadStructureTemplatePoolsForStructure(ResourceManager resourceManager, String structureId) {
