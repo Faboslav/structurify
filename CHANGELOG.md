@@ -1,6 +1,16 @@
 ## 2.0.34
 
+- Fixed crash related to loading of mod resource packs with invalid metadata (Forge only)
+- Fixed config packet sync logic
+- Fixed jigsaw options not being editable for disabled structures
+- Fixed selecting of biomes in the biome dropdown
+- Fixed spacing value of structure sets being corrected to a wrong value
+- Improved search logic across more complex fields
+- Improved load/save of structure "start_height" property (also for modded height providers)
 - Updated "/structurify dump" command to dump all the biomes
+- Updated "/structurify dump" command to dump all the values, not only the changed ones
+- Updated "YetAnotherConfigLib" dependency to be required only on the client side
+- A lot of other quality of life fixes both in the UI and config serialization
 
 ## 2.0.33
 

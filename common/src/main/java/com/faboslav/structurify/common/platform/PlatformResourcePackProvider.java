@@ -10,5 +10,6 @@ public interface PlatformResourcePackProvider
 	default ArrayList<RepositorySource> getPlatformResourcePackProviders() {
 		return new ArrayList<>();
 	}
+
 	default void loadPlatformResourcePacks(PackRepository resourcePackManager) {}
 }

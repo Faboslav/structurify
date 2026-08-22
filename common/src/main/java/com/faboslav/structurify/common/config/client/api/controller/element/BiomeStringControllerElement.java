@@ -108,7 +108,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 	public boolean matchingValue(String value) {
 		if (value.isBlank()) {
 			var slugifiedValue = inputField.toLowerCase().replace(" ", "_");
-			var slugifiedNone = Component.translatable("gui.featurify.label.none").getString().toLowerCase().replace(" ", "_");
+			var slugifiedNone = Component.translatable("gui.structurify.label.none").getString().toLowerCase().replace(" ", "_");
 
 			return slugifiedNone.contains(slugifiedValue) || super.matchingValue(value);
 		}
@@ -122,7 +122,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 
 	public Component getTranslatedBiome(String biome) {
 		if(biome.isBlank() && this.biomeStringController.allowEmptyValue) {
-			return Component.translatable("gui.featurify.label.none");
+			return Component.translatable("gui.structurify.label.none");
 		}
 
 		return LanguageUtil.translateId("biome", biome).append((" (" + biome + ") "));
@@ -190,7 +190,7 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 		var pendingValue = this.biomeStringController.option().pendingValue();
 
 		if (pendingValue.isEmpty() && this.biomeStringController.allowEmptyValue) {
-			return Component.translatable("gui.featurify.label.none");
+			return Component.translatable("gui.structurify.label.none");
 		}
 
 		if (pendingValue.contains(":")) {

@@ -69,7 +69,7 @@ public final class BiomeStringController extends AbstractDropdownController<Stri
 	@Override
 	public Component formatValue() {
 		if (getString().isEmpty()) {
-			return Component.translatable("gui.featurify.label.none");
+			return Component.translatable("gui.structurify.label.none");
 		}
 
 		return LanguageUtil.translateId("biome", getString()).append((" (" + getString() + ") "));
