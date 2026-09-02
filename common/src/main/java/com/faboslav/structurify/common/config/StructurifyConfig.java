@@ -49,6 +49,22 @@ public final class StructurifyConfig
 	public final static boolean ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = false;
 	public final static double GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = 1.0D;
 
+	public boolean isUsingDefaultDisableAllStructures() {
+		return this.disableAllStructures == DISABLE_ALL_STRUCTURES_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultPreventStructureOverlap() {
+		return this.preventStructureOverlap == PREVENT_STRUCTURE_OVERLAP_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultEnableGlobalSpacingAndSeparationModifier() {
+		return this.enableGlobalSpacingAndSeparationModifier == ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultGlobalSpacingAndSeparationModifier() {
+		return this.globalSpacingAndSeparationModifier == GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
+	}
+
 	public Map<String, StructureNamespaceData> getStructureNamespaceData() {
 		return this.structureNamespaceData;
 	}

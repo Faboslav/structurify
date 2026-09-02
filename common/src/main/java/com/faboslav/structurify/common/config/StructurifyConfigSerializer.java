@@ -199,7 +199,7 @@ public final class StructurifyConfigSerializer
 		json.addProperty(CONFIG_VERSION_PROPERTY, PlatformHooks.PLATFORM_HELPER.getModVersion());
 		json.addProperty(CONFIG_DATETIME_PROPERTY, LocalDateTime.now().format(StructurifyConfig.DATETIME_FORMATTER));
 
-		saveGeneralData(config, json);
+		saveGeneralData(config, json, saveOnlyChanged);
 		saveStructureNamespacesData(config, json, saveOnlyChanged);
 		saveStructuresData(config, json, saveOnlyChanged);
 		saveStructureSetsData(config, json, saveOnlyChanged);
@@ -208,12 +208,24 @@ public final class StructurifyConfigSerializer
 		return json;
 	}
 
-	private static void saveGeneralData(StructurifyConfig config, JsonObject json) {
+	private static void saveGeneralData(StructurifyConfig config, JsonObject json, boolean saveOnlyChanged) {
 		JsonObject general = new JsonObject();
-		general.addProperty(DISABLE_ALL_STRUCTURES_PROPERTY, config.disableAllStructures);
-		general.addProperty(PREVENT_STRUCTURE_OVERLAP_PROPERTY, config.preventStructureOverlap);
-		general.addProperty(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, config.enableGlobalSpacingAndSeparationModifier);
-		general.addProperty(GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, Math.round(config.globalSpacingAndSeparationModifier * 10.0) / 10.0);
+
+		if (!config.isUsingDefaultDisableAllStructures() || !saveOnlyChanged) {
+			general.addProperty(DISABLE_ALL_STRUCTURES_PROPERTY, config.disableAllStructures);
+		}
+
+		if (!config.isUsingDefaultPreventStructureOverlap() || !saveOnlyChanged) {
+			general.addProperty(PREVENT_STRUCTURE_OVERLAP_PROPERTY, config.preventStructureOverlap);
+		}
+
+		if (!config.isUsingDefaultEnableGlobalSpacingAndSeparationModifier() || !saveOnlyChanged) {
+			general.addProperty(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, config.enableGlobalSpacingAndSeparationModifier);
+		}
+
+		if (!config.isUsingDefaultGlobalSpacingAndSeparationModifier() || !saveOnlyChanged) {
+			general.addProperty(GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, Math.round(config.globalSpacingAndSeparationModifier * 10.0) / 10.0);
+		}
 
 		json.add(GENERAL_PROPERTY, general);
 	}
