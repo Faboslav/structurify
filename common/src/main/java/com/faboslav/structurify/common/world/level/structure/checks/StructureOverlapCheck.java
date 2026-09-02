@@ -25,26 +25,22 @@ public final class StructureOverlapCheck
 		var structureNamespaceData = structure.structurify$getStructureNamespaceData(structureId);
 		var structureData = structure.structurify$getStructureData(structureId);
 
-		@Nullable
-		OverlapCheckData overlapCheckDataToCheck = null;
+		OverlapCheckData structureOverlapCheckData = structureData != null ? structureData.getOverlapCheckData() : null;
+		OverlapCheckData namespaceOverlapCheckData = structureNamespaceData != null ? structureNamespaceData.getOverlapCheckData() : null;
 
-		if(structureNamespaceData != null) {
-			var namespaceOverlapCheckData = structureNamespaceData.getOverlapCheckData();
-
-			if (namespaceOverlapCheckData.isExcludedFromOverlapPrevention()) {
-				overlapCheckDataToCheck = namespaceOverlapCheckData;
-			}
+		if (structureOverlapCheckData != null && structureOverlapCheckData.isExcludedFromOverlapPrevention()) {
+			return structureOverlapCheckData;
 		}
 
-		if(structureData != null) {
-			var structureOverlapCheckData = structureData.getOverlapCheckData();
-
-			if (structureOverlapCheckData.isExcludedFromOverlapPrevention()) {
-				overlapCheckDataToCheck = structureOverlapCheckData;
-			}
+		if (namespaceOverlapCheckData != null && namespaceOverlapCheckData.isExcludedFromOverlapPrevention()) {
+			return namespaceOverlapCheckData;
 		}
 
-		return overlapCheckDataToCheck;
+		if (structureOverlapCheckData != null) {
+			return structureOverlapCheckData;
+		}
+
+		return namespaceOverlapCheckData;
 	}
 
 	public static boolean canDoOverlapCheck(
@@ -70,11 +66,12 @@ public final class StructureOverlapCheck
 
 	public static boolean checkForOverlap(
 		StructureCheckData structureCheckData,
-		OverlapCheckData overlapCheckData,
+		@Nullable OverlapCheckData overlapCheckData,
 		StructurifyChunkGenerator structurifyChunkGenerator
 	) {
 		StructureStart start = structureCheckData.getStructureStart();
-		long[] structureCells = getStructurePiecesSections(start);
+
+		long[] structureCells = getStructurePiecesSections(start, resolveOverlapPadding(overlapCheckData));
 
 		long structureCenter = structureCheckData.getStructureCenter().asLong();
 
@@ -88,16 +85,25 @@ public final class StructureOverlapCheck
 		return overlapCheckResult;
 	}
 
-	private static long[] getStructurePiecesSections(StructureStart start) {
+	private static int resolveOverlapPadding(@Nullable OverlapCheckData overlapCheckData) {
+		if (overlapCheckData != null && overlapCheckData.isOverridingGlobalOverlapPadding()) {
+			return overlapCheckData.getOverlapPadding();
+		}
+
+		return Structurify.getConfig().overlapPadding;
+	}
+
+	private static long[] getStructurePiecesSections(StructureStart start, int padding) {
 		Set<Long> structurePieceSectionUniqueKeys = new LongOpenHashSet();
 
 		for (var piece : start.getPieces()) {
 			BoundingBox b = piece.getBoundingBox();
 
-			int minSx = SectionPos.blockToSectionCoord(b.minX());
-			int maxSx = SectionPos.blockToSectionCoord(b.maxX());
-			int minSz = SectionPos.blockToSectionCoord(b.minZ());
-			int maxSz = SectionPos.blockToSectionCoord(b.maxZ());
+			int minSx = SectionPos.blockToSectionCoord(b.minX()) - padding;
+			int maxSx = SectionPos.blockToSectionCoord(b.maxX()) + padding;
+			int minSz = SectionPos.blockToSectionCoord(b.minZ()) - padding;
+			int maxSz = SectionPos.blockToSectionCoord(b.maxZ()) + padding;
+
 			int minSy = SectionPos.blockToSectionCoord(b.minY());
 			int maxSy = SectionPos.blockToSectionCoord(b.maxY());
 
@@ -113,7 +119,7 @@ public final class StructureOverlapCheck
 		long[] structurePieceSectionKeys = new long[structurePieceSectionUniqueKeys.size()];
 		int i = 0;
 
-		for (Long structurePieceSectionKey : structurePieceSectionUniqueKeys) {
+		for (long structurePieceSectionKey : structurePieceSectionUniqueKeys) {
 			structurePieceSectionKeys[i++] = structurePieceSectionKey;
 		}
 

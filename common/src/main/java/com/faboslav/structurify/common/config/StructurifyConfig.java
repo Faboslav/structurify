@@ -35,6 +35,7 @@ public final class StructurifyConfig
 
 	public boolean disableAllStructures = DISABLE_ALL_STRUCTURES_DEFAULT_VALUE;
 	public boolean preventStructureOverlap = PREVENT_STRUCTURE_OVERLAP_DEFAULT_VALUE;
+	public int overlapPadding = OVERLAP_PADDING_DEFAULT_VALUE;
 	public boolean enableGlobalSpacingAndSeparationModifier = ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 	public double globalSpacingAndSeparationModifier = GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 
@@ -46,6 +47,9 @@ public final class StructurifyConfig
 
 	public final static boolean DISABLE_ALL_STRUCTURES_DEFAULT_VALUE = false;
 	public final static boolean PREVENT_STRUCTURE_OVERLAP_DEFAULT_VALUE = false;
+	public final static int OVERLAP_PADDING_DEFAULT_VALUE = 0;
+	public final static int OVERLAP_PADDING_MIN_LIMIT = 0;
+	public final static int OVERLAP_PADDING_MAX_LIMIT = 16;
 	public final static boolean ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = false;
 	public final static double GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE = 1.0D;
 
@@ -55,6 +59,10 @@ public final class StructurifyConfig
 
 	public boolean isUsingDefaultPreventStructureOverlap() {
 		return this.preventStructureOverlap == PREVENT_STRUCTURE_OVERLAP_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultOverlapPadding() {
+		return this.overlapPadding == OVERLAP_PADDING_DEFAULT_VALUE;
 	}
 
 	public boolean isUsingDefaultEnableGlobalSpacingAndSeparationModifier() {
@@ -206,6 +214,7 @@ public final class StructurifyConfig
 
 			this.disableAllStructures = DISABLE_ALL_STRUCTURES_DEFAULT_VALUE;
 			this.preventStructureOverlap = PREVENT_STRUCTURE_OVERLAP_DEFAULT_VALUE;
+			this.overlapPadding = OVERLAP_PADDING_DEFAULT_VALUE;
 			this.enableGlobalSpacingAndSeparationModifier = ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 			this.globalSpacingAndSeparationModifier = GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
 

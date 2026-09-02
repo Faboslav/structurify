@@ -9,6 +9,7 @@ import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionAddable;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import net.minecraft.network.chat.Component;
 
 import java.util.Map;
@@ -62,5 +63,55 @@ public final class OverlapCheckOptions
 			).build();
 
 			builder.option(excludeFromOverlapPreventionOption);
+
+			boolean isExcluded = overlapCheckData.isExcludedFromOverlapPrevention();
+
+			var overrideGlobalOverlapPaddingOption = Option.<Boolean>createBuilder()
+				.name(Component.translatable("gui.structurify.structures.structure.override_global_overlap_padding.title"))
+				.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.override_global_overlap_padding.description", namespace, id)))
+				.available(isStructureOverlapPreventionEnabled && !isEnabledForNamespace && !isExcluded)
+				.binding(
+					OverlapCheckData.OVERRIDE_GLOBAL_OVERLAP_PADDING_DEFAULT_VALUE,
+					overlapCheckData::isOverridingGlobalOverlapPadding,
+					overlapCheckData::overrideGlobalOverlapPadding
+				).controller(opt -> BooleanControllerBuilder.create(opt)
+					.formatValue(val -> val ? Component.translatable("gui.structurify.label.yes"):Component.translatable("gui.structurify.label.no"))
+					.coloured(true)
+				).build();
+
+			builder.option(overrideGlobalOverlapPaddingOption);
+
+			var overlapPaddingOption = Option.<Integer>createBuilder()
+				.name(Component.translatable("gui.structurify.structures.structure.overlap_padding.title"))
+				.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.overlap_padding.description")))
+				.available(overlapCheckData.isOverridingGlobalOverlapPadding() && isStructureOverlapPreventionEnabled && !isEnabledForNamespace && !isExcluded)
+				.binding(
+					OverlapCheckData.OVERLAP_PADDING_DEFAULT_VALUE,
+					overlapCheckData::getOverlapPadding,
+					overlapCheckData::setOverlapPadding
+				)
+				.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(OverlapCheckData.OVERLAP_PADDING_MIN_LIMIT, OverlapCheckData.OVERLAP_PADDING_MAX_LIMIT).step(1)).build();
+
+			builder.option(overlapPaddingOption);
+
+			excludeFromOverlapPreventionOption.addListener((opt, currentIsExcluded) -> {
+				boolean isAvailable = isStructureOverlapPreventionEnabled && !isEnabledForNamespace && !currentIsExcluded;
+
+				overrideGlobalOverlapPaddingOption.setAvailable(isAvailable);
+
+				if (currentIsExcluded) {
+					overrideGlobalOverlapPaddingOption.requestSetDefault();
+				}
+
+				overlapPaddingOption.setAvailable(isAvailable && overrideGlobalOverlapPaddingOption.pendingValue());
+			});
+
+			overrideGlobalOverlapPaddingOption.addListener((opt, currentIsOverriding) -> {
+				if (!currentIsOverriding) {
+					overlapPaddingOption.requestSetDefault();
+				}
+
+				overlapPaddingOption.setAvailable(currentIsOverriding && isStructureOverlapPreventionEnabled && !isEnabledForNamespace && !excludeFromOverlapPreventionOption.pendingValue());
+			});
 	}
 }

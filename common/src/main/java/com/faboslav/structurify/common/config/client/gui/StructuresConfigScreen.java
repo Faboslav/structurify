@@ -17,6 +17,7 @@ import com.faboslav.structurify.common.util.StructurifyComparators;
 import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -167,6 +168,23 @@ public final class StructuresConfigScreen
 			.controller(opt -> BooleanControllerBuilder.create(opt).formatValue(val -> val ? Component.translatable("gui.structurify.label.yes").withStyle(style -> style.withColor(ChatFormatting.GREEN)):Component.translatable("gui.structurify.label.no").withStyle(style -> style.withColor(ChatFormatting.RED)))).build();
 
 		globalStructuresGroupBuilder.option(preventStructureOverlapOption);
+
+		var overlapPaddingOption = Option.<Integer>createBuilder()
+			.name(Component.translatable("gui.structurify.structures.overlap_padding.title"))
+			.description(OptionDescription.of(Component.translatable("gui.structurify.structures.overlap_padding.description")))
+			.available(config.preventStructureOverlap)
+			.binding(
+				StructurifyConfig.OVERLAP_PADDING_DEFAULT_VALUE,
+				() -> config.overlapPadding,
+				overlapPadding -> config.overlapPadding = overlapPadding
+			)
+			.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(StructurifyConfig.OVERLAP_PADDING_MIN_LIMIT, StructurifyConfig.OVERLAP_PADDING_MAX_LIMIT).step(1)).build();
+
+		globalStructuresGroupBuilder.option(overlapPaddingOption);
+
+		preventStructureOverlapOption.addListener((opt, currentIsEnabled) -> {
+			overlapPaddingOption.setAvailable(currentIsEnabled);
+		});
 
 		var globalDistanceFromWorldCenterOptions = DistanceFromWorldCenterOptions.addDistanceFromWorldCenterOptions(globalStructuresGroupBuilder, config, "global");
 		enableGlobalMinDistanceFromWorldCenterOption = (Option<Boolean>) globalDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.ENABLE_MIN_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME);

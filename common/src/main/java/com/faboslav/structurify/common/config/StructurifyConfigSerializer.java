@@ -24,6 +24,7 @@ public final class StructurifyConfigSerializer
 	public static final String GENERAL_PROPERTY = "general";
 	public static final String DISABLE_ALL_STRUCTURES_PROPERTY = "disable_all_structures";
 	public static final String PREVENT_STRUCTURE_OVERLAP_PROPERTY = "prevent_structure_overlap";
+	public static final String OVERLAP_PADDING_PROPERTY = "overlap_padding";
 	public static final String ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY = "enable_global_spacing_and_separation_modifier";
 	public static final String GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY = "global_spacing_and_separation_modifier";
 
@@ -53,6 +54,10 @@ public final class StructurifyConfigSerializer
 
 		if (general.has(PREVENT_STRUCTURE_OVERLAP_PROPERTY)) {
 			config.preventStructureOverlap = general.get(PREVENT_STRUCTURE_OVERLAP_PROPERTY).getAsBoolean();
+		}
+
+		if (general.has(OVERLAP_PADDING_PROPERTY)) {
+			config.overlapPadding = general.get(OVERLAP_PADDING_PROPERTY).getAsInt();
 		}
 
 		if (general.has(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY)) {
@@ -217,6 +222,10 @@ public final class StructurifyConfigSerializer
 
 		if (!config.isUsingDefaultPreventStructureOverlap() || !saveOnlyChanged) {
 			general.addProperty(PREVENT_STRUCTURE_OVERLAP_PROPERTY, config.preventStructureOverlap);
+		}
+
+		if (!config.isUsingDefaultOverlapPadding() || !saveOnlyChanged) {
+			general.addProperty(OVERLAP_PADDING_PROPERTY, config.overlapPadding);
 		}
 
 		if (!config.isUsingDefaultEnableGlobalSpacingAndSeparationModifier() || !saveOnlyChanged) {
