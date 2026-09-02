@@ -1,3 +1,11 @@
+## 2.0.35
+
+- Added "Enable" toggles and a "Circle"/"Square" mode for min/max distance from world center
+- Added overlap prevention padding (in chunks), configurable globally and per namespace/structure
+- Fixed "Exclude from overlap prevention" not actually excluding a structure unless its whole namespace was also excluded
+- Fixed min/max distance from world center always meaning "unlimited" when set to 0
+- Improved "save only changed values" logic to also cover general settings, structure namespaces and overlap checks
+
 ## 2.0.34
 
 - Fixed crash related to loading of mod resource packs with invalid metadata (Forge only)
