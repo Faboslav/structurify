@@ -11,6 +11,10 @@ public final class OverlapCheckData
 	}
 
 	public boolean isUsingDefaultValues() {
+		return this.isUsingDefaultIsExcludedFromOverlapPrevention();
+	}
+
+	public boolean isUsingDefaultIsExcludedFromOverlapPrevention() {
 		return this.isExcludedFromOverlapPrevention == this.defaultIsExcludedFromOverlapPrevention;
 	}
 

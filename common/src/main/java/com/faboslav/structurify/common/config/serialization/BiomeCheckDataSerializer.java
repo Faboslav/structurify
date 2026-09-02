@@ -40,14 +40,24 @@ public final class BiomeCheckDataSerializer
 		}
 	}
 
-	public static void save(JsonObject structureJson, BiomeCheckData biomeCheckData) {
-		structureJson.addProperty(OVERRIDE_GLOBAL_BIOME_CHECK_PROPERTY, biomeCheckData.isOverridingGlobalBiomeCheck());
-		structureJson.addProperty(ENABLE_BIOME_CHECK_PROPERTY, biomeCheckData.isEnabled());
-		structureJson.addProperty(BIOME_CHECK_MODE_PROPERTY, biomeCheckData.getMode().name());
+	public static void save(JsonObject structureJson, BiomeCheckData biomeCheckData, boolean saveOnlyChanged) {
+		if (!biomeCheckData.isUsingDefaultOverrideGlobalBiomeCheck() || !saveOnlyChanged) {
+			structureJson.addProperty(OVERRIDE_GLOBAL_BIOME_CHECK_PROPERTY, biomeCheckData.isOverridingGlobalBiomeCheck());
+		}
 
-		var biomeCheckBlacklistedBiomes = new ArrayList<>(biomeCheckData.getBlacklistedBiomes());
-		JsonArray biomeCheckBlacklistedBiomesJson = new JsonArray();
-		biomeCheckBlacklistedBiomes.stream().distinct().forEach(biomeCheckBlacklistedBiomesJson::add);
-		structureJson.add(BIOME_CHECK_BLACKLISTED_BIOMES_PROPERTY, biomeCheckBlacklistedBiomesJson);
+		if (!biomeCheckData.isUsingDefaultIsEnabled() || !saveOnlyChanged) {
+			structureJson.addProperty(ENABLE_BIOME_CHECK_PROPERTY, biomeCheckData.isEnabled());
+		}
+
+		if (!biomeCheckData.isUsingDefaultMode() || !saveOnlyChanged) {
+			structureJson.addProperty(BIOME_CHECK_MODE_PROPERTY, biomeCheckData.getMode().name());
+		}
+
+		if (!biomeCheckData.isUsingDefaultBlacklistedBiomes() || !saveOnlyChanged) {
+			var biomeCheckBlacklistedBiomes = new ArrayList<>(biomeCheckData.getBlacklistedBiomes());
+			JsonArray biomeCheckBlacklistedBiomesJson = new JsonArray();
+			biomeCheckBlacklistedBiomes.stream().distinct().forEach(biomeCheckBlacklistedBiomesJson::add);
+			structureJson.add(BIOME_CHECK_BLACKLISTED_BIOMES_PROPERTY, biomeCheckBlacklistedBiomesJson);
+		}
 	}
 }

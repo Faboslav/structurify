@@ -46,7 +46,7 @@ public final class StructureTemplatePoolDataSerializer
 		}
 	}
 
-	public static void save(JsonArray structureSetsJson, String structureTemplatePoolName, StructureTemplatePoolData structureTemplatePoolData) {
+	public static void save(JsonArray structureSetsJson, String structureTemplatePoolName, StructureTemplatePoolData structureTemplatePoolData, boolean saveOnlyChanged) {
 		JsonObject structureTemplatePool = new JsonObject();
 		JsonObject structureTemplatePoolElementWeights = new JsonObject();
 
@@ -55,7 +55,11 @@ public final class StructureTemplatePoolDataSerializer
 			var defaultStructurePoolElementWeight = structureTemplatePoolData.getDefaultStructureTemplatePoolElementWeights().get(structureTemplatePoolElementName);
 			var structureTemplatePoolElementWeight = structureTemplatePoolElementWeightEntry.getValue();
 
-			if(defaultStructurePoolElementWeight == null || defaultStructurePoolElementWeight.equals(structureTemplatePoolElementWeight)) {
+			if(defaultStructurePoolElementWeight == null) {
+				continue;
+			}
+
+			if(saveOnlyChanged && defaultStructurePoolElementWeight.equals(structureTemplatePoolElementWeight)) {
 				continue;
 			}
 

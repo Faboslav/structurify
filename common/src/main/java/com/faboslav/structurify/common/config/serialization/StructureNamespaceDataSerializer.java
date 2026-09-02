@@ -23,30 +23,34 @@ public final class StructureNamespaceDataSerializer
 	public static void save(
 		JsonArray structureNamespacesJson,
 		String structureName,
-		StructureNamespaceData structureNamespaceData
+		StructureNamespaceData structureNamespaceData,
+		boolean saveOnlyChanged
 	) {
 		JsonObject structureNamespace = new JsonObject();
 		structureNamespace.addProperty(NAME_PROPERTY, structureName);
-		structureNamespace.addProperty(IS_DISABLED_PROPERTY, structureNamespaceData.isDisabled());
+
+		if (!structureNamespaceData.isUsingDefaultIsDisabled() || !saveOnlyChanged) {
+			structureNamespace.addProperty(IS_DISABLED_PROPERTY, structureNamespaceData.isDisabled());
+		}
 
 		var distanceFromWorldCenterData = structureNamespaceData.getDistanceFromWorldCenterCheckData();
-		if (!distanceFromWorldCenterData.isUsingDefaultValues()) {
-			DistanceFromWorldCenterDataSerializer.save(structureNamespace, distanceFromWorldCenterData);
+		if (!distanceFromWorldCenterData.isUsingDefaultValues() || !saveOnlyChanged) {
+			DistanceFromWorldCenterDataSerializer.save(structureNamespace, distanceFromWorldCenterData, saveOnlyChanged);
 		}
 
 		var overlapCheckData = structureNamespaceData.getOverlapCheckData();
-		if(!overlapCheckData.isUsingDefaultValues()) {
-			OverlapCheckDataSerializer.save(structureNamespace, overlapCheckData);
+		if(!overlapCheckData.isUsingDefaultValues() || !saveOnlyChanged) {
+			OverlapCheckDataSerializer.save(structureNamespace, overlapCheckData, saveOnlyChanged);
 		}
 
 		var flatnessCheckData = structureNamespaceData.getFlatnessCheckData();
-		if (!flatnessCheckData.isUsingDefaultValues()) {
-			FlatnessCheckDataSerializer.save(structureNamespace, flatnessCheckData);
+		if (!flatnessCheckData.isUsingDefaultValues() || !saveOnlyChanged) {
+			FlatnessCheckDataSerializer.save(structureNamespace, flatnessCheckData, saveOnlyChanged);
 		}
 
 		var biomeCheckData = structureNamespaceData.getBiomeCheckData();
-		if (!biomeCheckData.isUsingDefaultValues()) {
-			BiomeCheckDataSerializer.save(structureNamespace, biomeCheckData);
+		if (!biomeCheckData.isUsingDefaultValues() || !saveOnlyChanged) {
+			BiomeCheckDataSerializer.save(structureNamespace, biomeCheckData, saveOnlyChanged);
 		}
 
 		structureNamespacesJson.add(structureNamespace);

@@ -22,11 +22,15 @@ public final class StructureNamespaceData implements StructureLikeData
 	}
 
 	public boolean isUsingDefaultValues() {
-		return this.isDisabled == IS_DISABLED_DEFAULT_VALUE
+		return this.isUsingDefaultIsDisabled()
 			   && this.getDistanceFromWorldCenterCheckData().isUsingDefaultValues()
 			   && this.getOverlapCheckData().isUsingDefaultValues()
 			   && this.getFlatnessCheckData().isUsingDefaultValues()
 			   && this.getBiomeCheckData().isUsingDefaultValues();
+	}
+
+	public boolean isUsingDefaultIsDisabled() {
+		return this.isDisabled == IS_DISABLED_DEFAULT_VALUE;
 	}
 
 	public boolean isDisabled() {

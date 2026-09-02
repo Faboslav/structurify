@@ -23,13 +23,36 @@ public class DistanceFromWorldCenterCheckData
 	}
 
 	public boolean isUsingDefaultValues() {
-		return
-			this.overrideGlobalDistanceFromWorldCenter == OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE
-			&& this.mode == MODE_DEFAULT_VALUE
-			&& this.enableMinDistanceFromWorldCenter == ENABLE_MIN_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE
-			&& this.enableMaxDistanceFromWorldCenter == ENABLE_MAX_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE
-			&& this.minDistanceFromWorldCenter == MIN_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE
-			&& this.maxDistanceFromWorldCenter == MAX_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
+		return this.isUsingDefaultOverrideGlobalDistanceFromWorldCenter()
+			   && this.isUsingDefaultMode()
+			   && this.isUsingDefaultEnableMinDistanceFromWorldCenter()
+			   && this.isUsingDefaultEnableMaxDistanceFromWorldCenter()
+			   && this.isUsingDefaultMinDistanceFromWorldCenter()
+			   && this.isUsingDefaultMaxDistanceFromWorldCenter();
+	}
+
+	public boolean isUsingDefaultOverrideGlobalDistanceFromWorldCenter() {
+		return this.overrideGlobalDistanceFromWorldCenter == OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultMode() {
+		return this.mode == MODE_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultEnableMinDistanceFromWorldCenter() {
+		return this.enableMinDistanceFromWorldCenter == ENABLE_MIN_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultEnableMaxDistanceFromWorldCenter() {
+		return this.enableMaxDistanceFromWorldCenter == ENABLE_MAX_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultMinDistanceFromWorldCenter() {
+		return this.minDistanceFromWorldCenter == MIN_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultMaxDistanceFromWorldCenter() {
+		return this.maxDistanceFromWorldCenter == MAX_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
 	}
 
 	public boolean isEnabled() {

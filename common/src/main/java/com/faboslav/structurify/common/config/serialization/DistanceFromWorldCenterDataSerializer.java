@@ -52,12 +52,29 @@ public class DistanceFromWorldCenterDataSerializer
 		}
 	}
 
-	public static void save(JsonObject structureJson, DistanceFromWorldCenterCheckData distanceFromWorldCenterData) {
-		structureJson.addProperty(OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_PROPERTY, distanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter());
-		structureJson.addProperty(DISTANCE_FROM_WORLD_CENTER_MODE_PROPERTY, distanceFromWorldCenterData.getMode().name());
-		structureJson.addProperty(ENABLE_MIN_DISTANCE_FROM_WORLD_CENTER_PROPERTY, distanceFromWorldCenterData.isMinDistanceFromWorldCenterEnabled());
-		structureJson.addProperty(MIN_DISTANCE_FROM_WORLD_CENTER_PROPERTY, distanceFromWorldCenterData.getMinDistanceFromWorldCenter());
-		structureJson.addProperty(ENABLE_MAX_DISTANCE_FROM_WORLD_CENTER_PROPERTY, distanceFromWorldCenterData.isMaxDistanceFromWorldCenterEnabled());
-		structureJson.addProperty(MAX_DISTANCE_FROM_WORLD_CENTER_PROPERTY, distanceFromWorldCenterData.getMaxDistanceFromWorldCenter());
+	public static void save(JsonObject structureJson, DistanceFromWorldCenterCheckData distanceFromWorldCenterData, boolean saveOnlyChanged) {
+		if (!distanceFromWorldCenterData.isUsingDefaultOverrideGlobalDistanceFromWorldCenter() || !saveOnlyChanged) {
+			structureJson.addProperty(OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_PROPERTY, distanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter());
+		}
+
+		if (!distanceFromWorldCenterData.isUsingDefaultMode() || !saveOnlyChanged) {
+			structureJson.addProperty(DISTANCE_FROM_WORLD_CENTER_MODE_PROPERTY, distanceFromWorldCenterData.getMode().name());
+		}
+
+		if (!distanceFromWorldCenterData.isUsingDefaultEnableMinDistanceFromWorldCenter() || !saveOnlyChanged) {
+			structureJson.addProperty(ENABLE_MIN_DISTANCE_FROM_WORLD_CENTER_PROPERTY, distanceFromWorldCenterData.isMinDistanceFromWorldCenterEnabled());
+		}
+
+		if (!distanceFromWorldCenterData.isUsingDefaultMinDistanceFromWorldCenter() || !saveOnlyChanged) {
+			structureJson.addProperty(MIN_DISTANCE_FROM_WORLD_CENTER_PROPERTY, distanceFromWorldCenterData.getMinDistanceFromWorldCenter());
+		}
+
+		if (!distanceFromWorldCenterData.isUsingDefaultEnableMaxDistanceFromWorldCenter() || !saveOnlyChanged) {
+			structureJson.addProperty(ENABLE_MAX_DISTANCE_FROM_WORLD_CENTER_PROPERTY, distanceFromWorldCenterData.isMaxDistanceFromWorldCenterEnabled());
+		}
+
+		if (!distanceFromWorldCenterData.isUsingDefaultMaxDistanceFromWorldCenter() || !saveOnlyChanged) {
+			structureJson.addProperty(MAX_DISTANCE_FROM_WORLD_CENTER_PROPERTY, distanceFromWorldCenterData.getMaxDistanceFromWorldCenter());
+		}
 	}
 }

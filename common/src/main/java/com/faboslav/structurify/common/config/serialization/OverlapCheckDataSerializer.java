@@ -14,7 +14,9 @@ public final class OverlapCheckDataSerializer
 		}
 	}
 
-	public static void save(JsonObject structureJson, OverlapCheckData overlapCheckData) {
-		structureJson.addProperty(EXCLUDE_FROM_OVERLAP_PREVENTION_PROPERTY, overlapCheckData.isExcludedFromOverlapPrevention());
+	public static void save(JsonObject structureJson, OverlapCheckData overlapCheckData, boolean saveOnlyChanged) {
+		if (!overlapCheckData.isUsingDefaultIsExcludedFromOverlapPrevention() || !saveOnlyChanged) {
+			structureJson.addProperty(EXCLUDE_FROM_OVERLAP_PREVENTION_PROPERTY, overlapCheckData.isExcludedFromOverlapPrevention());
+		}
 	}
 }

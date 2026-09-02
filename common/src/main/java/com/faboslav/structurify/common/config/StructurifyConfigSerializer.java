@@ -228,7 +228,7 @@ public final class StructurifyConfigSerializer
 		config.getStructureNamespaceData().entrySet().stream()
 			.filter(entry -> !saveOnlyChanged || !entry.getValue().isUsingDefaultValues())
 			.forEach(structureNamespaceDataEntry -> {
-				StructureNamespaceDataSerializer.save(structureNamespaces, structureNamespaceDataEntry.getKey(), structureNamespaceDataEntry.getValue());
+				StructureNamespaceDataSerializer.save(structureNamespaces, structureNamespaceDataEntry.getKey(), structureNamespaceDataEntry.getValue(), saveOnlyChanged);
 			});
 
 		json.add(STRUCTURE_NAMESPACES_PROPERTY, structureNamespaces);
@@ -282,7 +282,7 @@ public final class StructurifyConfigSerializer
 				var structureTemplatePoolName = structureTemplatePoolDataEntry.getKey();
 				var structureTemplatePoolData = structureTemplatePoolDataEntry.getValue();
 
-				StructureTemplatePoolDataSerializer.save(structureTemplatePools, structureTemplatePoolName, structureTemplatePoolData);
+				StructureTemplatePoolDataSerializer.save(structureTemplatePools, structureTemplatePoolName, structureTemplatePoolData, saveOnlyChanged);
 			});
 
 		json.add(STRUCTURE_TEMPLATE_POOLS_PROPERTY, structureTemplatePools);

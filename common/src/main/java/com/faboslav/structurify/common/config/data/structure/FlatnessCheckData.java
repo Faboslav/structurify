@@ -23,12 +23,31 @@ public final class FlatnessCheckData
 	}
 
 	public boolean isUsingDefaultValues() {
-		return
-			this.overrideGlobalFlatnessCheck == this.defaultOverrideGlobalFlatnessCheck
-			&& this.isEnabled == this.defaultIsEnabled
-			&& this.allowNonSolidBlocks == ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE
-			&& this.mode == MODE_DEFAULT_VALUE
-			&& this.maxHeightDifference == MAX_HEIGHT_DIFFERENCE_DEFAULT_VALUE;
+		return this.isUsingDefaultOverrideGlobalFlatnessCheck()
+			   && this.isUsingDefaultIsEnabled()
+			   && this.isUsingDefaultAllowNonSolidBlocks()
+			   && this.isUsingDefaultMode()
+			   && this.isUsingDefaultMaxHeightDifference();
+	}
+
+	public boolean isUsingDefaultOverrideGlobalFlatnessCheck() {
+		return this.overrideGlobalFlatnessCheck == this.defaultOverrideGlobalFlatnessCheck;
+	}
+
+	public boolean isUsingDefaultIsEnabled() {
+		return this.isEnabled == this.defaultIsEnabled;
+	}
+
+	public boolean isUsingDefaultAllowNonSolidBlocks() {
+		return this.allowNonSolidBlocks == ALLOW_NON_SOLID_BLOCKS_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultMode() {
+		return this.mode == MODE_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultMaxHeightDifference() {
+		return this.maxHeightDifference == MAX_HEIGHT_DIFFERENCE_DEFAULT_VALUE;
 	}
 
 	public boolean isOverridingGlobalFlatnessCheck() {

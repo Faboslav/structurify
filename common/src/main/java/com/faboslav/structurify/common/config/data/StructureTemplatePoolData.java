@@ -25,6 +25,10 @@ public class StructureTemplatePoolData
 	}
 
 	public boolean isUsingDefaultValues() {
+		return this.isUsingDefaultStructureTemplatePoolElementWeights();
+	}
+
+	public boolean isUsingDefaultStructureTemplatePoolElementWeights() {
 		return this.structureTemplatePoolElementWeights.equals(this.defaultStructureTemplatePoolElementWeights);
 	}
 }

@@ -154,22 +154,22 @@ public final class StructureDataSerializer
 
 		var distanceFromWorldCenterData = structureData.getDistanceFromWorldCenterCheckData();
 		if (!distanceFromWorldCenterData.isUsingDefaultValues() || !saveOnlyChanged) {
-			DistanceFromWorldCenterDataSerializer.save(structure, distanceFromWorldCenterData);
+			DistanceFromWorldCenterDataSerializer.save(structure, distanceFromWorldCenterData, saveOnlyChanged);
 		}
 
 		var overlapCheckData = structureData.getOverlapCheckData();
 		if(!overlapCheckData.isUsingDefaultValues() || !saveOnlyChanged) {
-			OverlapCheckDataSerializer.save(structure, overlapCheckData);
+			OverlapCheckDataSerializer.save(structure, overlapCheckData, saveOnlyChanged);
 		}
 
 		var flatnessCheckData = structureData.getFlatnessCheckData();
 		if (!flatnessCheckData.isUsingDefaultValues() || !saveOnlyChanged) {
-			FlatnessCheckDataSerializer.save(structure, flatnessCheckData);
+			FlatnessCheckDataSerializer.save(structure, flatnessCheckData, saveOnlyChanged);
 		}
 
 		var biomeCheckData = structureData.getBiomeCheckData();
 		if (!biomeCheckData.isUsingDefaultValues() || !saveOnlyChanged) {
-			BiomeCheckDataSerializer.save(structure, biomeCheckData);
+			BiomeCheckDataSerializer.save(structure, biomeCheckData, saveOnlyChanged);
 		}
 
 		structuresJson.add(structure);

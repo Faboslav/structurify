@@ -29,17 +29,32 @@ public final class BiomeCheckData
 	}
 
 	public boolean isUsingDefaultValues() {
+		return this.isUsingDefaultOverrideGlobalBiomeCheck()
+			   && this.isUsingDefaultIsEnabled()
+			   && this.isUsingDefaultMode()
+			   && this.isUsingDefaultBlacklistedBiomes();
+	}
+
+	public boolean isUsingDefaultOverrideGlobalBiomeCheck() {
+		return this.overrideGlobalBiomeCheck == this.defaultOverrideGlobalBiomeCheck;
+	}
+
+	public boolean isUsingDefaultIsEnabled() {
+		return this.isEnabled == this.defaultIsEnabled;
+	}
+
+	public boolean isUsingDefaultMode() {
+		return this.mode == MODE_DEFAULT_VALUE;
+	}
+
+	public boolean isUsingDefaultBlacklistedBiomes() {
 		var blacklistedBiomes = new ArrayList<>(this.blacklistedBiomes);
 		var defaultBlacklistedBiomes = new ArrayList<>(BLACKLISTED_BIOMES_DEFAULT_VALUE);
 
 		Collections.sort(blacklistedBiomes);
 		Collections.sort(defaultBlacklistedBiomes);
 
-		return
-			this.overrideGlobalBiomeCheck == this.defaultOverrideGlobalBiomeCheck
-			&& this.isEnabled == this.defaultIsEnabled
-			&& this.mode == MODE_DEFAULT_VALUE
-			&& blacklistedBiomes.equals(defaultBlacklistedBiomes);
+		return blacklistedBiomes.equals(defaultBlacklistedBiomes);
 	}
 
 	public boolean isOverridingGlobalBiomeCheck() {

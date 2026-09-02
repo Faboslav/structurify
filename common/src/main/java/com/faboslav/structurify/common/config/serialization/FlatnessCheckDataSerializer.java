@@ -39,11 +39,25 @@ public final class FlatnessCheckDataSerializer
 		}
 	}
 
-	public static void save(JsonObject structureJson, FlatnessCheckData flatnessCheckData) {
-		structureJson.addProperty(OVERRIDE_GLOBAL_FLATNESS_CHECK_PROPERTY, flatnessCheckData.isOverridingGlobalFlatnessCheck());
-		structureJson.addProperty(ENABLE_FLATNESS_CHECK_PROPERTY, flatnessCheckData.isEnabled());
-		structureJson.addProperty(FLATNESS_CHECK_ALLOW_NON_SOLID_PROPERTY, flatnessCheckData.areNonSolidBlocksAllowed());
-		structureJson.addProperty(FLATNESS_CHECK_MODE_PROPERTY, flatnessCheckData.getMode().name());
-		structureJson.addProperty(FLATNESS_CHECK_MAX_HEIGHT_DIFFERENCE, flatnessCheckData.getMaxHeightDifference());
+	public static void save(JsonObject structureJson, FlatnessCheckData flatnessCheckData, boolean saveOnlyChanged) {
+		if (!flatnessCheckData.isUsingDefaultOverrideGlobalFlatnessCheck() || !saveOnlyChanged) {
+			structureJson.addProperty(OVERRIDE_GLOBAL_FLATNESS_CHECK_PROPERTY, flatnessCheckData.isOverridingGlobalFlatnessCheck());
+		}
+
+		if (!flatnessCheckData.isUsingDefaultIsEnabled() || !saveOnlyChanged) {
+			structureJson.addProperty(ENABLE_FLATNESS_CHECK_PROPERTY, flatnessCheckData.isEnabled());
+		}
+
+		if (!flatnessCheckData.isUsingDefaultAllowNonSolidBlocks() || !saveOnlyChanged) {
+			structureJson.addProperty(FLATNESS_CHECK_ALLOW_NON_SOLID_PROPERTY, flatnessCheckData.areNonSolidBlocksAllowed());
+		}
+
+		if (!flatnessCheckData.isUsingDefaultMode() || !saveOnlyChanged) {
+			structureJson.addProperty(FLATNESS_CHECK_MODE_PROPERTY, flatnessCheckData.getMode().name());
+		}
+
+		if (!flatnessCheckData.isUsingDefaultMaxHeightDifference() || !saveOnlyChanged) {
+			structureJson.addProperty(FLATNESS_CHECK_MAX_HEIGHT_DIFFERENCE, flatnessCheckData.getMaxHeightDifference());
+		}
 	}
 }
