@@ -6,6 +6,9 @@ public class DistanceFromWorldCenterCheckData
 	public static final int MIN_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE = 0;
 	public static final int MAX_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE = 0;
 
+	public static final int DISTANCE_FROM_WORLD_CENTER_MIN_LIMIT = 0;
+	public static final int DISTANCE_FROM_WORLD_CENTER_MAX_LIMIT = 30000000;
+
 	private boolean overrideGlobalDistanceFromWorldCenter = OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
 	private int minDistanceFromWorldCenter = MIN_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;
 	private int maxDistanceFromWorldCenter = MAX_DISTANCE_FROM_WORLD_CENTER_DEFAULT_VALUE;

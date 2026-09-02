@@ -92,7 +92,7 @@ public class DistanceFromWorldCenterOptions
 				distanceFromWorldCenterData::getMinDistanceFromWorldCenter,
 				distanceFromWorldCenterData::setMinDistanceFromWorldCenter
 			)
-			.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(0, 100000)).build();
+			.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(DistanceFromWorldCenterCheckData.DISTANCE_FROM_WORLD_CENTER_MIN_LIMIT, DistanceFromWorldCenterCheckData.DISTANCE_FROM_WORLD_CENTER_MAX_LIMIT)).build();
 
 		var maxStructureDistanceFromWorldOption = Option.<Integer>createBuilder()
 			.name(Component.translatable("gui.structurify.structures.structure.max_distance_from_world_center.title"))
@@ -103,7 +103,7 @@ public class DistanceFromWorldCenterOptions
 				distanceFromWorldCenterData::getMaxDistanceFromWorldCenter,
 				distanceFromWorldCenterData::setMaxDistanceFromWorldCenter
 			)
-			.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(0, 100000)).build();
+			.controller(opt -> IntegerFieldControllerBuilder.create(opt).range(DistanceFromWorldCenterCheckData.DISTANCE_FROM_WORLD_CENTER_MIN_LIMIT, DistanceFromWorldCenterCheckData.DISTANCE_FROM_WORLD_CENTER_MAX_LIMIT)).build();
 
 		var distanceFromWorldCenterPair = new OptionPair<>(minStructureDistanceFromWorldOption, maxStructureDistanceFromWorldOption);
 
