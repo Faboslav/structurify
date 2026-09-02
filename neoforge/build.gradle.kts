@@ -62,11 +62,13 @@ dependencies {
 	if(!IS_CI) {
 		if (commonMod.mc == "1.21.1") {
 			val modrinthBundles = listOf(
-				"biolith",
-				"no-mans-land",
-				"yungs-better-end-island",
-				"dungeons-and-taverns",
-				"dungeons-and-taverns-ancient-city-overhaul"
+				//"biolith",
+				//"no-mans-land",
+				//"yungs-better-end-island",
+				//"dungeons-and-taverns",
+				//"dungeons-and-taverns-ancient-city-overhaul",
+				"abridged",
+				"streams-reflowing",
 			)
 
 			for (bundle in modrinthBundles) {

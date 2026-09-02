@@ -190,6 +190,10 @@ public final class StructureChecker
 		long structureHash = structureId.hashCode() & 0xffffffffL;
 		long chunkHash = ChunkPosUtil.getChunkPosAsLong(chunkPos);
 
-		return (structureHash << 32) ^ chunkHash;
+		long structureCheckId = structureHash * 0x9E3779B97F4A7C15L + chunkHash;
+		structureCheckId = (structureCheckId ^ (structureCheckId >>> 30)) * 0xBF58476D1CE4E5B9L;
+		structureCheckId = (structureCheckId ^ (structureCheckId >>> 27)) * 0x94D049BB133111EBL;
+
+		return structureCheckId ^ (structureCheckId >>> 31);
 	}
 }

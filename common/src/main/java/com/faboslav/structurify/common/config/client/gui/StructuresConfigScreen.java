@@ -4,9 +4,7 @@ import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.StructureButtonControllerBuilder;
-import com.faboslav.structurify.common.config.client.api.option.HolderOption;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
-import com.faboslav.structurify.common.config.client.api.option.OptionPair;
 import com.faboslav.structurify.common.config.client.gui.structure.BiomeCheckOptions;
 import com.faboslav.structurify.common.config.client.gui.structure.DistanceFromWorldCenterOptions;
 import com.faboslav.structurify.common.config.client.gui.structure.FlatnessCheckOptions;
@@ -35,23 +33,29 @@ import java.util.*;
 public final class StructuresConfigScreen
 {
 	private final static List<Option<Boolean>> structureOptions = new ArrayList<>();
-	private static Option<OptionPair<Option<Integer>, Option<Integer>>> globalDistanceFromWorldCenterOption = null;
+	private static Option<Boolean> enableGlobalMinDistanceFromWorldCenterOption = null;
+	private static Option<Boolean> enableGlobalMaxDistanceFromWorldCenterOption = null;
 	private static Option<Boolean> enableGlobalFlatnessCheckOption = null;
 	private static Option<Boolean> enableGlobalBiomeCheckOption = null;
 	private final static List<Option<Boolean>> overrideDistanceFromWorldCenterOptions = new ArrayList<>();
 	private final static List<Option<Boolean>> overrideFlatnessCheckOptions = new ArrayList<>();
 	private final static List<Option<Boolean>> overrideBiomeCheckOptions = new ArrayList<>();
+	private final static List<Option<Boolean>> enableMinDistanceFromWorldCenterOptions = new ArrayList<>();
+	private final static List<Option<Boolean>> enableMaxDistanceFromWorldCenterOptions = new ArrayList<>();
 	private final static List<Option<Boolean>> enableFlatnessCheckOptions = new ArrayList<>();
 	private final static List<Option<Boolean>> enableBiomeCheckOptions = new ArrayList<>();
 
 	public static void createStructuresTab(YetAnotherConfigLib.Builder yacl, StructurifyConfig config) {
 		structureOptions.clear();
-		globalDistanceFromWorldCenterOption = null;
+		enableGlobalMinDistanceFromWorldCenterOption = null;
+		enableGlobalMaxDistanceFromWorldCenterOption = null;
 		enableGlobalFlatnessCheckOption = null;
 		enableGlobalBiomeCheckOption = null;
 		overrideDistanceFromWorldCenterOptions.clear();
 		overrideFlatnessCheckOptions.clear();
 		overrideBiomeCheckOptions.clear();
+		enableMinDistanceFromWorldCenterOptions.clear();
+		enableMaxDistanceFromWorldCenterOptions.clear();
 		enableFlatnessCheckOptions.clear();
 		enableBiomeCheckOptions.clear();
 
@@ -62,37 +66,69 @@ public final class StructuresConfigScreen
 		addGlobalSettings(structureCategoryBuilder, config);
 		addStructures(structureCategoryBuilder, config);
 
-		globalDistanceFromWorldCenterOption.addListener((opt, enableGlobalFlatnessCheck) -> {
-			for (var overrideDistanceFromWorldCenterOption : overrideDistanceFromWorldCenterOptions) {
-				overrideDistanceFromWorldCenterOption.setAvailable(!globalDistanceFromWorldCenterOption.isPendingValueDefault());
-			}
+		enableGlobalMinDistanceFromWorldCenterOption.addListener((opt, enableGlobalMinDistanceFromWorldCenter) -> {
+			updateOverrideDistanceFromWorldCenterOptions();
+		});
+
+		enableGlobalMaxDistanceFromWorldCenterOption.addListener((opt, enableGlobalMaxDistanceFromWorldCenter) -> {
+			updateOverrideDistanceFromWorldCenterOptions();
 		});
 
 		enableGlobalFlatnessCheckOption.addListener((opt, enableGlobalFlatnessCheck) -> {
-			for (int i = 0; i < overrideFlatnessCheckOptions.size(); i++) {
-				var overrideFlatnessCheckOption = overrideFlatnessCheckOptions.get(i);
-				overrideFlatnessCheckOption.setAvailable(enableGlobalFlatnessCheck);
-				overrideFlatnessCheckOption.requestSetDefault();
-
-				var enableFlatnessCheckOption = enableFlatnessCheckOptions.get(i);
-				enableFlatnessCheckOption.setAvailable(!overrideFlatnessCheckOption.available());
-				enableFlatnessCheckOption.requestSetDefault();
-			}
+			updateOverrideFlatnessCheckOptions();
 		});
 
 		enableGlobalBiomeCheckOption.addListener((opt, enableGlobalBiomeCheck) -> {
-			for (int i = 0; i < overrideBiomeCheckOptions.size(); i++) {
-				var overrideBiomeCheckOption = overrideBiomeCheckOptions.get(i);
-				overrideBiomeCheckOption.setAvailable(enableGlobalBiomeCheck);
-				overrideBiomeCheckOption.requestSetDefault();
-
-				var enableBiomeCheckOption = enableBiomeCheckOptions.get(i);
-				enableBiomeCheckOption.setAvailable(!overrideBiomeCheckOption.available());
-				enableBiomeCheckOption.requestSetDefault();
-			}
+			updateOverrideBiomeCheckOptions();
 		});
 
 		yacl.category(structureCategoryBuilder.build());
+	}
+
+	private static void updateOverrideDistanceFromWorldCenterOptions() {
+		boolean isEnabledGlobally = enableGlobalMinDistanceFromWorldCenterOption.pendingValue() || enableGlobalMaxDistanceFromWorldCenterOption.pendingValue();
+
+		for (int i = 0; i < overrideDistanceFromWorldCenterOptions.size(); i++) {
+			var overrideDistanceFromWorldCenterOption = overrideDistanceFromWorldCenterOptions.get(i);
+			overrideDistanceFromWorldCenterOption.setAvailable(isEnabledGlobally);
+			overrideDistanceFromWorldCenterOption.requestSetDefault();
+
+			var enableMinDistanceFromWorldCenterOption = enableMinDistanceFromWorldCenterOptions.get(i);
+			enableMinDistanceFromWorldCenterOption.setAvailable(!overrideDistanceFromWorldCenterOption.available());
+			enableMinDistanceFromWorldCenterOption.requestSetDefault();
+
+			var enableMaxDistanceFromWorldCenterOption = enableMaxDistanceFromWorldCenterOptions.get(i);
+			enableMaxDistanceFromWorldCenterOption.setAvailable(!overrideDistanceFromWorldCenterOption.available());
+			enableMaxDistanceFromWorldCenterOption.requestSetDefault();
+		}
+	}
+
+	private static void updateOverrideFlatnessCheckOptions() {
+		boolean isEnabledGlobally = enableGlobalFlatnessCheckOption.pendingValue();
+
+		for (int i = 0; i < overrideFlatnessCheckOptions.size(); i++) {
+			var overrideFlatnessCheckOption = overrideFlatnessCheckOptions.get(i);
+			overrideFlatnessCheckOption.setAvailable(isEnabledGlobally);
+			overrideFlatnessCheckOption.requestSetDefault();
+
+			var enableFlatnessCheckOption = enableFlatnessCheckOptions.get(i);
+			enableFlatnessCheckOption.setAvailable(!overrideFlatnessCheckOption.available());
+			enableFlatnessCheckOption.requestSetDefault();
+		}
+	}
+
+	private static void updateOverrideBiomeCheckOptions() {
+		boolean isEnabledGlobally = enableGlobalBiomeCheckOption.pendingValue();
+
+		for (int i = 0; i < overrideBiomeCheckOptions.size(); i++) {
+			var overrideBiomeCheckOption = overrideBiomeCheckOptions.get(i);
+			overrideBiomeCheckOption.setAvailable(isEnabledGlobally);
+			overrideBiomeCheckOption.requestSetDefault();
+
+			var enableBiomeCheckOption = enableBiomeCheckOptions.get(i);
+			enableBiomeCheckOption.setAvailable(!overrideBiomeCheckOption.available());
+			enableBiomeCheckOption.requestSetDefault();
+		}
 	}
 
 	private static void addGlobalSettings(ConfigCategory.Builder structureCategoryBuilder, StructurifyConfig config) {
@@ -133,7 +169,8 @@ public final class StructuresConfigScreen
 		globalStructuresGroupBuilder.option(preventStructureOverlapOption);
 
 		var globalDistanceFromWorldCenterOptions = DistanceFromWorldCenterOptions.addDistanceFromWorldCenterOptions(globalStructuresGroupBuilder, config, "global");
-		globalDistanceFromWorldCenterOption = (Option<OptionPair<Option<Integer>, Option<Integer>>>) globalDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.DISTANCE_FROM_WORLD_CENTER_OPTION_NAME);
+		enableGlobalMinDistanceFromWorldCenterOption = (Option<Boolean>) globalDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.ENABLE_MIN_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME);
+		enableGlobalMaxDistanceFromWorldCenterOption = (Option<Boolean>) globalDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.ENABLE_MAX_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME);
 
 		var globalFlatnessCheckOptions = FlatnessCheckOptions.addFlatnessCheckOptions(globalStructuresGroupBuilder, config, "global");
 		enableGlobalFlatnessCheckOption = (Option<Boolean>) globalFlatnessCheckOptions.get(FlatnessCheckOptions.FLATNESS_CHECK_IS_ENABLED_OPTION_NAME);
@@ -185,6 +222,8 @@ public final class StructuresConfigScreen
 
 			var namespaceDistanceFromWorldCenterOptions = DistanceFromWorldCenterOptions.addDistanceFromWorldCenterOptions(namespaceGroupBuilder, config, structureNamespace);
 			overrideDistanceFromWorldCenterOptions.add((Option<Boolean>) namespaceDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.OVERRIDE_GLOBAL_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME));
+			enableMinDistanceFromWorldCenterOptions.add((Option<Boolean>) namespaceDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.ENABLE_MIN_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME));
+			enableMaxDistanceFromWorldCenterOptions.add((Option<Boolean>) namespaceDistanceFromWorldCenterOptions.get(DistanceFromWorldCenterOptions.ENABLE_MAX_DISTANCE_FROM_WORLD_CENTER_OPTION_NAME));
 
 			OverlapCheckOptions.addOverlapCheckOptions(namespaceGroupBuilder, config, structureNamespace);
 

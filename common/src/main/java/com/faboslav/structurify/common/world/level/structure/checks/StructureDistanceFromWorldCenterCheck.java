@@ -40,17 +40,28 @@ public class StructureDistanceFromWorldCenterCheck
 		DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckData,
 		ChunkPos chunkPos
 	) {
-		double minDistanceFromWorldCenter = distanceFromWorldCenterCheckData.getMinDistanceFromWorldCenter();
-		double maxDistanceFromWorldCenter = distanceFromWorldCenterCheckData.getMaxDistanceFromWorldCenter();
-
-		if (minDistanceFromWorldCenter == 0 && maxDistanceFromWorldCenter == 0) {
+		if (!distanceFromWorldCenterCheckData.isEnabled()) {
 			return true;
 		}
 
+		boolean enableMinDistanceFromWorldCenter = distanceFromWorldCenterCheckData.isMinDistanceFromWorldCenterEnabled();
+		boolean enableMaxDistanceFromWorldCenter = distanceFromWorldCenterCheckData.isMaxDistanceFromWorldCenterEnabled();
+		double minDistanceFromWorldCenter = distanceFromWorldCenterCheckData.getMinDistanceFromWorldCenter();
+		double maxDistanceFromWorldCenter = distanceFromWorldCenterCheckData.getMaxDistanceFromWorldCenter();
+
 		var worldPosition = chunkPos.getWorldPosition();
+
+		if (distanceFromWorldCenterCheckData.getMode() == DistanceFromWorldCenterCheckData.DistanceFromWorldCenterCheckMode.SQUARE) {
+			var distanceFromWorldCenter = Math.max(Math.abs(worldPosition.getX()), Math.abs(worldPosition.getZ()));
+			var isFarEnoughFromWorldCenter = !enableMinDistanceFromWorldCenter || (distanceFromWorldCenter >= minDistanceFromWorldCenter);
+			var isCloseEnoughToWorldCenter = !enableMaxDistanceFromWorldCenter || (distanceFromWorldCenter <= maxDistanceFromWorldCenter);
+
+			return isFarEnoughFromWorldCenter && isCloseEnoughToWorldCenter;
+		}
+
 		var distanceFromWorldCenter = worldPosition.distSqr(new BlockPos(0, worldPosition.getY(), 0));
-		var isFarEnoughFromWorldCenter = minDistanceFromWorldCenter == 0 || (distanceFromWorldCenter >= minDistanceFromWorldCenter * minDistanceFromWorldCenter);
-		var isCloseEnoughToWorldCenter = maxDistanceFromWorldCenter == 0 || (distanceFromWorldCenter <= maxDistanceFromWorldCenter * maxDistanceFromWorldCenter);
+		var isFarEnoughFromWorldCenter = !enableMinDistanceFromWorldCenter || (distanceFromWorldCenter >= minDistanceFromWorldCenter * minDistanceFromWorldCenter);
+		var isCloseEnoughToWorldCenter = !enableMaxDistanceFromWorldCenter || (distanceFromWorldCenter <= maxDistanceFromWorldCenter * maxDistanceFromWorldCenter);
 
 		return isFarEnoughFromWorldCenter && isCloseEnoughToWorldCenter;
 	}
