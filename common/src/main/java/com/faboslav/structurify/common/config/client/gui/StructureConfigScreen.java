@@ -86,7 +86,7 @@ public final class StructureConfigScreen
 				var templatePoolsButton = ButtonOption.createBuilder()
 					.name(Component.translatable("gui.structurify.structures.structure.open_template_pool_button.title"))
 					.text(Component.literal("\u2699").withStyle(style -> style.withBold(true)))
-					.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.open_template_pool_button.description")))
+					.description(OptionDescription.of(Component.translatable("gui.structurify.structures.structure.open_template_pool_button.description", structureId)))
 					.action((screen, buttonOption) -> {
 						var configScreen = StructurifyClient.getConfigScreen();
 

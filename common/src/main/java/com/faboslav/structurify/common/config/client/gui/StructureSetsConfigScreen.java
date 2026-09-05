@@ -19,6 +19,7 @@ import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -264,6 +265,21 @@ public final class StructureSetsConfigScreen
 
 			currentGroupBuilder.option(overrideGlobalSpacingAndSeparationModifierOption);
 			currentGroupBuilder.option(spacingAndSeparationOption);
+
+			var placementAttemptsDescriptionBuilder = OptionDescription.createBuilder();
+			placementAttemptsDescriptionBuilder.text(TextUtil.createTextWithPrefix(translatedStructureSetName, "gui.structurify.structure_sets.placement_attempts.description"));
+
+			var placementAttemptsOption = Option.<Integer>createBuilder()
+				.name(Component.translatable("gui.structurify.structure_sets.placement_attempts.title"))
+				.description(placementAttemptsDescriptionBuilder.build())
+				.binding(
+					StructureSetData.PLACEMENT_ATTEMPTS_DEFAULT_VALUE,
+					structureSetData::getPlacementAttempts,
+					structureSetData::setPlacementAttempts
+				)
+				.controller(opt -> IntegerSliderControllerBuilder.create(opt).range(StructureSetData.MIN_PLACEMENT_ATTEMPTS, StructureSetData.MAX_PLACEMENT_ATTEMPTS).step(1).formatValue((value) -> Component.literal(value.toString()))).build();
+
+			currentGroupBuilder.option(placementAttemptsOption);
 
 			structureSetOptions.put(structureSetStringId, new AbstractMap.SimpleEntry<>(overrideGlobalSpacingAndSeparationModifierOption, spacingAndSeparationOption));
 		}

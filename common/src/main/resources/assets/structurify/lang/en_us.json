@@ -142,6 +142,8 @@
 	"gui.structurify.structure_sets.spacing.description": "Spacing is the average distance in chunks between structures within the same structure set (group of structures).",
 	"gui.structurify.structure_sets.separation.title": "Separation",
 	"gui.structurify.structure_sets.separation.description": "Separation is the minimum distance in chunks between structures within the same structure set (group of structures). The separation value cannot be greater than the spacing value.",
+	"gui.structurify.structure_sets.placement_attempts.title": "Placement attempts",
+	"gui.structurify.structure_sets.placement_attempts.description": "Placement attempts is the number of positions tried when placing a structure within its placement region. When the structure cannot generate at its original position (for example due to unsuitable biomes or failed checks), additional deterministic positions within the same region are tried and the first valid one is used.\n\n - 1: vanilla behavior, only the original position is tried\n - > 1: failed structures get additional chances to generate",
 	"gui.structurify.structure_sets.structure_set.is_disabled.title": "Is disabled",
 	"gui.structurify.structure_sets.structure_set.is_disabled.description": "When disabled, the structure set will not generate.",
 	"gui.structurify.structure_sets.structure_set.title": "Structure set settings",

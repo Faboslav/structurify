@@ -14,6 +14,9 @@ public final class StructureSetData
 	public static final int MAX_SEPARATION = 1024;
 	public static final int MIN_STRUCTURE_WEIGHT = 0;
 	public static final int MAX_STRUCTURE_WEIGHT = 128;
+	public static final int PLACEMENT_ATTEMPTS_DEFAULT_VALUE = 1;
+	public static final int MIN_PLACEMENT_ATTEMPTS = 1;
+	public static final int MAX_PLACEMENT_ATTEMPTS = 9;
 
 	private boolean isDisabled = IS_DISABLED_DEFAULT_VALUE;
 	private boolean overrideGlobalSpacingAndSeparationModifier = OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_DEFAULT_VALUE;
@@ -27,6 +30,7 @@ public final class StructureSetData
 	private float frequency;
 	private int spacing;
 	private int separation;
+	private int placementAttempts = PLACEMENT_ATTEMPTS_DEFAULT_VALUE;
 	private final HashMap<String, Integer> structureWeights;
 
 	public StructureSetData(int salt, float frequency, int spacing, int separation, HashMap<String, Integer> structureWeights) {
@@ -49,6 +53,7 @@ public final class StructureSetData
 		       && this.isUsingDefaultFrequency()
 		       && this.isUsingDefaultSpacing()
 		       && this.isUsingDefaultSeparation()
+		       && this.isUsingDefaultPlacementAttempts()
 		       && this.isUsingDefaultStructureWeights();
 	}
 
@@ -74,6 +79,10 @@ public final class StructureSetData
 
 	public boolean isUsingDefaultSeparation() {
 		return this.separation == this.defaultSeparation;
+	}
+
+	public boolean isUsingDefaultPlacementAttempts() {
+		return this.placementAttempts == PLACEMENT_ATTEMPTS_DEFAULT_VALUE;
 	}
 
 	public boolean isUsingDefaultStructureWeights() {
@@ -150,6 +159,14 @@ public final class StructureSetData
 
 	public void setSeparation(int separation) {
 		this.separation = separation;
+	}
+
+	public int getPlacementAttempts() {
+		return this.placementAttempts;
+	}
+
+	public void setPlacementAttempts(int placementAttempts) {
+		this.placementAttempts = placementAttempts;
 	}
 
 	public HashMap<String, Integer> getDefaultStructureWeights() {
