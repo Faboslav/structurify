@@ -19,6 +19,7 @@ public final class StructureSetDataSerializer
 	private static final String OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY = "override_global_spacing_and_separation_modifier";
 	private static final String SPACING_PROPERTY = "spacing";
 	private static final String SEPARATION_PROPERTY = "separation";
+	private static final String PLACEMENT_ATTEMPTS_PROPERTY = "placement_attempts";
 	private static final String STRUCTURE_WEIGHT_PROPERTY = "structure_weights";
 
 	public static void load(JsonObject structureSetJson, StructureSetData structureSetData) {
@@ -76,6 +77,18 @@ public final class StructureSetDataSerializer
 
 			structureSetData.setSpacing(spacing);
 			structureSetData.setSeparation(separation);
+		}
+
+		if (structureSetJson.has(PLACEMENT_ATTEMPTS_PROPERTY)) {
+			var placementAttempts = structureSetJson.get(PLACEMENT_ATTEMPTS_PROPERTY).getAsInt();
+
+			if (placementAttempts < StructureSetData.MIN_PLACEMENT_ATTEMPTS || placementAttempts > StructureSetData.MAX_PLACEMENT_ATTEMPTS) {
+				int correctedPlacementAttempts = Mth.clamp(placementAttempts, StructureSetData.MIN_PLACEMENT_ATTEMPTS, StructureSetData.MAX_PLACEMENT_ATTEMPTS);
+				Structurify.getLogger().info("Placement attempts value for structure set {} is currently {}, which is outside of the range of {} to {}, value will be automatically corrected to {}.", structureSetName, placementAttempts, StructureSetData.MIN_PLACEMENT_ATTEMPTS, StructureSetData.MAX_PLACEMENT_ATTEMPTS, correctedPlacementAttempts);
+				placementAttempts = correctedPlacementAttempts;
+			}
+
+			structureSetData.setPlacementAttempts(placementAttempts);
 		}
 
 		if(structureSetJson.has(STRUCTURE_WEIGHT_PROPERTY)) {
@@ -167,6 +180,10 @@ public final class StructureSetDataSerializer
 
 		if(!structureSetData.isUsingDefaultOverrideGlobalSpacingAndSeparationModifier() || !saveOnlyChanged) {
 			structureSet.addProperty(OVERRIDE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY, structureSetData.overrideGlobalSpacingAndSeparationModifier());
+		}
+
+		if(!structureSetData.isUsingDefaultPlacementAttempts() || !saveOnlyChanged) {
+			structureSet.addProperty(PLACEMENT_ATTEMPTS_PROPERTY, structureSetData.getPlacementAttempts());
 		}
 
 		if(!structureSetData.isUsingDefaultStructureWeights() || !saveOnlyChanged) {
