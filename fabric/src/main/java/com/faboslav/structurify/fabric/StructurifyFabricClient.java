@@ -39,26 +39,19 @@ public final class StructurifyFabricClient implements ClientModInitializer
 	{
 		//? if >= 26.1 {
 		var cameraPos = context.levelState().cameraRenderState.pos;
-		var poseStack = context.poseStack();
-		var submitNodeCollector = context.submitNodeCollector();
+		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), cameraPos);
 		//?} else if >= 1.21.11 {
 		/*var cameraPos = context.worldState().cameraRenderState.pos;
-		var poseStack = context.matrices();
-		var submitNodeCollector = context.commandQueue();
+		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), cameraPos);
 		*///?} else if >= 1.21.9 {
 		/*var cameraPos = context.worldState().cameraRenderState.pos;
-		var poseStack = context.matrices();
-		var submitNodeCollector = context.consumers();
+		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), context.matrices(), cameraPos, context.consumers());
 		*///?} else if >= 1.21.1 {
 		/*var cameraPos = context.camera().getPosition();
-		var poseStack = context.matrixStack();
-		var submitNodeCollector = context.consumers();
+		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), context.matrixStack(), cameraPos, context.consumers());
 		*///?} else {
 		/*var cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-		var poseStack = context.matrixStack();
-		var submitNodeCollector = context.consumers();
+		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), context.matrixStack(), cameraPos, context.consumers());
 		*///?}
-
-		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), poseStack, cameraPos, submitNodeCollector);
 	}
 }

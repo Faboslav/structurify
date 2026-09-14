@@ -61,30 +61,28 @@ dependencies {
 	}*/
 
 	// Litostitched
-	/*
 	commonMod.depOrNull("lithostitched_minecraft")?.let { lithostitchedMcVersion ->
 		commonMod.depOrNull("lithostitched")?.let { lithostitchedVersion ->
-			modImplementation(commonMod.modrinth("lithostitched", "${lithostitchedVersion}-fabric-${lithostitchedMcVersion}"))
-		}
-	}*/
-
-	// Yungs api
-	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
-		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->
-			modImplementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-Fabric-$yungsApiVersion")
+			modImplementation(fletchingTable.modrinth("lithostitched", minecraft = commonMod.mc, loaders = "fabric"))
 		}
 	}
 
-	// Repurposed structures
-	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
-		commonMod.depOrNull("midnight_lib")?.let { midnightLibVersion ->
-			modImplementation("com.telepathicgrunt:RepurposedStructures:${repurposedStructuresVersion}-fabric")
-			if (commonMod.mc == "1.21.4" || commonMod.mc == "1.21.5") {
-				modImplementation(commonMod.modrinth("midnightlib", "${midnightLibVersion}-fabric"))
-			} else {
-				modImplementation(commonMod.modrinth("midnightlib", "${midnightLibVersion}-fabric"))
-			}
+	// Yungs api
+	commonMod.depOrNull("yungs_api_minecraft")?.let { mcVersion ->
+		commonMod.depOrNull("yungs_api")?.let { modVersion ->
+			modImplementation(fletchingTable.modrinth("yungs-api", minecraft = commonMod.mc, loaders = "fabric"))
 		}
+	}
+
+	// Repurposed Structures
+	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
+		val repurposedStructuresMinecraftVersion = when (commonMod.mc) {
+			"26.1.2" -> "26.1"
+			"1.21.10" -> "1.21.11"
+			else -> commonMod.mc
+		}
+		modImplementation(fletchingTable.modrinth("repurposed-structures-fabric", minecraft = repurposedStructuresMinecraftVersion, loaders = "fabric"))
+		modImplementation(fletchingTable.modrinth("midnightlib", minecraft = repurposedStructuresMinecraftVersion, loaders = "fabric"))
 	}
 }
 

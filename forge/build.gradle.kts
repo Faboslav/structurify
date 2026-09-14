@@ -81,6 +81,14 @@ dependencies {
 		modImplementation(commonMod.modrinth("structure-gel-api", structureGelApiVersion)) { isTransitive = false }
 	}
 
+	// Cataclysm
+	try {
+		modImplementation(fletchingTable.modrinth("l_enders-cataclysm", minecraft = commonMod.mc, loaders = "forge"))
+		stonecutter.constants["cataclysm"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["cataclysm"] = false
+	}
+
 	if(!IS_CI) {
 		val modrinthBundles = listOf(
 			"better-modlist",

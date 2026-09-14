@@ -5,6 +5,7 @@ import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.config.data.StructureNamespaceData;
 import com.faboslav.structurify.common.util.BiomeUtil;
+import com.faboslav.structurify.common.world.level.structure.SpeculativeStructureBiomePredicate;
 import com.faboslav.structurify.common.world.level.structure.checks.StructureChecker;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -282,6 +283,10 @@ public abstract class StructureMixin implements StructurifyStructure
 		*///?}
 
 		if (structureStart == StructureStart.INVALID_START || !structureStart.isValid()) {
+			return structureStart;
+		}
+
+		if (validBiome instanceof SpeculativeStructureBiomePredicate) {
 			return structureStart;
 		}
 

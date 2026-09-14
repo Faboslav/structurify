@@ -1,29 +1,78 @@
 package com.faboslav.structurify.common.util;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+//? if >= 1.21.11 {
+import net.minecraft.gizmos.Gizmos;
+import net.minecraft.gizmos.GizmoStyle;
+import net.minecraft.gizmos.TextGizmo;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.phys.Vec3;
+//?} else {
+/*import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-//? if >= 1.21.11 {
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.network.chat.Component;
-//?} else {
-/*import net.minecraft.client.renderer.MultiBufferSource;
- *///?}
+import net.minecraft.client.renderer.MultiBufferSource;
+*///?}
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 
 //? if >= 1.21.11 {
 //?} else if >= 1.21.3 {
 /*import net.minecraft.client.renderer.ShapeRenderer;
- *///?} else {
+*///?} else {
 /*import net.minecraft.client.renderer.LevelRenderer;
- *///?}
+*///?}
 
 public final class RenderUtil
 {
+	//? if >= 1.21.11 {
 	public static void renderBoundingBox(
+		BoundingBox boundingBox,
+		float alpha
+	) {
+		var aabb = new AABB(
+			boundingBox.minX(), boundingBox.minY(), boundingBox.minZ(),
+			boundingBox.maxX() + 1, boundingBox.maxY() + 1, boundingBox.maxZ() + 1
+		);
+
+		renderLineBox(aabb, 1.0f, 1.0f, 1.0f, alpha);
+	}
+
+	public static void renderLineBox(
+		AABB box,
+		float red,
+		float green,
+		float blue,
+		float alpha
+	) {
+		Gizmos.cuboid(box, GizmoStyle.stroke(ARGB.colorFromFloat(alpha, red, green, blue)));
+	}
+
+	public static void renderLabel(
+		BoundingBox box,
+		String label
+	) {
+		double centerX = (box.minX() + box.maxX() + 1) * 0.5;
+		double centerZ = (box.minZ() + box.maxZ() + 1) * 0.5;
+		double labelY = box.maxY() + 1.25;
+
+		float spanX = box.getXSpan();
+		float spanZ = box.getZSpan();
+		float diagXZ = (float) Math.sqrt(spanX * spanX + spanZ * spanZ);
+		float dynamic = Math.max(1.0f, diagXZ / 24.0f);
+		float scale = TextGizmo.Style.DEFAULT_SCALE * dynamic;
+		double lineHeight = 0.2f * dynamic;
+
+		String[] lines = label.split("\n");
+
+		for (int i = 0; i < lines.length; i++) {
+			var linePosition = new Vec3(centerX, labelY + (lines.length - 1 - i) * lineHeight, centerZ);
+			Gizmos.billboardText(lines[i], linePosition, TextGizmo.Style.forColorAndCentered(0xFFFFFFFF).withScale(scale)).setAlwaysOnTop();
+		}
+	}
+	//?} else {
+	/*public static void renderBoundingBox(
 		BoundingBox boundingBox,
 		PoseStack poseStack,
 		VertexConsumer vertexConsumer,
@@ -49,82 +98,27 @@ public final class RenderUtil
 		float blue,
 		float alpha
 	) {
-		//? if >= 1.21.11 {
-		line(poseStack, buffer, box.minX, box.minY, box.minZ, box.maxX, box.minY, box.minZ, red, green, blue, alpha, 1.0f, 0.0f, 0.0f);
-		line(poseStack, buffer, box.minX, box.minY, box.minZ, box.minX, box.maxY, box.minZ, red, green, blue, alpha, 0.0f, 1.0f, 0.0f);
-		line(poseStack, buffer, box.minX, box.minY, box.minZ, box.minX, box.minY, box.maxZ, red, green, blue, alpha, 0.0f, 0.0f, 1.0f);
-		line(poseStack, buffer, box.maxX, box.minY, box.minZ, box.maxX, box.maxY, box.minZ, red, green, blue, alpha, 0.0f, 1.0f, 0.0f);
-		line(poseStack, buffer, box.maxX, box.minY, box.minZ, box.maxX, box.minY, box.maxZ, red, green, blue, alpha, 0.0f, 0.0f, 1.0f);
-		line(poseStack, buffer, box.minX, box.maxY, box.minZ, box.maxX, box.maxY, box.minZ, red, green, blue, alpha, 1.0f, 0.0f, 0.0f);
-		line(poseStack, buffer, box.minX, box.maxY, box.minZ, box.minX, box.maxY, box.maxZ, red, green, blue, alpha, 0.0f, 0.0f, 1.0f);
-		line(poseStack, buffer, box.minX, box.minY, box.maxZ, box.maxX, box.minY, box.maxZ, red, green, blue, alpha, 1.0f, 0.0f, 0.0f);
-		line(poseStack, buffer, box.minX, box.minY, box.maxZ, box.minX, box.maxY, box.maxZ, red, green, blue, alpha, 0.0f, 1.0f, 0.0f);
-		line(poseStack, buffer, box.maxX, box.maxY, box.minZ, box.maxX, box.maxY, box.maxZ, red, green, blue, alpha, 0.0f, 0.0f, 1.0f);
-		line(poseStack, buffer, box.maxX, box.minY, box.maxZ, box.maxX, box.maxY, box.maxZ, red, green, blue, alpha, 0.0f, 1.0f, 0.0f);
-		line(poseStack, buffer, box.minX, box.maxY, box.maxZ, box.maxX, box.maxY, box.maxZ, red, green, blue, alpha, 1.0f, 0.0f, 0.0f);
-		//?} else if >= 1.21.9 {
-		/*ShapeRenderer.renderLineBox(poseStack.last(), buffer, box, red, green, blue, alpha);
-		 *///?} else if >= 1.21.3 {
-		/*ShapeRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
-		 *///?} else {
-		/*LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
-		 *///?}
+		//? if >= 1.21.9 {
+		ShapeRenderer.renderLineBox(poseStack.last(), buffer, box, red, green, blue, alpha);
+		//?} else if >= 1.21.3 {
+		/^ShapeRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
+		^///?} else {
+		/^LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
+		^///?}
 	}
-
-	//? if >= 1.21.11 {
-	private static void line(
-		PoseStack poseStack,
-		VertexConsumer buffer,
-		double x1,
-		double y1,
-		double z1,
-		double x2,
-		double y2,
-		double z2,
-		float red,
-		float green,
-		float blue,
-		float alpha,
-		float normalX,
-		float normalY,
-		float normalZ
-	) {
-		PoseStack.Pose pose = poseStack.last();
-		buffer.addVertex(pose, (float)x1, (float)y1, (float)z1).setColor(red, green, blue, alpha).setNormal(pose, normalX, normalY, normalZ).setLight(0xF000F0);
-		buffer.addVertex(pose, (float)x2, (float)y2, (float)z2).setColor(red, green, blue, alpha).setNormal(pose, normalX, normalY, normalZ).setLight(0xF000F0);
-	}
-	//?}
 
 	public static void renderLabel(
 		BoundingBox box,
 		String label,
 		Minecraft mc,
 		PoseStack poseStack,
-		//? if >= 1.21.11 {
-		SubmitNodeCollector submitNodeCollector,
-		//?} else {
-		/*MultiBufferSource buffers,
-		 *///?}
+		MultiBufferSource buffers,
 		double camX,
 		double camY,
 		double camZ
 	) {
-		renderLabel(box, label, mc, poseStack,
-			//? if >= 1.21.11 {
-			submitNodeCollector,
-			//?} else {
-			/*buffers,
-			 *///?}
-			camX, camY, camZ, false
-		);
-		renderLabel(box, label, mc, poseStack,
-			//? if >= 1.21.11 {
-			submitNodeCollector,
-			//?} else {
-			/*buffers,
-			 *///?}
-			camX, camY, camZ, true
-		);
+		renderLabel(box, label, mc, poseStack, buffers, camX, camY, camZ, false);
+		renderLabel(box, label, mc, poseStack, buffers, camX, camY, camZ, true);
 	}
 
 	private static void renderLabel(
@@ -132,11 +126,7 @@ public final class RenderUtil
 		String label,
 		Minecraft mc,
 		PoseStack poseStack,
-		//? if >= 1.21.11 {
-		SubmitNodeCollector submitNodeCollector,
-		//?} else {
-		/*MultiBufferSource buffers,
-		 *///?}
+		MultiBufferSource buffers,
 		double camX,
 		double camY,
 		double camZ,
@@ -170,21 +160,7 @@ public final class RenderUtil
 			String line = lines[i];
 			int width = font.width(line);
 
-			//? if >= 1.21.11 {
-			submitNodeCollector.submitText(
-				poseStack,
-				-width / 2f,
-				yStart + i * lineHeight,
-				Component.literal(line).getVisualOrderText(),
-				false,
-				Font.DisplayMode.NORMAL,
-				0xF000F0,
-				0xFFFFFFFF,
-				0,
-				0
-			);
-			//?} else {
-			/*font.drawInBatch(
+			font.drawInBatch(
 				line,
 				-width / 2f,
 				yStart + i * lineHeight,
@@ -196,9 +172,9 @@ public final class RenderUtil
 				0,
 				0xF000F0
 			);
-			*///?}
 		}
 
 		poseStack.popPose();
 	}
+	*///?}
 }

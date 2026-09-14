@@ -14,12 +14,40 @@ public final class ChunkPosUtil
 		return new ChunkPos(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z));
 	}
 
+	public static ChunkPos createChunkPos(long chunkPos) {
+		//? if >= 26.1 {
+		return ChunkPos.unpack(chunkPos);
+		//?} else {
+		/*return new ChunkPos(chunkPos);
+		*///?}
+	}
+
 	public static long getChunkPosAsLong(ChunkPos chunkPos) {
 
 		//? if >= 26.1 {
 		return chunkPos.pack();
 		//?} else {
 		/*return chunkPos.toLong();
+		*///?}
+	}
+
+	public static int getChunkSpan(int blocks) {
+		return (blocks + SectionPos.SECTION_SIZE - 1) / SectionPos.SECTION_SIZE;
+	}
+
+	public static int getX(ChunkPos chunkPos) {
+		//? if >= 26.1 {
+		return chunkPos.x();
+		//?} else {
+		/*return chunkPos.x;
+		*///?}
+	}
+
+	public static int getZ(ChunkPos chunkPos) {
+		//? if >= 26.1 {
+		return chunkPos.z();
+		//?} else {
+		/*return chunkPos.z;
 		*///?}
 	}
 }

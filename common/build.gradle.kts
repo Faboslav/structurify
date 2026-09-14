@@ -8,10 +8,8 @@ stonecutter {
 	constants["global_packs"] = rootProject.project(stonecutter.current.project).property("deps.global_packs").toString() != ""
 	constants["open_loader"] = rootProject.project(stonecutter.current.project).property("deps.open_loader").toString() != ""
 	constants["lithostitched"] = rootProject.project(stonecutter.current.project).property("deps.lithostitched").toString() != "" && rootProject.project(stonecutter.current.project).property("deps.lithostitched_minecraft").toString() != ""
-	constants["yungs_api"] = rootProject.project(stonecutter.current.project).property("deps.yungs_api").toString() != "" && rootProject.project(stonecutter.current.project).property("deps.yungs_api_minecraft").toString() != ""
-	constants["repurposed_structures"] = rootProject.project(stonecutter.current.project).property("deps.repurposed_structures")
-		.toString() != "" && rootProject.project(stonecutter.current.project).property("deps.midnight_lib")
-		.toString() != ""
+	constants["yungs_api"] = false;
+	constants["repurposed_structures"] = false;
 }
 
 fletchingTable {
@@ -81,20 +79,28 @@ dependencies {
 	// Litostitched
 	commonMod.depOrNull("lithostitched_minecraft")?.let { lithostitchedMcVersion ->
 		commonMod.depOrNull("lithostitched")?.let { lithostitchedVersion ->
-			modImplementation(commonMod.modrinth("lithostitched", "${lithostitchedVersion}-fabric-${lithostitchedMcVersion}"))
+			modImplementation(fletchingTable.modrinth("lithostitched", minecraft = commonMod.mc, loaders = "fabric"))
 		}
 	}
 
 	// Yungs api
-	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
-		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->
-			modImplementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-Fabric-$yungsApiVersion")
+	commonMod.depOrNull("yungs_api_minecraft")?.let { lithostitchedMcVersion ->
+		commonMod.depOrNull("yungs_api")?.let { lithostitchedVersion ->
+			modImplementation(fletchingTable.modrinth("yungs-api", minecraft = commonMod.mc, loaders = "fabric"))
+			stonecutter.constants["yungs_api"] = true
 		}
 	}
 
 	// Repurposed Structures
 	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
-		modImplementation("com.telepathicgrunt:RepurposedStructures:${repurposedStructuresVersion}-fabric")
+		val repurposedStructuresMinecraftVersion = when (commonMod.mc) {
+			"26.1.2" -> "26.1"
+			"1.21.10" -> "1.21.11"
+			else -> commonMod.mc
+		}
+		modImplementation(fletchingTable.modrinth("repurposed-structures-fabric", minecraft = repurposedStructuresMinecraftVersion, loaders = "fabric"))
+		modImplementation(fletchingTable.modrinth("midnightlib", minecraft = repurposedStructuresMinecraftVersion, loaders = "fabric"))
+		stonecutter.constants["repurposed_structures"] = true
 	}
 }
 

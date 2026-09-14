@@ -4,6 +4,7 @@ import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -28,6 +29,10 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 	@Nullable
 	public String structurify$structureId = null;
 
+	@Unique
+	@Nullable
+	public StructureSet structurify$structureSet = null;
+
 	public void structurify$setStructureSetId(String structureSetId) {
 		this.structurify$structureId = structureSetId;
 	}
@@ -35,6 +40,15 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 	@Nullable
 	public String structurify$getStructureSetId() {
 		return this.structurify$structureId;
+	}
+
+	public void structurify$setStructureSet(@Nullable StructureSet structureSet) {
+		this.structurify$structureSet = structureSet;
+	}
+
+	@Nullable
+	public StructureSet structurify$getStructureSet() {
+		return this.structurify$structureSet;
 	}
 
 	public int structurify$getOriginalSalt() {

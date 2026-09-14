@@ -41,22 +41,36 @@ dependencies {
 	// Litostitched
 	commonMod.depOrNull("lithostitched_minecraft")?.let { lithostitchedMcVersion ->
 		commonMod.depOrNull("lithostitched")?.let { lithostitchedVersion ->
-			implementation(commonMod.modrinth("lithostitched", "${lithostitchedVersion}-neoforge-${lithostitchedMcVersion}"))
+			implementation(fletchingTable.modrinth("lithostitched", minecraft = commonMod.mc, loaders = "neoforge"))
 		}
 	}
 
 	// Yungs api
-	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
-		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->
-			implementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-NeoForge-$yungsApiVersion") {
-				isTransitive = false
-			}
+	commonMod.depOrNull("yungs_api_minecraft")?.let { lithostitchedMcVersion ->
+		commonMod.depOrNull("yungs_api")?.let { lithostitchedVersion ->
+			implementation(fletchingTable.modrinth("yungs-api", minecraft = commonMod.mc, loaders = "neoforge"))
 		}
 	}
 
 	// Repurposed Structures
-	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
-		implementation("com.telepathicgrunt:RepurposedStructures:${repurposedStructuresVersion}-neoforge")
+	if (commonMod.mc >= "1.21.1") {
+		commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
+			val repurposedStructuresMinecraftVersion = when (commonMod.mc) {
+				"26.1.2" -> "26.1"
+				"1.21.10" -> "1.21.11"
+				else -> commonMod.mc
+			}
+			implementation(fletchingTable.modrinth("repurposed-structures-forge", minecraft = repurposedStructuresMinecraftVersion, loaders = "neoforge"))
+			implementation(fletchingTable.modrinth("midnightlib", minecraft = repurposedStructuresMinecraftVersion, loaders = "neoforge"))
+		}
+	}
+
+	// Cataclysm
+	try {
+		implementation(fletchingTable.modrinth("l_enders-cataclysm", minecraft = commonMod.mc, loaders = "neoforge"))
+		stonecutter.constants["cataclysm"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["cataclysm"] = false
 	}
 
 	if(!IS_CI) {

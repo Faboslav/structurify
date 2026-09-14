@@ -1,7 +1,7 @@
 package com.faboslav.structurify.common.world.level.structure.checks;
 
 import com.faboslav.structurify.common.api.StructurifyStructure;
-import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckSample;
+import com.faboslav.structurify.common.world.level.structure.checks.debug.StructurePlacementAttempt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -9,9 +9,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public final class StructureCheckData
 {
@@ -20,6 +18,7 @@ public final class StructureCheckData
 	private final StructurifyStructure structure;
 	private final StructureStart structureStart;
 	private final BlockPos structureCenter;
+	private final StructurePlacementAttempt structurePlacementAttempt;
 
 	private List<StructurePiece> structurePieces = new ArrayList<>();
 	private int structureArea = 0;
@@ -29,13 +28,19 @@ public final class StructureCheckData
 		long structureCheckId,
 		Identifier structureId,
 		StructurifyStructure structure,
-		StructureStart structureStart
+		StructureStart structureStart,
+		StructurePlacementAttempt structurePlacementAttempt
 	) {
 		this.structureCheckId = structureCheckId;
 		this.structureId = structureId;
 		this.structureStart = structureStart;
 		this.structure = structure;
 		this.structureCenter = structureStart.getBoundingBox().getCenter();
+		this.structurePlacementAttempt = structurePlacementAttempt;
+	}
+
+	public StructurePlacementAttempt getStructurePlacementAttempt() {
+		return this.structurePlacementAttempt;
 	}
 
 	public List<StructurePiece> getStructurePieces() {

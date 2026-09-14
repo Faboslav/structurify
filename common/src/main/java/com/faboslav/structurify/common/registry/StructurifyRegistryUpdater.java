@@ -3,6 +3,7 @@ package com.faboslav.structurify.common.registry;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
 import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
+import com.faboslav.structurify.common.api.StructurifyStructureSelectionEntry;
 import com.faboslav.structurify.common.api.StructurifyWithStructureSet;
 import com.faboslav.structurify.common.events.common.UpdateRegistriesEvent;
 import com.faboslav.structurify.common.mixin.structure.StructureTemplatePoolMixin;
@@ -78,11 +79,13 @@ public final class StructurifyRegistryUpdater
 			((StructurifyWithStructureSet) (Object) structureSet).structurify$setStructureSetId(structureSetId);
 			StructurifyStructurePlacement structurifyStructurePlacement = ((StructurifyStructurePlacement) structureSet.placement());
 			structurifyStructurePlacement.structurify$setStructureSetId(structureSetId);
+			structurifyStructurePlacement.structurify$setStructureSet(structureSet);
 
 			var structures = structureSet.structures();
 
 			for(var structure : structures) {
 				((StructurifyWithStructureSet) (Object) structure).structurify$setStructureSetId(structureSetId);
+				((StructurifyStructureSelectionEntry) (Object) structure).structurify$setStructureSet(structureSet);
 			}
 		}
 

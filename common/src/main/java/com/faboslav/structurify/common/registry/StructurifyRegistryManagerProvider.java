@@ -154,6 +154,7 @@ public final class StructurifyRegistryManagerProvider
 		}
 
 		isLoading = true;
+
 		try {
 			Structurify.getLogger().info("Loading registry manager...");
 			var resourcePackManager = StructurifyResourcePackProvider.getResourcePackRepository();

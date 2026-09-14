@@ -19,12 +19,12 @@ import java.util.Optional;
 *///?}
 
 //? if repurposed_structures {
-/*import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
-*///?}
+import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
+//?}
 
 //? if yungs_api || repurposed_structures {
-/*import com.faboslav.structurify.common.platform.PlatformHooks;
-*///?}
+import com.faboslav.structurify.common.platform.PlatformHooks;
+//?}
 
 public final class JigsawStructureUtil
 {
@@ -74,10 +74,10 @@ public final class JigsawStructureUtil
 		*///?}
 
 		//? if repurposed_structures {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return true;
 		}
-		*///?}
+		//?}
 
 		if (structureJson != null && (structureJson.has("max_distance_from_center") || structureJson.has("max_depth") || structureJson.has("size") || structureJson.has("start_height") || structureJson.has("project_start_to_heightmap"))) {
 			return true;
@@ -105,12 +105,16 @@ public final class JigsawStructureUtil
 
 		//? if yungs_api {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
-			return ((YungJigsawStructure) structure).maxDistanceFromCenter;
+			//? if >= 1.21.9 {
+			return new JigsawStructure.MaxDistance(((YungJigsawStructure) structure).maxDistanceFromCenter);
+			//?} else {
+			/^return ((YungJigsawStructure) structure).maxDistanceFromCenter;
+			^///?}
 		}
 		*///?}
 
 		//? if repurposed_structures {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			//? if >= 1.21.10 {
 			var maxDistanceFromCenter = ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(null);
 
@@ -120,10 +124,10 @@ public final class JigsawStructureUtil
 				return new JigsawStructure.MaxDistance(maxDistanceFromCenter);
 			}
 			 //?} else {
-			/^return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(null);
-			^///?}
+			/*return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(null);
+			*///?}
 		}
-		*///?}
+		//?}
 
 		var serializationContext = StructurifyRegistryManagerProvider.getSerializationContext();
 
@@ -164,10 +168,10 @@ public final class JigsawStructureUtil
 		*///?}
 
 		//? if repurposed_structures {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).size;
 		}
-		*///?}
+		//?}
 
 		var serializationContext = StructurifyRegistryManagerProvider.getSerializationContext();
 
@@ -203,10 +207,10 @@ public final class JigsawStructureUtil
 		*///?}
 
 		//? if repurposed_structures {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).startHeight;
 		}
-		*///?}
+		//?}
 
 		var serializationContext = StructurifyRegistryManagerProvider.getSerializationContext();
 
@@ -238,10 +242,10 @@ public final class JigsawStructureUtil
 		*///?}
 
 		//? if repurposed_structures {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
 			return ((GenericJigsawStructure) structure).projectStartToHeightmap;
 		}
-		*///?}
+		//?}
 
 		var serializationContext = StructurifyRegistryManagerProvider.getSerializationContext();
 

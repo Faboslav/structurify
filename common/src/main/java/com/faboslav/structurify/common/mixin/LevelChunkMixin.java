@@ -2,6 +2,7 @@ package com.faboslav.structurify.common.mixin;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyStructure;
+import com.faboslav.structurify.common.world.level.structure.StructurePlacementResolver;
 import com.faboslav.structurify.common.world.level.structure.checks.StructureChecker;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -73,7 +74,7 @@ public abstract class LevelChunkMixin extends ChunkAccess
 		BiomeSource biomeSource = chunkGenerator.getBiomeSource();
 
 		for (var structureStartEntry : this.getAllStarts().entrySet()) {
-			StructureChecker.debugCheckStructure(structureStartEntry.getValue(), (StructurifyStructure) structureStartEntry.getKey(), chunkGenerator, this.levelHeightAccessor, randomState, biomeSource);
+			StructureChecker.debugCheckStructure(structureStartEntry.getValue(), (StructurifyStructure) structureStartEntry.getKey(), chunkGenerator, this.levelHeightAccessor, randomState, biomeSource, StructurePlacementResolver.getStructurePlacementAttempt(structureStartEntry.getValue(), serverLevel));
 		}
 	}
 }

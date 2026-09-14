@@ -20,6 +20,10 @@ public abstract class StructureSelectionEntryMixin implements StructurifyStructu
 	@Nullable
 	public String structurify$structureId = null;
 
+	@Unique
+	@Nullable
+	public StructureSet structurify$structureSet = null;
+
 	public void structurify$setStructureSetId(String structureSetId) {
 		this.structurify$structureId = structureSetId;
 	}
@@ -27,6 +31,15 @@ public abstract class StructureSelectionEntryMixin implements StructurifyStructu
 	@Nullable
 	public String structurify$getStructureSetId() {
 		return this.structurify$structureId;
+	}
+
+	public void structurify$setStructureSet(@Nullable StructureSet structureSet) {
+		this.structurify$structureSet = structureSet;
+	}
+
+	@Nullable
+	public StructureSet structurify$getStructureSet() {
+		return this.structurify$structureSet;
 	}
 
 	@Shadow

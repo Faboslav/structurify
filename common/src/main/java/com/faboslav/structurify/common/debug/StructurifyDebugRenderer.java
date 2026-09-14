@@ -10,32 +10,30 @@ import com.faboslav.structurify.common.world.level.structure.checks.debug.Struct
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckSample;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckOverview;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureFlatnessCheckSample;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-//? if >= 1.21.11 {
-import net.minecraft.client.renderer.SubmitNodeCollector;
-//?} else {
-/*import net.minecraft.client.renderer.MultiBufferSource;
- *///?}
+//? if < 1.21.11 {
+/*import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import org.jetbrains.annotations.Nullable;
+*///?}
 
 public final class StructurifyDebugRenderer
 {
 	public void render(
 		Minecraft minecraft,
-		PoseStack poseStack,
-		Vec3 cameraPosition,
-		//? if >= 1.21.11 {
-		@Nullable SubmitNodeCollector submitNodeCollector
-		//?} else {
-		/*@Nullable MultiBufferSource bufferSource
-		 *///?}
+		//? if < 1.21.11 {
+		/*@Nullable PoseStack poseStack,
+		*///?}
+		Vec3 cameraPosition
+		//? if < 1.21.11 {
+		/*, @Nullable MultiBufferSource bufferSource
+		*///?}
 	) {
 		DebugData debugData = Structurify.getConfig().getDebugData();
 
@@ -43,13 +41,16 @@ public final class StructurifyDebugRenderer
 			return;
 		}
 
-		//? if >= 1.21.11 {
-		if (submitNodeCollector == null) {
-			return;
+		//? if < 1.21.11 {
+		/*if (poseStack == null) {
+			poseStack = new PoseStack();
 		}
-		//?} else {
-		/*if (bufferSource == null) {
-			bufferSource = minecraft.renderBuffers().bufferSource();
+
+		MultiBufferSource.BufferSource fallbackBufferSource = null;
+
+		if (bufferSource == null) {
+			fallbackBufferSource = minecraft.renderBuffers().bufferSource();
+			bufferSource = fallbackBufferSource;
 		}
 		*///?}
 
@@ -69,17 +70,15 @@ public final class StructurifyDebugRenderer
 			synchronized (structureFlatnessCheckOverviews) {
 				for (StructureFlatnessCheckOverview structureFlatnessCheckOverview : structureFlatnessCheckOverviews.values().stream().filter(o -> isWithinChunkRadius(cameraBlockPosition, o.structureBoundingBox().getCenter(), chunkRadius)).toList()) {
 					FlatnessCheckDebugRenderer.renderStructureFlatnessCheckOverview(
-						structureFlatnessCheckOverview,
-						minecraft,
+						structureFlatnessCheckOverview
+						//? if < 1.21.11 {
+						/*, minecraft,
 						poseStack,
-						//? if >= 1.21.11 {
-						submitNodeCollector,
-						//?} else {
-						/*bufferSource,
-						 *///?}
+						bufferSource,
 						camX,
 						camY,
 						camZ
+						*///?}
 					);
 				}
 			}
@@ -89,16 +88,14 @@ public final class StructurifyDebugRenderer
 			synchronized (structureFlatnessCheckSamples) {
 				for (StructureFlatnessCheckSample structureFlatnessCheckSample : structureFlatnessCheckSamples.values().stream().flatMap(Collection::stream).filter(o -> isWithinChunkRadius(cameraBlockPosition, o.x(), o.freeY(), o.z(), chunkRadius)).toList()) {
 					FlatnessCheckDebugRenderer.renderStructureFlatnessCheckSample(
-						structureFlatnessCheckSample,
-						poseStack,
-						//? if >= 1.21.11 {
-						submitNodeCollector,
-						//?} else {
-						/*bufferSource,
-						 *///?}
+						structureFlatnessCheckSample
+						//? if < 1.21.11 {
+						/*, poseStack,
+						bufferSource,
 						camX,
 						camY,
 						camZ
+						*///?}
 					);
 				}
 			}
@@ -108,17 +105,15 @@ public final class StructurifyDebugRenderer
 			synchronized (structureBiomeCheckOverviews) {
 				for (StructureBiomeCheckOverview structureBiomeCheckOverview : structureBiomeCheckOverviews.values().stream().filter(o -> isWithinChunkRadius(cameraBlockPosition, o.structureBoundingBox().getCenter(), chunkRadius)).toList()) {
 					BiomeCheckDebugRenderer.renderStructureBiomeCheckOverview(
-						structureBiomeCheckOverview,
-						minecraft,
+						structureBiomeCheckOverview
+						//? if < 1.21.11 {
+						/*, minecraft,
 						poseStack,
-						//? if >= 1.21.11 {
-						submitNodeCollector,
-						//?} else {
-						/*bufferSource,
-						 *///?}
+						bufferSource,
 						camX,
 						camY,
 						camZ
+						*///?}
 					);
 				}
 			}
@@ -128,16 +123,14 @@ public final class StructurifyDebugRenderer
 			synchronized (structureBiomeCheckSamples) {
 				for (StructureBiomeCheckSample structureBiomeCheckSample : structureBiomeCheckSamples.values().stream().flatMap(Collection::stream).filter(o -> isWithinChunkRadius(cameraBlockPosition, o.x(), o.y(), o.z(), chunkRadius)).toList()) {
 					BiomeCheckDebugRenderer.renderStructureBiomeCheckSample(
-						structureBiomeCheckSample,
-						poseStack,
-						//? if >= 1.21.11 {
-						submitNodeCollector,
-						//?} else {
-						/*bufferSource,
-						 *///?}
+						structureBiomeCheckSample
+						//? if < 1.21.11 {
+						/*, poseStack,
+						bufferSource,
 						camX,
 						camY,
 						camZ
+						*///?}
 					);
 				}
 			}
@@ -161,17 +154,15 @@ public final class StructurifyDebugRenderer
 							if (isWithinChunkRadius(cameraBlockPosition, pos.getX(), pos.getY(), pos.getZ(), chunkRadius)) {
 								StructureOverlapDebugRenderer.renderStructureSectionClaim(
 									structureSectionClaim,
-									minecraft,
+									pos
+									//? if < 1.21.11 {
+									/*, minecraft,
 									poseStack,
-									//? if >= 1.21.11 {
-									submitNodeCollector,
-									//?} else {
-									/*bufferSource,
-									 *///?}
-									pos,
+									bufferSource,
 									camX,
 									camY,
 									camZ
+									*///?}
 								);
 							}
 						}
@@ -179,6 +170,12 @@ public final class StructurifyDebugRenderer
 				}
 			}
 		}
+
+		//? if < 1.21.11 {
+		/*if (fallbackBufferSource != null) {
+			fallbackBufferSource.endBatch();
+		}
+		*///?}
 	}
 
 	private static boolean isWithinChunkRadius(

@@ -3,40 +3,35 @@ package com.faboslav.structurify.common.debug.renderer;
 import com.faboslav.structurify.common.util.RenderUtil;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckOverview;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckSample;
-import com.mojang.blaze3d.vertex.PoseStack;
+//? if < 1.21.11 {
+/*import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-//? if >= 1.21.11 {
-import net.minecraft.client.renderer.SubmitNodeCollector;
-//?} else {
-/*import net.minecraft.client.renderer.MultiBufferSource;
- *///?}
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+*///?}
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 
 public class BiomeCheckDebugRenderer
 {
 	public static void renderStructureBiomeCheckOverview(
-		StructureBiomeCheckOverview structureBiomeCheckOverview,
-		Minecraft minecraft,
+		StructureBiomeCheckOverview structureBiomeCheckOverview
+		//? if < 1.21.11 {
+		/*, Minecraft minecraft,
 		PoseStack poseStack,
-		//? if >= 1.21.11 {
-		SubmitNodeCollector submitNodeCollector,
-		//?} else {
-		/*MultiBufferSource bufferSource,
-		 *///?}
+		MultiBufferSource bufferSource,
 		double camX,
 		double camY,
 		double camZ
+		*///?}
 	) {
 		BoundingBox structureBoundingBox = structureBiomeCheckOverview.structureBoundingBox();
+		String label = structureBiomeCheckOverview.toString();
 
 		//? if >= 1.21.11 {
-		submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, vertexConsumer) -> {
-			RenderUtil.renderBoundingBox(structureBoundingBox, poseStack, vertexConsumer, camX, camY, camZ, 0.8f);
-		});
-		RenderUtil.renderLabel(structureBoundingBox, structureBiomeCheckOverview.toString(), minecraft, poseStack, submitNodeCollector, camX, camY, camZ);
-		StructureDebugRenderer.renderStructurePieces(structureBoundingBox, structureBiomeCheckOverview.structurePieces(), minecraft, poseStack, submitNodeCollector, camX, camY, camZ);
+		RenderUtil.renderBoundingBox(structureBoundingBox, 0.8f);
+		RenderUtil.renderLabel(structureBoundingBox, label);
+		StructureDebugRenderer.renderStructurePieces(structureBoundingBox, structureBiomeCheckOverview.structurePieces());
 		//?} else {
 		/*RenderUtil.renderBoundingBox(
 			structureBoundingBox,
@@ -47,22 +42,20 @@ public class BiomeCheckDebugRenderer
 			camZ,
 			0.8f
 		);
-		RenderUtil.renderLabel(structureBoundingBox, structureBiomeCheckOverview.toString(), minecraft, poseStack, bufferSource, camX, camY, camZ);
+		RenderUtil.renderLabel(structureBoundingBox, label, minecraft, poseStack, bufferSource, camX, camY, camZ);
 		StructureDebugRenderer.renderStructurePieces(structureBoundingBox, structureBiomeCheckOverview.structurePieces(), minecraft, poseStack, bufferSource, camX, camY, camZ);
 		*///?}
 	}
 
 	public static void renderStructureBiomeCheckSample(
-		StructureBiomeCheckSample structureBiomeCheckSample,
-		PoseStack poseStack,
-		//? if >= 1.21.11 {
-		SubmitNodeCollector submitNodeCollector,
-		//?} else {
-		/*MultiBufferSource bufferSource,
-		 *///?}
+		StructureBiomeCheckSample structureBiomeCheckSample
+		//? if < 1.21.11 {
+		/*, PoseStack poseStack,
+		MultiBufferSource bufferSource,
 		double camX,
 		double camY,
 		double camZ
+		*///?}
 	) {
 		final int x = structureBiomeCheckSample.x();
 		final int y = structureBiomeCheckSample.y();
@@ -74,14 +67,12 @@ public class BiomeCheckDebugRenderer
 		final float b = 0.2f;
 		final float a = 0.95f;
 
-		AABB col = new AABB(x, y, z, x + 1, y + 1, z + 1).move(-camX, -camY, -camZ);
-
 		//? if >= 1.21.11 {
-		submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, vertexConsumer) -> {
-			RenderUtil.renderLineBox(poseStack, vertexConsumer, col, r, g, b, a);
-		});
+		AABB col = new AABB(x, y, z, x + 1, y + 1, z + 1);
+		RenderUtil.renderLineBox(col, r, g, b, a);
 		//?} else {
-		/*RenderUtil.renderLineBox(
+		/*AABB col = new AABB(x, y, z, x + 1, y + 1, z + 1).move(-camX, -camY, -camZ);
+		RenderUtil.renderLineBox(
 			poseStack,
 			bufferSource.getBuffer(RenderTypes.lines()),
 			col,

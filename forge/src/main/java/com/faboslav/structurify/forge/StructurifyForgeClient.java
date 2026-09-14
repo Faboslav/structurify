@@ -34,6 +34,11 @@ public final class StructurifyForgeClient
 			return;
 		}
 
-		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), event.getCamera().getPosition(), null);
+		StructurifyClient.getDebugRenderer().render(
+			Minecraft.getInstance(),
+			event.getPoseStack(),
+			event.getCamera().getPosition(),
+			null
+		);
 	}
 }

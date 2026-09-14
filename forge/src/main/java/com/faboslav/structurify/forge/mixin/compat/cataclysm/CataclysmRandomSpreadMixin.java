@@ -1,45 +1,46 @@
-package com.faboslav.structurify.common.mixin.structure.placement;
+//? if cataclysm {
+package com.faboslav.structurify.forge.mixin.compat.cataclysm;
 
 import com.faboslav.structurify.common.api.StructurifyRandomSpreadStructurePlacement;
 import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.faboslav.structurify.common.world.level.structure.StructurePlacementResolver;
+import com.github.L_Ender.cataclysm.world.structures.placements.CataclysmRandomSpread;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import java.util.Optional;
 
-@Mixin(RandomSpreadStructurePlacement.class)
-public abstract class RandomSpreadStructurePlacementMixin extends StructurePlacementMixin implements StructurifyRandomSpreadStructurePlacement
+@Pseudo
+@Mixin(value = CataclysmRandomSpread.class)
+public abstract class CataclysmRandomSpreadMixin extends RandomSpreadStructurePlacement implements StructurifyRandomSpreadStructurePlacement
 {
-	@Shadow
-	@Final
-	private int spacing;
+	public CataclysmRandomSpreadMixin(int spacing, int separation, RandomSpreadType spreadType, int salt
+	) {
+		super(spacing, separation, spreadType, salt);
+	}
 
 	@Shadow
 	@Final
-	private int separation;
-
-	@Shadow
 	public abstract int spacing();
 
-	public int structurify$getOriginalSpacing() {
-		return this.spacing;
-	}
-
-	public int structurify$getOriginalSeparation() {
-		return this.separation;
-	}
+	@Shadow(remap = false)
+	public abstract Optional<Integer> minDistanceFromWorldOrigin();
 
 	@ModifyReturnValue(
 		method = "spacing",
-		at = @At("RETURN")
+		at = @At("RETURN"),
+		require = 0
 	)
 	protected int structurify$getSpacing(int originalSpacing) {
 		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetId(), originalSpacing);
@@ -47,7 +48,8 @@ public abstract class RandomSpreadStructurePlacementMixin extends StructurePlace
 
 	@ModifyReturnValue(
 		method = "separation",
-		at = @At("RETURN")
+		at = @At("RETURN"),
+		require = 0
 	)
 	protected int structurify$getSeparation(int originalSeparation) {
 		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetId(), this.spacing(), originalSeparation);
@@ -57,9 +59,11 @@ public abstract class RandomSpreadStructurePlacementMixin extends StructurePlace
 		method = "getPotentialStructureChunk",
 		at = @At(
 			value = "FIELD",
-			target = "Lnet/minecraft/world/level/levelgen/structure/placement/RandomSpreadStructurePlacement;spacing:I",
-			opcode = Opcodes.GETFIELD
-		)
+			target = "Lcom/github/L_Ender/cataclysm/world/structures/placements/CataclysmRandomSpread;spacing:I",
+			opcode = Opcodes.GETFIELD,
+			remap = false
+		),
+		require = 0
 	)
 	protected int structurify$getStartChunkGetSpacing(int originalSpacing) {
 		return RandomSpreadUtil.getModifiedSpacing(this.structurify$getStructureSetId(), originalSpacing);
@@ -69,16 +73,19 @@ public abstract class RandomSpreadStructurePlacementMixin extends StructurePlace
 		method = "getPotentialStructureChunk",
 		at = @At(
 			value = "FIELD",
-			target = "Lnet/minecraft/world/level/levelgen/structure/placement/RandomSpreadStructurePlacement;separation:I",
-			opcode = Opcodes.GETFIELD
-		)
+			target = "Lcom/github/L_Ender/cataclysm/world/structures/placements/CataclysmRandomSpread;separation:I",
+			opcode = Opcodes.GETFIELD,
+			remap = false
+		),
+		require = 0
 	)
 	protected int structurify$getStartChunkGetSeparation(int originalSeparation) {
 		return RandomSpreadUtil.getModifiedSeparation(this.structurify$getStructureSetId(), this.spacing(), originalSeparation);
 	}
 
 	@WrapMethod(
-		method = "isPlacementChunk"
+		method = "isPlacementChunk",
+		require = 0
 	)
 	protected boolean structurify$isPlacementChunk(
 		ChunkGeneratorStructureState chunkGeneratorStructureState,
@@ -100,6 +107,26 @@ public abstract class RandomSpreadStructurePlacementMixin extends StructurePlace
 			return false;
 		}
 
+		if (this.structurify$isWithinMinDistanceFromWorldOrigin(chunkX, chunkZ)) {
+			return false;
+		}
+
 		return RandomSpreadUtil.isWithinPlacementSpread((RandomSpreadStructurePlacement) (Object) this, chunkX, chunkZ);
 	}
+
+	@Unique
+	private boolean structurify$isWithinMinDistanceFromWorldOrigin(int chunkX, int chunkZ) {
+		Optional<Integer> minDistanceFromWorldOrigin = this.minDistanceFromWorldOrigin();
+
+		if (minDistanceFromWorldOrigin.isEmpty()) {
+			return false;
+		}
+
+		long x = chunkX * 16L;
+		long z = chunkZ * 16L;
+		long minDistance = minDistanceFromWorldOrigin.get();
+
+		return x * x + z * z < minDistance * minDistance;
+	}
 }
+//?}

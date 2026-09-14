@@ -1,7 +1,9 @@
 package com.faboslav.structurify.common.commands;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
 import com.faboslav.structurify.common.api.StructurifyStructure;
+import com.faboslav.structurify.common.api.StructurifyStructurePlacement;
 import com.faboslav.structurify.common.config.data.DebugData;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.mixin.LocateCommandInvoker;
@@ -10,9 +12,12 @@ import com.faboslav.structurify.common.network.packet.ConfigStatusToClientPacket
 import com.faboslav.structurify.common.network.packet.ConfigSyncRequestToClientPacket;
 import com.faboslav.structurify.common.network.packet.ConfigSyncToClientPacket;
 import com.faboslav.structurify.common.util.ChunkPosUtil;
+import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.faboslav.structurify.common.util.ClickEventFactory;
 import com.faboslav.structurify.common.util.HoverEventFactory;
 import com.faboslav.structurify.common.versions.VersionedPermission;
+import com.faboslav.structurify.common.world.level.structure.StructurePlacementContext;
+import com.faboslav.structurify.common.world.level.structure.StructurePlacementResolver;
 import com.faboslav.structurify.common.world.level.structure.checks.StructureChecker;
 import com.google.common.base.Stopwatch;
 import com.mojang.brigadier.CommandDispatcher;
@@ -38,6 +43,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.commands.LocateCommand;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.util.Util;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
@@ -277,6 +284,8 @@ public final class StructurifyCommand
 		int baseChunkX = SectionPos.blockToSectionCoord(blockPos.getX());
 		int baseChunkZ = SectionPos.blockToSectionCoord(blockPos.getZ());
 
+		reloadStructurePlacementAttempts(serverLevel, baseChunkX, baseChunkZ, chunkRadius);
+
 		for (int dz = -chunkRadius; dz <= chunkRadius; dz++) {
 			for (int dx = -chunkRadius; dx <= chunkRadius; dx++) {
 				int chunkX = baseChunkX + dx;
@@ -294,7 +303,47 @@ public final class StructurifyCommand
 						chunkGenerator,
 						serverLevel,
 						randomState,
-						biomeSource
+						biomeSource,
+						StructurePlacementResolver.getStructurePlacementAttempt(structureStartEntry.getValue(), serverLevel)
+					);
+				}
+			}
+		}
+	}
+
+	private static void reloadStructurePlacementAttempts(
+		ServerLevel serverLevel,
+		int baseChunkX,
+		int baseChunkZ,
+		int chunkRadius
+	) {
+		var chunkSource = serverLevel.getChunkSource();
+		var generatorState = chunkSource.getGeneratorState();
+		var context = StructurePlacementContext.of(serverLevel);
+
+		((StructurifyChunkGenerator) context.chunkGenerator()).structurify$getResolvedStructureChunks().clear();
+
+		for (var structureSetHolder : generatorState.possibleStructureSets()) {
+			var structureSet = structureSetHolder.value();
+
+			if (!(structureSet.placement() instanceof RandomSpreadStructurePlacement randomSpreadStructurePlacement)) {
+				continue;
+			}
+
+			var structureSetId = ((StructurifyStructurePlacement) structureSet.placement()).structurify$getStructureSetId();
+
+			if (structureSetId == null || RandomSpreadUtil.getPlacementAttempts(structureSetId) <= 1) {
+				continue;
+			}
+
+			for (int dz = -chunkRadius; dz <= chunkRadius; dz++) {
+				for (int dx = -chunkRadius; dx <= chunkRadius; dx++) {
+					StructurePlacementResolver.getStructureChunkResolution(
+						structureSetId,
+						structureSet,
+						randomSpreadStructurePlacement,
+						new ChunkPos(baseChunkX + dx, baseChunkZ + dz),
+						context
 					);
 				}
 			}

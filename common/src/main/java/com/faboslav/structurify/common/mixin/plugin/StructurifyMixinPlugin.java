@@ -4,13 +4,17 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class StructurifyMixinPlugin implements IMixinConfigPlugin
 {
+	private String mixinPackage;
+
 	@Override
 	public void onLoad(String mixinPackage) {
+		this.mixinPackage = mixinPackage;
 	}
 
 	@Override
@@ -60,7 +64,37 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 
 	@Override
 	public List<String> getMixins() {
-		return null;
+		List<String> mixins = new ArrayList<>();
+
+		if (this.mixinPackage.equals("com.faboslav.structurify.neoforge.mixin")) {
+			if(this.isClassAvailable("com.faboslav.structurify.neoforge.mixin.compat.cataclysm.CataclysmRandomSpreadMixin") && this.isClassAvailable("com.github.L_Ender.cataclysm.world.structures.placements.CataclysmRandomSpread")) {
+				mixins.add("compat.cataclysm.CataclysmRandomSpreadMixin");
+			}
+
+			if(this.isClassAvailable("com.faboslav.structurify.neoforge.mixin.compat.cataclysm.CataclysmStructureMixin") && this.isClassAvailable("com.github.L_Ender.cataclysm.structures.CataclysmStructure")) {
+				mixins.add("compat.cataclysm.CataclysmStructureMixin");
+			}
+
+			if(this.isClassAvailable("com.faboslav.structurify.neoforge.mixin.compat.cataclysm.CataclysmJigsawStructureMixin") && this.isClassAvailable("com.github.L_Ender.cataclysm.structures.jisaw.CataclysmJigsawStructure")) {
+				mixins.add("compat.cataclysm.CataclysmJigsawStructureMixin");
+			}
+		}
+
+		if (this.mixinPackage.equals("com.faboslav.structurify.forge.mixin")) {
+			if(this.isClassAvailable("com.faboslav.structurify.forge.mixin.compat.cataclysm.CataclysmRandomSpreadMixin") && this.isClassAvailable("com.github.L_Ender.cataclysm.world.structures.placements.CataclysmRandomSpread")) {
+				mixins.add("compat.cataclysm.CataclysmRandomSpreadMixin");
+			}
+
+			if(this.isClassAvailable("com.faboslav.structurify.forge.mixin.compat.cataclysm.CataclysmStructureMixin") && this.isClassAvailable("com.github.L_Ender.cataclysm.structures.CataclysmStructure")) {
+				mixins.add("compat.cataclysm.CataclysmStructureMixin");
+			}
+
+			if(this.isClassAvailable("com.faboslav.structurify.forge.mixin.compat.cataclysm.CataclysmJigsawStructureMixin") && this.isClassAvailable("com.github.L_Ender.cataclysm.structures.jisaw.CataclysmJigsawStructure")) {
+				mixins.add("compat.cataclysm.CataclysmJigsawStructureMixin");
+			}
+		}
+
+		return mixins;
 	}
 
 	@Override

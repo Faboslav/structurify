@@ -3,7 +3,7 @@ package com.faboslav.structurify.common.mixin.structure.jigsaw.compat;
 import org.spongepowered.asm.mixin.Mixin;
 
 //? if repurposed_structures {
-/*import com.faboslav.structurify.common.api.StructurifyJigsawStructure;
+import com.faboslav.structurify.common.api.StructurifyJigsawStructure;
 import com.faboslav.structurify.common.mixin.structure.StructureMixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
@@ -115,6 +115,32 @@ public abstract class RepurposedStructuresGenericJigsawStructureMixin extends St
 	}
 
 	@ModifyExpressionValue(
+		method = "extraSpawningChecks",
+		at = @At(
+			value = "FIELD",
+			target = "Lcom/telepathicgrunt/repurposedstructures/world/structures/GenericJigsawStructure;projectStartToHeightmap:Ljava/util/Optional;",
+			opcode = Opcodes.GETFIELD
+		),
+		remap = false
+	)
+	protected Optional<Heightmap.Types> structurify$extraSpawningChecksGetProjectStartToHeightmap(Optional<Heightmap.Types> originalProjectStartToHeightmap) {
+		return this.structurify$getProjectStartToHeightmap(originalProjectStartToHeightmap);
+	}
+
+	@ModifyExpressionValue(
+		method = "postLayoutAdjustments",
+		at = @At(
+			value = "FIELD",
+			target = "Lcom/telepathicgrunt/repurposedstructures/world/structures/GenericJigsawStructure;projectStartToHeightmap:Ljava/util/Optional;",
+			opcode = Opcodes.GETFIELD
+		),
+		remap = false
+	)
+	protected Optional<Heightmap.Types> structurify$postLayoutAdjustmentsGetProjectStartToHeightmap(Optional<Heightmap.Types> originalProjectStartToHeightmap) {
+		return this.structurify$getProjectStartToHeightmap(originalProjectStartToHeightmap);
+	}
+
+	@ModifyExpressionValue(
 		method = "findGenerationPoint",
 		at = @At(
 			value = "FIELD",
@@ -144,11 +170,11 @@ public abstract class RepurposedStructuresGenericJigsawStructureMixin extends St
 		return this.structurify$maxDistanceFromCenter;
 	}
 }
-*///?} else {
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+//?} else {
+/*import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
 @Mixin(value = JigsawStructure.class)
 public abstract class RepurposedStructuresGenericJigsawStructureMixin
 {
 }
-//?}
+*///?}

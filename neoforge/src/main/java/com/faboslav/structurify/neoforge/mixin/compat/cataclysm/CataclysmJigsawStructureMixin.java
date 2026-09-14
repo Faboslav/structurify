@@ -1,28 +1,24 @@
-package com.faboslav.structurify.common.mixin.structure.jigsaw.compat;
+//? if cataclysm {
+/*package com.faboslav.structurify.neoforge.mixin.compat.cataclysm;
 
-import org.spongepowered.asm.mixin.Mixin;
-
-//? if yungs_api {
-/*import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
-import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
+import com.faboslav.structurify.common.api.StructurifyJigsawStructure;
 import com.faboslav.structurify.common.mixin.structure.StructureMixin;
+import com.github.L_Ender.cataclysm.structures.jisaw.CataclysmJigsawStructure;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import org.jetbrains.annotations.Nullable;
-import com.faboslav.structurify.common.api.StructurifyJigsawStructure;
-
-//? if >= 1.21.9 {
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
-//?}
-
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
 import java.util.Optional;
 
-@Mixin(value = YungJigsawStructure.class)
-public abstract class YungJigsawStructureMixin extends StructureMixin implements StructurifyJigsawStructure
+@Pseudo
+@Mixin(value = CataclysmJigsawStructure.class, remap = false)
+public abstract class CataclysmJigsawStructureMixin extends StructureMixin implements StructurifyJigsawStructure
 {
 	@Unique
 	@Nullable
@@ -38,11 +34,7 @@ public abstract class YungJigsawStructureMixin extends StructureMixin implements
 
 	@Unique
 	@Nullable
-	//? if >= 1.21.9 {
-	private JigsawStructure.MaxDistance structurify$maxDistanceFromCenter = null;
-	//?} else {
-	/^private Integer structurify$maxDistanceFromCenter = null;
-	^///?}
+	private Integer structurify$maxDistanceFromCenter = null;
 
 	@Override
 	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
@@ -65,9 +57,10 @@ public abstract class YungJigsawStructureMixin extends StructureMixin implements
 		method = "findGenerationPoint",
 		at = @At(
 			value = "FIELD",
-			target = "Lcom/yungnickyoung/minecraft/yungsapi/world/structure/YungJigsawStructure;maxDepth:I",
+			target = "Lcom/github/L_Ender/cataclysm/structures/jisaw/CataclysmJigsawStructure;maxDepth:I",
 			opcode = Opcodes.GETFIELD
-		)
+		),
+		require = 0
 	)
 	public int structurify$findGenerationPointGetMaxDepth(int originalMaxDepth) {
 		return this.structurify$getMaxDepth(originalMaxDepth);
@@ -88,9 +81,10 @@ public abstract class YungJigsawStructureMixin extends StructureMixin implements
 		method = "findGenerationPoint",
 		at = @At(
 			value = "FIELD",
-			target = "Lcom/yungnickyoung/minecraft/yungsapi/world/structure/YungJigsawStructure;startHeight:Lnet/minecraft/world/level/levelgen/heightproviders/HeightProvider;",
+			target = "Lcom/github/L_Ender/cataclysm/structures/jisaw/CataclysmJigsawStructure;startHeight:Lnet/minecraft/world/level/levelgen/heightproviders/HeightProvider;",
 			opcode = Opcodes.GETFIELD
-		)
+		),
+		require = 0
 	)
 	protected HeightProvider structurify$findGenerationPointGetStartHeight(HeightProvider originalStartHeight) {
 		return this.structurify$getStartHeight(originalStartHeight);
@@ -111,9 +105,10 @@ public abstract class YungJigsawStructureMixin extends StructureMixin implements
 		method = "findGenerationPoint",
 		at = @At(
 			value = "FIELD",
-			target = "Lcom/yungnickyoung/minecraft/yungsapi/world/structure/YungJigsawStructure;projectStartToHeightmap:Ljava/util/Optional;",
+			target = "Lcom/github/L_Ender/cataclysm/structures/jisaw/CataclysmJigsawStructure;projectStartToHeightmap:Ljava/util/Optional;",
 			opcode = Opcodes.GETFIELD
-		)
+		),
+		require = 0
 	)
 	protected Optional<Heightmap.Types> structurify$findGenerationPointGetProjectStartToHeightmap(Optional<Heightmap.Types> originalProjectStartToHeightmap) {
 		return this.structurify$getProjectStartToHeightmap(originalProjectStartToHeightmap);
@@ -121,21 +116,11 @@ public abstract class YungJigsawStructureMixin extends StructureMixin implements
 
 	@Unique
 	@Nullable
-	//? if >= 1.21.9 {
-	public JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter()
-	//?} else {
-	/^public Integer structurify$getMaxDistanceFromCenter()
-	^///?}
-	{
+	public Integer structurify$getMaxDistanceFromCenter() {
 		return this.structurify$maxDistanceFromCenter;
 	}
 
-	//? if >= 1.21.9 {
-	public void structurify$setMaxDistanceFromCenter(@Nullable JigsawStructure.MaxDistance maxDistanceFromCenter)
-	//?} else {
-	/^public void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter)
-	^///?}
-	{
+	public void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter) {
 		this.structurify$maxDistanceFromCenter = maxDistanceFromCenter;
 	}
 
@@ -143,24 +128,14 @@ public abstract class YungJigsawStructureMixin extends StructureMixin implements
 		method = "findGenerationPoint",
 		at = @At(
 			value = "FIELD",
-			target = "Lcom/yungnickyoung/minecraft/yungsapi/world/structure/YungJigsawStructure;maxDistanceFromCenter:I",
+			target = "Lcom/github/L_Ender/cataclysm/structures/jisaw/CataclysmJigsawStructure;maxDistanceFromCenter:I",
 			opcode = Opcodes.GETFIELD
-		)
+		),
+		require = 0
 	)
 	protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
 	{
-		//? if >= 1.21.9 {
-		return this.structurify$getMaxDistanceFromCenter(new JigsawStructure.MaxDistance(originalMaxDistanceFromCenter)).horizontal();
-		//?} else {
-		/^return this.structurify$getMaxDistanceFromCenter((Integer) originalMaxDistanceFromCenter);
-		^///?}
+		return this.structurify$getMaxDistanceFromCenter((Integer) originalMaxDistanceFromCenter);
 	}
 }
-*///?} else {
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
-
-@Mixin(value = JigsawStructure.class)
-public abstract class YungJigsawStructureMixin
-{
-}
-//?}
+*///?}

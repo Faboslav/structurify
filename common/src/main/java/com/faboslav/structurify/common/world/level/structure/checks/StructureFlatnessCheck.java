@@ -95,7 +95,7 @@ public final class StructureFlatnessCheck
 			maxHeightDifference = Mth.clamp(
 				(int) Math.round(Math.sqrt(structureArea) * 0.35),
 				3,
-				24
+				32
 			);
 		} else {
 			maxHeightDifference = flatnessCheckData.getMaxHeightDifference();
@@ -126,7 +126,7 @@ public final class StructureFlatnessCheck
 				maxHeight = firstOceanFloorOccupiedHeight;
 				if (maxHeight - minHeight > maxHeightDifference) {
 					if (isDebugEnabled) {
-						debugData.addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, maxHeightDifference, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false));
+						debugData.addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, maxHeightDifference, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false, structureCheckData.getStructurePlacementAttempt()));
 					}
 					return false;
 				}
@@ -136,7 +136,7 @@ public final class StructureFlatnessCheck
 				minHeight = firstOceanFloorOccupiedHeight;
 				if (maxHeight - minHeight > maxHeightDifference) {
 					if (isDebugEnabled) {
-						debugData.addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, maxHeightDifference, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false));
+						debugData.addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, maxHeightDifference, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false, structureCheckData.getStructurePlacementAttempt()));
 					}
 					return false;
 				}
@@ -158,7 +158,7 @@ public final class StructureFlatnessCheck
 
 						if (nonSolidFlatnessChecks >= nonSolidFlatnessChecksThreshold) {
 							if (isDebugEnabled) {
-								debugData.addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, maxHeightDifference, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false));
+								debugData.addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, maxHeightDifference, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, false, structureCheckData.getStructurePlacementAttempt()));
 							}
 							return false;
 						}
@@ -173,7 +173,7 @@ public final class StructureFlatnessCheck
 
 		if (isDebugEnabled) {
 			flatnessCheckSamples.forEach((flatnessCheckSample) -> debugData.addStructureFlatnessCheckSample(structureCenterChunkPos, flatnessCheckSample));
-			debugData.addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, maxHeightDifference, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, true));
+			debugData.addStructureFlatnessCheckInfo(structureCenterChunkPos, new StructureFlatnessCheckOverview(structureId, structureStart.getBoundingBox(), structurePieces, structureArea, minHeight, maxHeight, maxHeightDifference, totalFlatnessChecks, nonSolidFlatnessChecks, nonSolidFlatnessChecksThreshold, true, structureCheckData.getStructurePlacementAttempt()));
 		}
 
 		return true;

@@ -7,11 +7,9 @@ import com.faboslav.structurify.common.config.data.structure.BiomeCheckData;
 import com.faboslav.structurify.common.util.ChunkPosUtil;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckOverview;
 import com.faboslav.structurify.common.world.level.structure.checks.debug.StructureBiomeCheckSample;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.QuartPos;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -131,7 +129,8 @@ public final class StructureBiomeCheck
 				structureCheckData.getStructurePieces(),
 				structureCheckData.getStructure().structurify$getStructureData().getBiomeCheckData().getMode(),
 				structureCheckData.getStructurePieceSamples().length,
-				result
+				result,
+				structureCheckData.getStructurePlacementAttempt()
 			)
 		);
 	}

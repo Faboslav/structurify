@@ -69,11 +69,29 @@ public final class StructureOverlapCheck
 		@Nullable OverlapCheckData overlapCheckData,
 		StructurifyChunkGenerator structurifyChunkGenerator
 	) {
+		return checkForOverlap(structureCheckData, overlapCheckData, structurifyChunkGenerator, false);
+	}
+
+	public static boolean checkForOverlap(
+		StructureCheckData structureCheckData,
+		@Nullable OverlapCheckData overlapCheckData,
+		StructurifyChunkGenerator structurifyChunkGenerator,
+		boolean testOnly
+	) {
 		StructureStart start = structureCheckData.getStructureStart();
 
 		long[] structureCells = getStructurePiecesSections(start, resolveOverlapPadding(overlapCheckData));
 
 		long structureCenter = structureCheckData.getStructureCenter().asLong();
+
+		if (testOnly) {
+			return !canClaimStructureSections(
+				structurifyChunkGenerator,
+				structureCells,
+				structureCheckData.getStructureId(),
+				structureCenter
+			);
+		}
 
 		boolean overlapCheckResult = !claimStructureSections(
 			structurifyChunkGenerator,
@@ -83,6 +101,25 @@ public final class StructureOverlapCheck
 		);
 
 		return overlapCheckResult;
+	}
+
+	public static void releaseStructureSections(
+		StructureCheckData structureCheckData,
+		@Nullable OverlapCheckData overlapCheckData,
+		StructurifyChunkGenerator structurifyChunkGenerator
+	) {
+		long[] structureCells = getStructurePiecesSections(structureCheckData.getStructureStart(), resolveOverlapPadding(overlapCheckData));
+
+		String structureId = structureCheckData.getStructureId().toString();
+		long structureCenter = structureCheckData.getStructureCenter().asLong();
+
+		for (long structureCell : structureCells) {
+			StructureSectionClaim claim = structurifyChunkGenerator.structurify$getStructureSectionClaims().get(structureCell);
+
+			if (claim != null && structureId.equals(claim.structureId()) && structureCenter == claim.structureCenter()) {
+				structurifyChunkGenerator.structurify$getStructureSectionClaims().remove(structureCell, claim);
+			}
+		}
 	}
 
 	private static int resolveOverlapPadding(@Nullable OverlapCheckData overlapCheckData) {
@@ -124,6 +161,29 @@ public final class StructureOverlapCheck
 		}
 
 		return structurePieceSectionKeys;
+	}
+
+	private static boolean canClaimStructureSections(
+		StructurifyChunkGenerator gen,
+		long[] sectionKeysToClaim,
+		Identifier structureId,
+		long structureCenter
+	) {
+		for (long key : sectionKeysToClaim) {
+			StructureSectionClaim prev = gen.structurify$getStructureSectionClaims().get(key);
+
+			if (prev == null) {
+				continue;
+			}
+
+			if (structureId.toString().equals(prev.structureId()) && structureCenter == prev.structureCenter()) {
+				continue;
+			}
+
+			return false;
+		}
+
+		return true;
 	}
 
 	private static boolean claimStructureSections(
