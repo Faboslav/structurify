@@ -3,7 +3,9 @@
 - Added experimental structure set placement attempt logic
 - Added Lithostitched compat
 - Added Cataclysm compat
-- Repurposed Structures compat
+- Added "Collapse all" / "Expand all" button
+- Fixed Repurposed Structures compat
+- Small UI quality of life tweaks
  
 ## 2.0.35
 
