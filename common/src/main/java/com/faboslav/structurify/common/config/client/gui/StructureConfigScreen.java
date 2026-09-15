@@ -2,6 +2,7 @@ package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.StructurifyClient;
+import com.faboslav.structurify.common.api.StructurifyYACLScreen;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.controller.builder.BiomeStringControllerBuilder;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
@@ -140,6 +141,9 @@ public final class StructureConfigScreen
 
 		yacl.category(structureCategoryBuilder.build());
 
-		return (YACLScreen) yacl.build().generateScreen(parent);
+		var yaclScreen = (YACLScreen) yacl.build().generateScreen(parent);
+		((StructurifyYACLScreen) yaclScreen).structurify$markAsStructurifyScreen();
+
+		return yaclScreen;
 	}
 }

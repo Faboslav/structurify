@@ -1,6 +1,7 @@
 package com.faboslav.structurify.common.config.client.gui;
 
 import com.faboslav.structurify.common.Structurify;
+import com.faboslav.structurify.common.api.StructurifyYACLScreen;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.mixin.yacl.CategoryTabAccessor;
 //? if <= 1.20.1 {
@@ -36,6 +37,7 @@ public class StructurifyConfigScreen
 		StructureSetsConfigScreen.createStructureSetsTab(yaclBuilder, config);
 
 		var yaclScreen = (YACLScreen) yaclBuilder.build().generateScreen(parent);
+		((StructurifyYACLScreen) yaclScreen).structurify$markAsStructurifyScreen();
 
 		return yaclScreen;
 	}

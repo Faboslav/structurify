@@ -1,5 +1,6 @@
 package com.faboslav.structurify.common.config.client.gui;
 
+import com.faboslav.structurify.common.api.StructurifyYACLScreen;
 import com.faboslav.structurify.common.config.StructurifyConfig;
 import com.faboslav.structurify.common.config.client.api.option.InvisibleOptionGroup;
 import com.faboslav.structurify.common.config.client.gui.structure.*;
@@ -63,6 +64,9 @@ public final class StructureSetConfigScreen
 		structureCategoryBuilder.group(structureSetSettingsGroup.build());
 		yacl.category(structureCategoryBuilder.build());
 
-		return (YACLScreen) yacl.build().generateScreen(parent);
+		var yaclScreen = (YACLScreen) yacl.build().generateScreen(parent);
+		((StructurifyYACLScreen) yaclScreen).structurify$markAsStructurifyScreen();
+
+		return yaclScreen;
 	}
 }

@@ -1,11 +1,12 @@
 package com.faboslav.structurify.common.mixin.yacl;
 
+import com.faboslav.structurify.common.api.StructurifyCategoryTab;
+import com.faboslav.structurify.common.api.StructurifyYACLScreen;
 import com.faboslav.structurify.common.util.YACLUtil;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.gui.OptionListWidget;
 import dev.isxander.yacl3.gui.SearchFieldWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
@@ -19,10 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.function.Consumer;
-
 @Mixin(value = YACLScreen.CategoryTab.class, remap = false)
-public abstract class CategoryTabMixin
+public abstract class CategoryTabMixin implements StructurifyCategoryTab
 {
 	@Shadow
 	@Final
@@ -49,6 +48,10 @@ public abstract class CategoryTabMixin
 		at = @At("TAIL")
 	)
 	private void structurify$init(YACLScreen screen, ConfigCategory category, ScreenRectangle tabArea, CallbackInfo ci) {
+		if (!((StructurifyYACLScreen) screen).structurify$isStructurifyScreen()) {
+			return;
+		}
+
 		this.structurify$optionListWidget = YACLUtil.getOptionListWidget(this);
 		this.searchField.setY(this.searchField.getY() - 22);
 
@@ -60,14 +63,10 @@ public abstract class CategoryTabMixin
 		this.structurify$updateToggleGroupsButton();
 	}
 
-	@Inject(
-		method = "visitChildren",
-		at = @At("TAIL")
-	)
-	private void structurify$visitChildren(Consumer<AbstractWidget> consumer, CallbackInfo ci) {
-		if (this.structurify$toggleGroupsButton != null) {
-			consumer.accept(this.structurify$toggleGroupsButton);
-		}
+	@Override
+	@Nullable
+	public Button structurify$getToggleGroupsButton() {
+		return this.structurify$toggleGroupsButton;
 	}
 
 	@Inject(

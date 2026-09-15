@@ -35,6 +35,7 @@
 	],
 	"client": [
 		"AbstractWidgetInvoker",
+		"TabManagerMixin",
 		"WorldOpenFlowsMixin",
 		"yacl.CategoryTabAccessor",
 		"yacl.CategoryTabMixin",

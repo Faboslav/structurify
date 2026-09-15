@@ -1,3 +1,7 @@
+## 2.0.37
+
+- Fixed related YACL crash introduced by new quality of life tweaks
+
 ## 2.0.36
 
 - Added experimental structure set placement attempt logic
