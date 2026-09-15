@@ -1,6 +1,6 @@
 ## 2.0.36
 
-- Added experimental structure attempt logic
+- Added experimental structure set placement attempt logic
 - Added Lithostitched compat
 - Added Cataclysm compat
 - Repurposed Structures compat
