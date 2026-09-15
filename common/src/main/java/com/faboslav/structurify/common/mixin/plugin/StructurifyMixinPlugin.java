@@ -32,24 +32,6 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 			return this.isClassAvailable("me.earth.mc_runtime_test.McRuntimeTest");
 		}
 
-		// Structure Jigsaws
-		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.structure.jigsaw.compat.YungJigsawStructureMixin")) {
-			return this.isClassAvailable("com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure");
-		}
-
-		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.structure.jigsaw.compat.RepurposedStructuresGenericJigsawStructureMixin")) {
-			return this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure");
-		}
-
-		// Structure placements
-		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.structure.placement.compat.RepurposedStructuresModifySpreadMixin")) {
-			return this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread");
-		}
-
-		if (mixinClassName.equals("com.faboslav.structurify.forge.mixin.compat.StructureGelApiModifySpreadMixin")) {
-			return this.isClassAvailable("com.legacy.structure_gel.api.structure.GridStructurePlacement");
-		}
-
 		// YACL
 		if (mixinClassName.equals("com.faboslav.structurify.common.mixin.yacl.ElementListWidgetExtMixin")) {
 			return this.isClassAvailable("dev.isxander.yacl3.gui.ElementListWidgetExt");
@@ -66,6 +48,25 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 	public List<String> getMixins() {
 		List<String> mixins = new ArrayList<>();
 
+		// Common
+		if (this.mixinPackage.equals("com.faboslav.structurify.common.mixin")) {
+			if (this.isClassAvailable("com.faboslav.structurify.common.mixin.compat.lithostitched.LithostitchedAlternateJigsawStructureMixin") && this.isClassAvailable("dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawStructure")) {
+				mixins.add("compat.lithostitched.LithostitchedAlternateJigsawStructureMixin");
+			}
+			if (this.isClassAvailable("com.faboslav.structurify.common.mixin.compat.yungsapi.YungJigsawStructureMixin") && this.isClassAvailable("com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure")) {
+				mixins.add("compat.yungsapi.YungJigsawStructureMixin");
+			}
+
+			if (this.isClassAvailable("com.faboslav.structurify.common.mixin.compat.repurposedstructures.RepurposedStructuresGenericJigsawStructureMixin") && this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure")) {
+				mixins.add("compat.repurposedstructures.RepurposedStructuresGenericJigsawStructureMixin");
+			}
+
+			if (this.isClassAvailable("com.faboslav.structurify.common.mixin.compat.repurposedstructures.RepurposedStructuresModifySpreadMixin") && this.isClassAvailable("com.telepathicgrunt.repurposedstructures.world.structures.placements.AdvancedRandomSpread")) {
+				mixins.add("compat.repurposedstructures.RepurposedStructuresModifySpreadMixin");
+			}
+		}
+
+		// NeoForge
 		if (this.mixinPackage.equals("com.faboslav.structurify.neoforge.mixin")) {
 			if(this.isClassAvailable("com.faboslav.structurify.neoforge.mixin.compat.cataclysm.CataclysmRandomSpreadMixin") && this.isClassAvailable("com.github.L_Ender.cataclysm.world.structures.placements.CataclysmRandomSpread")) {
 				mixins.add("compat.cataclysm.CataclysmRandomSpreadMixin");
@@ -80,7 +81,11 @@ public class StructurifyMixinPlugin implements IMixinConfigPlugin
 			}
 		}
 
+		// Forge
 		if (this.mixinPackage.equals("com.faboslav.structurify.forge.mixin")) {
+			if (this.isClassAvailable("com.faboslav.structurify.forge.mixin.compat.structuregelapi.StructureGelApiGridStructurePlacement") && this.isClassAvailable("com.legacy.structure_gel.api.structure.GridStructurePlacement")) {
+				mixins.add("compat.structuregelapi.StructureGelApiGridStructurePlacement");
+			}
 			if(this.isClassAvailable("com.faboslav.structurify.forge.mixin.compat.cataclysm.CataclysmRandomSpreadMixin") && this.isClassAvailable("com.github.L_Ender.cataclysm.world.structures.placements.CataclysmRandomSpread")) {
 				mixins.add("compat.cataclysm.CataclysmRandomSpreadMixin");
 			}

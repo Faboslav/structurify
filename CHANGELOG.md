@@ -1,3 +1,10 @@
+## 2.0.36
+
+- Added experimental structure attempt logic
+- Added Lithostitched compat
+- Added Cataclysm compat
+- Repurposed Structures compat
+ 
 ## 2.0.35
 
 - Added "Enable" toggles and a "Circle"/"Square" mode for min/max distance from world center

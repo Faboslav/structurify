@@ -51,34 +51,41 @@ dependencies {
 	}
 
 	// Litostitched
-	commonMod.depOrNull("lithostitched_minecraft")?.let { lithostitchedMcVersion ->
-		commonMod.depOrNull("lithostitched")?.let { lithostitchedVersion ->
-			modImplementation(commonMod.modrinth("lithostitched", "${lithostitchedVersion}-forge-${lithostitchedMcVersion}"))
-		}
+	try {
+		modImplementation(fletchingTable.modrinth("lithostitched", minecraft = commonMod.mc, loaders = "forge"))
+		stonecutter.constants["lithostitched"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["lithostitched"] = false
 	}
 
-	// Yungs Api
-	commonMod.depOrNull("yungs_api_minecraft")?.let { yungsApiMcVersion ->
-		commonMod.depOrNull("yungs_api")?.let { yungsApiVersion ->
-			modImplementation("com.yungnickyoung.minecraft.yungsapi:YungsApi:$yungsApiMcVersion-Forge-$yungsApiVersion") {
-				isTransitive = false
-			}
-		}
+	// YUNG's API
+	try {
+		modImplementation(fletchingTable.modrinth("yungs-api", minecraft = commonMod.mc, loaders = "forge"))
+		stonecutter.constants["yungs_api"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["yungs_api"] = false
 	}
 
 	// Repurposed Structures
-	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
-		modImplementation(
-			commonMod.modrinth(
-				"repurposed-structures-forge",
-				"${repurposedStructuresVersion}-forge"
-			)
-		) { isTransitive = false }
+	try {
+		val repurposedStructuresMinecraftVersion = when (commonMod.mc) {
+			"26.1.2" -> "26.1"
+			"1.21.10" -> "1.21.11"
+			else -> commonMod.mc
+		}
+		modImplementation(fletchingTable.modrinth("repurposed-structures-forge", minecraft = repurposedStructuresMinecraftVersion, loaders = "forge"))
+		modImplementation(fletchingTable.modrinth("midnightlib", minecraft = repurposedStructuresMinecraftVersion, loaders = "forge"))
+		stonecutter.constants["repurposed_structures"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["repurposed_structures"] = false
 	}
 
 	// Structure Gel Api
-	commonMod.depOrNull("structure_gel_api")?.let { structureGelApiVersion ->
-		modImplementation(commonMod.modrinth("structure-gel-api", structureGelApiVersion)) { isTransitive = false }
+	try {
+		modImplementation(fletchingTable.modrinth("structure-gel-api", minecraft = commonMod.mc, loaders = "forge"))
+		stonecutter.constants["structure_gel_api"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["structure_gel_api"] = false
 	}
 
 	// Cataclysm

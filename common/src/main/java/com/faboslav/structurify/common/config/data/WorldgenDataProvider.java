@@ -20,18 +20,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-//? if yungs_api || repurposed_structures {
-import com.faboslav.structurify.common.platform.PlatformHooks;
-//?}
-
-//? if yungs_api {
-/*import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
- *///?}
-
-//? if repurposed_structures {
-import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
-//?}
-
 public final class WorldgenDataProvider
 {
 	private static List<String> biomes = new ArrayList<>();

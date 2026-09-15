@@ -39,30 +39,33 @@ dependencies {
 	}
 
 	// Litostitched
-	commonMod.depOrNull("lithostitched_minecraft")?.let { lithostitchedMcVersion ->
-		commonMod.depOrNull("lithostitched")?.let { lithostitchedVersion ->
-			implementation(fletchingTable.modrinth("lithostitched", minecraft = commonMod.mc, loaders = "neoforge"))
-		}
+	try {
+		implementation(fletchingTable.modrinth("lithostitched", minecraft = commonMod.mc, loaders = "neoforge"))
+		stonecutter.constants["lithostitched"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["lithostitched"] = false
 	}
 
-	// Yungs api
-	commonMod.depOrNull("yungs_api_minecraft")?.let { lithostitchedMcVersion ->
-		commonMod.depOrNull("yungs_api")?.let { lithostitchedVersion ->
-			implementation(fletchingTable.modrinth("yungs-api", minecraft = commonMod.mc, loaders = "neoforge"))
-		}
+	// YUNG's API
+	try {
+		implementation(fletchingTable.modrinth("yungs-api", minecraft = commonMod.mc, loaders = "neoforge"))
+		stonecutter.constants["yungs_api"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["yungs_api"] = false
 	}
 
 	// Repurposed Structures
-	if (commonMod.mc >= "1.21.1") {
-		commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
-			val repurposedStructuresMinecraftVersion = when (commonMod.mc) {
-				"26.1.2" -> "26.1"
-				"1.21.10" -> "1.21.11"
-				else -> commonMod.mc
-			}
-			implementation(fletchingTable.modrinth("repurposed-structures-forge", minecraft = repurposedStructuresMinecraftVersion, loaders = "neoforge"))
-			implementation(fletchingTable.modrinth("midnightlib", minecraft = repurposedStructuresMinecraftVersion, loaders = "neoforge"))
+	try {
+		val repurposedStructuresMinecraftVersion = when (commonMod.mc) {
+			"26.1.2" -> "26.1"
+			"1.21.10" -> "1.21.11"
+			else -> commonMod.mc
 		}
+		implementation(fletchingTable.modrinth("repurposed-structures-forge", minecraft = repurposedStructuresMinecraftVersion, loaders = "neoforge"))
+		implementation(fletchingTable.modrinth("midnightlib", minecraft = repurposedStructuresMinecraftVersion, loaders = "neoforge"))
+		stonecutter.constants["repurposed_structures"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["repurposed_structures"] = false
 	}
 
 	// Cataclysm

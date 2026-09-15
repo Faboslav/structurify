@@ -136,7 +136,7 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 				this.structurify$setMaxDistanceFromCenter(originalMaxDistanceFromCenter);
 			} else {
 				var verticalMaxDistanceFromCenter = structureData.getJigsawData().getVerticalMaxDistanceFromCenter();
-				var horizontalMaxDistanceFromCenter = structureData.getJigsawData().getVerticalMaxDistanceFromCenter();
+				var horizontalMaxDistanceFromCenter = structureData.getJigsawData().getHorizontalMaxDistanceFromCenter();
 
 				if(verticalMaxDistanceFromCenter == null || horizontalMaxDistanceFromCenter == null) {
 					this.structurify$setMaxDistanceFromCenter(originalMaxDistanceFromCenter);

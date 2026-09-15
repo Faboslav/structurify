@@ -1,19 +1,19 @@
-package com.faboslav.structurify.common.mixin.structure.jigsaw.compat;
-
-import org.spongepowered.asm.mixin.Mixin;
-
 //? if yungs_api {
-/*import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
-import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
+/*package com.faboslav.structurify.common.mixin.compat.yungsapi;
+
+import com.faboslav.structurify.common.api.StructurifyJigsawStructure;
 import com.faboslav.structurify.common.mixin.structure.StructureMixin;
+import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
+import org.objectweb.asm.Opcodes;
 import org.jetbrains.annotations.Nullable;
-import com.faboslav.structurify.common.api.StructurifyJigsawStructure;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
 
 //? if >= 1.21.9 {
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
@@ -21,6 +21,7 @@ import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
 import java.util.Optional;
 
+@Pseudo
 @Mixin(value = YungJigsawStructure.class)
 public abstract class YungJigsawStructureMixin extends StructureMixin implements StructurifyJigsawStructure
 {
@@ -156,11 +157,4 @@ public abstract class YungJigsawStructureMixin extends StructureMixin implements
 		^///?}
 	}
 }
-*///?} else {
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
-
-@Mixin(value = JigsawStructure.class)
-public abstract class YungJigsawStructureMixin
-{
-}
-//?}
+*///?}

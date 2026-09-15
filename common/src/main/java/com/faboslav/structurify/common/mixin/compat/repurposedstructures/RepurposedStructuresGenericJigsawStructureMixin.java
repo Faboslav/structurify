@@ -1,8 +1,6 @@
-package com.faboslav.structurify.common.mixin.structure.jigsaw.compat;
-
-import org.spongepowered.asm.mixin.Mixin;
-
 //? if repurposed_structures {
+package com.faboslav.structurify.common.mixin.compat.repurposedstructures;
+
 import com.faboslav.structurify.common.api.StructurifyJigsawStructure;
 import com.faboslav.structurify.common.mixin.structure.StructureMixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -12,14 +10,17 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import java.util.Optional;
 
 //? if >= 1.21.9 {
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+
 //?}
 
+@Pseudo
 @Mixin(value = GenericJigsawStructure.class)
 public abstract class RepurposedStructuresGenericJigsawStructureMixin extends StructureMixin implements StructurifyJigsawStructure
 {
@@ -157,7 +158,7 @@ public abstract class RepurposedStructuresGenericJigsawStructureMixin extends St
 				this.structurify$maxDistanceFromCenter = originalMaxDistanceFromCenter;
 			} else {
 				var verticalMaxDistanceFromCenter = structureData.getJigsawData().getVerticalMaxDistanceFromCenter();
-				var horizontalMaxDistanceFromCenter = structureData.getJigsawData().getVerticalMaxDistanceFromCenter();
+				var horizontalMaxDistanceFromCenter = structureData.getJigsawData().getHorizontalMaxDistanceFromCenter();
 
 				if(verticalMaxDistanceFromCenter == null || horizontalMaxDistanceFromCenter == null) {
 					this.structurify$maxDistanceFromCenter = originalMaxDistanceFromCenter;
@@ -170,11 +171,4 @@ public abstract class RepurposedStructuresGenericJigsawStructureMixin extends St
 		return this.structurify$maxDistanceFromCenter;
 	}
 }
-//?} else {
-/*import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
-
-@Mixin(value = JigsawStructure.class)
-public abstract class RepurposedStructuresGenericJigsawStructureMixin
-{
-}
-*///?}
+//?}

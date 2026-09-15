@@ -28,11 +28,8 @@
 		"structure.StructureTemplatePoolMixin",
 		"structure.jigsaw.JigsawStructureAccessor",
 		"structure.jigsaw.JigsawStructureMixin",
-		"structure.jigsaw.compat.RepurposedStructuresGenericJigsawStructureMixin",
-		"structure.jigsaw.compat.YungJigsawStructureMixin",
 		"structure.placement.RandomSpreadStructurePlacementMixin",
 		"structure.placement.StructurePlacementMixin",
-		"structure.placement.compat.RepurposedStructuresModifySpreadMixin",
 		"structure.pools.SinglePoolElementAccessor",
 		"yacl.ControllerWidgetMixin"
 	],

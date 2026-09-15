@@ -22,8 +22,9 @@ import java.util.Optional;
 import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
 //?}
 
-//? if yungs_api || repurposed_structures {
-import com.faboslav.structurify.common.platform.PlatformHooks;
+//? if lithostitched {
+import com.faboslav.structurify.common.modcompat.LithostitchedCompat;
+import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawStructure;
 //?}
 
 public final class JigsawStructureUtil
@@ -67,6 +68,12 @@ public final class JigsawStructureUtil
 			return true;
 		}
 
+		//? if lithostitched {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("lithostitched") && structure instanceof AlternateJigsawStructure) {
+			return true;
+		}
+		//?}
+
 		//? if yungs_api {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
 			return true;
@@ -79,7 +86,7 @@ public final class JigsawStructureUtil
 		}
 		//?}
 
-		if (structureJson != null && (structureJson.has("max_distance_from_center") || structureJson.has("max_depth") || structureJson.has("size") || structureJson.has("start_height") || structureJson.has("project_start_to_heightmap"))) {
+		if (structureJson != null && (structureJson.has("max_distance_from_center") || structureJson.has("max_depth") || structureJson.has("size") || structureJson.has("start_height") || structureJson.has("project_start_to_heightmap") || structureJson.has("start_projection"))) {
 			return true;
 		}
 
@@ -97,26 +104,20 @@ public final class JigsawStructureUtil
 			return ((JigsawStructureAccessor) structure).structurify$getOriginalMaxDistanceFromCenter();
 		}
 
-		// TODO lithostitched
-		/*
-		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("litostitched") && structure instanceof AlternateJigsawStructure) {
-			return new JigsawStructure.MaxDistance(((AlternateJigsawStructure) structure).config().maxDistanceFromCenter().horizontal(), ((AlternateJigsawStructure) structure).config().maxDistanceFromCenter().vertical());
-		}*/
-
 		//? if yungs_api {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure yungJigsawStructure) {
 			//? if >= 1.21.9 {
-			return new JigsawStructure.MaxDistance(((YungJigsawStructure) structure).maxDistanceFromCenter);
+			return new JigsawStructure.MaxDistance(yungJigsawStructure.maxDistanceFromCenter);
 			//?} else {
-			/^return ((YungJigsawStructure) structure).maxDistanceFromCenter;
+			/^return yungJigsawStructure.maxDistanceFromCenter;
 			^///?}
 		}
 		*///?}
 
 		//? if repurposed_structures {
-		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure genericJigsawStructure) {
 			//? if >= 1.21.10 {
-			var maxDistanceFromCenter = ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(null);
+			var maxDistanceFromCenter = genericJigsawStructure.maxDistanceFromCenter.orElse(null);
 
 			if(maxDistanceFromCenter == null) {
 				return null;
@@ -124,7 +125,7 @@ public final class JigsawStructureUtil
 				return new JigsawStructure.MaxDistance(maxDistanceFromCenter);
 			}
 			 //?} else {
-			/*return ((GenericJigsawStructure) structure).maxDistanceFromCenter.orElse(null);
+			/*return genericJigsawStructure.maxDistanceFromCenter.orElse(null);
 			*///?}
 		}
 		//?}
@@ -147,7 +148,11 @@ public final class JigsawStructureUtil
 			.result()
 			.orElse(null);
 		//?} else {
-		/*if (!maxDistanceJson.isJsonPrimitive() || !maxDistanceJson.getAsJsonPrimitive().isNumber()) {
+		/*if (maxDistanceJson.isJsonObject()) {
+			maxDistanceJson = maxDistanceJson.getAsJsonObject().get("horizontal");
+		}
+
+		if (maxDistanceJson == null || !maxDistanceJson.isJsonPrimitive() || !maxDistanceJson.getAsJsonPrimitive().isNumber()) {
 			return null;
 		}
 
@@ -161,15 +166,21 @@ public final class JigsawStructureUtil
 			return ((JigsawStructureAccessor) structure).structurify$getOriginalMaxDepth();
 		}
 
+		//? if lithostitched {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("lithostitched") && structure instanceof AlternateJigsawStructure) {
+			return LithostitchedCompat.getSize(structureJson);
+		}
+		//?}
+
 		//? if yungs_api {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
-			return ((YungJigsawStructure) structure).maxDepth;
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure yungJigsawStructure) {
+			return yungJigsawStructure.maxDepth;
 		}
 		*///?}
 
 		//? if repurposed_structures {
-		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
-			return ((GenericJigsawStructure) structure).size;
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure genericJigsawStructure) {
+			return genericJigsawStructure.size;
 		}
 		//?}
 
@@ -201,14 +212,14 @@ public final class JigsawStructureUtil
 		}
 
 		//? if yungs_api {
-		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {
-			return ((YungJigsawStructure) structure).startHeight;
+		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure yungJigsawStructure) {
+			return yungJigsawStructure.startHeight;
 		}
 		*///?}
 
 		//? if repurposed_structures {
-		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure) {
-			return ((GenericJigsawStructure) structure).startHeight;
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("repurposed_structures") && structure instanceof GenericJigsawStructure genericJigsawStructure) {
+			return genericJigsawStructure.startHeight;
 		}
 		//?}
 
@@ -234,6 +245,12 @@ public final class JigsawStructureUtil
 		if (structure instanceof JigsawStructure) {
 			return ((JigsawStructureAccessor) structure).structurify$getOriginalProjectStartToHeightmap();
 		}
+
+		//? if lithostitched {
+		if (PlatformHooks.PLATFORM_HELPER.isModLoaded("lithostitched") && structure instanceof AlternateJigsawStructure) {
+			return LithostitchedCompat.getProjectStartToHeightmap(structureJson);
+		}
+		//?}
 
 		//? if yungs_api {
 		/*if (PlatformHooks.PLATFORM_HELPER.isModLoaded("yungsapi") && structure instanceof YungJigsawStructure) {

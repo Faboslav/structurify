@@ -61,21 +61,23 @@ dependencies {
 	}*/
 
 	// Litostitched
-	commonMod.depOrNull("lithostitched_minecraft")?.let { lithostitchedMcVersion ->
-		commonMod.depOrNull("lithostitched")?.let { lithostitchedVersion ->
-			modImplementation(fletchingTable.modrinth("lithostitched", minecraft = commonMod.mc, loaders = "fabric"))
-		}
+	try {
+		modImplementation(fletchingTable.modrinth("lithostitched", minecraft = commonMod.mc, loaders = "fabric"))
+		stonecutter.constants["lithostitched"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["lithostitched"] = false
 	}
 
-	// Yungs api
-	commonMod.depOrNull("yungs_api_minecraft")?.let { mcVersion ->
-		commonMod.depOrNull("yungs_api")?.let { modVersion ->
-			modImplementation(fletchingTable.modrinth("yungs-api", minecraft = commonMod.mc, loaders = "fabric"))
-		}
+	// YUNG's API
+	try {
+		modImplementation(fletchingTable.modrinth("yungs-api", minecraft = commonMod.mc, loaders = "fabric"))
+		stonecutter.constants["yungs_api"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["yungs_api"] = false
 	}
 
 	// Repurposed Structures
-	commonMod.depOrNull("repurposed_structures")?.let { repurposedStructuresVersion ->
+	try {
 		val repurposedStructuresMinecraftVersion = when (commonMod.mc) {
 			"26.1.2" -> "26.1"
 			"1.21.10" -> "1.21.11"
@@ -83,6 +85,9 @@ dependencies {
 		}
 		modImplementation(fletchingTable.modrinth("repurposed-structures-fabric", minecraft = repurposedStructuresMinecraftVersion, loaders = "fabric"))
 		modImplementation(fletchingTable.modrinth("midnightlib", minecraft = repurposedStructuresMinecraftVersion, loaders = "fabric"))
+		stonecutter.constants["repurposed_structures"] = true
+	} catch (e: Throwable) {
+		stonecutter.constants["repurposed_structures"] = false
 	}
 }
 
