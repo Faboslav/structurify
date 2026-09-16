@@ -74,7 +74,6 @@ dependencies {
 			else -> commonMod.mc
 		}
 		modImplementation(fletchingTable.modrinth("repurposed-structures-forge", minecraft = repurposedStructuresMinecraftVersion, loaders = "forge"))
-		modImplementation(fletchingTable.modrinth("midnightlib", minecraft = repurposedStructuresMinecraftVersion, loaders = "forge"))
 		stonecutter.constants["repurposed_structures"] = true
 	} catch (e: Throwable) {
 		stonecutter.constants["repurposed_structures"] = false
@@ -91,6 +90,8 @@ dependencies {
 	// Cataclysm
 	try {
 		modImplementation(fletchingTable.modrinth("l_enders-cataclysm", minecraft = commonMod.mc, loaders = "forge"))
+		modImplementation(fletchingTable.modrinth("lionfish-api", minecraft = commonMod.mc, loaders = "forge"))
+		modImplementation(fletchingTable.modrinth("curios", minecraft = commonMod.mc, loaders = "forge"))
 		stonecutter.constants["cataclysm"] = true
 	} catch (e: Throwable) {
 		stonecutter.constants["cataclysm"] = false

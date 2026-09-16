@@ -18,6 +18,7 @@ import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
+@SuppressWarnings({"all", "removal"})
 @Mod(Structurify.MOD_ID)
 public final class StructurifyNeoForge
 {

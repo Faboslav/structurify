@@ -7,4 +7,6 @@ public interface StructurifyCategoryTab
 {
 	@Nullable
 	Button structurify$getToggleGroupsButton();
+
+	void structurify$updateToggleGroupsButton();
 }

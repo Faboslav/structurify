@@ -41,6 +41,7 @@
 		"yacl.CategoryTabMixin",
 		"yacl.ElementListWidgetExtMixin",
 		"yacl.GroupSeparatorEntryAccessor",
+		"yacl.GroupSeparatorEntryMixin",
 		"yacl.LabelControllerElementMixin",
 		"yacl.ListGroupSeparatorEntryMixin",
 		"yacl.OptionImplMixin",

@@ -69,14 +69,6 @@ public abstract class CategoryTabMixin implements StructurifyCategoryTab
 		return this.structurify$toggleGroupsButton;
 	}
 
-	@Inject(
-		method = "tick",
-		at = @At("TAIL")
-	)
-	private void structurify$tick(CallbackInfo ci) {
-		this.structurify$updateToggleGroupsButton();
-	}
-
 	@Unique
 	private void structurify$toggleGroups() {
 		if (this.structurify$optionListWidget == null) {
@@ -95,8 +87,8 @@ public abstract class CategoryTabMixin implements StructurifyCategoryTab
 		this.structurify$updateToggleGroupsButton();
 	}
 
-	@Unique
-	private void structurify$updateToggleGroupsButton() {
+	@Override
+	public void structurify$updateToggleGroupsButton() {
 		if (this.structurify$toggleGroupsButton == null || this.structurify$optionListWidget == null) {
 			return;
 		}

@@ -1,3 +1,7 @@
+## 2.0.38
+
+- Fixed related YACL crash (the rest of it)
+
 ## 2.0.37
 
 - Fixed related YACL crash introduced by new quality of life tweaks

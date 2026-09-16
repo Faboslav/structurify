@@ -71,6 +71,8 @@ dependencies {
 	// Cataclysm
 	try {
 		implementation(fletchingTable.modrinth("l_enders-cataclysm", minecraft = commonMod.mc, loaders = "neoforge"))
+		implementation(fletchingTable.modrinth("lionfish-api", minecraft = commonMod.mc, loaders = "neoforge"))
+		implementation(fletchingTable.modrinth("curios", minecraft = commonMod.mc, loaders = "neoforge"))
 		stonecutter.constants["cataclysm"] = true
 	} catch (e: Throwable) {
 		stonecutter.constants["cataclysm"] = false
