@@ -22,8 +22,8 @@ public final class ForgeNetwork implements Network {
         this.channel = NetworkRegistry.newSimpleChannel(
                 channel,
                 () -> version,
-                version::equals,
-                version::equals
+                NetworkRegistry.acceptMissingOr(version::equals),
+                NetworkRegistry.acceptMissingOr(version::equals)
         );
     }
 

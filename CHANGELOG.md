@@ -1,3 +1,7 @@
+## 2.0.39
+
+- Make Structurify optional on the client
+
 ## 2.0.38
 
 - Fixed related YACL crash (the rest of it)

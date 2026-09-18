@@ -8,6 +8,7 @@ import com.faboslav.structurify.common.config.data.DebugData;
 import com.faboslav.structurify.common.config.data.StructureData;
 import com.faboslav.structurify.common.mixin.LocateCommandInvoker;
 import com.faboslav.structurify.common.mixin.ResourceKeyArgumentInvoker;
+import com.faboslav.structurify.common.network.MessageHandler;
 import com.faboslav.structurify.common.network.packet.ConfigStatusToClientPacket;
 import com.faboslav.structurify.common.network.packet.ConfigSyncRequestToClientPacket;
 import com.faboslav.structurify.common.network.packet.ConfigSyncToClientPacket;
@@ -234,6 +235,11 @@ public final class StructurifyCommand
 			return 0;
 		}
 
+		if (!MessageHandler.DEFAULT_CHANNEL.canSendToPlayer(player, ConfigSyncRequestToClientPacket.TYPE)) {
+			source.sendFailure(Component.literal("Structurify is not installed on your client."));
+			return 0;
+		}
+
 		ConfigSyncRequestToClientPacket.sendToClient(player);
 
 		source.sendSuccess(
@@ -252,6 +258,11 @@ public final class StructurifyCommand
 			return 0;
 		}
 
+		if (!MessageHandler.DEFAULT_CHANNEL.canSendToPlayer(player, ConfigSyncToClientPacket.TYPE)) {
+			source.sendFailure(Component.literal("Structurify is not installed on your client."));
+			return 0;
+		}
+
 		ConfigSyncToClientPacket.sendToClient(Structurify.getConfig(), player);
 
 		return 1;
@@ -262,6 +273,11 @@ public final class StructurifyCommand
 
 		if (player == null) {
 			source.sendFailure(Component.literal("This command can only be executed by a player."));
+			return 0;
+		}
+
+		if (!MessageHandler.DEFAULT_CHANNEL.canSendToPlayer(player, ConfigStatusToClientPacket.TYPE)) {
+			source.sendFailure(Component.literal("Structurify is not installed on your client."));
 			return 0;
 		}
 

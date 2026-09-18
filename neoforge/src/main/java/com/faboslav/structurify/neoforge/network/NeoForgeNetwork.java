@@ -69,7 +69,7 @@ public final class NeoForgeNetwork implements Network
 	}
 
 	public void onNetworkSetup(RegisterPayloadHandlersEvent event) {
-		PayloadRegistrar registrar = event.registrar(this.version);
+		PayloadRegistrar registrar = event.registrar(this.version).optional();
 
 		for (ClientboundPacketType<?> type : this.clientPackets) {
 			this.registerClientbound(registrar, type);
