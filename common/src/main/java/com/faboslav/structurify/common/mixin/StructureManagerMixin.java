@@ -28,7 +28,9 @@ public abstract class StructureManagerMixin
 
 	@Shadow
 	public abstract void setStartForStructure(
-		SectionPos sectionPos,
+		//? if < 26.3 {
+		/*SectionPos sectionPos,
+		*///?}
 		Structure structure,
 		StructureStart structureStart,
 		StructureAccess structureAccess
@@ -39,12 +41,18 @@ public abstract class StructureManagerMixin
 		method = "getStartForStructure"
 	)
 	public StructureStart structurify$getStartForStructure(
-		SectionPos sectionPos,
+		//? if < 26.3 {
+		/*SectionPos sectionPos,
+		*///?}
 		Structure structure,
 		StructureAccess structureAccess,
 		Operation<StructureStart> original
 	) {
-		var structureStart = original.call(sectionPos, structure, structureAccess);
+		//? if >= 26.3 {
+		var structureStart = original.call(structure, structureAccess);
+		//?} else {
+		//var structureStart = original.call(sectionPos, structure, structureAccess);
+		//?}
 		StructurifyStructure structurifyStructure = (StructurifyStructure) structure;
 		Identifier structureId = structurifyStructure.structurify$getStructureIdentifier();
 
@@ -72,7 +80,11 @@ public abstract class StructureManagerMixin
 		var structureCheckResult = StructureChecker.checkStructure(structureStart, structureId, structurifyStructure, chunkGenerator, serverLevel, randomState, biomeSource);
 
 		if (!structureCheckResult) {
-			this.setStartForStructure(sectionPos, structure, StructureStart.INVALID_START, structureAccess);
+			//? if >= 26.3 {
+			this.setStartForStructure(structure, StructureStart.INVALID_START, structureAccess);
+			//?} else {
+			//this.setStartForStructure(sectionPos, structure, StructureStart.INVALID_START, structureAccess);
+			//?}
 			return StructureStart.INVALID_START;
 		}
 

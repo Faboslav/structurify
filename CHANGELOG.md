@@ -1,3 +1,7 @@
+## 2.0.40
+
+- Fixed the StructureManager mixin crash
+
 ## 2.0.39
 
 - Make Structurify optional on the client
