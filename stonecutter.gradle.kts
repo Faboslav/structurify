@@ -17,6 +17,12 @@ stonecutter {
 			replace("net.minecraft.client.renderer.RenderType", "net.minecraft.client.renderer.rendertype.RenderTypes")
 			replace("RenderType.lines()", "RenderTypes.lines()")
 		}
+
+		replacements.string(current.parsed >= "26.3") {
+			replace("getStructureManager()", "getStructureTemplateManager()")
+			replace("datapackWorldgen()", "datapackWorldRegistries()")
+			replace("WORLDGEN_REGISTRIES", "WORLD_REGISTRIES")
+		}
 	}
 }
 
