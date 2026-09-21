@@ -44,6 +44,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+//? if >=26.3 {
+import net.minecraft.world.level.biome.Climate;
+//?}
+
 @Mixin(ChunkGenerator.class)
 public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 {
@@ -103,8 +107,20 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 		method = "tryGenerateStructure"
 	)
 	public boolean structurify$trySetStructureStart(
-		//? if >=1.21.4 {
+		//? if >=26.3 {
 		StructureSet.StructureSelectionEntry structureSelectionEntry,
+		StructureManager structureManager,
+		RegistryAccess registryAccess,
+		RandomState randomState,
+		StructureTemplateManager structureTemplateManager,
+		long seed,
+		ChunkAccess chunkAccess,
+		ChunkPos chunkPos,
+		ResourceKey<Level> resourceKey,
+		Climate.Sampler climateSampler,
+		Operation<Boolean> original
+		//?} else if >=1.21.4 {
+		/*StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
 		RandomState randomState,
@@ -115,7 +131,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 		SectionPos sectionPos,
 		ResourceKey<Level> resourceKey,
 		Operation<Boolean> original
-		//?} else {
+		*///?} else {
 		/*StructureSet.StructureSelectionEntry structureSelectionEntry,
 		StructureManager structureManager,
 		RegistryAccess registryAccess,
@@ -173,7 +189,8 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 				structureTemplateManager,
 				seed,
 				chunkAccess/*? if >= 1.21.4 {*/,
-				resourceKey/*?}*/
+				resourceKey/*?}*//*? if >=26.3 {*/,
+				climateSampler/*?}*/
 			);
 
 			ChunkPos resolvedStructureChunk = StructurePlacementResolver.resolveStructureChunk(structureSetId, structureSet, randomSpreadStructurePlacement, chunkPos, context);
@@ -183,11 +200,13 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 			}
 		}
 
-		//? if >=1.21.4 {
-		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
+		//? if >=26.3 {
+		return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, resourceKey, climateSampler);
+		//?} else if >=1.21.4 {
+		//return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos, resourceKey);
 		//?} else {
-		/*return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
-		 *///?}
+		//return original.call(structureSelectionEntry, structureManager, registryAccess, randomState, structureTemplateManager, seed, chunkAccess, chunkPos, sectionPos);
+		 //?}
 	}
 
 	@WrapMethod(

@@ -372,10 +372,14 @@ public final class StructurifyCommand
 		//? if > 1.21.1 {
 		var structureRegistry = source.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE);
 		//?} else {
-		/*var structureRegistry = source.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
-		 *///?}
+		//var structureRegistry = source.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
+		 //?}
 
-		var structureStarts = level.structureManager().startsForStructure(ChunkPosUtil.createChunkPos(commandPos), structure -> true).stream().filter(structureStart -> structureStart.getBoundingBox().inflatedBy(16).isInside(commandPos)).toList();
+		//? if >= 26.3 {
+		var structureStarts = level.structureManager().startsForStructure(SectionPos.blockToSectionCoord(commandPos.getX()), SectionPos.blockToSectionCoord(commandPos.getZ()), structure -> true).stream().filter(structureStart -> structureStart.getBoundingBox().inflatedBy(16).isInside(commandPos)).toList();
+		//?} else {
+		//var structureStarts = level.structureManager().startsForStructure(ChunkPosUtil.createChunkPos(commandPos), structure -> true).stream().filter(structureStart -> structureStart.getBoundingBox().inflatedBy(16).isInside(commandPos)).toList();
+		//?}
 
 		if (structureStarts.isEmpty()) {
 			source.sendSuccess(() -> Component.literal("There is no structures at ").append(getClickablePos(commandPos)).append(Component.literal(".")), !source.isPlayer());
@@ -452,8 +456,8 @@ public final class StructurifyCommand
 		//? if > 1.21.1 {
 		var registry = serverLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
 		//?} else {
-		/*var registry = source.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
-		 *///?}
+		//var registry = source.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
+		 //?}
 
 		HolderSet<Structure> holderSet = LocateCommandInvoker.structurify$invokeGetHolders(structure, registry)
 			.orElseThrow(() -> LocateCommandInvoker.structurify$getStructureInvalidError().create(structure.asPrintable()));

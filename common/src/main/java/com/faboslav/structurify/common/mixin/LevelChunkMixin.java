@@ -6,13 +6,11 @@ import com.faboslav.structurify.common.world.level.structure.StructurePlacementR
 import com.faboslav.structurify.common.world.level.structure.checks.StructureChecker;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -21,9 +19,11 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-//? if <= 1.21.8 {
-
-//?}
+//? if >= 1.21.9 {
+//?} else {
+/*import net.minecraft.core.Registry;
+import net.minecraft.world.level.biome.Biome;
+*///?}
 
 @Mixin(LevelChunk.class)
 public abstract class LevelChunkMixin extends ChunkAccess

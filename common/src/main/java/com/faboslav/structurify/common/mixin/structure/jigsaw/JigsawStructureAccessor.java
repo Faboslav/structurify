@@ -17,8 +17,8 @@ public interface JigsawStructureAccessor
 	//? if >= 1.21.9 {
 	JigsawStructure.MaxDistance structurify$getOriginalMaxDistanceFromCenter();
 	//?} else {
-	/*int structurify$getOriginalMaxDistanceFromCenter();
-	*///?}
+	//int structurify$getOriginalMaxDistanceFromCenter();
+	//?}
 
 	@Accessor("startHeight")
 	HeightProvider structurify$getOriginalStartHeight();

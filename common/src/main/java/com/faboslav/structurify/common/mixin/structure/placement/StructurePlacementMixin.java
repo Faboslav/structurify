@@ -5,7 +5,6 @@ import com.faboslav.structurify.common.util.RandomSpreadUtil;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -14,7 +13,17 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(StructurePlacement.class)
+//? if >= 26.3 {
+import net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement;
+//?} else {
+//import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
+//?}
+
+//? if >= 26.3 {
+@Mixin(AbstractSpreadingStructurePlacement.class)
+//?} else {
+//@Mixin(StructurePlacement.class)
+//?}
 public abstract class StructurePlacementMixin implements StructurifyStructurePlacement
 {
 	@Shadow
@@ -75,12 +84,16 @@ public abstract class StructurePlacementMixin implements StructurifyStructurePla
 		return RandomSpreadUtil.getModifiedFrequency(this.structurify$getStructureSetId(), originalFrequency);
 	}
 
-	//? if >= 1.21.1 {
+	//? if >= 1.21.1{
 	@ModifyExpressionValue(
 		method = "applyAdditionalChunkRestrictions",
 		at = @At(
 			value = "FIELD",
-			target = "Lnet/minecraft/world/level/levelgen/structure/placement/StructurePlacement;frequency:F",
+			//? if >= 26.3 {
+			target = "Lnet/minecraft/world/level/levelgen/structure/placement/AbstractSpreadingStructurePlacement;frequency:F",
+			//?} else {
+			//target = "Lnet/minecraft/world/level/levelgen/structure/placement/StructurePlacement;frequency:F",
+			//?}
 			opcode = Opcodes.GETFIELD
 		)
 	)

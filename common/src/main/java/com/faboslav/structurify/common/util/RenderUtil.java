@@ -19,10 +19,10 @@ import net.minecraft.world.phys.AABB;
 
 //? if >= 1.21.11 {
 //?} else if >= 1.21.3 {
-/*import net.minecraft.client.renderer.ShapeRenderer;
-*///?} else {
-/*import net.minecraft.client.renderer.LevelRenderer;
-*///?}
+//import net.minecraft.client.renderer.ShapeRenderer;
+//?} else {
+//import net.minecraft.client.renderer.LevelRenderer;
+//?}
 
 public final class RenderUtil
 {
@@ -101,10 +101,10 @@ public final class RenderUtil
 		//? if >= 1.21.9 {
 		ShapeRenderer.renderLineBox(poseStack.last(), buffer, box, red, green, blue, alpha);
 		//?} else if >= 1.21.3 {
-		/^ShapeRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
-		^///?} else {
-		/^LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
-		^///?}
+		//ShapeRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
+		//?} else {
+		//LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, alpha);
+		//?}
 	}
 
 	public static void renderLabel(

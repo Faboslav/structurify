@@ -33,8 +33,8 @@ public final class FabricNetwork implements Network
 		//? if >= 26.1 {
 		PayloadTypeRegistry.clientboundPlay().register(payloadType, type.codec(payloadType));
 		//?} else {
-		/*PayloadTypeRegistry.playS2C().register(payloadType, type.codec(payloadType));
-		*///?}
+		//PayloadTypeRegistry.playS2C().register(payloadType, type.codec(payloadType));
+		//?}
 
 		if (!IS_CLIENT) {
 			return;
@@ -49,8 +49,8 @@ public final class FabricNetwork implements Network
 		//? if >= 26.1 {
 		PayloadTypeRegistry.serverboundPlay().register(payloadType, type.codec(payloadType));
 		//?} else {
-		/*PayloadTypeRegistry.playC2S().register(payloadType, type.codec(payloadType));
-		*///?}
+		//PayloadTypeRegistry.playC2S().register(payloadType, type.codec(payloadType));
+		//?}
 
 		ServerPlayNetworking.registerGlobalReceiver(
 			payloadType,

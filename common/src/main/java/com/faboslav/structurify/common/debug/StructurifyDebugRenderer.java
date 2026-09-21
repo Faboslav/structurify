@@ -28,12 +28,12 @@ public final class StructurifyDebugRenderer
 	public void render(
 		Minecraft minecraft,
 		//? if < 1.21.11 {
-		/*@Nullable PoseStack poseStack,
-		*///?}
+		//@Nullable PoseStack poseStack,
+		//?}
 		Vec3 cameraPosition
 		//? if < 1.21.11 {
-		/*, @Nullable MultiBufferSource bufferSource
-		*///?}
+		//, @Nullable MultiBufferSource bufferSource
+		//?}
 	) {
 		DebugData debugData = Structurify.getConfig().getDebugData();
 

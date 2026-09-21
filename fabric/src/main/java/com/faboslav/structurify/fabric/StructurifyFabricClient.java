@@ -27,15 +27,15 @@ public final class StructurifyFabricClient implements ClientModInitializer
 		//? if >= 26.1 {
 		LevelRenderEvents.BEFORE_GIZMOS.register(StructurifyFabricClient::onRenderLevelStage);
 		 //?} else {
-		/*WorldRenderEvents.AFTER_ENTITIES.register(StructurifyFabricClient::onRenderLevelStage);
-		*///?}
+		//WorldRenderEvents.AFTER_ENTITIES.register(StructurifyFabricClient::onRenderLevelStage);
+		//?}
 	}
 
 	//? if >= 26.1 {
 	private static void onRenderLevelStage(LevelRenderContext context)
 	//?} else {
-	/*private static void onRenderLevelStage(WorldRenderContext context)
-	 *///?}
+	//private static void onRenderLevelStage(WorldRenderContext context)
+	 //?}
 	{
 		//? if >= 26.1 {
 		var cameraPos = context.levelState().cameraRenderState.pos;

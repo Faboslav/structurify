@@ -12,52 +12,52 @@ public final class VersionedGui
 	//? if >= 26.2 {
 	public static Gui getGui(Minecraft minecraft)
 	//?} else {
-	/*public static Minecraft getGui(Minecraft minecraft)
-	 *///?}
+	//public static Minecraft getGui(Minecraft minecraft)
+	 //?}
 	{
 		//? if >= 26.2 {
 		return minecraft.gui;
 		//?} else {
-		/*return minecraft;
-		 *///?}
+		//return minecraft;
+		 //?}
 	}
 
 	//? if >= 26.2 {
 	public static Gui getGui()
 	//?} else {
-	/*public static Minecraft getGui()
-	 *///?}
+	//public static Minecraft getGui()
+	 //?}
 	{
 		//? if >= 26.2 {
 		return getGui(Minecraft.getInstance());
 		//?} else {
-		/*return getGui(Minecraft.getInstance());
-		 *///?}
+		//return getGui(Minecraft.getInstance());
+		 //?}
 	}
 
 	//? if >= 26.2 {
 	public static Screen getScreen(Minecraft minecraft)
 	//?} else {
-	/*public static Screen getScreen(Minecraft minecraft)
-	 *///?}
+	//public static Screen getScreen(Minecraft minecraft)
+	 //?}
 	{
 		//? if >= 26.2 {
 		return minecraft.gui.screen();
 		//?} else {
-		/*return minecraft.screen;
-		 *///?}
+		//return minecraft.screen;
+		 //?}
 	}
 
 	//? if >= 26.2 {
 	public static Screen getScreen()
 	//?} else {
-	/*public static Screen getScreen()
-	 *///?}
+	//public static Screen getScreen()
+	 //?}
 	{
 		//? if >= 26.2 {
 		return getScreen(Minecraft.getInstance());
 		//?} else {
-		/*return getScreen(Minecraft.getInstance());
-		 *///?}
+		//return getScreen(Minecraft.getInstance());
+		 //?}
 	}
 }

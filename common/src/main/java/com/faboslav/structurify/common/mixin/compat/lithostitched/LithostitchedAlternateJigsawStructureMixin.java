@@ -4,8 +4,6 @@ package com.faboslav.structurify.common.mixin.compat.lithostitched;
 import com.faboslav.structurify.common.mixin.structure.StructureMixin;
 import com.faboslav.structurify.common.modcompat.LithostitchedCompat;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawConfig;
-import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawStructure;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -13,6 +11,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+
+//? if >= 26.3 {
+import dev.worldgen.lithostitched.impl.worldgen.structure.AlternateJigsawConfig;
+import dev.worldgen.lithostitched.impl.worldgen.structure.AlternateJigsawStructure;
+//?} else {
+/*import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawConfig;
+import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawStructure;
+*///?}
 
 @Pseudo
 @Mixin(value = AlternateJigsawStructure.class)

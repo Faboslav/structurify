@@ -42,8 +42,8 @@ public final class NeoForgePlatformHelper implements PlatformHelper
 				return Optional.empty();
 			}
 			//?} else {
-			/*return FileUtil.getModIconInfo(id, iconPath, Optional.of(modContainer.get().getModInfo().getOwningFile().getFile().findResource(iconPath.get())));
-			*///?}
+			//return FileUtil.getModIconInfo(id, iconPath, Optional.of(modContainer.get().getModInfo().getOwningFile().getFile().findResource(iconPath.get())));
+			//?}
 		});
 	}
 

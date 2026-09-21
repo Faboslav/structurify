@@ -245,8 +245,8 @@ public final class StructurifyTemplatePoolProvider
 		//? if >= 1.21.1 {
 		String structureDirectory = "structure";
 		//?} else {
-		/*String structureDirectory = "structures";
-		*///?}
+		//String structureDirectory = "structures";
+		//?}
 		
 		Identifier structureNbtId = templateId.withPath(path -> structureDirectory + "/" + path + ".nbt");
 		Optional<Resource> structureNbtResource = resourceManager.getResource(structureNbtId);
@@ -259,8 +259,8 @@ public final class StructurifyTemplatePoolProvider
 			//? if >= 1.21 {
 			return Optional.of(NbtIo.readCompressed(inputStream, NbtAccounter.unlimitedHeap()));
 			//?} else {
-			/*return Optional.of(NbtIo.readCompressed(inputStream));
-			*///?}
+			//return Optional.of(NbtIo.readCompressed(inputStream));
+			//?}
 		}
 	}
 
@@ -272,8 +272,8 @@ public final class StructurifyTemplatePoolProvider
 		//? if >= 1.21.5 {
 		ListTag blocks = structureTemplateNbt.getList("blocks").orElse(new ListTag());
 		//?} else {
-		/*ListTag blocks = structureTemplateNbt.getList("blocks", 10);
-		 *///?}
+		//ListTag blocks = structureTemplateNbt.getList("blocks", 10);
+		 //?}
 
 		for (int i = 0; i < blocks.size(); i++) {
 			var block = blocks.getCompound(i);
@@ -299,8 +299,8 @@ public final class StructurifyTemplatePoolProvider
 			//? if >= 1.21.5 {
 			String id = blockNbt.getString("id").orElse("");
 			//?} else {
-			/*String id = blockNbt.getString("id");
-			 *///?}
+			//String id = blockNbt.getString("id");
+			 //?}
 
 			if (!"minecraft:jigsaw".equals(id)) {
 				continue;
@@ -309,8 +309,8 @@ public final class StructurifyTemplatePoolProvider
 			//? if >= 1.21.5 {
 			String pool = blockNbt.getString("pool").orElse("");
 			//?} else {
-			/*String pool = blockNbt.getString("pool");
-			 *///?}
+			//String pool = blockNbt.getString("pool");
+			 //?}
 
 			if (pool.isBlank()) {
 				continue;

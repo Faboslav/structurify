@@ -32,8 +32,8 @@ public final class GlobalDatapacksCompat implements ModCompat
 			Path globalPackFolder = (Path) globalPackFolderField.get(null);
 
 			//? if =1.20.1 {
-			/*resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD));
-			 *///?} else {
+			//resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD));
+			 //?} else {
 			resourcePackProviders.add(new FolderRepositorySource(globalPackFolder, PackType.SERVER_DATA, PackSource.WORLD, new DirectoryValidator(path -> true)));
 			//?}
 		} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {

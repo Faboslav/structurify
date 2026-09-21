@@ -9,7 +9,7 @@ public final class VersionedPlayer
 		//? if >= 26.1 {
 		player.sendSystemMessage(message);
 		//?} else {
-		/*player.displayClientMessage(message, false);
-		*///?}
+		//player.displayClientMessage(message, false);
+		//?}
 	}
 }

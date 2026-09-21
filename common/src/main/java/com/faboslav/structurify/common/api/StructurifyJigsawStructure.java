@@ -109,8 +109,8 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 	//? if >= 1.21.9 {
 	default JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter()
 	//?} else {
-	/*default Integer structurify$getMaxDistanceFromCenter()
-	*///?}
+	//default Integer structurify$getMaxDistanceFromCenter()
+	//?}
 	{
 		return null;
 	}
@@ -118,16 +118,16 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 	//? if >= 1.21.9 {
 	default void structurify$setMaxDistanceFromCenter(@Nullable JigsawStructure.MaxDistance maxDistanceFromCenter)
 	//?} else {
-	/*default void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter)
-	*///?}
+	//default void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter)
+	//?}
 	{
 	}
 
 	//? if >= 1.21.9 {
 	default JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter(JigsawStructure.MaxDistance originalMaxDistanceFromCenter)
 	//?} else {
-	/*default int structurify$getMaxDistanceFromCenter(Integer originalMaxDistanceFromCenter)
-	*///?}
+	//default int structurify$getMaxDistanceFromCenter(Integer originalMaxDistanceFromCenter)
+	//?}
 	{
 		if(this.structurify$getMaxDistanceFromCenter() == null) {
 			var structureData = this.structurify$getStructureData();
@@ -147,8 +147,8 @@ public interface StructurifyJigsawStructure extends StructurifyStructure
 						structureData.getJigsawData().getVerticalMaxDistanceFromCenter()
 					));
 					//?} else {
-					/*this.structurify$setMaxDistanceFromCenter(horizontalMaxDistanceFromCenter);
-					*///?}
+					//this.structurify$setMaxDistanceFromCenter(horizontalMaxDistanceFromCenter);
+					//?}
 				}
 			}
 		}

@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 //? if yungs_api {
-/*import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
-*///?}
+//import com.yungnickyoung.minecraft.yungsapi.world.structure.YungJigsawStructure;
+//?}
 
 //? if repurposed_structures {
 import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawStructure;
@@ -24,7 +24,11 @@ import com.telepathicgrunt.repurposedstructures.world.structures.GenericJigsawSt
 
 //? if lithostitched {
 import com.faboslav.structurify.common.modcompat.LithostitchedCompat;
-import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawStructure;
+//? if >= 26.3 {
+import dev.worldgen.lithostitched.impl.worldgen.structure.AlternateJigsawStructure;
+//?} else {
+//import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawStructure;
+ //?}
 //?}
 
 public final class JigsawStructureUtil
@@ -49,8 +53,8 @@ public final class JigsawStructureUtil
 				//? if >= 1.21.1 {
 				return JigsawStructure.CODEC.codec()
 				//?} else {
-				/*return JigsawStructure.CODEC
-				*///?}
+				//return JigsawStructure.CODEC
+				//?}
 					.encodeStart(serializationContext, (JigsawStructure) structure)
 					.result()
 					.filter(JsonElement::isJsonObject)
@@ -97,8 +101,8 @@ public final class JigsawStructureUtil
 	//? if >= 1.21.9 {
 	public static JigsawStructure.MaxDistance getMaxDistanceFromCenterForStructure(Structure structure, JsonObject structureJson)
 	//?} else {
-	/*public static Integer getMaxDistanceFromCenterForStructure(Structure structure, JsonObject structureJson)
-	*///?}
+	//public static Integer getMaxDistanceFromCenterForStructure(Structure structure, JsonObject structureJson)
+	//?}
 	{
 		if (structure instanceof JigsawStructure) {
 			return ((JigsawStructureAccessor) structure).structurify$getOriginalMaxDistanceFromCenter();
@@ -109,8 +113,8 @@ public final class JigsawStructureUtil
 			//? if >= 1.21.9 {
 			return new JigsawStructure.MaxDistance(yungJigsawStructure.maxDistanceFromCenter);
 			//?} else {
-			/^return yungJigsawStructure.maxDistanceFromCenter;
-			^///?}
+			//return yungJigsawStructure.maxDistanceFromCenter;
+			//?}
 		}
 		*///?}
 
@@ -125,8 +129,8 @@ public final class JigsawStructureUtil
 				return new JigsawStructure.MaxDistance(maxDistanceFromCenter);
 			}
 			 //?} else {
-			/*return genericJigsawStructure.maxDistanceFromCenter.orElse(null);
-			*///?}
+			//return genericJigsawStructure.maxDistanceFromCenter.orElse(null);
+			//?}
 		}
 		//?}
 

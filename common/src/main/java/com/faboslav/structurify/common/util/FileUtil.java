@@ -29,8 +29,8 @@ public class FileUtil
 			//? if >= 1.21.5 {
 			var texture = new DynamicTexture(() -> "mod_icon/" + id, image);
 			//?} else {
-			/*var texture = new DynamicTexture(image);
-			 *///?}
+			//var texture = new DynamicTexture(image);
+			 //?}
 			var textureId = Structurify.makeId(id, iconPath.get());
 			Minecraft.getInstance()
 				.getTextureManager()

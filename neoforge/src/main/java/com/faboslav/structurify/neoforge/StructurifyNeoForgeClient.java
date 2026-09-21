@@ -8,8 +8,8 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
 //? if < 1.20.6 {
-/*import net.neoforged.neoforge.client.ConfigScreenHandler;
- *///?} else {
+//import net.neoforged.neoforge.client.ConfigScreenHandler;
+ //?} else {
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 //?}
 
@@ -43,10 +43,10 @@ public final class StructurifyNeoForgeClient
 	//? if >= 26.1 {
 	public static void onRenderLevelStage(RenderLevelStageEvent.AfterTranslucentBlocks event)
 	//?} else if >= 1.21.8 {
-	/*public static void onRenderLevelStage(RenderLevelStageEvent.AfterParticles event)
-	*///?} else {
-	/*public static void onRenderLevelStage(RenderLevelStageEvent event)
-	 *///?}
+	//public static void onRenderLevelStage(RenderLevelStageEvent.AfterParticles event)
+	//?} else {
+	//public static void onRenderLevelStage(RenderLevelStageEvent event)
+	 //?}
 	{
 		//? if < 1.21.8 {
 		/*if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
@@ -57,15 +57,15 @@ public final class StructurifyNeoForgeClient
 		//? if >= 1.21.10 {
 		var cameraPos = event.getLevelRenderState().cameraRenderState.pos;
 		//?} else if >= 1.21.1 {
-		/*var cameraPos = event.getCamera().getPosition();
-		 *///?} else {
-		/*var cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-		 *///?}
+		//var cameraPos = event.getCamera().getPosition();
+		 //?} else {
+		//var cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+		 //?}
 
 		//? if >= 1.21.11 {
 		StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), cameraPos);
 		//?} else {
-		/*StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), cameraPos, null);
-		*///?}
+		//StructurifyClient.getDebugRenderer().render(Minecraft.getInstance(), event.getPoseStack(), cameraPos, null);
+		//?}
 	}
 }

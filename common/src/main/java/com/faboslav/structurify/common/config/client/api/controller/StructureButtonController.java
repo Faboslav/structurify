@@ -22,8 +22,8 @@ import net.minecraft.client.input.MouseButtonEvent;
 //? if >= 26.1 {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 //?} else {
-/*import net.minecraft.client.gui.GuiGraphics;
- *///?}
+//import net.minecraft.client.gui.GuiGraphics;
+ //?}
 
 public class StructureButtonController extends BooleanController
 {

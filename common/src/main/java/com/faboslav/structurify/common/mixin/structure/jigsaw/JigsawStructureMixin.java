@@ -34,8 +34,8 @@ public abstract class JigsawStructureMixin extends StructureMixin implements Str
 	//? if >= 1.21.9 {
 	private JigsawStructure.MaxDistance structurify$maxDistanceFromCenter = null;
 	//?} else {
-	/*private Integer structurify$maxDistanceFromCenter = null;
-	*///?}
+	//private Integer structurify$maxDistanceFromCenter = null;
+	//?}
 
 	@Override
 	public void structurify$setStructureIdentifier(Identifier structureSetIdentifier) {
@@ -117,8 +117,8 @@ public abstract class JigsawStructureMixin extends StructureMixin implements Str
 	//? if >= 1.21.9 {
 	public JigsawStructure.MaxDistance structurify$getMaxDistanceFromCenter()
 	//?} else {
-	/*public Integer structurify$getMaxDistanceFromCenter()
-	*///?}
+	//public Integer structurify$getMaxDistanceFromCenter()
+	//?}
 	{
 		return this.structurify$maxDistanceFromCenter;
 	}
@@ -126,8 +126,8 @@ public abstract class JigsawStructureMixin extends StructureMixin implements Str
 	//? if >= 1.21.9 {
 	public void structurify$setMaxDistanceFromCenter(@Nullable JigsawStructure.MaxDistance maxDistanceFromCenter)
 	//?} else {
-	/*public void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter)
-	*///?}
+	//public void structurify$setMaxDistanceFromCenter(@Nullable Integer maxDistanceFromCenter)
+	//?}
 	{
 		this.structurify$maxDistanceFromCenter = maxDistanceFromCenter;
 	}
@@ -139,16 +139,16 @@ public abstract class JigsawStructureMixin extends StructureMixin implements Str
 			//? if >= 1.21.9 {
 			target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure$MaxDistance;",
 			//?} else {
-			/*target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:I",
-			*///?}
+			//target = "Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;maxDistanceFromCenter:I",
+			//?}
 			opcode = Opcodes.GETFIELD
 		)
 	)
 	//? if >= 1.21.9 {
 	protected JigsawStructure.MaxDistance structurify$findGenerationPointGetMaxDistanceFromCenter(JigsawStructure.MaxDistance originalMaxDistanceFromCenter)
 	//?} else {
-	/*protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
-	*///?}
+	//protected int structurify$findGenerationPointGetMaxDistanceFromCenter(int originalMaxDistanceFromCenter)
+	//?}
 	{
 		return this.structurify$getMaxDistanceFromCenter(originalMaxDistanceFromCenter);
 	}

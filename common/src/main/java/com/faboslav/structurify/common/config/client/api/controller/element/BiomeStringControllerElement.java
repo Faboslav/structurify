@@ -24,8 +24,8 @@ import net.minecraft.client.renderer.RenderPipelines;
 //?}
 
 //? if < 1.21.5 {
-/*import com.mojang.blaze3d.systems.RenderSystem;
- *///?}
+//import com.mojang.blaze3d.systems.RenderSystem;
+ //?}
 
 //? if >= 1.21.3 {
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -34,8 +34,8 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 //? if >= 26.1 {
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 	//?} else {
-/*import net.minecraft.client.gui.GuiGraphics;
- *///?}
+//import net.minecraft.client.gui.GuiGraphics;
+ //?}
 
 /**
  * Related code is based on LibBamboo: Utility library mod with permissions from the author
@@ -57,16 +57,16 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 		//? if >= 26.1 {
 	protected void extractValueText(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta)
 		//?} else {
-		/*protected void drawValueText(GuiGraphics graphics, int mouseX, int mouseY, float delta)
-		 *///?}
+		//protected void drawValueText(GuiGraphics graphics, int mouseX, int mouseY, float delta)
+		 //?}
 	{
 		var oldDimension = getDimension();
 		setDimension(getDimension().withWidth(getDimension().width() - getDecorationPadding()));
 		//? if >= 26.1 {
 		super.extractValueText(graphics, mouseX, mouseY, delta);
 		//?} else {
-		/*super.drawValueText(graphics, mouseX, mouseY, delta);
-		 *///?}
+		//super.drawValueText(graphics, mouseX, mouseY, delta);
+		 //?}
 		setDimension(oldDimension);
 
 		int imageX = getDimension().xLimit() - getXPadding() - getDecorationPadding() + 4;
@@ -158,14 +158,14 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 		//? if >= 26.1 {
 	protected void extractDropdownEntry(GuiGraphicsExtractor graphics, Dimension<Integer> entryDimension, String value)
 		//?} else {
-		/*protected void renderDropdownEntry(GuiGraphics graphics, Dimension<Integer> entryDimension, String value)
-		 *///?}
+		//protected void renderDropdownEntry(GuiGraphics graphics, Dimension<Integer> entryDimension, String value)
+		 //?}
 	{
 		//? if >= 26.1 {
 		super.extractDropdownEntry(graphics, entryDimension, value);
 		//?} else {
-		/*super.renderDropdownEntry(graphics, entryDimension, value);
-		 *///?}
+		//super.renderDropdownEntry(graphics, entryDimension, value);
+		 //?}
 
 		int imageX = entryDimension.xLimit() - 1;
 		int imageY = entryDimension.y() + 4;
@@ -205,8 +205,8 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 		//? if >= 26.1 {
 		GuiGraphicsExtractor graphics,
 		//?} else {
-		/*GuiGraphics graphics,
-		 *///?}
+		//GuiGraphics graphics,
+		 //?}
 		int x,
 		int y,
 		float delta
@@ -243,16 +243,16 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 				var modIconHeight = modIcon.get().height();
 
 				//? if < 1.21.5 {
-				/*RenderSystem.setShaderTexture(0, modIconId);
-				 *///?}
+				//RenderSystem.setShaderTexture(0, modIconId);
+				 //?}
 
 				//? if >= 1.21.6 {
 				graphics.blit(RenderPipelines.GUI_TEXTURED, modIconId, x, y, 0.0F, 0.0F, iconWidth, iconHeight, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
 				//?} else if >= 1.21.3 {
-				/*graphics.blit(RenderType::guiTextured, modIconId, x, y, iconWidth, iconHeight, 0, 0, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
-				 *///?} else {
-				/*graphics.blit(modIconId, x, y, iconWidth, iconHeight, 0.0F, 0.0F, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
-				 *///?}
+				//graphics.blit(RenderType::guiTextured, modIconId, x, y, iconWidth, iconHeight, 0, 0, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
+				 //?} else {
+				//graphics.blit(modIconId, x, y, iconWidth, iconHeight, 0.0F, 0.0F, modIconWidth, modIconHeight, modIconWidth, modIconHeight);
+				 //?}
 				return;
 			} catch (Exception e) {
 				// Ignore

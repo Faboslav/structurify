@@ -13,6 +13,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 //?}
 
+//? if >= 26.3 {
+import net.minecraft.world.level.biome.Climate;
+import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
+//?}
+
 public record StructurePlacementContext(
 	ChunkGenerator chunkGenerator,
 	RegistryAccess registryAccess,
@@ -21,7 +26,8 @@ public record StructurePlacementContext(
 	StructureTemplateManager structureTemplateManager,
 	long levelSeed,
 	LevelHeightAccessor heightAccessor/*? if >= 1.21.4 {*/,
-	ResourceKey<Level> level/*?}*/
+	ResourceKey<Level> level/*?}*//*? if >= 26.3 {*/,
+	Climate.Sampler climateSampler/*?}*/
 )
 {
 	public static StructurePlacementContext of(ServerLevel serverLevel) {
@@ -33,10 +39,11 @@ public record StructurePlacementContext(
 			serverLevel.registryAccess(),
 			chunkGenerator.getBiomeSource(),
 			chunkSource.randomState(),
-			serverLevel.getStructureManager(),
+			serverLevel.getStructureTemplateManager(),
 			chunkSource.getGeneratorState().getLevelSeed(),
 			serverLevel/*? if >= 1.21.4 {*/,
-			serverLevel.dimension()/*?}*/
+			serverLevel.dimension()/*?}*//*? if >= 26.3 {*/,
+			chunkSource.randomState().createClimateSampler(SamplerContext.builder().enableCaches().build())/*?}*/
 		);
 	}
 }

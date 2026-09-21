@@ -6,7 +6,6 @@ import com.faboslav.structurify.common.registry.StructurifyRegistryManagerProvid
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
-import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawConfig;
 import net.minecraft.util.valueproviders.IntProvider;
 //? if >= 26.1 {
 import net.minecraft.util.valueproviders.IntProviders;
@@ -14,6 +13,12 @@ import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import org.jetbrains.annotations.Nullable;
+
+//? if >= 26.3 {
+import dev.worldgen.lithostitched.impl.worldgen.structure.AlternateJigsawConfig;
+//?} else {
+//import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawConfig;
+//?}
 
 import java.util.Optional;
 
@@ -41,15 +46,15 @@ public final class LithostitchedCompat
 		//? if >= 26.1 {
 		return IntProviders.CODEC
 		//?} else {
-		/*return IntProvider.CODEC
-		*///?}
+		//return IntProvider.CODEC
+		//?}
 			.parse(serializationContext, structureJson.get(SIZE_PROPERTY))
 			.result()
 			//? if >= 26.1 {
 			.map(IntProvider::maxInclusive)
 			//?} else {
-			/*.map(IntProvider::getMaxValue)
-			*///?}
+			//.map(IntProvider::getMaxValue)
+			//?}
 			.orElse(null);
 	}
 

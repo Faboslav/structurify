@@ -9,8 +9,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import com.faboslav.structurify.common.network.base.NetworkPacketPayload;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 //?} else {
-/*import net.minecraft.network.FriendlyByteBuf;
-*///?}
+//import net.minecraft.network.FriendlyByteBuf;
+//?}
 import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)

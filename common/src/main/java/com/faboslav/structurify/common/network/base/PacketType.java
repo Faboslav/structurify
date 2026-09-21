@@ -6,8 +6,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 //?} else {
-/*import net.minecraft.network.FriendlyByteBuf;
-*///?}
+//import net.minecraft.network.FriendlyByteBuf;
+//?}
 import net.minecraft.resources.Identifier;
 
 public interface PacketType<T extends Packet<T>>

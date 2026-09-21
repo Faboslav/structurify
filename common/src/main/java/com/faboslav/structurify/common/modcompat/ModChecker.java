@@ -27,8 +27,8 @@ public final class ModChecker
 			//?}
 
 			//? if open_loader {
-			/*loadModCompat("openloader", () -> new OpenLoaderCompat());
-			*///?}
+			//loadModCompat("openloader", () -> new OpenLoaderCompat());
+			//?}
 
 			loadModCompat("terra", () -> new TerraCompat());
 

@@ -2,13 +2,16 @@ package com.faboslav.structurify.common.mixin.yacl;
 
 import dev.isxander.yacl3.gui.OptionListWidget;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
+//? if < 26.3 {
+/*import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+*///?}
 
 @Mixin(value = OptionListWidget.ListGroupSeparatorEntry.class)
 public abstract class ListGroupSeparatorEntryMixin
 {
-	@ModifyArg(
+	//? if < 26.3 {
+	/*@ModifyArg(
 		method = "<init>",
 		at = @At(
 			value = "INVOKE",
@@ -19,4 +22,5 @@ public abstract class ListGroupSeparatorEntryMixin
 	private float structurify$scaleResetListButtonText(float textScale) {
 		return 2.0F;
 	}
+	*///?}
 }

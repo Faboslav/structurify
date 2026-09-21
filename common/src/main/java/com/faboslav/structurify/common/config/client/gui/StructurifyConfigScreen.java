@@ -5,8 +5,8 @@ import com.faboslav.structurify.common.api.StructurifyYACLScreen;
 import com.faboslav.structurify.common.events.common.LoadConfigEvent;
 import com.faboslav.structurify.common.mixin.yacl.CategoryTabAccessor;
 //? if <= 1.20.1 {
-/*import com.faboslav.structurify.common.mixin.yacl.ElementListWidgetExtMixin;
-*///?}
+//import com.faboslav.structurify.common.mixin.yacl.ElementListWidgetExtMixin;
+//?}
 import com.faboslav.structurify.common.mixin.yacl.GroupSeparatorEntryAccessor;
 import com.faboslav.structurify.common.util.YACLUtil;
 import com.faboslav.structurify.common.versions.VersionedGui;
@@ -66,8 +66,8 @@ public class StructurifyConfigScreen
 				//? if >= 1.21.4 {
 				optionListWidget.scrollAmount(),
 				 //?} else {
-				/*optionListWidget.getScrollAmount(),
-				*///?}
+				//optionListWidget.getScrollAmount(),
+				//?}
 				collapsedGroups
 			));
 		}
@@ -85,8 +85,8 @@ public class StructurifyConfigScreen
 				categoryTab.getSearchField().setValue(screenState.lastSearchText());
 				optionListWidget.setScrollAmount(screenState.lastScrollAmount());
 				//? if <= 1.20.1 {
-				/*((ElementListWidgetExtMixin) optionListWidget).structurify$resetSmoothScrolling();
-				*///?}
+				//((ElementListWidgetExtMixin) optionListWidget).structurify$resetSmoothScrolling();
+				//?}
 
 				for (OptionListWidget.Entry entry : optionListWidget.children()) {
 					if (entry instanceof OptionListWidget.GroupSeparatorEntry groupSeparatorEntry) {

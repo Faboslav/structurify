@@ -7,6 +7,7 @@ plugins {
 stonecutter {
 	constants["global_packs"] = rootProject.project(stonecutter.current.project).property("deps.global_packs").toString() != ""
 	constants["open_loader"] = rootProject.project(stonecutter.current.project).property("deps.open_loader").toString() != ""
+	constants["lithostitched"] = false
 }
 
 fletchingTable {
@@ -78,6 +79,7 @@ dependencies {
 		modImplementation(fletchingTable.modrinth("lithostitched", minecraft = commonMod.mc, loaders = "fabric"))
 		stonecutter.constants["lithostitched"] = true
 	} catch (e: Throwable) {
+
 		stonecutter.constants["lithostitched"] = false
 	}
 

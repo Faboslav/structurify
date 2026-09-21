@@ -32,8 +32,8 @@ public abstract class TabManagerMixin
 		//? if >= 26.2 {
 		method = "setCurrentTab(Lnet/minecraft/client/gui/components/tabs/Tab;ZZ)V"
 		//?} else {
-		/*method = "setCurrentTab(Lnet/minecraft/client/gui/components/tabs/Tab;Z)V"
-		*///?}
+		//method = "setCurrentTab(Lnet/minecraft/client/gui/components/tabs/Tab;Z)V"
+		//?}
 	)
 	private void structurify$setCurrentTab(
 		Tab tab,
@@ -48,8 +48,8 @@ public abstract class TabManagerMixin
 		//? if >= 26.2 {
 		original.call(tab, playClickSound, flag);
 		//?} else {
-		/*original.call(tab, playClickSound);
-		*///?}
+		//original.call(tab, playClickSound);
+		//?}
 
 		if (this.currentTab == previousTab) {
 			return;

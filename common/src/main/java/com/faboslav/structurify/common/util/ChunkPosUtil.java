@@ -18,8 +18,8 @@ public final class ChunkPosUtil
 		//? if >= 26.1 {
 		return ChunkPos.unpack(chunkPos);
 		//?} else {
-		/*return new ChunkPos(chunkPos);
-		*///?}
+		//return new ChunkPos(chunkPos);
+		//?}
 	}
 
 	public static long getChunkPosAsLong(ChunkPos chunkPos) {
@@ -27,8 +27,8 @@ public final class ChunkPosUtil
 		//? if >= 26.1 {
 		return chunkPos.pack();
 		//?} else {
-		/*return chunkPos.toLong();
-		*///?}
+		//return chunkPos.toLong();
+		//?}
 	}
 
 	public static int getChunkSpan(int blocks) {
@@ -39,15 +39,15 @@ public final class ChunkPosUtil
 		//? if >= 26.1 {
 		return chunkPos.x();
 		//?} else {
-		/*return chunkPos.x;
-		*///?}
+		//return chunkPos.x;
+		//?}
 	}
 
 	public static int getZ(ChunkPos chunkPos) {
 		//? if >= 26.1 {
 		return chunkPos.z();
 		//?} else {
-		/*return chunkPos.z;
-		*///?}
+		//return chunkPos.z;
+		//?}
 	}
 }

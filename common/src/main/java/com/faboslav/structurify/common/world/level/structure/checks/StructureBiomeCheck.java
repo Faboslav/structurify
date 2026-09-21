@@ -71,7 +71,11 @@ public final class StructureBiomeCheck
 
 		int blockY = structureCheckData.getStructureCenter().getY();
 		int sampleQuartY = QuartPos.fromBlock(blockY);
-		var sampler = randomState.sampler();
+		//? if >= 26.3 {
+		var biomeResolver = biomeSource.createCachingResolver(randomState);
+		//?} else {
+		//var sampler = randomState.sampler();
+		//?}
 
 		DebugData debugData = Structurify.getConfig().getDebugData();
 		boolean isDebugEnabled = debugData.isEnabled();
@@ -83,7 +87,11 @@ public final class StructureBiomeCheck
 			int quartX = QuartPos.fromBlock(blockX);
 			int quartZ = QuartPos.fromBlock(blockZ);
 
-			Holder<Biome> biome = biomeSource.getNoiseBiome(quartX, sampleQuartY, quartZ, sampler);
+			//? if >= 26.3 {
+			Holder<Biome> biome = biomeResolver.getNoiseBiome(quartX, sampleQuartY, quartZ);
+			//?} else {
+			//Holder<Biome> biome = biomeSource.getNoiseBiome(quartX, sampleQuartY, quartZ, sampler);
+			//?}
 
 			if (mode == BiomeCheckData.BiomeCheckMode.STRICT) {
 				if (allowedBiomes != null && !allowedBiomes.contains(biome)) {

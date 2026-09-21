@@ -24,12 +24,28 @@ public abstract class TextScaledButtonWidgetMixin extends AbstractButton
 	@Shadow(remap = false)
 	public float textScale;
 
-	@WrapMethod(
+	//? if >= 26.3 {
+	@Override
+	protected void extractDefaultLabel(ActiveTextCollector textCollector) {
+		if (this.textScale == 1.0F) {
+			super.extractDefaultLabel(textCollector);
+			return;
+		}
+
+		var centerX = this.getX() + this.getWidth() / 2.0F;
+		var centerY = this.getY() + this.getHeight() / 2.0F;
+		var x = Math.round(centerX / this.textScale);
+		var y = Math.round(centerY / this.textScale - 4.5F);
+
+		textCollector.accept(TextAlignment.CENTER, x, y, textCollector.defaultParameters().withScale(this.textScale), this.getMessage());
+	}
+	//?} else {
+	/*@WrapMethod(
 		//? if >= 26.1 {
 		method = "extractDefaultLabel"
 		//?} else {
-		/*method = "renderDefaultLabel"
-		*///?}
+		//method = "renderDefaultLabel"
+		//?}
 	)
 	private void structurify$scaleDefaultLabel(ActiveTextCollector textCollector, Operation<Void> original) {
 		if (this.textScale == 1.0F) {
@@ -44,5 +60,6 @@ public abstract class TextScaledButtonWidgetMixin extends AbstractButton
 
 		textCollector.accept(TextAlignment.CENTER, x, y, textCollector.defaultParameters().withScale(this.textScale), this.getMessage());
 	}
+	*///?}
 	//?}
 }

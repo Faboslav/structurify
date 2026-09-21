@@ -8,8 +8,8 @@ import com.faboslav.structurify.common.network.base.PacketType;
 //? if >= 1.20.2 {
 import net.minecraft.network.RegistryFriendlyByteBuf;
  //?} else {
-/*import net.minecraft.network.FriendlyByteBuf;
-*///?}
+//import net.minecraft.network.FriendlyByteBuf;
+//?}
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 

@@ -242,11 +242,13 @@ public final class StructurePlacementResolver
 			var structureBiomes = structure.biomes();
 			var validBiome = new SpeculativeStructureBiomePredicate(structureBiomes::contains);
 
-			//? if >= 1.21.4 {
-			return structure.generate(structureSelectionEntry.structure(), context.level(), context.registryAccess(), context.chunkGenerator(), context.biomeSource(), context.randomState(), context.structureTemplateManager(), context.levelSeed(), attemptChunkPos, 0, context.heightAccessor(), validBiome);
+			//? if >= 26.3 {
+			return structure.generate(structureSelectionEntry.structure(), context.level(), context.registryAccess(), context.chunkGenerator(), context.biomeSource(), context.climateSampler(), context.randomState(), context.structureTemplateManager(), context.levelSeed(), attemptChunkPos, 0, context.heightAccessor(), validBiome);
+			//?} else if >= 1.21.4 {
+			//return structure.generate(structureSelectionEntry.structure(), context.level(), context.registryAccess(), context.chunkGenerator(), context.biomeSource(), context.randomState(), context.structureTemplateManager(), context.levelSeed(), attemptChunkPos, 0, context.heightAccessor(), validBiome);
 			//?} else {
-			/*return structure.generate(context.registryAccess(), context.chunkGenerator(), context.biomeSource(), context.randomState(), context.structureTemplateManager(), context.levelSeed(), attemptChunkPos, 0, context.heightAccessor(), validBiome);
-			*///?}
+			//return structure.generate(context.registryAccess(), context.chunkGenerator(), context.biomeSource(), context.randomState(), context.structureTemplateManager(), context.levelSeed(), attemptChunkPos, 0, context.heightAccessor(), validBiome);
+			//?}
 		} catch (Throwable e) {
 			return StructureStart.INVALID_START;
 		}
@@ -258,12 +260,20 @@ public final class StructurePlacementResolver
 		StructurePlacementContext context
 	) {
 		try {
-			Holder<Biome> biome = context.biomeSource().getNoiseBiome(
+			//? if >= 26.3 {
+			Holder<Biome> biome = context.biomeSource().createResolver(context.climateSampler()).getNoiseBiome(
+				QuartPos.fromBlock(attemptChunkPos.getMiddleBlockX()),
+				QuartPos.fromBlock(getSurfaceY(attemptChunkPos, context)),
+				QuartPos.fromBlock(attemptChunkPos.getMiddleBlockZ())
+			);
+			//?} else {
+			/*Holder<Biome> biome = context.biomeSource().getNoiseBiome(
 				QuartPos.fromBlock(attemptChunkPos.getMiddleBlockX()),
 				QuartPos.fromBlock(getSurfaceY(attemptChunkPos, context)),
 				QuartPos.fromBlock(attemptChunkPos.getMiddleBlockZ()),
 				context.randomState().sampler()
 			);
+			*///?}
 
 			for (var structureSelectionEntry : structureSet.structures()) {
 				if (structureSelectionEntry.structure().value().biomes().contains(biome)) {

@@ -24,8 +24,6 @@ import net.minecraft.util.Util;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.WorldDataConfiguration;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -44,13 +42,21 @@ import net.minecraft.server.permissions.PermissionSet;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.tags.TagLoader;
 //?} else {
-/*import net.minecraft.core.registries.BuiltInRegistries;
- *///?}
+//import net.minecraft.core.registries.BuiltInRegistries;
+ //?}
 
 //? if >= 26.1 {
 import net.minecraft.resources.RegistryValidator;
 import net.minecraft.util.Util;
 //?}
+
+//? if >= 26.3 {
+import net.minecraft.world.level.levelgen.carver.WorldCarver;
+import net.minecraft.world.level.levelgen.feature.Feature;
+//?} else {
+/*import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+*///?}
 
 //? if <= 1.21.1 {
 /*import net.minecraft.server.packs.resources.ResourceManager;
@@ -64,14 +70,21 @@ public final class StructurifyRegistryManagerProvider
 	private static boolean isLoading = false;
 	private static final Map<ResourceKey<? extends Registry<?>>, Codec<?>> REGISTRIES = Map.ofEntries(
 		Map.entry(Registries.BIOME, Biome.DIRECT_CODEC),
-		Map.entry(Registries.CONFIGURED_CARVER, ConfiguredWorldCarver.DIRECT_CODEC),
+		//? if >= 26.3 {
+		Map.entry(Registries.CARVER, WorldCarver.DIRECT_CODEC),
+		//?} else {
+		//Map.entry(Registries.CONFIGURED_CARVER, ConfiguredWorldCarver.DIRECT_CODEC),
+		//?}
 		Map.entry(Registries.PROCESSOR_LIST, StructureProcessorType.DIRECT_CODEC),
 		Map.entry(Registries.TEMPLATE_POOL, StructureTemplatePool.DIRECT_CODEC),
-		Map.entry(Registries.CONFIGURED_FEATURE, ConfiguredFeature.DIRECT_CODEC),
+		//? if >= 26.3 {
+		Map.entry(Registries.FEATURE, Feature.DIRECT_CODEC),
+		//?} else {
+		//Map.entry(Registries.CONFIGURED_FEATURE, ConfiguredFeature.DIRECT_CODEC),
+		//?}
 		Map.entry(Registries.PLACED_FEATURE, PlacedFeature.DIRECT_CODEC),
 		Map.entry(Registries.STRUCTURE, Structure.DIRECT_CODEC),
 		Map.entry(Registries.STRUCTURE_SET, StructureSet.DIRECT_CODEC)
-
 	);
 
 	@Nullable
@@ -95,8 +108,8 @@ public final class StructurifyRegistryManagerProvider
 		//? if >= 1.21 {
 		return registryManager.createSerializationContext(JsonOps.INSTANCE);
 		//?} else {
-		/*return RegistryOps.create(JsonOps.INSTANCE, registryManager);
-		*///?}
+		//return RegistryOps.create(JsonOps.INSTANCE, registryManager);
+		//?}
 	}
 
 	@Nullable
@@ -168,7 +181,7 @@ public final class StructurifyRegistryManagerProvider
 
 					//? if >=1.21.3 {
 					var dimensionsConfig = loadContextSupplierContext
-						.datapackWorldgen()
+						.datapackWorldRegistries()
 						.lookupOrThrow(Registries.WORLD_PRESET)
 						.getOrThrow(WorldPresets.FLAT)
 						.value()
@@ -176,7 +189,7 @@ public final class StructurifyRegistryManagerProvider
 						.bake(registry);
 					//?} else {
 					/*var dimensionsConfig = loadContextSupplierContext
-						.datapackWorldgen()
+						.datapackWorldRegistries()
 						.registryOrThrow(Registries.WORLD_PRESET)
 						.getHolderOrThrow(WorldPresets.FLAT)
 						.value()
@@ -217,7 +230,7 @@ public final class StructurifyRegistryManagerProvider
 				PackType.SERVER_DATA,
 				resourcePackManager.openAllSelected()
 			)) {
-				List<RegistryDataLoader.RegistryData<?>> registries = RegistryDataLoader.WORLDGEN_REGISTRIES;
+				List<RegistryDataLoader.RegistryData<?>> registries = RegistryDataLoader.WORLD_REGISTRIES;
 				//? if >= 1.21.3 {
 				LayeredRegistryAccess<RegistryLayer> initialLayers = RegistryLayer.createRegistryAccess();
 				List<Registry.PendingTags<?>> staticLayerTags = TagLoader.loadTagsForExistingRegistries(
@@ -225,12 +238,12 @@ public final class StructurifyRegistryManagerProvider
 					initialLayers.getLayer(RegistryLayer.STATIC)
 				);
 				var baseRegistryAccess = TagLoader.buildUpdatedLookups(
-					initialLayers.getAccessForLoading(RegistryLayer.WORLDGEN),
+					initialLayers.getAccessForLoading(RegistryLayer./*? if >= 26.3 {*/WORLD/*?} else {*//*WORLDGEN*//*?}*/),
 					staticLayerTags
 				);
 				//?} else {
-				/*var baseRegistryAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-				 *///?}
+				//var baseRegistryAccess = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+				 //?}
 				//? if >= 26.1 {
 				var registryAccess = Util.blockUntilDone(executor ->
 					RegistryDataLoader.load(
@@ -273,10 +286,10 @@ public final class StructurifyRegistryManagerProvider
 		//? if >= 26.1 {
 		return new RegistryDataLoader.RegistryData<>(key, codec, RegistryValidator.none());
 		//?} else if >= 1.21.1 {
-		/*return new RegistryDataLoader.RegistryData<>(key, codec, false);
-		 *///?} else {
-		/*return new RegistryDataLoader.RegistryData<>(key, codec);
-		 *///?}
+		//return new RegistryDataLoader.RegistryData<>(key, codec, false);
+		 //?} else {
+		//return new RegistryDataLoader.RegistryData<>(key, codec);
+		 //?}
 	}
 
 	//? if <= 1.21.1 {
@@ -290,8 +303,8 @@ public final class StructurifyRegistryManagerProvider
 			//? if >= 1.21 {
 			Registries.tagsDirPath(registryKey)
 			//?} else {
-			/^"tags/" + registryKey.location().getPath()
-			^///?}
+			//"tags/" + registryKey.location().getPath()
+			//?}
 
 			;
 		TagLoader<Holder<T>> loader = new TagLoader<>(id -> registry.getHolder(ResourceKey.create(registryKey, id)), tagsDirectory);

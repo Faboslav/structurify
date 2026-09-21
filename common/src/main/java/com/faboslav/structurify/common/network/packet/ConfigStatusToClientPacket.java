@@ -21,8 +21,8 @@ import java.util.UUID;
 //? if >= 1.20.2 {
 import net.minecraft.network.RegistryFriendlyByteBuf;
  //?} else {
-/*import net.minecraft.network.FriendlyByteBuf;
-*///?}
+//import net.minecraft.network.FriendlyByteBuf;
+//?}
 
 public record ConfigStatusToClientPacket(String config, UUID playerId) implements Packet<ConfigStatusToClientPacket>
 {

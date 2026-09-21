@@ -37,6 +37,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 //?}
 
+//? if >= 26.3 {
+import net.minecraft.world.level.biome.Climate;
+//?}
+
 @Mixin(Structure.class)
 public abstract class StructureMixin implements StructurifyStructure
 {
@@ -45,8 +49,8 @@ public abstract class StructureMixin implements StructurifyStructure
 	//? if >= 1.21.5 {
 	protected Structure.StructureSettings settings;
 	//?} else {
-	/*private Structure.StructureSettings settings;
-	*///?}
+	//private Structure.StructureSettings settings;
+	//?}
 
 	@Unique
 	@Nullable
@@ -259,6 +263,9 @@ public abstract class StructureMixin implements StructurifyStructure
 		RegistryAccess registryAccess,
 		ChunkGenerator chunkGenerator,
 		BiomeSource biomeSource,
+		//? if >= 26.3 {
+		Climate.Sampler climateSampler,
+		//?}
 		RandomState randomState,
 		StructureTemplateManager structureTemplateManager,
 		long seed,
@@ -268,19 +275,21 @@ public abstract class StructureMixin implements StructurifyStructure
 		Predicate<Holder<Biome>> validBiome,
 		Operation<StructureStart> original
 	) {
-		//? if >= 1.21.4 {
-		var structureStart = original.call(structure, level, registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
+		//? if >= 26.3 {
+		var structureStart = original.call(structure, level, registryAccess, chunkGenerator, biomeSource, climateSampler, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
+		//?} else if >= 1.21.4 {
+		//var structureStart = original.call(structure, level, registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
 		 //?} else {
-		/*var structureStart = original.call(registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
-		*///?}
+		//var structureStart = original.call(registryAccess, chunkGenerator, biomeSource, randomState, structureTemplateManager, seed, chunkPos, references, heightAccessor, validBiome);
+		//?}
 		Identifier structureId = null;
 
 		//? if >= 1.21.4 {
 		var possibleStructureId = structure.unwrapKey();
 		structureId = possibleStructureId.map(ResourceKey::/*? if >= 1.21.11 {*/identifier/*?} else {*//*location*//*?}*/).orElseGet(this::structurify$getStructureIdentifier);
 		//?} else {
-		/*structureId = this.structurify$getStructureIdentifier();
-		*///?}
+		//structureId = this.structurify$getStructureIdentifier();
+		//?}
 
 		if (structureStart == StructureStart.INVALID_START || !structureStart.isValid()) {
 			return structureStart;
