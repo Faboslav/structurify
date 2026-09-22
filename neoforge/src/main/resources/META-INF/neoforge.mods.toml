@@ -9,7 +9,11 @@ version = "${modVersion}"
 displayName = "${modName}"
 authors = "${modAuthor}"
 description = "${modDescription}"
-logoFile = "icon.png"
+#? if >= 26.3 {
+iconFile = "icon.png"
+#?} else {
+#logoFile = "icon.png"
+#?}
 logoBlur = false
 displayURL = "${modGitHub}"
 

@@ -1,6 +1,5 @@
 package com.faboslav.structurify.common.mixin.yacl;
 
-import dev.isxander.yacl3.gui.TextScaledButtonWidget;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +12,8 @@ import net.minecraft.client.gui.TextAlignment;
 import org.spongepowered.asm.mixin.Shadow;
 //?}
 
-@Mixin(value = TextScaledButtonWidget.class)
+@SuppressWarnings({"removal", "deprecated"})
+@Mixin(value = dev.isxander.yacl3.gui.TextScaledButtonWidget.class)
 public abstract class TextScaledButtonWidgetMixin extends AbstractButton
 {
 	protected TextScaledButtonWidgetMixin(int x, int y, int width, int height, Component message) {
