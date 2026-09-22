@@ -36,7 +36,7 @@ public record DualController<K extends Option<?>, V extends Option<?>>(OptionPai
 			firstOptionWidget.setDimension(firstOptionWidget.getDimension().expanded(-10, 0));
 			secondOptionWidget.setDimension(secondOptionWidget.getDimension().expanded(-10, 0));
 
-			var resetButton = new TooltipButtonWidget(screen, secondOptionWidget.getDimension().xLimit() - 10, 0, 20, 20, 2f, Component.literal("\u21BB"), button -> {
+			var resetButton = new TooltipButtonWidget(screen, secondOptionWidget.getDimension().xLimit() - 10, 0, 20, 20,  Component.literal("\u21BB"), null, button -> {
 				this.optionPair.firstOption().requestSetDefault();
 				this.optionPair.secondOption().requestSetDefault();
 			});
