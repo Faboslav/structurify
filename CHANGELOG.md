@@ -1,3 +1,7 @@
+## 2.0.41
+
+- Fixed the TextScaledButtonWidgetMixin mixin crash
+
 ## 2.0.40
 
 - Fixed the StructureManager mixin crash

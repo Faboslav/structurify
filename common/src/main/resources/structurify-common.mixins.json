@@ -43,10 +43,8 @@
 		"yacl.GroupSeparatorEntryAccessor",
 		"yacl.GroupSeparatorEntryMixin",
 		"yacl.LabelControllerElementMixin",
-		"yacl.ListGroupSeparatorEntryMixin",
 		"yacl.OptionImplMixin",
 		"yacl.OptionListWidgetMixin",
-		"yacl.TextScaledButtonWidgetMixin",
 		"yacl.YACLScreenAccessor",
 		"yacl.YACLScreenMixin"
 	]
