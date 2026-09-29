@@ -5,12 +5,16 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class ChunkGeneratorHeightCache
 {
 	private static final int MAX_CACHE_SIZE = 16_384;
+
+	private static final ThreadLocal<ReferenceQueue<LevelHeightAccessor>> HEIGHT_ACCESSOR_QUEUE = ThreadLocal.withInitial(ReferenceQueue::new);
 
 	private static final ThreadLocal<Map<ChunkGeneratorHeightCacheKey, Integer>> HEIGHT_CACHE = ThreadLocal.withInitial(() ->
 		new LinkedHashMap<>(MAX_CACHE_SIZE, 0.75F, true)
@@ -81,7 +85,15 @@ public final class ChunkGeneratorHeightCache
 		LevelHeightAccessor heightAccessor,
 		RandomState randomState
 	) {
-		return HEIGHT_CACHE.get().get(new ChunkGeneratorHeightCacheKey(chunkGenerator, x, z, heightmapType, heightAccessor, randomState));
+		try {
+			Map<ChunkGeneratorHeightCacheKey, Integer> heightCache = HEIGHT_CACHE.get();
+			removeCollectedEntries(heightCache);
+
+			return heightCache.get(new ChunkGeneratorHeightCacheKey(chunkGenerator, x, z, heightmapType, heightAccessor, randomState));
+		} finally {
+			// Keeps the height accessor reachable while its key is being looked up
+			Reference.reachabilityFence(heightAccessor);
+		}
 	}
 
 	private static void put(
@@ -93,6 +105,22 @@ public final class ChunkGeneratorHeightCache
 		RandomState randomState,
 		int height
 	) {
-		HEIGHT_CACHE.get().put(new ChunkGeneratorHeightCacheKey(chunkGenerator, x, z, heightmapType, heightAccessor, randomState), height);
+		try {
+			Map<ChunkGeneratorHeightCacheKey, Integer> heightCache = HEIGHT_CACHE.get();
+			removeCollectedEntries(heightCache);
+			heightCache.put(new ChunkGeneratorHeightCacheKey(chunkGenerator, x, z, heightmapType, heightAccessor, randomState, HEIGHT_ACCESSOR_QUEUE.get()), height);
+		} finally {
+			// Keeps the height accessor reachable while its key is being stored
+			Reference.reachabilityFence(heightAccessor);
+		}
+	}
+
+	private static void removeCollectedEntries(Map<ChunkGeneratorHeightCacheKey, Integer> heightCache) {
+		ReferenceQueue<LevelHeightAccessor> heightAccessorQueue = HEIGHT_ACCESSOR_QUEUE.get();
+		Reference<? extends LevelHeightAccessor> collectedKey;
+
+		while ((collectedKey = heightAccessorQueue.poll()) != null) {
+			heightCache.remove(collectedKey);
+		}
 	}
 }

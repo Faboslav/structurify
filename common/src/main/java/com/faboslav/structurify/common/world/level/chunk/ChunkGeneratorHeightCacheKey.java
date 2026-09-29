@@ -5,13 +5,16 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 
-final class ChunkGeneratorHeightCacheKey
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.WeakReference;
+
+final class ChunkGeneratorHeightCacheKey extends WeakReference<LevelHeightAccessor>
 {
 	private final ChunkGenerator chunkGenerator;
 	private final int x;
 	private final int z;
 	private final Heightmap.Types heightmapType;
-	private final LevelHeightAccessor heightAccessor;
+	private final boolean hasNullHeightAccessor;
 	private final RandomState randomState;
 	private final int hashCode;
 
@@ -23,11 +26,24 @@ final class ChunkGeneratorHeightCacheKey
 		LevelHeightAccessor heightAccessor,
 		RandomState randomState
 	) {
+		this(chunkGenerator, x, z, heightmapType, heightAccessor, randomState, null);
+	}
+
+	ChunkGeneratorHeightCacheKey(
+		ChunkGenerator chunkGenerator,
+		int x,
+		int z,
+		Heightmap.Types heightmapType,
+		LevelHeightAccessor heightAccessor,
+		RandomState randomState,
+		ReferenceQueue<LevelHeightAccessor> heightAccessorQueue
+	) {
+		super(heightAccessor, heightAccessorQueue);
 		this.chunkGenerator = chunkGenerator;
 		this.x = x;
 		this.z = z;
 		this.heightmapType = heightmapType;
-		this.heightAccessor = heightAccessor;
+		this.hasNullHeightAccessor = heightAccessor == null;
 		this.randomState = randomState;
 
 		int hash = System.identityHashCode(chunkGenerator);
@@ -42,6 +58,7 @@ final class ChunkGeneratorHeightCacheKey
 
 	@Override
 	public boolean equals(Object object) {
+		// A collected key stays equal to itself, so its entry can still be removed from the cache
 		if (this == object) {
 			return true;
 		}
@@ -54,8 +71,18 @@ final class ChunkGeneratorHeightCacheKey
 			   && this.x == other.x
 			   && this.z == other.z
 			   && this.heightmapType == other.heightmapType
-			   && this.heightAccessor == other.heightAccessor
+			   && this.hasSameHeightAccessor(other)
 			   && this.randomState == other.randomState;
+	}
+
+	private boolean hasSameHeightAccessor(ChunkGeneratorHeightCacheKey other) {
+		if (this.hasNullHeightAccessor || other.hasNullHeightAccessor) {
+			return this.hasNullHeightAccessor && other.hasNullHeightAccessor;
+		}
+
+		LevelHeightAccessor heightAccessor = this.get();
+
+		return heightAccessor != null && heightAccessor == other.get();
 	}
 
 	@Override
