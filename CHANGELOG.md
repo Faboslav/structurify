@@ -1,3 +1,8 @@
+## 2.0.42
+
+- Fixed structure set spacing or separation being dropped on load when only one of them was changed
+- Fixed per namespace and per structure min/max distance from world center being ignored unless "Override global settings" was enabled
+
 ## 2.0.41
 
 - Fixed the TextScaledButtonWidgetMixin mixin crash

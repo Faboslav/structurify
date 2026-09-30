@@ -25,11 +25,11 @@ public class StructureDistanceFromWorldCenterCheck
 
 		DistanceFromWorldCenterCheckData distanceFromWorldCenterCheckDataToCheck = globalDistanceFromWorldCenterData;
 
-		if (namespaceDistanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter()) {
+		if (namespaceDistanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter() || namespaceDistanceFromWorldCenterData.isEnabled()) {
 			distanceFromWorldCenterCheckDataToCheck = namespaceDistanceFromWorldCenterData;
 		}
 
-		if (structureDistanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter()) {
+		if (structureDistanceFromWorldCenterData.isOverridingGlobalDistanceFromWorldCenter() || structureDistanceFromWorldCenterData.isEnabled()) {
 			distanceFromWorldCenterCheckDataToCheck = structureDistanceFromWorldCenterData;
 		}
 

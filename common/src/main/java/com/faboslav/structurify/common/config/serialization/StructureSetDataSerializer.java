@@ -56,9 +56,9 @@ public final class StructureSetDataSerializer
 			structureSetData.setOverrideGlobalSpacingAndSeparationModifier(overrideGlobalSpacingAndSeparationModifier);
 		}
 
-		if (structureSetJson.has(SPACING_PROPERTY) && structureSetJson.has(SEPARATION_PROPERTY)) {
-			var spacing = structureSetJson.get(SPACING_PROPERTY).getAsInt();
-			var separation = structureSetJson.get(SEPARATION_PROPERTY).getAsInt();
+		if (structureSetJson.has(SPACING_PROPERTY) || structureSetJson.has(SEPARATION_PROPERTY)) {
+			var spacing = structureSetJson.has(SPACING_PROPERTY) ? structureSetJson.get(SPACING_PROPERTY).getAsInt() : structureSetData.getDefaultSpacing();
+			var separation = structureSetJson.has(SEPARATION_PROPERTY) ? structureSetJson.get(SEPARATION_PROPERTY).getAsInt() : structureSetData.getDefaultSeparation();
 
 			if (separation >= spacing) {
 				Structurify.getLogger().info("Separatiton value for structure set {} is currently {}, which is bigger than spacing {}, value will be automatically corrected to {}.", structureSetName, separation, spacing, spacing - 1);
