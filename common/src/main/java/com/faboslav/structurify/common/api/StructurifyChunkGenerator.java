@@ -4,6 +4,7 @@ import com.faboslav.structurify.common.world.level.structure.StructureChunkResol
 import com.faboslav.structurify.common.world.level.structure.StructureSectionClaim;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public interface StructurifyChunkGenerator
 {
@@ -11,11 +12,5 @@ public interface StructurifyChunkGenerator
 
 	Map<Long, StructureChunkResolution> structurify$getResolvedStructureChunks();
 
-	Map<Long, Boolean> structurify$getStructureChecks();
-
-	Map<Long, Boolean> structurify$getFlatnessChecks();
-
-	Map<Long, Boolean> structurify$getBiomeChecks();
-
-	Map<Long, Boolean> structurify$getOverlapChecks();
+	Map<Long, CompletableFuture<Boolean>> structurify$getStructureChecks();
 }

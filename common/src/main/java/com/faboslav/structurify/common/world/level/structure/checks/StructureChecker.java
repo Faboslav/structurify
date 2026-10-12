@@ -17,6 +17,8 @@ import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.CompletableFuture;
+
 public final class StructureChecker
 {
 	public static boolean checkStructure(
@@ -47,33 +49,68 @@ public final class StructureChecker
 		long structureCheckId = generateStructureCheckId(structureId, structureStart.getChunkPos());
 		StructurifyChunkGenerator structurifyChunkGenerator = (StructurifyChunkGenerator) chunkGenerator;
 
-		@Nullable Identifier finalStructureId = structureId;
+		CompletableFuture<Boolean> cachedStructureCheck = structurifyChunkGenerator.structurify$getStructureChecks().get(structureCheckId);
 
-		return structurifyChunkGenerator.structurify$getStructureChecks().computeIfAbsent(structureCheckId, id -> {
-			StructureCheckData structureCheckData = new StructureCheckData(structureCheckId, finalStructureId, structure, structureStart, StructurePlacementAttempt.of(structureStart.getChunkPos()));
+		if (cachedStructureCheck != null) {
+			return cachedStructureCheck.join();
+		}
 
-			boolean overlapCheckResult = structurifyChunkGenerator.structurify$getOverlapChecks().computeIfAbsent(structureCheckId, id2 -> checkOverlap(structureCheckData, structurifyChunkGenerator, false));
+		CompletableFuture<Boolean> structureCheck = new CompletableFuture<>();
+		cachedStructureCheck = structurifyChunkGenerator.structurify$getStructureChecks().putIfAbsent(structureCheckId, structureCheck);
+
+		if (cachedStructureCheck != null) {
+			return cachedStructureCheck.join();
+		}
+
+		boolean structureCheckResult = true;
+
+		try {
+			structureCheckResult = checkStructure(structureStart, structureId, structure, chunkGenerator, heightAccessor, randomState, biomeSource, structureCheckId);
+		} finally {
+			structureCheck.complete(structureCheckResult);
+		}
+
+		return structureCheckResult;
+	}
+
+	private static boolean checkStructure(
+		StructureStart structureStart,
+		Identifier structureId,
+		StructurifyStructure structure,
+		ChunkGenerator chunkGenerator,
+		LevelHeightAccessor heightAccessor,
+		RandomState randomState,
+		BiomeSource biomeSource,
+		long structureCheckId
+	) {
+		try {
+			StructureCheckData structureCheckData = new StructureCheckData(structureCheckId, structureId, structure, structureStart, StructurePlacementAttempt.of(structureStart.getChunkPos()));
+			StructurifyChunkGenerator structurifyChunkGenerator = (StructurifyChunkGenerator) chunkGenerator;
+
+			boolean overlapCheckResult = checkOverlap(structureCheckData, structurifyChunkGenerator, heightAccessor, false);
 
 			if (!overlapCheckResult) {
 				return false;
 			}
 
-			boolean biomeCheckResult = structurifyChunkGenerator.structurify$getBiomeChecks().computeIfAbsent(structureCheckId, id2 -> checkBiomes(structureCheckData, biomeSource, randomState));
+			boolean biomeCheckResult = checkBiomes(structureCheckData, biomeSource, randomState);
 
 			if (!biomeCheckResult) {
-				releaseOverlapClaims(structureCheckData, structurifyChunkGenerator);
+				releaseOverlapClaims(structureCheckData, structurifyChunkGenerator, heightAccessor);
 				return false;
 			}
 
-			boolean flatnessCheckResult = structurifyChunkGenerator.structurify$getFlatnessChecks().computeIfAbsent(structureCheckId, id2 -> checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState));
+			boolean flatnessCheckResult = checkFlatness(structureCheckData, chunkGenerator, heightAccessor, randomState);
 
 			if (!flatnessCheckResult) {
-				releaseOverlapClaims(structureCheckData, structurifyChunkGenerator);
+				releaseOverlapClaims(structureCheckData, structurifyChunkGenerator, heightAccessor);
 				return false;
 			}
 
 			return true;
-		});
+		} catch (Throwable e) {
+			return true;
+		}
 	}
 
 	public static boolean testStructure(
@@ -111,7 +148,7 @@ public final class StructureChecker
 		long structureCheckId = generateStructureCheckId(structureId, structureStart.getChunkPos());
 		StructureCheckData structureCheckData = new StructureCheckData(structureCheckId, structureId, structure, structureStart, structurePlacementAttempt);
 
-		boolean overlapCheckResult = checkOverlap(structureCheckData, (StructurifyChunkGenerator) chunkGenerator, true);
+		boolean overlapCheckResult = checkOverlap(structureCheckData, (StructurifyChunkGenerator) chunkGenerator, heightAccessor, true);
 
 		if (!overlapCheckResult && !runAllChecks) {
 			return false;
@@ -130,7 +167,8 @@ public final class StructureChecker
 
 	private static void releaseOverlapClaims(
 		StructureCheckData structureCheckData,
-		StructurifyChunkGenerator structurifyChunkGenerator
+		StructurifyChunkGenerator structurifyChunkGenerator,
+		LevelHeightAccessor heightAccessor
 	) {
 		OverlapCheckData overlapCheckData = StructureOverlapCheck.getOverlapCheckData(structureCheckData);
 
@@ -138,7 +176,7 @@ public final class StructureChecker
 			return;
 		}
 
-		StructureOverlapCheck.releaseStructureSections(structureCheckData, overlapCheckData, structurifyChunkGenerator);
+		StructureOverlapCheck.releaseStructureSections(structureCheckData, overlapCheckData, structurifyChunkGenerator, heightAccessor);
 	}
 
 	public static void debugCheckStructure(
@@ -222,6 +260,7 @@ public final class StructureChecker
 	private static boolean checkOverlap(
 		StructureCheckData structureCheckData,
 		StructurifyChunkGenerator chunkGenerator,
+		LevelHeightAccessor heightAccessor,
 		boolean testOnly
 	) {
 		try {
@@ -231,7 +270,7 @@ public final class StructureChecker
 				return true;
 			}
 
-			boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, overlapCheckData, chunkGenerator, testOnly);
+			boolean overlapCheckResult = StructureOverlapCheck.checkForOverlap(structureCheckData, overlapCheckData, chunkGenerator, heightAccessor, testOnly);
 
 			if (overlapCheckResult) {
 				return false;

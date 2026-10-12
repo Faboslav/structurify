@@ -12,6 +12,7 @@ import com.google.common.hash.Hashing;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.util.Mth;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -57,7 +58,15 @@ public final class StructurifyConfigSerializer
 		}
 
 		if (general.has(OVERLAP_PADDING_PROPERTY)) {
-			config.overlapPadding = general.get(OVERLAP_PADDING_PROPERTY).getAsInt();
+			var overlapPadding = general.get(OVERLAP_PADDING_PROPERTY).getAsInt();
+
+			if (overlapPadding < StructurifyConfig.OVERLAP_PADDING_MIN_LIMIT || overlapPadding > StructurifyConfig.OVERLAP_PADDING_MAX_LIMIT) {
+				int correctedOverlapPadding = Mth.clamp(overlapPadding, StructurifyConfig.OVERLAP_PADDING_MIN_LIMIT, StructurifyConfig.OVERLAP_PADDING_MAX_LIMIT);
+				Structurify.getLogger().info("Overlap padding value is currently {}, which is outside of the range of {} to {}, value will be automatically corrected to {}.", overlapPadding, StructurifyConfig.OVERLAP_PADDING_MIN_LIMIT, StructurifyConfig.OVERLAP_PADDING_MAX_LIMIT, correctedOverlapPadding);
+				overlapPadding = correctedOverlapPadding;
+			}
+
+			config.overlapPadding = overlapPadding;
 		}
 
 		if (general.has(ENABLE_GLOBAL_SPACING_AND_SEPARATION_MODIFIER_PROPERTY)) {

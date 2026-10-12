@@ -98,7 +98,7 @@ public final class StructureDataSerializer
 		}
 
 		DistanceFromWorldCenterDataSerializer.load(structureJson, structureData.getDistanceFromWorldCenterCheckData());
-		OverlapCheckDataSerializer.load(structureJson, structureData.getOverlapCheckData());
+		OverlapCheckDataSerializer.load(structureJson, structureData.getOverlapCheckData(), structureName);
 		FlatnessCheckDataSerializer.load(structureJson, structureData.getFlatnessCheckData());
 		BiomeCheckDataSerializer.load(structureJson, structureData.getBiomeCheckData());
 	}

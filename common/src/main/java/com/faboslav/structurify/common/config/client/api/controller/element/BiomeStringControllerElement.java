@@ -46,6 +46,9 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 public final class BiomeStringControllerElement extends AbstractDropdownControllerElement<String, String>
 {
 	private final BiomeStringController biomeStringController;
+	//? if >= 26.3 {
+	private boolean isCreatingDropdownWidget = false;
+	//?}
 
 
 	public BiomeStringControllerElement(BiomeStringController control, YACLScreen screen, Dimension<Integer> dim) {
@@ -130,6 +133,12 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 
 	@Override
 	public void setFocused(boolean focused) {
+		//? if >= 26.3 {
+		if (!focused && this.isCreatingDropdownWidget) {
+			return;
+		}
+		//?}
+
 		super.setFocused(focused);
 
 		if (focused && !this.dropdownVisible) {
@@ -137,6 +146,19 @@ public final class BiomeStringControllerElement extends AbstractDropdownControll
 			this.createDropdownWidget();
 		}
 	}
+
+	//? if >= 26.3 {
+	@Override
+	public void createDropdownWidget() {
+		this.isCreatingDropdownWidget = true;
+		super.createDropdownWidget();
+		this.isCreatingDropdownWidget = false;
+
+		if (this.inputFieldFocused) {
+			Minecraft.getInstance().onTextInputFocusChange(this, true);
+		}
+	}
+	//?}
 
 	@Override
 	public String getString(String biome) {

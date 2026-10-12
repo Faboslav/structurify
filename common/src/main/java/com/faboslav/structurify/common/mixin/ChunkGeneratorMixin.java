@@ -42,6 +42,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 //? if >=26.3 {
@@ -62,16 +63,7 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 	private final Map<Long, StructureChunkResolution> structurify$resolvedStructureChunks = new ConcurrentHashMap<>();
 
 	@Unique
-	private final Map<Long, Boolean> structurify$structureChecks = new ConcurrentHashMap<>();
-
-	@Unique
-	private final Map<Long, Boolean> structurify$flatnessChecks = new ConcurrentHashMap<>();
-
-	@Unique
-	private final Map<Long, Boolean> structurify$biomeChecks = new ConcurrentHashMap<>();
-
-	@Unique
-	private final Map<Long, Boolean> structurify$overlapChecks = new ConcurrentHashMap<>();
+	private final Map<Long, CompletableFuture<Boolean>> structurify$structureChecks = new ConcurrentHashMap<>();
 
 	@Unique
 	public Map<Long, StructureSectionClaim> structurify$getStructureSectionClaims() {
@@ -84,23 +76,8 @@ public final class ChunkGeneratorMixin implements StructurifyChunkGenerator
 	}
 
 	@Unique
-	public Map<Long, Boolean> structurify$getStructureChecks() {
+	public Map<Long, CompletableFuture<Boolean>> structurify$getStructureChecks() {
 		return this.structurify$structureChecks;
-	}
-
-	@Unique
-	public Map<Long, Boolean> structurify$getFlatnessChecks() {
-		return this.structurify$flatnessChecks;
-	}
-
-	@Unique
-	public Map<Long, Boolean> structurify$getBiomeChecks() {
-		return this.structurify$biomeChecks;
-	}
-
-	@Unique
-	public Map<Long, Boolean> structurify$getOverlapChecks() {
-		return this.structurify$overlapChecks;
 	}
 
 	@WrapMethod(

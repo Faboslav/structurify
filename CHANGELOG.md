@@ -1,3 +1,10 @@
+## 2.0.43
+
+- Fixed world generation freezing when a slow structure check ran while Distant Horizons or C2ME generated chunks in parallel (hopefully)
+- Fixed the structure overlap check hanging on structures with oversized piece bounding boxes
+- Fixed overlap padding values outside the 0 to 16 range not being corrected on load
+- Fixed not being able to type into biome inputs in the config
+
 ## 2.0.42
 
 - Fixed structure set spacing or separation being dropped on load when only one of them was changed

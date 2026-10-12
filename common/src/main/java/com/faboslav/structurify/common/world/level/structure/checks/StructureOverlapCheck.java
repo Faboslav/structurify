@@ -3,19 +3,23 @@ package com.faboslav.structurify.common.world.level.structure.checks;
 import com.faboslav.structurify.common.Structurify;
 import com.faboslav.structurify.common.api.StructurifyChunkGenerator;
 import com.faboslav.structurify.common.config.data.structure.OverlapCheckData;
+import com.faboslav.structurify.common.util.ChunkPosUtil;
 import com.faboslav.structurify.common.world.level.structure.StructureSectionClaim;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.core.SectionPos;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public final class StructureOverlapCheck
 {
+	private static final int STRUCTURE_RANGE = 8;
+
 	@Nullable
 	public static OverlapCheckData getOverlapCheckData(
 		StructureCheckData structureCheckData
@@ -67,20 +71,22 @@ public final class StructureOverlapCheck
 	public static boolean checkForOverlap(
 		StructureCheckData structureCheckData,
 		@Nullable OverlapCheckData overlapCheckData,
-		StructurifyChunkGenerator structurifyChunkGenerator
+		StructurifyChunkGenerator structurifyChunkGenerator,
+		LevelHeightAccessor heightAccessor
 	) {
-		return checkForOverlap(structureCheckData, overlapCheckData, structurifyChunkGenerator, false);
+		return checkForOverlap(structureCheckData, overlapCheckData, structurifyChunkGenerator, heightAccessor, false);
 	}
 
 	public static boolean checkForOverlap(
 		StructureCheckData structureCheckData,
 		@Nullable OverlapCheckData overlapCheckData,
 		StructurifyChunkGenerator structurifyChunkGenerator,
+		LevelHeightAccessor heightAccessor,
 		boolean testOnly
 	) {
 		StructureStart start = structureCheckData.getStructureStart();
 
-		long[] structureCells = getStructurePiecesSections(start, resolveOverlapPadding(overlapCheckData));
+		long[] structureCells = getStructurePiecesSections(start, resolveOverlapPadding(overlapCheckData), heightAccessor);
 
 		long structureCenter = structureCheckData.getStructureCenter().asLong();
 
@@ -106,9 +112,10 @@ public final class StructureOverlapCheck
 	public static void releaseStructureSections(
 		StructureCheckData structureCheckData,
 		@Nullable OverlapCheckData overlapCheckData,
-		StructurifyChunkGenerator structurifyChunkGenerator
+		StructurifyChunkGenerator structurifyChunkGenerator,
+		LevelHeightAccessor heightAccessor
 	) {
-		long[] structureCells = getStructurePiecesSections(structureCheckData.getStructureStart(), resolveOverlapPadding(overlapCheckData));
+		long[] structureCells = getStructurePiecesSections(structureCheckData.getStructureStart(), resolveOverlapPadding(overlapCheckData), heightAccessor);
 
 		String structureId = structureCheckData.getStructureId().toString();
 		long structureCenter = structureCheckData.getStructureCenter().asLong();
@@ -130,19 +137,35 @@ public final class StructureOverlapCheck
 		return Structurify.getConfig().overlapPadding;
 	}
 
-	private static long[] getStructurePiecesSections(StructureStart start, int padding) {
-		Set<Long> structurePieceSectionUniqueKeys = new LongOpenHashSet();
+	private static long[] getStructurePiecesSections(StructureStart start, int padding, LevelHeightAccessor heightAccessor) {
+		LongOpenHashSet structurePieceSectionUniqueKeys = new LongOpenHashSet();
+		ChunkPos startChunkPos = start.getChunkPos();
+		int chunkX = ChunkPosUtil.getX(startChunkPos);
+		int chunkZ = ChunkPosUtil.getZ(startChunkPos);
+
+		int minAllowedSx = chunkX - STRUCTURE_RANGE - padding;
+		int maxAllowedSx = chunkX + STRUCTURE_RANGE + padding;
+		int minAllowedSz = chunkZ - STRUCTURE_RANGE - padding;
+		int maxAllowedSz = chunkZ + STRUCTURE_RANGE + padding;
+
+		//? if >= 1.21.3 {
+		int minAllowedSy = heightAccessor.getMinSectionY();
+		int maxAllowedSy = heightAccessor.getMaxSectionY();
+		//?} else {
+		/*int minAllowedSy = heightAccessor.getMinSection();
+		int maxAllowedSy = heightAccessor.getMaxSection() - 1;
+		*///?}
 
 		for (var piece : start.getPieces()) {
 			BoundingBox b = piece.getBoundingBox();
 
-			int minSx = SectionPos.blockToSectionCoord(b.minX()) - padding;
-			int maxSx = SectionPos.blockToSectionCoord(b.maxX()) + padding;
-			int minSz = SectionPos.blockToSectionCoord(b.minZ()) - padding;
-			int maxSz = SectionPos.blockToSectionCoord(b.maxZ()) + padding;
+			int minSx = Math.max(SectionPos.blockToSectionCoord(b.minX()) - padding, minAllowedSx);
+			int maxSx = Math.min(SectionPos.blockToSectionCoord(b.maxX()) + padding, maxAllowedSx);
+			int minSz = Math.max(SectionPos.blockToSectionCoord(b.minZ()) - padding, minAllowedSz);
+			int maxSz = Math.min(SectionPos.blockToSectionCoord(b.maxZ()) + padding, maxAllowedSz);
 
-			int minSy = SectionPos.blockToSectionCoord(b.minY());
-			int maxSy = SectionPos.blockToSectionCoord(b.maxY());
+			int minSy = Math.max(SectionPos.blockToSectionCoord(b.minY()), minAllowedSy);
+			int maxSy = Math.min(SectionPos.blockToSectionCoord(b.maxY()), maxAllowedSy);
 
 			for (int sz = minSz; sz <= maxSz; sz++) {
 				for (int sx = minSx; sx <= maxSx; sx++) {
@@ -153,14 +176,7 @@ public final class StructureOverlapCheck
 			}
 		}
 
-		long[] structurePieceSectionKeys = new long[structurePieceSectionUniqueKeys.size()];
-		int i = 0;
-
-		for (long structurePieceSectionKey : structurePieceSectionUniqueKeys) {
-			structurePieceSectionKeys[i++] = structurePieceSectionKey;
-		}
-
-		return structurePieceSectionKeys;
+		return structurePieceSectionUniqueKeys.toLongArray();
 	}
 
 	private static boolean canClaimStructureSections(

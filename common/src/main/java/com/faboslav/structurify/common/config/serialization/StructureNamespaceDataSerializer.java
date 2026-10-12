@@ -10,12 +10,14 @@ public final class StructureNamespaceDataSerializer
 	private static final String IS_DISABLED_PROPERTY = "is_disabled";
 
 	public static void load(JsonObject structureJson, StructureNamespaceData structureNamespaceData) {
+		var structureNamespaceName = structureJson.get(NAME_PROPERTY).getAsString();
+
 		if (structureJson.has(IS_DISABLED_PROPERTY)) {
 			structureNamespaceData.setDisabled(structureJson.get(IS_DISABLED_PROPERTY).getAsBoolean());
 		}
 
 		DistanceFromWorldCenterDataSerializer.load(structureJson, structureNamespaceData.getDistanceFromWorldCenterCheckData());
-		OverlapCheckDataSerializer.load(structureJson, structureNamespaceData.getOverlapCheckData());
+		OverlapCheckDataSerializer.load(structureJson, structureNamespaceData.getOverlapCheckData(), structureNamespaceName);
 		FlatnessCheckDataSerializer.load(structureJson, structureNamespaceData.getFlatnessCheckData());
 		BiomeCheckDataSerializer.load(structureJson, structureNamespaceData.getBiomeCheckData());
 	}

@@ -77,10 +77,20 @@ public final class StructurePlacementResolver
 		StructurifyChunkGenerator structurifyChunkGenerator = (StructurifyChunkGenerator) context.chunkGenerator();
 		long structureChunkResolutionId = generateStructureChunkResolutionId(structureSetId, originalStructureChunk);
 
-		return structurifyChunkGenerator.structurify$getResolvedStructureChunks().computeIfAbsent(
-			structureChunkResolutionId,
-			id -> resolveStructureChunkAttempts(structureSetId, structureSet, randomSpreadStructurePlacement, originalStructureChunk, chunkX, chunkZ, placementAttempts, context)
-		);
+		StructureChunkResolution cachedStructureChunkResolution = structurifyChunkGenerator.structurify$getResolvedStructureChunks().get(structureChunkResolutionId);
+
+		if (cachedStructureChunkResolution != null) {
+			return cachedStructureChunkResolution;
+		}
+
+		StructureChunkResolution structureChunkResolution = resolveStructureChunkAttempts(structureSetId, structureSet, randomSpreadStructurePlacement, originalStructureChunk, chunkX, chunkZ, placementAttempts, context);
+		cachedStructureChunkResolution = structurifyChunkGenerator.structurify$getResolvedStructureChunks().putIfAbsent(structureChunkResolutionId, structureChunkResolution);
+
+		if (cachedStructureChunkResolution != null) {
+			return cachedStructureChunkResolution;
+		}
+
+		return structureChunkResolution;
 	}
 
 	private static StructureChunkResolution resolveStructureChunkAttempts(
